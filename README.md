@@ -8,7 +8,7 @@
 [[LLM Agents]](https://github.com/bigai-ai/civrealm-llm-baseline)
 [[Tensor Agent]](https://github.com/bigai-ai/civrealm-tensor-baseline)
 
-[![Documentation Status](https://readthedocs.org/projects/openreview-py/badge/?version=latest)](<http://civilization.pages.mybigai.ac.cn/civrealm>)
+[![Documentation Status](https://readthedocs.org/projects/openreview-py/badge/?version=latest)](<https://bigai-ai.github.io/civrealm>)
 [![PyPI](https://img.shields.io/pypi/v/civrealm)](https://pypi.org/project/civrealm/)
 [![PyPI - Python Version](https://img.shields.io/python/required-version-toml?tomlFilePath=https://raw.githubusercontent.com/bigai-ai/civrealm/dev/pyproject.toml)](https://pypi.org/project/civrealm/)
 [![PyPI Status](https://pepy.tech/badge/civrealm)](https://pepy.tech/project/civrealm)
@@ -16,9 +16,9 @@
 
 </div>
 
-CivRealm is an interactive environment for the open-source strategy game [Freeciv-web](https://github.com/freeciv/freeciv-web), based on [Freeciv](https://www.freeciv.org/), a Civilization-like game. Within CivRealm, we provide interfaces for two typical types of agents: tensor-based reinforcement learning agents (see [Tensor-agent Repo](https://gitlab.mybigai.ac.cn/civilization/freeciv-tensor-baseline)) based on the [Gymnasium](https://gymnasium.farama.org/) API, and language-based agents (see [LLM-agent Repo](https://gitlab.mybigai.ac.cn/civilization/freeciv-llm-baseline)) driven by language models.
+CivRealm is an interactive environment for the open-source strategy game [Freeciv-web](https://github.com/freeciv/freeciv-web), based on [Freeciv](https://www.freeciv.org/), a Civilization-like game. Within CivRealm, we provide interfaces for two typical types of agents: tensor-based reinforcement learning agents (see [Tensor-agent Repo](https://github.com/bigai-ai/civrealm-tensor-baseline)) based on the [Gymnasium](https://gymnasium.farama.org/) API, and language-based agents (see [LLM-agent Repo](https://github.com/bigai-ai/civrealm-llm-baseline)) driven by language models.
 
-We also provide a set of tools for training and evaluating agents, as well as a set of baselines for both types of agents. We hope that CivRealm can serve as a testbed for the development and evaluation of agents that can learn and reason in complex environments. Detailed usage of the CivRealm API can be found in the [Documentation](http://civilization.pages.mybigai.ac.cn/civrealm).
+We also provide a set of tools for training and evaluating agents, as well as a set of baselines for both types of agents. We hope that CivRealm can serve as a testbed for the development and evaluation of agents that can learn and reason in complex environments. Detailed usage of the CivRealm API can be found in the [Documentation](https://bigai-ai.github.io/civrealm).
 
 ![Punic War](docs/assets/punic_war_base.jpg)
 
@@ -42,7 +42,7 @@ In the future, CivRealm will be maintained by BIGAI.
 
 CivRealm requires Python `≥ 3.8` and docker. We have tested on Ubuntu 22.04, Mac OS X, and Windows. 
 
-To test CivRealm on <http://localhost>, please follow the docker installation instructions on <http://civilization.pages.mybigai.ac.cn/civrealm/getting_started/requirements.html>.
+To test CivRealm on <http://localhost>, please follow the docker installation instructions on <https://bigai-ai.github.io/civrealm/getting_started/requirements.html>.
 
 After starting the Freeciv-web service, you can connect to the Freeciv-web server via the host machine <a href="http://localhost:8080/">localhost:8080</a> using a standard browser.
 
@@ -57,7 +57,7 @@ pip install civrealm
 To install the latest version from the source code or contribute to the project, please follow the instructions below:
 
 ```bash
-git clone ssh://git@gitlab.mybigai.ac.cn:2222/civilization/civrealm.git && cd civrealm
+git clone git@github.com:bigai-ai/civrealm.git && cd civrealm
 pip install -e .
 ```
 
