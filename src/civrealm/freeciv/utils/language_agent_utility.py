@@ -35,6 +35,8 @@ def action_mask(keywords, avail_action_set):
 def get_valid_actions(info, ctrl_type, actor_id):
     action_dict = info['available_actions'][ctrl_type]
     avail_action_list = []
+    if actor_id not in action_dict:
+        return avail_action_list
 
     for actor_act in action_dict[actor_id]:
         if action_dict[actor_id][actor_act]:
