@@ -5,6 +5,7 @@ from .dipl_wrapper import (CancelReturnedTreaties, DiplomacyLoop,
                            TruncateDiplCity)
 from .info_wrapper import GameOverScoreInfo, MiniTaskGameOverScoreInfo
 from .llm_wrapper import LLMWrapper
+from .llm_republic_wrapper import RepLLMWrapper
 from .observation_wrapper import CacheLastObs, TensorObservation
 from .reward_wrapper import (MinitaskDelayedReward, MinitaskDenseReward,
                              PenalizeConsecutiveTurnDoneReward)

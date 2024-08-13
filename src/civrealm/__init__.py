@@ -33,6 +33,10 @@ register(
     entry_point='civrealm.envs:FreecivLLMEnv',
 )
 register(
+    id='civrealm/FreecivRepLLM-v0',
+    entry_point='civrealm.envs:FreecivRepLLMEnv',
+)
+register(
     id='civrealm/FreecivMinitask-v0',
     entry_point='civrealm.envs:FreecivMinitaskEnv',
 )

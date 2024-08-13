@@ -6,6 +6,7 @@ from .freeciv_tensor_minitask_env import FreecivTensorMinitaskEnv
 
 
 from .freeciv_llm_env import FreecivLLMEnv
+from .freeciv_republic_llm_env import FreecivRepLLMEnv
 # Parallel environment
 from .freeciv_parallel_env import FreecivParallelEnv
 from .freeciv_a3c_env import FreecivA3CEnv

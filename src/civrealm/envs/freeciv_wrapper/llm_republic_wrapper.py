@@ -173,9 +173,7 @@ class RepLLMWrapper(Wrapper):
         actor_info['name'] = actor_name
 
         available_actions = get_valid_actions(info, ctrl_type, actor_id)
-        if not available_actions or (len(available_actions) == 1 and available_actions[0] == 'keep_activity'):
-            return dict()
-        else:
+        if available_actions and not (len(available_actions) == 1 and available_actions[0] == 'keep_activity'):
             if ctrl_type not in self.ctrl_action_categories:
                 actor_info['available_actions'] = make_action_list_readable(
                     available_actions, self.action_names)
