@@ -62,37 +62,32 @@ def format_hex(num):
     return formatted_hex
 
 
+def convert_hard_boundary(val, upper, lower=0):
+    return min(max(lower, val), upper)
+
+def convert_periodic_boundary(val, period):
+    return (val % period + period) % period
+
 def read_sub_arr_with_wrap(arr, start_x, end_x, start_y, end_y):
     """ consider map_const.TF_WRAPX == 1 """
-    if len(arr.shape) == 2:
-        (length, width) = arr.shape
-    else:
-        (length, width, height) = arr.shape
+    length, width = arr.shape[:2]
 
-    if start_y < 0:
-        start_y = 0
-    if end_y > width:
-        end_y = width
-
-    if start_x < 0 or end_x > length:
+    start_y = convert_hard_boundary(start_y, 0, width)
+    end_y = convert_hard_boundary(end_y, 0, width)
+    start_x = convert_periodic_boundary(start_x, length)
+    end_x = convert_periodic_boundary(end_x, length)
+    if start_x > end_x:
         if start_x < 0:
             start_x = length + start_x
         else:
             end_x = end_x % length
 
-        if len(arr.shape) == 2:
-            arr_1 = arr[start_x:, start_y: end_y]
-            arr_2 = arr[:end_x, start_y: end_y]
-        else:
-            arr_1 = arr[start_x:, start_y: end_y, :]
-            arr_2 = arr[:end_x, start_y: end_y, :]
+        arr_1 = arr[start_x:, start_y: end_y]
+        arr_2 = arr[:end_x, start_y: end_y]
         return np.concatenate((arr_1, arr_2), axis=0)
 
-    else:
-        if len(arr.shape) == 2:
-            return arr[start_x: end_x, start_y: end_y]
-        else:
-            return arr[start_x: end_x, start_y: end_y, :]
+    return arr[start_x: end_x, start_y: end_y]
+
 
 
 def geometric_sequence(length: int, start: int, end: int):
