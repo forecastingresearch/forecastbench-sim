@@ -68,20 +68,20 @@ def convert_hard_boundary(val, upper, lower=0):
 def convert_periodic_boundary(val, period):
     return (val % period + period) % period
 
-def read_sub_arr_with_wrap(arr, start_x, end_x, start_y, end_y):
-    """ consider map_const.TF_WRAPX == 1 """
+def read_sub_arr_with_wrap(arr, start_x, end_x, start_y, end_y,
+                           wrap_flag=(1, 0)):
+    """
+    consider map_const.TF_WRAPX == 1 
+    wrap_flag=[map_const.TF_WRAPX, map_const.TF_WRAPY]
+    """
     length, width = arr.shape[:2]
-
-    start_y = convert_hard_boundary(start_y, 0, width)
-    end_y = convert_hard_boundary(end_y, 0, width)
-    start_x = convert_periodic_boundary(start_x, length)
-    end_x = convert_periodic_boundary(end_x, length)
+    convert_methods = [convert_hard_boundary,      # 0
+                       convert_periodic_boundary]  # 1
+    start_x = convert_methods[wrap_flag[0]](start_x, length)
+    end_x = convert_methods[wrap_flag[0]](end_x, length)
+    start_y = convert_methods[wrap_flag[1]](start_y, width)
+    end_y = convert_methods[wrap_flag[1]](end_y, width)
     if start_x > end_x:
-        if start_x < 0:
-            start_x = length + start_x
-        else:
-            end_x = end_x % length
-
         arr_1 = arr[start_x:, start_y: end_y]
         arr_2 = arr[:end_x, start_y: end_y]
         return np.concatenate((arr_1, arr_2), axis=0)
