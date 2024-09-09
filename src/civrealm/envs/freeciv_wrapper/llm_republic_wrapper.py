@@ -139,17 +139,19 @@ class RepLLMWrapper(Wrapper):
                     # The following two conditions are used to check if 1.  the city is just built or is building
                     # coinage, and 2. the city has just built a unit or an improvement last turn and there are some
                     # production points left in stock.
+                    """
                     if (obs[ctrl_type][city_id]['prod_process'] == 0 or
                             current_turn == obs[ctrl_type][city_id]['turn_last_built'] + 1):
-                        x = obs[ctrl_type][city_id]['x']
-                        y = obs[ctrl_type][city_id]['y']
+                    """
+                    x = obs[ctrl_type][city_id]['x']
+                    y = obs[ctrl_type][city_id]['y']
 
-                        city_dict = self.get_actor_info(
-                            x, y, obs, info, ctrl_type, city_id)
-                        if city_dict:
-                            llm_info[ctrl_type][city_id] = city_dict
-                    else:
-                        continue
+                    city_dict = self.get_actor_info(x, y, obs, info, ctrl_type, city_id)
+                    if city_dict:
+                        llm_info[ctrl_type][city_id] = city_dict
+
+                    if obs[ctrl_type][city_id]['prod_process'] != 0 and current_turn != obs[ctrl_type][city_id]['turn_last_built'] + 1:
+                        llm_info[ctrl_type][city_id]['available_actions'] = []
 
             elif ctrl_type == 'tech':
                 llm_info[ctrl_type]['cur_player'] = self.get_tech_info(info, ctrl_type, self.my_player_id)
