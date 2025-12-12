@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""Run a Civilization game and generate world reports
+"""Run a Civilization game and collect savegames
 
 This script runs an all-AI competitive game where ALL players are controlled
-by Freeciv's built-in AI, then automatically generates world reports from the
-recorded gameplay.
+by Freeciv's built-in AI, then downloads the savegames for later processing.
 
 Usage:
     python run_world.py --seed 42 --max_turns 50
+    python run_world.py --seed 42 --quiet  # Suppress output for batch runs
 
 The seed uniquely identifies the run and ensures deterministic gameplay.
 Games with the same seed will produce identical results.
@@ -18,7 +18,6 @@ Setup:
 
 Output:
 - Recordings saved to: logs/recordings/s{seed}/
-- Reports saved to: reports/s{seed}/
 """
 
 import sys
@@ -32,7 +31,6 @@ sys.path.insert(0, str(Path(__file__).parent / 'src'))
 
 from civrealm.configs import fc_args
 from civrealm.agents import NoOpAgent
-from civrealm.world_reports import ReportGenerator, ReportConfig
 from civrealm.world_reports.utils.savegame_parser import (
     download_all_savegames_from_docker
 )
@@ -64,10 +62,8 @@ def cleanup_docker_savegames(username: str, container_name: str = 'freeciv-web')
         capture_output=True
     )
 
-    print(f"Cleaned Docker savegames directory for {username}")
 
-
-def main(seed: int, max_turns: int = 50, num_ai_players: int = 5):
+def main(seed: int, max_turns: int = 50, num_ai_players: int = 5, quiet: bool = False):
     # Use seed as the unique identifier for this run
     # Freeciv requires non-numeric usernames, so prefix with 's' for seed
     run_id = f's{seed}'
@@ -83,18 +79,20 @@ def main(seed: int, max_turns: int = 50, num_ai_players: int = 5):
     # Also seed Python's random module for nation selection (used in civ_controller.py)
     random.seed(seed)
 
-    print("Starting all-AI game collection...")
-    print(f"Seed: {seed}")
-    print(f"AI Players: {num_ai_players} total (all Freeciv AI at {AI_DIFFICULTY} difficulty)")
-    print(f"Setup: {num_ai_players - 1} via aifill + 1 connected player toggled to AI")
-    print(f"Max turns: {max_turns}")
-    print(f"Recording to: logs/recordings/{run_id}/")
-    print()
+    def log(msg):
+        if not quiet:
+            print(msg)
+
+    log("Starting all-AI game collection...")
+    log(f"Seed: {seed}")
+    log(f"AI Players: {num_ai_players} total (all Freeciv AI at {AI_DIFFICULTY} difficulty)")
+    log(f"Setup: {num_ai_players - 1} via aifill + 1 connected player toggled to AI")
+    log(f"Max turns: {max_turns}")
+    log(f"Recording to: logs/recordings/{run_id}/")
+    log("")
 
     # Clean up any existing savegames for this run
-    print("Cleaning Docker savegames directory...")
     cleanup_docker_savegames(run_id)
-    print()
 
     env = gymnasium.make('civrealm/FreecivBase-v0')
     # NoOpAgent just ends turn - connected player will be toggled to Freeciv AI
@@ -106,17 +104,13 @@ def main(seed: int, max_turns: int = 50, num_ai_players: int = 5):
     # This ensures complete world data for reports
 
     # Preserve all autosaves throughout the game for complete data extraction
-    print(f"Preserving autosaves for complete historical data...")
     env.unwrapped.civ_controller.delete_save = False
 
     # Note: DO NOT enter observer mode - it prevents autosaves on turns 2-50
     # Observer mode causes handle_begin_turn to exit early without calling save_game()
-    # print(f"Entering observer mode for complete data access...")
-    # env.unwrapped.civ_controller.ws_client.send_message("/observe")
-    # time.sleep(1)
 
     # Set AI difficulty level for all AI players
-    print(f"Setting AI difficulty to {AI_DIFFICULTY}...")
+    log(f"Setting AI difficulty to {AI_DIFFICULTY}...")
     env.unwrapped.civ_controller.ws_client.send_message(f"/set skilllevel {AI_DIFFICULTY}")
     time.sleep(1)
 
@@ -127,25 +121,25 @@ def main(seed: int, max_turns: int = 50, num_ai_players: int = 5):
 
     # Randomize starting position assignments to balance the game
     # teamplacement=DISABLED assigns starting positions randomly rather than by team
-    print("Randomizing starting positions...")
+    log("Randomizing starting positions...")
     env.unwrapped.civ_controller.ws_client.send_message("/set teamplacement DISABLED")
     time.sleep(0.5)
 
     # Toggle the connected player to be AI-controlled by Freeciv's built-in AI
-    print(f"Toggling {fc_args['username']} to Freeciv AI control...")
+    log(f"Toggling {fc_args['username']} to Freeciv AI control...")
     env.unwrapped.civ_controller.ws_client.send_message(f"/aitoggle {fc_args['username']}")
     time.sleep(1)
 
     # Aifill players are already AI-controlled by default (PLRF_AI flag set)
     # DO NOT toggle them - that would turn OFF their AI!
-    print(f"All {num_ai_players - 1} aifill players are AI-controlled by default")
+    log(f"All {num_ai_players - 1} aifill players are AI-controlled by default")
 
     done = False
     step = 0
 
-    print(f"Game started - all {num_ai_players} players controlled by Freeciv AI")
-    print(f"Running for up to {max_turns} turns (AI vs AI competitive game)")
-    print()
+    log(f"Game started - all {num_ai_players} players controlled by Freeciv AI")
+    log(f"Running for up to {max_turns} turns (AI vs AI competitive game)")
+    log("")
 
     while not done:
         try:
@@ -155,88 +149,34 @@ def main(seed: int, max_turns: int = 50, num_ai_players: int = 5):
 
             turn = info.get('turn', 0)
             if turn > 0 and turn % 10 == 0:
-                print(f"Turn {turn}/{max_turns}")
+                log(f"Turn {turn}/{max_turns}")
 
             step += 1
             # Environment will set terminated=True when max_turns is reached
             done = terminated or truncated
 
         except Exception as e:
-            print(f"Error: {e}")
+            if not quiet:
+                print(f"Error: {e}")
             raise e
 
     # Save and preserve the final game state for extracting complete production data
     # Autosave only happens at the beginning of turns, so we need to manually save at the end
-    print("\nSaving final game state for complete data extraction...")
     env.unwrapped.civ_controller.save_game()
     env.unwrapped.civ_controller.delete_save = False  # Prevent deletion
 
     env.close()
 
     # Download and persist all savegames from Docker container
-    print("\nDownloading savegames from Docker container...")
     recording_dir = f'logs/recordings/{run_id}'
     downloaded, skipped, failed = download_all_savegames_from_docker(run_id, recording_dir)
-    print(f"Downloaded {downloaded} savegames (skipped {skipped} existing, {failed} failed)")
-
-    print()
-    print("="*60)
-    print("DATA COLLECTION COMPLETE!")
-    print("="*60)
-    print()
-
-    # Generate world reports automatically
-    print("Generating world reports...")
-    print()
-
-    # Configuration for world report generation
-    report_config = ReportConfig(
-        # Input: where our game recording is stored
-        recording_dir=f'logs/recordings/{run_id}/',
-
-        # Output: where to save the report
-        output_dir=f'reports/{run_id}/',
-
-        # Generate report at the final turn
-        report_turns=[max_turns],
-
-        # Enable all implemented sections
-        enabled_sections=['overview', 'historical_events', 'economics', 'demographics', 'technology'],
-
-        # Output formats
-        formats=['html'],
-
-        # Visualization settings
-        plot_style='seaborn',
-        dpi=150
-    )
-
-    # Create generator and generate reports
-    print("Initializing World Report Generator...")
-    generator = ReportGenerator(report_config)
-
-    print("Validating configuration...")
-    if not generator.validate_config():
-        print("Configuration validation failed!")
-        return 1
-
-    print("Configuration validated successfully!")
-    print()
-    print("Generating reports...")
-    generator.generate_reports()
-
-    print()
-    print("="*60)
-    print("WORLD REPORTS GENERATED!")
-    print("="*60)
-    print(f"\nReports saved to: {report_config.output_dir}")
-    print("\nOpen the HTML files in your browser to view the reports.")
+    log(f"Downloaded {downloaded} savegames (skipped {skipped} existing, {failed} failed)")
 
     return 0
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
-        description='Run an all-AI Civilization game and generate world reports'
+        description='Run an all-AI Civilization game and collect savegames'
     )
     parser.add_argument(
         '--seed',
@@ -256,10 +196,16 @@ if __name__ == '__main__':
         default=5,
         help='Total number of AI players in the game (default: 5)'
     )
+    parser.add_argument(
+        '--quiet', '-q',
+        action='store_true',
+        help='Suppress output (useful for batch runs)'
+    )
 
     args = parser.parse_args()
     exit(main(
         seed=args.seed,
         max_turns=args.max_turns,
-        num_ai_players=args.num_ai_players
+        num_ai_players=args.num_ai_players,
+        quiet=args.quiet
     ))
