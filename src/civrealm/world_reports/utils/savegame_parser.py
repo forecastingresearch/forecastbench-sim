@@ -743,6 +743,113 @@ def parse_player_technologies(savegame_content: str, ruleset_techs: Optional[Dic
     return player_techs
 
 
+def parse_city_wonders(savegame_content: str) -> Dict[int, Dict[str, any]]:
+    """Parse city improvement data from savegame to track wonders
+
+    Each city has an improvements binary string where each position indicates
+    if that improvement is built. Position corresponds to improvement ID.
+
+    Args:
+        savegame_content: Decompressed savegame file content
+
+    Returns:
+        Dict mapping player_id to their wonders/improvements data:
+        {
+            player_id: {
+                'cities': {
+                    city_id: {
+                        'name': str,
+                        'improvements': str (binary string)
+                    }
+                },
+                'improvements_built': set of improvement IDs built by this player
+            }
+        }
+    """
+    player_data = {}
+
+    # Find all player sections and their cities
+    player_sections = re.finditer(r'\[player(\d+)\]', savegame_content)
+    player_starts = []
+
+    for match in player_sections:
+        player_starts.append((int(match.group(1)), match.start(), match.end()))
+
+    # Process each player section
+    for i, (player_id, _, content_start) in enumerate(player_starts):
+        # Find end of this player section
+        if i + 1 < len(player_starts):
+            section_end = player_starts[i + 1][1]
+        else:
+            section_end = len(savegame_content)
+
+        player_content = savegame_content[content_start:section_end]
+
+        # Find city schema
+        schema_match = re.search(r'c=\{([^}]+)\}', player_content)
+        if not schema_match:
+            continue
+
+        schema = schema_match.group(1).replace('"', '').split(',')
+
+        # Find indices for city data
+        try:
+            id_idx = schema.index('id')
+            name_idx = schema.index('name')
+            improvements_idx = schema.index('improvements')
+        except ValueError:
+            continue
+
+        # Initialize player data
+        player_data[player_id] = {
+            'cities': {},
+            'improvements_built': set()
+        }
+
+        # Find city data lines (start after schema definition)
+        schema_end = schema_match.end()
+        # Cities are in lines that start with coordinates (y,x,...)
+        city_lines = re.findall(r'\n(\d+,\d+,\d+,[^\n]+)', player_content[schema_end - content_start:])
+
+        for city_line in city_lines:
+            # Parse CSV carefully, handling quoted strings
+            values = []
+            current = ""
+            in_quotes = False
+            for char in city_line:
+                if char == '"':
+                    in_quotes = not in_quotes
+                elif char == ',' and not in_quotes:
+                    values.append(current)
+                    current = ""
+                else:
+                    current += char
+            values.append(current)
+
+            if len(values) <= max(id_idx, name_idx, improvements_idx):
+                continue
+
+            try:
+                city_id = int(values[id_idx])
+                city_name = values[name_idx].strip('"')
+                improvements_str = values[improvements_idx].strip('"')
+
+                player_data[player_id]['cities'][city_id] = {
+                    'name': city_name,
+                    'improvements': improvements_str
+                }
+
+                # Track which improvements are built (positions with '1')
+                for impr_id, bit in enumerate(improvements_str):
+                    if bit == '1':
+                        player_data[player_id]['improvements_built'].add(impr_id)
+
+            except (ValueError, IndexError):
+                continue
+
+    return player_data
+
+
 def extract_complete_data_from_savegame(username: str, turn: int, host: str = 'localhost', port: int = 8080, recording_dir: Optional[str] = None) -> Optional[Dict[str, any]]:
     """Extract complete game data from savegame file
 
@@ -789,13 +896,15 @@ def extract_complete_data_from_savegame(username: str, turn: int, host: str = 'l
         nations = parse_player_nations(content)
         technologies = parse_player_technologies(content)
         diplomacy = parse_player_diplomacy(content)
+        city_wonders = parse_city_wonders(content)
 
         return {
             'production': production,
             'science': science,
             'nations': nations,
             'technologies': technologies,
-            'diplomacy': diplomacy
+            'diplomacy': diplomacy,
+            'city_wonders': city_wonders
         }
 
     except Exception as e:

@@ -340,6 +340,97 @@ class EventDetector:
 
         return events
 
+    def detect_wonder_completions(
+        self,
+        prev_savegame_data: Optional[Dict],
+        curr_savegame_data: Optional[Dict],
+        curr_state: Dict,
+        turn: int,
+        ruleset: Optional[Dict] = None
+    ) -> List[GameEvent]:
+        """Detect wonder completions by comparing savegame data
+
+        Args:
+            prev_savegame_data: Previous turn savegame data with 'city_wonders' key
+            curr_savegame_data: Current turn savegame data with 'city_wonders' key
+            curr_state: Current turn state (for player names)
+            turn: Current turn number
+            ruleset: Optional ruleset with 'improvements' data for wonder names
+
+        Returns:
+            List of wonder completion events
+        """
+        events = []
+
+        if not curr_savegame_data or 'city_wonders' not in curr_savegame_data:
+            return events
+
+        curr_wonders = curr_savegame_data.get('city_wonders', {})
+        prev_wonders = prev_savegame_data.get('city_wonders', {}) if prev_savegame_data else {}
+
+        # Get improvement metadata from ruleset to identify wonders
+        improvements = ruleset.get('improvements', {}) if ruleset else {}
+
+        # Helper to check if an improvement is a wonder
+        def is_wonder(impr_id: int) -> bool:
+            impr_id_str = str(impr_id)
+            if impr_id_str in improvements:
+                impr = improvements[impr_id_str]
+                # genus 0 = great wonder, genus 1 = small wonder
+                genus = impr.get('genus', 2)
+                soundtag = impr.get('soundtag', '')
+                return genus in (0, 1) or (soundtag and soundtag[0] == 'w')
+            return False
+
+        # Helper to get wonder name
+        def get_wonder_name(impr_id: int) -> str:
+            impr_id_str = str(impr_id)
+            if impr_id_str in improvements:
+                return improvements[impr_id_str].get('name', f'Wonder #{impr_id}')
+            return f'Wonder #{impr_id}'
+
+        # Check each player for newly completed wonders
+        for player_id, player_data in curr_wonders.items():
+            curr_built = player_data.get('improvements_built', set())
+
+            # Get previous state for this player
+            prev_built = set()
+            if player_id in prev_wonders:
+                prev_built = prev_wonders[player_id].get('improvements_built', set())
+
+            # Find newly built improvements that are wonders
+            new_built = curr_built - prev_built
+            for impr_id in new_built:
+                if is_wonder(impr_id):
+                    wonder_name = get_wonder_name(impr_id)
+                    player_name = self._get_player_name(curr_state, player_id)
+
+                    # Find which city has this wonder
+                    city_name = None
+                    for city_id, city_data in player_data.get('cities', {}).items():
+                        improvements_str = city_data.get('improvements', '')
+                        if impr_id < len(improvements_str) and improvements_str[impr_id] == '1':
+                            city_name = city_data.get('name', f'City #{city_id}')
+                            break
+
+                    description = f"{player_name} completed {wonder_name}"
+                    if city_name:
+                        description += f" in {city_name}"
+
+                    events.append(GameEvent(
+                        turn=turn,
+                        event_type='wonder_completed',
+                        description=description,
+                        player_id=player_id,
+                        metadata={
+                            'wonder_id': impr_id,
+                            'wonder_name': wonder_name,
+                            'city_name': city_name
+                        }
+                    ))
+
+        return events
+
     def detect_all_events(
         self,
         prev_state: Optional[Dict],

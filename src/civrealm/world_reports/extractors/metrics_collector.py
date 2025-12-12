@@ -89,7 +89,7 @@ class MetricsCollector:
         metadata["num_civilizations"] = len(civilizations)
 
         print("  Collecting time series data...")
-        time_series = self.collect_time_series(states, config, civilizations)
+        time_series = self.collect_time_series(states, config, civilizations, data_loader)
 
         print("  Detecting events...")
         events = self.collect_events(states, data_loader, config)
@@ -231,7 +231,8 @@ class MetricsCollector:
         self,
         states: Dict[int, Dict],
         config: Any,
-        civilizations: Dict[int, Dict]
+        civilizations: Dict[int, Dict],
+        data_loader: Any = None
     ) -> Dict[str, Dict[int, Dict[int, float]]]:
         """Collect all time series metrics
 
@@ -260,7 +261,8 @@ class MetricsCollector:
             "techs_known": {},
             "cities_count": {},
             "units_count": {},
-            "military_units_count": {}
+            "military_units_count": {},
+            "wonders_count": {}
         }
 
         # Collect data for each turn
@@ -319,6 +321,11 @@ class MetricsCollector:
                     if isinstance(u, dict) and u.get('owner') == pid
                     and u.get('type_attack_strength', 0) > 0
                 ])
+
+                # Count wonders (from city improvements)
+                time_series["wonders_count"][turn][pid] = metrics.count_player_wonders(
+                    state, pid, data_loader.ruleset if data_loader else None
+                )
 
             # Try to override with complete savegame data
             savegame_data = get_savegame_data_for_report(config, turn)
@@ -406,6 +413,14 @@ class MetricsCollector:
             game_events = detector.detect_city_events(prev_state, curr_state, turn)
             game_events.extend(detector.detect_government_changes(prev_state, curr_state, turn))
             game_events.extend(detector.detect_diplomatic_changes(prev_state, curr_state, turn))
+
+            # Detect wonder completions using savegame data (complete visibility)
+            if curr_savegame_data:
+                wonder_events = detector.detect_wonder_completions(
+                    prev_savegame_data, curr_savegame_data, curr_state, turn,
+                    data_loader.ruleset if data_loader else None
+                )
+                game_events.extend(wonder_events)
 
             # For tech discoveries, prefer savegame data (complete visibility)
             # Use all_techs_seen to avoid counting same tech multiple times

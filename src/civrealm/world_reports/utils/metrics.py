@@ -230,3 +230,118 @@ def get_player_culture(state: Dict, player_id: int) -> float:
         return 0.0
 
     return float(player.get('culture', 0))
+
+
+def count_player_wonders(state: Dict, player_id: int, ruleset: Dict = None) -> int:
+    """Count wonders owned by a player
+
+    Counts improvements in cities that are classified as wonders
+    (genus 0 = great wonder, genus 1 = small wonder, or soundtag starting with 'w').
+
+    Args:
+        state: Game state dictionary containing 'city' data
+        player_id: Player ID (can be string or int)
+        ruleset: Optional ruleset dict with 'improvements' data for wonder identification
+
+    Returns:
+        Number of wonders owned by the player
+    """
+    if 'city' not in state:
+        return 0
+
+    # Get improvement metadata from ruleset
+    improvements = ruleset.get('improvements', {}) if ruleset else {}
+
+    # Helper to check if an improvement is a wonder
+    def is_wonder(impr_id: int) -> bool:
+        impr_id_str = str(impr_id)
+        if impr_id_str in improvements:
+            impr = improvements[impr_id_str]
+            # genus 0 = great wonder, genus 1 = small wonder
+            genus = impr.get('genus', 2)
+            soundtag = impr.get('soundtag', '')
+            return genus in (0, 1) or (soundtag and soundtag[0] == 'w')
+        return False
+
+    # Convert player_id for comparison
+    player_id_int = int(player_id)
+
+    wonder_count = 0
+    for city_id, city in state['city'].items():
+        if not isinstance(city, dict):
+            continue
+
+        # Check if city is owned by player
+        if city.get('owner') != player_id_int:
+            continue
+
+        # Check improvements array
+        improvements_arr = city.get('improvements', [])
+        if not improvements_arr:
+            continue
+
+        # Count wonders in this city
+        for impr_id, has_improvement in enumerate(improvements_arr):
+            if has_improvement and is_wonder(impr_id):
+                wonder_count += 1
+
+    return wonder_count
+
+
+def get_player_wonder_list(state: Dict, player_id: int, ruleset: Dict = None) -> List[Dict]:
+    """Get list of wonders owned by a player with details
+
+    Args:
+        state: Game state dictionary containing 'city' data
+        player_id: Player ID (can be string or int)
+        ruleset: Optional ruleset dict with 'improvements' data for wonder names
+
+    Returns:
+        List of wonder dicts with 'id', 'name', 'city_name', 'city_id'
+    """
+    if 'city' not in state:
+        return []
+
+    # Get improvement metadata from ruleset
+    improvements = ruleset.get('improvements', {}) if ruleset else {}
+
+    # Helper to check if an improvement is a wonder
+    def is_wonder(impr_id: int) -> bool:
+        impr_id_str = str(impr_id)
+        if impr_id_str in improvements:
+            impr = improvements[impr_id_str]
+            genus = impr.get('genus', 2)
+            soundtag = impr.get('soundtag', '')
+            return genus in (0, 1) or (soundtag and soundtag[0] == 'w')
+        return False
+
+    def get_wonder_name(impr_id: int) -> str:
+        impr_id_str = str(impr_id)
+        if impr_id_str in improvements:
+            return improvements[impr_id_str].get('name', f'Wonder #{impr_id}')
+        return f'Wonder #{impr_id}'
+
+    # Convert player_id for comparison
+    player_id_int = int(player_id)
+
+    wonders = []
+    for city_id, city in state['city'].items():
+        if not isinstance(city, dict):
+            continue
+
+        if city.get('owner') != player_id_int:
+            continue
+
+        city_name = city.get('name', f'City #{city_id}')
+        improvements_arr = city.get('improvements', [])
+
+        for impr_id, has_improvement in enumerate(improvements_arr):
+            if has_improvement and is_wonder(impr_id):
+                wonders.append({
+                    'id': impr_id,
+                    'name': get_wonder_name(impr_id),
+                    'city_name': city_name,
+                    'city_id': city_id
+                })
+
+    return wonders
