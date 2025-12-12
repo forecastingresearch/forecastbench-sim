@@ -245,8 +245,35 @@ class HTMLRenderer:
         else:
             html.append('<p>No city events recorded.</p>')
 
+        # Wonder events
+        html.append('<h3>2.2 Wonder Completions</h3>')
+        wonder_events = [e for e in events if e['type'] == 'wonder_completed']
+        # Filter out Palace (small wonder everyone gets)
+        wonder_events = [e for e in wonder_events
+                        if e.get('metadata', {}).get('wonder_name') != 'Palace']
+
+        if wonder_events:
+            rows = []
+            for event in wonder_events:
+                turn_str = f"Turn {event['turn']}"
+                wonder_name = event.get('metadata', {}).get('wonder_name', 'Unknown')
+                city_name = event.get('metadata', {}).get('city_name', 'Unknown')
+                description = event['description']
+
+                rows.append(f'<tr><td>{turn_str}</td><td>{wonder_name}</td><td>{city_name}</td><td>{description}</td></tr>')
+
+            html.append('<table class="data-table">')
+            html.append('<caption>Wonder Completions Throughout History</caption>')
+            html.append('<thead><tr><th>Turn</th><th>Wonder</th><th>City</th><th>Description</th></tr></thead>')
+            html.append('<tbody>')
+            html.append('\n'.join(rows))
+            html.append('</tbody>')
+            html.append('</table>')
+        else:
+            html.append('<p>No wonders completed yet.</p>')
+
         # Territory maps (if visualizer available)
-        html.append('<h3>2.2 Territorial Control</h3>')
+        html.append('<h3>2.3 Territorial Control</h3>')
 
         if self.visualizer and self.data_loader:
             territory_turns = json_data.get('territory_snapshots', {}).get('turns', [])
@@ -282,7 +309,7 @@ class HTMLRenderer:
             html.append('<p><em>Territory maps require visualizer and data_loader.</em></p>')
 
         # Territory graphs
-        html.append('<h3>2.3 Territory Expansion</h3>')
+        html.append('<h3>2.4 Territory Expansion</h3>')
         try:
             img_buf = graph_gen.create_territory_graph(json_data)
             img_name = 'territory_over_time'
@@ -295,7 +322,7 @@ class HTMLRenderer:
             html.append('<p>Territory data not available.</p>')
 
         # Arable land graph
-        html.append('<h3>2.4 Arable Land</h3>')
+        html.append('<h3>2.5 Arable Land</h3>')
         try:
             img_buf = graph_gen.create_arable_land_graph(json_data)
             img_name = 'arable_land_over_time'
@@ -308,7 +335,7 @@ class HTMLRenderer:
             html.append('<p>Arable land data not available.</p>')
 
         # Technology discoveries
-        html.append('<h3>2.5 Technology Discoveries</h3>')
+        html.append('<h3>2.6 Technology Discoveries</h3>')
         tech_events = [e for e in events if e['type'] == 'tech_discovered']
 
         if tech_events:
@@ -329,7 +356,7 @@ class HTMLRenderer:
             html.append('<p>No technology discoveries recorded.</p>')
 
         # Government changes
-        html.append('<h3>2.6 Government Changes</h3>')
+        html.append('<h3>2.7 Government Changes</h3>')
         gov_events = [e for e in events if e['type'] == 'government_change']
 
         if gov_events:
