@@ -46,6 +46,7 @@ CivBench provides a benchmark that enables **immediate feedback** on LLM forecas
   - [Data Production Pipeline](#data-production-pipeline)
   - [World Report Generation](#world-report-generation)
   - [Question Generation](#question-generation)
+  - [Scripts](#scripts)
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
 - [Testing the Installation](#testing-the-installation)
@@ -293,8 +294,20 @@ python scripts/compute_base_rates.py --data-dir data/games --snapshot-turn 50
 **Key Files:**
 - [signal_statistics.py](src/civrealm/world_reports/questions/signal_statistics.py) - Embedded statistics and threshold functions
 - [generator.py](src/civrealm/world_reports/questions/generator.py) - Question generation with calibrated thresholds
-- [compute_signal_statistics.py](scripts/compute_signal_statistics.py) - Script to extract statistics from games
-- [compute_base_rates.py](scripts/compute_base_rates.py) - Script to verify base rates across games
+
+### Scripts
+
+All utility scripts are in the `scripts/` directory:
+
+| Script | Description |
+|--------|-------------|
+| [run_world.py](scripts/run_world.py) | Run a single AI-vs-AI game with deterministic seed |
+| [run_worlds.py](scripts/run_worlds.py) | Run multiple games in parallel |
+| [generate_data_batch.py](scripts/generate_data_batch.py) | Batch extract JSON data from game recordings |
+| [compute_signal_statistics.py](scripts/compute_signal_statistics.py) | Extract percentile statistics from game data |
+| [compute_base_rates.py](scripts/compute_base_rates.py) | Compute base rates across games |
+| [generate_questions.py](scripts/generate_questions.py) | Generate question banks from game data |
+| [calibrate_thresholds.py](scripts/calibrate_thresholds.py) | Calibrate threshold values |
 
 ## Prerequisites
 
