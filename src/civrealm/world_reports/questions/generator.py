@@ -22,7 +22,12 @@ from .templates import (
     TEMPLATES_BY_SIGNAL_TYPE,
     get_template,
 )
-from .thresholds import DEFAULT_THRESHOLDS, select_threshold
+from .thresholds import (
+    DEFAULT_THRESHOLDS,
+    select_threshold,
+    select_threshold_for_rate,
+    select_growth_threshold_for_rate,
+)
 
 
 class QuestionGenerator:
@@ -387,8 +392,8 @@ class QuestionGenerator:
         civ_name: str,
         question_id: str,
     ) -> QuestionInstance | None:
-        """Generate a threshold-based question."""
-        # Get current value to select appropriate threshold
+        """Generate a threshold-based question using statistics-calibrated thresholds."""
+        # Get current value to ensure threshold is above it
         signal_name = template.signal_name
         time_series = game_data.get("time_series", {}).get(signal_name, {})
 
@@ -398,25 +403,25 @@ class QuestionGenerator:
         if current_value is None:
             return None  # No data available
 
-        # Also get expected value at resolution turn to pick better threshold
-        future_value = self._get_signal_value(time_series, player_id, resolution_turn)
-
-        # Select threshold that will result in ~50% True answers
-        # Use a value closer to the future value to make questions answerable
+        # Use statistics-based threshold selection for ~40% True rate
+        # The threshold is derived from empirical percentiles at the resolution turn
         try:
-            if future_value is not None and future_value > current_value:
-                # Pick a threshold likely to be reached
-                # Use 70% of the way from current to future (biased toward reachable)
-                target_value = current_value + 0.7 * (future_value - current_value)
-                threshold = select_threshold(signal_name, target_value, self.thresholds, strategy="nearest_below")
-                # Ensure threshold is above current value (otherwise question is trivial)
-                if threshold <= current_value:
-                    threshold = select_threshold(signal_name, current_value, self.thresholds, strategy="nearest_above")
-            else:
-                threshold = select_threshold(signal_name, current_value, self.thresholds, strategy="nearest_above")
+            threshold = select_threshold_for_rate(
+                signal_name=signal_name,
+                resolution_turn=resolution_turn,
+                target_rate=0.4,  # Target ~40% True answers
+                current_value=current_value,  # Ensures threshold > current
+            )
         except ValueError:
-            # No thresholds configured for this signal
-            return None
+            # Fall back to old method if signal not in statistics
+            try:
+                threshold = select_threshold(signal_name, current_value, self.thresholds, strategy="nearest_above")
+            except ValueError:
+                return None
+
+        # Ensure threshold is above current value (otherwise question is trivial)
+        if threshold <= current_value:
+            threshold = int(current_value) + 1
 
         # Build parameters
         params = {
@@ -455,12 +460,21 @@ class QuestionGenerator:
         civ_name: str,
         question_id: str,
     ) -> QuestionInstance | None:
-        """Generate a territory gain question."""
-        # Get threshold (using territory_gain signal)
+        """Generate a territory gain question using statistics-calibrated thresholds."""
+        # Use statistics-based growth threshold selection for ~40% True rate
         try:
-            threshold = select_threshold("territory_gain", 0, self.thresholds, strategy="median")
+            threshold = select_growth_threshold_for_rate(
+                signal_name="territory_size",
+                snapshot_turn=snapshot_turn,
+                resolution_turn=resolution_turn,
+                target_rate=0.4,  # Target ~40% True answers
+            )
         except ValueError:
-            return None
+            # Fall back to static median
+            try:
+                threshold = select_threshold("territory_gain", 0, self.thresholds, strategy="median")
+            except ValueError:
+                return None
 
         params = {
             "civ": civ_name,

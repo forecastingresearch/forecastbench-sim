@@ -45,6 +45,7 @@ CivBench provides a benchmark that enables **immediate feedback** on LLM forecas
   - [Running AI Games with run_world.py](#running-ai-games-with-run_worldpy)
   - [Data Production Pipeline](#data-production-pipeline)
   - [World Report Generation](#world-report-generation)
+  - [Question Generation](#question-generation)
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
 - [Testing the Installation](#testing-the-installation)
@@ -59,7 +60,7 @@ This fork introduces a complete pipeline for running AI games, generating detail
 
 ### Running AI Games with run_world.py
 
-The [run_world.py](run_world.py) script orchestrates fully-automated AI-vs-AI games and report generation:
+The [run_world.py](scripts/run_world.py) script orchestrates fully-automated AI-vs-AI games and report generation:
 
 **Game Setup:**
 - Creates a competitive game with N AI players (default 5, all using Freeciv's built-in AI)
@@ -88,9 +89,9 @@ The [run_world.py](run_world.py) script orchestrates fully-automated AI-vs-AI ga
 
 **Usage:**
 ```bash
-python run_world.py --seed 42
-python run_world.py --seed 42 --max_turns 100
-python run_world.py --seed 42 --max_turns 100 --num_ai_players 7
+python scripts/run_world.py --seed 42
+python scripts/run_world.py --seed 42 --max_turns 100
+python scripts/run_world.py --seed 42 --max_turns 100 --num_ai_players 7
 ```
 
 **Arguments:**
@@ -203,6 +204,97 @@ generator.generate_reports()
 - `turn_50_data.json` - Complete extracted metrics (intermediate format)
 - `turn_50_report.html` - HTML report
 - Embedded PNG charts and visualizations
+
+### Question Generation
+
+The question generation system creates forecasting questions from game data, with thresholds calibrated from empirical statistics across 103 game simulations.
+
+**Question Types:**
+
+Questions are organized into three signal types based on predictability:
+- **B1 (High base rate):** Tech count, population, score - signals that generally increase
+- **B2 (Medium base rate):** Territory, treasury, cities - signals with more variance
+- **B3 (Low base rate):** Events like wars, alliances, conquests - harder to predict
+
+Each question has a time horizon:
+- **H1 (Short):** ≤30 turns ahead - immediate predictions
+- **H2 (Medium):** 30-100 turns ahead - medium-term forecasts
+- **H3 (Long):** >100 turns ahead - long-range predictions
+
+**Statistics-Based Threshold Calibration:**
+
+For thresholds, we extract empirical percentiles from game data:
+
+```bash
+# Extract statistics from all games
+python scripts/compute_signal_statistics.py --data-dir data/games --output signal_stats.json
+```
+
+This produces percentile distributions for each signal at key turns:
+
+| Signal | Turn 70 (p50) | Turn 125 (p50) | Turn 200 (p50) |
+|--------|---------------|----------------|----------------|
+| techs_known | 11 | 33 | 46 |
+| population | 2 | 31 | 43 |
+| territory_size | 27 | 134 | 138 |
+| cities_count | 2 | 15 | 15 |
+
+**Threshold Selection Formula:**
+
+For a question "Will signal ≥ threshold by resolution_turn?", we target ~40% True rate:
+- Select the 60th percentile at the resolution turn
+- 60% of outcomes fall below → 40% at or above → 40% True
+
+```python
+from civrealm.world_reports.questions import select_threshold_for_rate
+
+# Get calibrated threshold for ~40% True rate at turn 125
+threshold = select_threshold_for_rate(
+    signal_name="techs_known",
+    resolution_turn=125,
+    target_rate=0.4
+)
+# Returns 34 (60th percentile of tech count at turn 125)
+```
+
+**Generating Question Banks:**
+
+```python
+from civrealm.world_reports.questions import QuestionGenerator, QuestionResolver
+
+# Generate questions with calibrated thresholds
+generator = QuestionGenerator()
+question_bank = generator.generate_question_bank(
+    game_id="s42",
+    game_data=game_data,
+    snapshot_turn=50,  # Forecaster sees data up to turn 50
+)
+
+# Resolve questions against actual outcomes
+resolver = QuestionResolver()
+resolved_bank = resolver.resolve_batch(question_bank, game_data)
+```
+
+**Computing Base Rates:**
+
+To verify calibration across multiple games:
+
+```bash
+# Compute base rates across all games
+python scripts/compute_base_rates.py --data-dir data/games --snapshot-turn 50
+
+# Output shows True rate by template and horizon:
+# Template                          H1         H2         H3
+# tech_count_gte                 54.1%      60.5%      55.2%
+# population_gte                 39.1%      57.6%      61.9%
+# cities_gte                     41.2%      54.6%      71.4%
+```
+
+**Key Files:**
+- [signal_statistics.py](src/civrealm/world_reports/questions/signal_statistics.py) - Embedded statistics and threshold functions
+- [generator.py](src/civrealm/world_reports/questions/generator.py) - Question generation with calibrated thresholds
+- [compute_signal_statistics.py](scripts/compute_signal_statistics.py) - Script to extract statistics from games
+- [compute_base_rates.py](scripts/compute_base_rates.py) - Script to verify base rates across games
 
 ## Prerequisites
 

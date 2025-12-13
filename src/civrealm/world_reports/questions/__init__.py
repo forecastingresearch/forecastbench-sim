@@ -63,6 +63,17 @@ from .thresholds import (
     get_thresholds_for_signal,
     select_threshold,
     create_threshold_config,
+    select_threshold_for_rate,
+    select_growth_threshold_for_rate,
+)
+
+from .signal_statistics import (
+    get_threshold_for_rate,
+    get_growth_threshold_for_rate,
+    get_event_probability,
+    SIGNAL_STATS,
+    GROWTH_STATS,
+    EVENT_PROBABILITIES,
 )
 
 from .generator import QuestionGenerator
@@ -106,6 +117,15 @@ __all__ = [
     "get_thresholds_for_signal",
     "select_threshold",
     "create_threshold_config",
+    "select_threshold_for_rate",
+    "select_growth_threshold_for_rate",
+    # Signal statistics
+    "get_threshold_for_rate",
+    "get_growth_threshold_for_rate",
+    "get_event_probability",
+    "SIGNAL_STATS",
+    "GROWTH_STATS",
+    "EVENT_PROBABILITIES",
     # Generator & Resolver
     "QuestionGenerator",
     "QuestionResolver",

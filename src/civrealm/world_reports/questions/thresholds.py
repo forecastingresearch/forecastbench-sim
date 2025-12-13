@@ -1,27 +1,35 @@
 """
 Configurable threshold values for question generation.
 
-These are placeholder values that will be calibrated after collecting
-a corpus with base rates from simulation runs.
+This module provides two threshold selection strategies:
+
+1. Static thresholds (DEFAULT_THRESHOLDS): Fixed lists of values per signal.
+   Use with select_threshold() for backward compatibility.
+
+2. Statistics-based thresholds: Dynamically computed from empirical data.
+   Use select_threshold_for_rate() for calibrated ~40% True rates.
+
+Statistics are derived from 103 game simulations.
+See signal_statistics.py for the underlying data.
 """
 
 from .schema import ThresholdConfig
 
 
-# Default threshold configuration
-# Calibrated from game data using calibrate_thresholds.py
+# Default threshold configuration (static fallback)
+# These are used when resolution_turn is not available
 DEFAULT_THRESHOLDS = ThresholdConfig(
     defaults={
-        # B1 signals - calibrated from percentiles at turns 50-200
-        "techs_known": [6, 8, 13, 24, 28, 38, 40, 44, 50],
-        "population": [5, 9, 19, 23, 27, 43],
-        "score": [100, 250, 500, 1000, 2000, 5000],  # Not yet calibrated
+        # B1 signals - techs/population/score
+        "techs_known": [8, 12, 20, 28, 35, 42, 50],
+        "population": [5, 15, 30, 50, 70, 90],
+        "score": [200, 500, 1000, 2000, 3500, 5000],
 
-        # B2 signals - calibrated from percentiles at turns 50-200
-        "territory_size": [26, 38, 63, 67, 90, 142, 149],
-        "territory_gain": [10, 25, 50, 75, 100],
-        "treasury": [100, 222, 268, 741, 804, 956, 1253],
-        "cities_count": [1, 3, 5, 8, 15],
+        # B2 signals - territory/treasury/cities
+        "territory_size": [30, 70, 130, 200, 280, 350],
+        "territory_gain": [10, 40, 100, 180, 250],
+        "treasury": [100, 400, 800, 1200, 1800],
+        "cities_count": [3, 8, 15, 25, 35],
     }
 )
 
@@ -119,3 +127,88 @@ def create_threshold_config(overrides: dict[str, list[int | float]] | None = Non
     if overrides:
         merged.update(overrides)
     return ThresholdConfig(defaults=merged)
+
+
+def select_threshold_for_rate(
+    signal_name: str,
+    resolution_turn: int,
+    target_rate: float = 0.4,
+    current_value: float | None = None,
+) -> int | float:
+    """
+    Select a threshold targeting a specific True rate using empirical statistics.
+
+    This is the recommended threshold selection method. It uses percentile
+    statistics from 103 game simulations to pick thresholds that achieve
+    approximately the target True rate.
+
+    For a question "Will signal >= threshold by resolution_turn?":
+    - target_rate=0.4 means ~40% of outcomes will be True
+    - We select the (1-target_rate) percentile, e.g., 60th percentile for 40% True
+
+    Args:
+        signal_name: Name of the signal (e.g., 'techs_known', 'population')
+        resolution_turn: Turn at which the question is resolved
+        target_rate: Target fraction of True answers (default 0.4 = 40%)
+        current_value: Optional current value to ensure threshold is above it
+
+    Returns:
+        Threshold value calibrated for the target rate
+
+    Example:
+        >>> select_threshold_for_rate("techs_known", resolution_turn=125, target_rate=0.4)
+        35  # 60th percentile of tech count at turn 125
+    """
+    from .signal_statistics import get_threshold_for_rate, get_canonical_signal_name
+
+    canonical_name = get_canonical_signal_name(signal_name)
+
+    try:
+        return get_threshold_for_rate(
+            canonical_name,
+            resolution_turn=resolution_turn,
+            target_rate=target_rate,
+            current_value=current_value,
+        )
+    except ValueError:
+        # Fall back to static thresholds if signal not in statistics
+        thresholds = get_thresholds_for_signal(signal_name)
+        # Return median of static thresholds
+        sorted_t = sorted(thresholds)
+        return sorted_t[len(sorted_t) // 2]
+
+
+def select_growth_threshold_for_rate(
+    signal_name: str,
+    snapshot_turn: int,
+    resolution_turn: int,
+    target_rate: float = 0.4,
+) -> int | float:
+    """
+    Select a growth threshold (change from snapshot to resolution) for target rate.
+
+    For questions like "Will territory increase by X from snapshot to resolution?"
+
+    Args:
+        signal_name: Name of the signal
+        snapshot_turn: Starting turn (when question is asked)
+        resolution_turn: Ending turn (when question is resolved)
+        target_rate: Target True rate
+
+    Returns:
+        Growth threshold value
+    """
+    from .signal_statistics import get_growth_threshold_for_rate
+
+    try:
+        return get_growth_threshold_for_rate(
+            signal_name,
+            snapshot_turn=snapshot_turn,
+            resolution_turn=resolution_turn,
+            target_rate=target_rate,
+        )
+    except ValueError:
+        # Fall back to static thresholds
+        thresholds = get_thresholds_for_signal("territory_gain")
+        sorted_t = sorted(thresholds)
+        return sorted_t[len(sorted_t) // 2]
