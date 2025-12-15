@@ -28,108 +28,6 @@ from utils.llm.model_registry import configure_api_keys, MODELS
 from dotenv import load_dotenv
 
 
-def format_world_report_json(data: dict) -> str:
-    """
-    Format world report JSON data into a readable text format for LLMs.
-
-    Extracts key information: civilizations, current state, and recent trends.
-    """
-    lines = []
-
-    # Metadata
-    turn = data.get("metadata", {}).get("turn", "?")
-    lines.append(f"# World Report - Turn {turn}")
-    lines.append("")
-
-    # Civilizations
-    civs = data.get("civilizations", {})
-    lines.append("## Civilizations")
-    for civ_id, civ_info in civs.items():
-        lines.append(f"- Player {civ_id}: {civ_info.get('name', 'Unknown')}")
-    lines.append("")
-
-    # Current state (turn 50 values)
-    time_series = data.get("time_series", {})
-    turn_str = str(turn)
-
-    lines.append("## Current State (Turn 50)")
-    lines.append("")
-
-    # Technology counts (key is "techs_known")
-    if "techs_known" in time_series and turn_str in time_series["techs_known"]:
-        lines.append("### Technologies Discovered")
-        tech_data = time_series["techs_known"][turn_str]
-        for civ_id, civ_info in civs.items():
-            tech_count = tech_data.get(civ_id, 0)
-            lines.append(f"- {civ_info.get('name')}: {tech_count} technologies")
-        lines.append("")
-
-    # Science output
-    if "science" in time_series and turn_str in time_series["science"]:
-        lines.append("### Science Output")
-        science_data = time_series["science"][turn_str]
-        for civ_id, civ_info in civs.items():
-            science = science_data.get(civ_id, 0)
-            lines.append(f"- {civ_info.get('name')}: {science}")
-        lines.append("")
-
-    # Population
-    if "population" in time_series and turn_str in time_series["population"]:
-        lines.append("### Population")
-        pop_data = time_series["population"][turn_str]
-        for civ_id, civ_info in civs.items():
-            pop = pop_data.get(civ_id, 0)
-            lines.append(f"- {civ_info.get('name')}: {pop}")
-        lines.append("")
-
-    # Cities (key is "cities_count")
-    if "cities_count" in time_series and turn_str in time_series["cities_count"]:
-        lines.append("### Cities")
-        city_data = time_series["cities_count"][turn_str]
-        for civ_id, civ_info in civs.items():
-            cities = city_data.get(civ_id, 0)
-            lines.append(f"- {civ_info.get('name')}: {cities} cities")
-        lines.append("")
-
-    # Treasury
-    if "treasury" in time_series and turn_str in time_series["treasury"]:
-        lines.append("### Treasury")
-        treasury_data = time_series["treasury"][turn_str]
-        for civ_id, civ_info in civs.items():
-            gold = treasury_data.get(civ_id, 0)
-            lines.append(f"- {civ_info.get('name')}: {gold} gold")
-        lines.append("")
-
-    # Territory
-    if "territory_size" in time_series and turn_str in time_series["territory_size"]:
-        lines.append("### Territory Size")
-        territory_data = time_series["territory_size"][turn_str]
-        for civ_id, civ_info in civs.items():
-            territory = territory_data.get(civ_id, 0)
-            lines.append(f"- {civ_info.get('name')}: {territory} tiles")
-        lines.append("")
-
-    # Recent tech progress (last 10 turns)
-    if "techs_known" in time_series:
-        lines.append("## Technology Progress (Last 10 Turns)")
-        lines.append("")
-        tech_series = time_series["techs_known"]
-        recent_turns = [str(t) for t in range(max(1, turn - 9), turn + 1)]
-
-        for civ_id, civ_info in civs.items():
-            civ_name = civ_info.get('name')
-            values = []
-            for t in recent_turns:
-                if t in tech_series:
-                    values.append(str(tech_series[t].get(civ_id, 0)))
-                else:
-                    values.append("?")
-            lines.append(f"- {civ_name}: {' -> '.join(values)}")
-        lines.append("")
-
-    return '\n'.join(lines)
-
-
 def load_questions(data_dir: Path, template_filter: str = "tech_comparative") -> list[dict]:
     """
     Load all questions from game folders, filtering by template_id.
@@ -173,7 +71,7 @@ def load_questions(data_dir: Path, template_filter: str = "tech_comparative") ->
 
 
 def load_world_report(data_dir: Path, game_id: str) -> str:
-    """Load world report JSON data and format for LLM."""
+    """Load world report JSON data as raw JSON string."""
     report_path = data_dir / game_id / "world_report" / "turn_050_data.json"
 
     if not report_path.exists():
@@ -182,7 +80,8 @@ def load_world_report(data_dir: Path, game_id: str) -> str:
     with open(report_path) as f:
         data = json.load(f)
 
-    return format_world_report_json(data)
+    # Return as compact JSON string
+    return json.dumps(data, separators=(',', ':'))
 
 
 def subsample_questions(questions: list[dict], n: int, seed: int) -> list[dict]:
@@ -195,9 +94,11 @@ def subsample_questions(questions: list[dict], n: int, seed: int) -> list[dict]:
 
 def build_prompt(question_text: str, world_report: str) -> str:
     """Build the prompt for the LLM."""
-    return f"""You are a forecaster analyzing a civilization simulation game. Based on the world report below, provide your probability estimate (0.0 to 1.0) that the following question will resolve to YES.
+    return f"""You are a forecaster analyzing a civilization simulation game. Based on the world report data (JSON) below, provide your probability estimate (a probability between 0.0 and 1.0) that the following question will resolve to YES.
 
-## World Report (Turn 50)
+The JSON contains time series data for each civilization, keyed by turn number and player ID.
+
+## World Report Data (Turn 50)
 {world_report}
 
 ## Question
