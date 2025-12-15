@@ -12,21 +12,14 @@ from .schema import (
     QuestionTemplate,
     WorldReportConfig,
     CivilizationInfo,
-    ThresholdConfig,
     classify_horizon,
     calculate_difficulty,
 )
 from .templates import (
     ALL_TEMPLATES,
     TEMPLATES_BY_ID,
-    TEMPLATES_BY_SIGNAL_TYPE,
+    TEMPLATES_BY_INFO_AVAILABILITY,
     get_template,
-)
-from .thresholds import (
-    DEFAULT_THRESHOLDS,
-    select_threshold,
-    select_threshold_for_rate,
-    select_growth_threshold_for_rate,
 )
 
 
@@ -34,24 +27,21 @@ class QuestionGenerator:
     """
     Generates question banks from game data.
 
-    The generator creates questions using predefined templates and configurable
-    thresholds, supporting all B1/B2/B3 signal types and H1/H2/H3 time horizons.
+    The generator creates questions using predefined templates,
+    supporting all I1/I2/I3 information availability levels and H1/H2/H3 time horizons.
     """
 
     def __init__(
         self,
         templates: list[QuestionTemplate] | None = None,
-        thresholds: ThresholdConfig | None = None,
     ):
         """
         Initialize the question generator.
 
         Args:
             templates: List of question templates to use; defaults to ALL_TEMPLATES
-            thresholds: Threshold configuration; defaults to DEFAULT_THRESHOLDS
         """
         self.templates = templates or ALL_TEMPLATES
-        self.thresholds = thresholds or DEFAULT_THRESHOLDS
         self._templates_by_id = {t.template_id: t for t in self.templates}
 
     def generate_question_bank(
@@ -60,7 +50,7 @@ class QuestionGenerator:
         game_data: dict[str, Any],
         snapshot_turn: int,
         resolution_turns: list[int] | None = None,
-        signal_types: list[str] | None = None,
+        info_availability_levels: list[str] | None = None,
         world_report_config: WorldReportConfig | None = None,
     ) -> QuestionBank:
         """
@@ -71,7 +61,7 @@ class QuestionGenerator:
             game_data: Output from MetricsCollector.collect_all()
             snapshot_turn: Turn at which forecasters see data
             resolution_turns: Specific turns to resolve questions at; auto-selected if None
-            signal_types: List of signal types to include (["B1", "B2", "B3"]); all if None
+            info_availability_levels: List of levels to include (["I1", "I2", "I3"]); all if None
             world_report_config: Custom world report config; auto-generated if None
 
         Returns:
@@ -89,13 +79,13 @@ class QuestionGenerator:
         # Filter to valid resolution turns
         resolution_turns = [t for t in resolution_turns if snapshot_turn < t <= max_turn]
 
-        # Select templates by signal type
-        if signal_types is None:
-            signal_types = ["B1", "B2", "B3"]
+        # Select templates by info availability level
+        if info_availability_levels is None:
+            info_availability_levels = ["I1", "I2", "I3"]
 
         templates_to_use = []
-        for st in signal_types:
-            templates_to_use.extend(TEMPLATES_BY_SIGNAL_TYPE.get(st, []))
+        for level in info_availability_levels:
+            templates_to_use.extend(TEMPLATES_BY_INFO_AVAILABILITY.get(level, []))
 
         # Extract civilizations
         civilizations = self._extract_civilizations(game_data)
@@ -135,9 +125,9 @@ class QuestionGenerator:
         """
         Auto-select resolution turns for H1, H2, H3 horizons.
 
-        H1: 10-30 turns ahead
-        H2: 50-100 turns ahead
-        H3: 150+ turns ahead
+        H1: 20 turns ahead (short extrapolation)
+        H2: 80 turns ahead (medium, second-order effects)
+        H3: 150 turns ahead (long, regime changes likely)
         """
         turns = []
 
@@ -146,8 +136,8 @@ class QuestionGenerator:
         if h1_turn <= max_turn:
             turns.append(h1_turn)
 
-        # H2: Medium horizon (75 turns ahead)
-        h2_turn = snapshot_turn + 75
+        # H2: Medium horizon (80 turns ahead)
+        h2_turn = snapshot_turn + 80
         if h2_turn <= max_turn:
             turns.append(h2_turn)
 
@@ -202,38 +192,18 @@ class QuestionGenerator:
         question_counter = question_id_start
 
         # Dispatch based on template type
-        if template.template_id in ["tech_count_gte", "population_gte", "score_gte",
-                                    "territory_gte", "treasury_gte", "cities_gte"]:
-            # Single-civ threshold questions
-            for player_id, civ_info in civilizations.items():
-                q = self._generate_threshold_question(
-                    template=template,
-                    game_data=game_data,
-                    snapshot_turn=snapshot_turn,
-                    resolution_turn=resolution_turn,
-                    player_id=player_id,
-                    civ_name=civ_info.name,
-                    question_id=f"q{question_counter:04d}",
-                )
-                if q:
-                    questions.append(q)
-                    question_counter += 1
-
-        elif template.template_id == "territory_gain":
-            # Territory gain (needs both snapshot and resolution turn)
-            for player_id, civ_info in civilizations.items():
-                q = self._generate_territory_gain_question(
-                    template=template,
-                    game_data=game_data,
-                    snapshot_turn=snapshot_turn,
-                    resolution_turn=resolution_turn,
-                    player_id=player_id,
-                    civ_name=civ_info.name,
-                    question_id=f"q{question_counter:04d}",
-                )
-                if q:
-                    questions.append(q)
-                    question_counter += 1
+        if template.resolution_type == "comparative":
+            # Comparative questions use rank-adjacent pairings
+            new_questions = self._generate_comparative_questions(
+                template=template,
+                game_data=game_data,
+                snapshot_turn=snapshot_turn,
+                resolution_turn=resolution_turn,
+                civilizations=civilizations,
+                question_id_start=question_counter,
+            )
+            questions.extend(new_questions)
+            question_counter += len(new_questions)
 
         elif template.template_id == "score_rank_1":
             # Rank question - one per civ
@@ -249,7 +219,7 @@ class QuestionGenerator:
                 questions.append(q)
                 question_counter += 1
 
-        elif template.template_id in ["at_war_dyad", "alliance_dyad"]:
+        elif template.template_id in ["at_war_dyad", "alliance_dyad", "border_contact"]:
             # Dyadic questions - all pairs
             player_ids = list(civilizations.keys())
             for p1, p2 in itertools.combinations(player_ids, 2):
@@ -280,7 +250,7 @@ class QuestionGenerator:
                 questions.append(q)
                 question_counter += 1
 
-        elif template.template_id in ["city_founded", "city_lost", "anarchy_event"]:
+        elif template.template_id in ["city_founded", "city_lost", "anarchy_event", "treasury_zero"]:
             # Single-civ event questions
             for player_id, civ_info in civilizations.items():
                 q = self._generate_civ_event_question(
@@ -382,123 +352,96 @@ class QuestionGenerator:
 
         return None
 
-    def _generate_threshold_question(
+    def _get_rankings_for_signal(
+        self,
+        game_data: dict[str, Any],
+        signal_name: str,
+        turn: int,
+        civilizations: dict[int, CivilizationInfo],
+    ) -> list[tuple[int, float | int]]:
+        """
+        Get ranked list of (player_id, value) for a signal at a specific turn.
+        Returns list sorted by value descending.
+        """
+        if signal_name == "scores":
+            # Scores are in snapshots
+            snapshots = game_data.get("snapshots", {})
+            turn_snapshot = snapshots.get(str(turn), {})
+            scores = turn_snapshot.get("scores", {})
+            values = [(int(pid), val) for pid, val in scores.items() if int(pid) in civilizations]
+        else:
+            # Other signals are in time_series
+            time_series = game_data.get("time_series", {}).get(signal_name, {})
+            values = []
+            for player_id in civilizations.keys():
+                val = self._get_signal_value(time_series, player_id, turn)
+                if val is not None:
+                    values.append((player_id, val))
+
+        # Sort by value descending
+        values.sort(key=lambda x: x[1], reverse=True)
+        return values
+
+    def _generate_comparative_questions(
         self,
         template: QuestionTemplate,
         game_data: dict[str, Any],
         snapshot_turn: int,
         resolution_turn: int,
-        player_id: int,
-        civ_name: str,
-        question_id: str,
-    ) -> QuestionInstance | None:
-        """Generate a threshold-based question using statistics-calibrated thresholds."""
-        # Get current value to ensure threshold is above it
-        signal_name = template.signal_name
-        time_series = game_data.get("time_series", {}).get(signal_name, {})
+        civilizations: dict[int, CivilizationInfo],
+        question_id_start: int,
+    ) -> list[QuestionInstance]:
+        """
+        Generate comparative questions using rank-adjacent pairings.
 
-        # Handle both structures: turn -> player_id or player_id -> turn
-        current_value = self._get_signal_value(time_series, player_id, snapshot_turn)
+        Per the spec: "Use rank-adjacent pairings at snapshot turn" to produce
+        ~50% base rates and ensure difficulty comes from H and I dimensions.
+        """
+        questions = []
+        question_counter = question_id_start
 
-        if current_value is None:
-            return None  # No data available
-
-        # Use statistics-based threshold selection for ~40% True rate
-        # The threshold is derived from empirical percentiles at the resolution turn
-        try:
-            threshold = select_threshold_for_rate(
-                signal_name=signal_name,
-                resolution_turn=resolution_turn,
-                target_rate=0.4,  # Target ~40% True answers
-                current_value=current_value,  # Ensures threshold > current
-            )
-        except ValueError:
-            # Fall back to old method if signal not in statistics
-            try:
-                threshold = select_threshold(signal_name, current_value, self.thresholds, strategy="nearest_above")
-            except ValueError:
-                return None
-
-        # Ensure threshold is above current value (otherwise question is trivial)
-        if threshold <= current_value:
-            threshold = int(current_value) + 1
-
-        # Build parameters
-        params = {
-            "civ": civ_name,
-            "player_id": player_id,
-            "threshold": threshold,
-            "resolution_turn": resolution_turn,
-        }
-
-        # Render question text
-        question_text = template.question_template.format(**params)
-
-        # Calculate difficulty
-        horizon = classify_horizon(snapshot_turn, resolution_turn)
-        difficulty = calculate_difficulty(horizon, template.signal_type)
-
-        return QuestionInstance(
-            question_id=question_id,
-            template_id=template.template_id,
-            resolution_turn=resolution_turn,
-            horizon=horizon,
-            base_rate=template.signal_type,
-            difficulty=difficulty,
-            parameters=params,
-            question_text=question_text,
-            resolution=None,
+        # Get rankings at snapshot turn
+        rankings = self._get_rankings_for_signal(
+            game_data, template.signal_name, snapshot_turn, civilizations
         )
 
-    def _generate_territory_gain_question(
-        self,
-        template: QuestionTemplate,
-        game_data: dict[str, Any],
-        snapshot_turn: int,
-        resolution_turn: int,
-        player_id: int,
-        civ_name: str,
-        question_id: str,
-    ) -> QuestionInstance | None:
-        """Generate a territory gain question using statistics-calibrated thresholds."""
-        # Use statistics-based growth threshold selection for ~40% True rate
-        try:
-            threshold = select_growth_threshold_for_rate(
-                signal_name="territory_size",
-                snapshot_turn=snapshot_turn,
+        if len(rankings) < 2:
+            return questions
+
+        # Generate questions for rank-adjacent pairs
+        for i in range(len(rankings) - 1):
+            player_id_a, _ = rankings[i]      # Higher ranked
+            player_id_b, _ = rankings[i + 1]  # Lower ranked
+
+            civ_name_a = civilizations[player_id_a].name
+            civ_name_b = civilizations[player_id_b].name
+
+            params = {
+                "civ_a": civ_name_a,
+                "civ_b": civ_name_b,
+                "player_id_a": player_id_a,
+                "player_id_b": player_id_b,
+                "resolution_turn": resolution_turn,
+            }
+
+            question_text = template.question_template.format(**params)
+            horizon = classify_horizon(snapshot_turn, resolution_turn)
+            difficulty = calculate_difficulty(horizon, template.info_availability)
+
+            questions.append(QuestionInstance(
+                question_id=f"q{question_counter:04d}",
+                template_id=template.template_id,
                 resolution_turn=resolution_turn,
-                target_rate=0.4,  # Target ~40% True answers
-            )
-        except ValueError:
-            # Fall back to static median
-            try:
-                threshold = select_threshold("territory_gain", 0, self.thresholds, strategy="median")
-            except ValueError:
-                return None
+                horizon=horizon,
+                info_availability=template.info_availability,
+                difficulty=difficulty,
+                parameters=params,
+                question_text=question_text,
+                resolution=None,
+            ))
+            question_counter += 1
 
-        params = {
-            "civ": civ_name,
-            "player_id": player_id,
-            "threshold": threshold,
-            "snapshot_turn": snapshot_turn,
-            "resolution_turn": resolution_turn,
-        }
-
-        question_text = template.question_template.format(**params)
-        horizon = classify_horizon(snapshot_turn, resolution_turn)
-        difficulty = calculate_difficulty(horizon, template.signal_type)
-
-        return QuestionInstance(
-            question_id=question_id,
-            template_id=template.template_id,
-            resolution_turn=resolution_turn,
-            horizon=horizon,
-            base_rate=template.signal_type,
-            difficulty=difficulty,
-            parameters=params,
-            question_text=question_text,
-            resolution=None,
-        )
+        return questions
 
     def _generate_rank_question(
         self,
@@ -518,14 +461,14 @@ class QuestionGenerator:
 
         question_text = template.question_template.format(**params)
         horizon = classify_horizon(snapshot_turn, resolution_turn)
-        difficulty = calculate_difficulty(horizon, template.signal_type)
+        difficulty = calculate_difficulty(horizon, template.info_availability)
 
         return QuestionInstance(
             question_id=question_id,
             template_id=template.template_id,
             resolution_turn=resolution_turn,
             horizon=horizon,
-            base_rate=template.signal_type,
+            info_availability=template.info_availability,
             difficulty=difficulty,
             parameters=params,
             question_text=question_text,
@@ -549,19 +492,20 @@ class QuestionGenerator:
             "civ_b": civ_name_b,
             "player_id_a": player_id_a,
             "player_id_b": player_id_b,
+            "snapshot_turn": snapshot_turn,
             "resolution_turn": resolution_turn,
         }
 
         question_text = template.question_template.format(**params)
         horizon = classify_horizon(snapshot_turn, resolution_turn)
-        difficulty = calculate_difficulty(horizon, template.signal_type)
+        difficulty = calculate_difficulty(horizon, template.info_availability)
 
         return QuestionInstance(
             question_id=question_id,
             template_id=template.template_id,
             resolution_turn=resolution_turn,
             horizon=horizon,
-            base_rate=template.signal_type,
+            info_availability=template.info_availability,
             difficulty=difficulty,
             parameters=params,
             question_text=question_text,
@@ -586,14 +530,14 @@ class QuestionGenerator:
 
         question_text = template.question_template.format(**params)
         horizon = classify_horizon(snapshot_turn, resolution_turn)
-        difficulty = calculate_difficulty(horizon, template.signal_type)
+        difficulty = calculate_difficulty(horizon, template.info_availability)
 
         return QuestionInstance(
             question_id=question_id,
             template_id=template.template_id,
             resolution_turn=resolution_turn,
             horizon=horizon,
-            base_rate=template.signal_type,
+            info_availability=template.info_availability,
             difficulty=difficulty,
             parameters=params,
             question_text=question_text,
@@ -619,14 +563,14 @@ class QuestionGenerator:
 
         question_text = template.question_template.format(**params)
         horizon = classify_horizon(snapshot_turn, resolution_turn)
-        difficulty = calculate_difficulty(horizon, template.signal_type)
+        difficulty = calculate_difficulty(horizon, template.info_availability)
 
         return QuestionInstance(
             question_id=question_id,
             template_id=template.template_id,
             resolution_turn=resolution_turn,
             horizon=horizon,
-            base_rate=template.signal_type,
+            info_availability=template.info_availability,
             difficulty=difficulty,
             parameters=params,
             question_text=question_text,
@@ -648,14 +592,14 @@ class QuestionGenerator:
 
         question_text = template.question_template.format(**params)
         horizon = classify_horizon(snapshot_turn, resolution_turn)
-        difficulty = calculate_difficulty(horizon, template.signal_type)
+        difficulty = calculate_difficulty(horizon, template.info_availability)
 
         return QuestionInstance(
             question_id=question_id,
             template_id=template.template_id,
             resolution_turn=resolution_turn,
             horizon=horizon,
-            base_rate=template.signal_type,
+            info_availability=template.info_availability,
             difficulty=difficulty,
             parameters=params,
             question_text=question_text,
@@ -719,14 +663,14 @@ class QuestionGenerator:
 
                 question_text = template.question_template.format(**params)
                 horizon = classify_horizon(snapshot_turn, resolution_turn)
-                difficulty = calculate_difficulty(horizon, template.signal_type)
+                difficulty = calculate_difficulty(horizon, template.info_availability)
 
                 questions.append(QuestionInstance(
                     question_id=f"q{question_counter:04d}",
                     template_id=template.template_id,
                     resolution_turn=resolution_turn,
                     horizon=horizon,
-                    base_rate=template.signal_type,
+                    info_availability=template.info_availability,
                     difficulty=difficulty,
                     parameters=params,
                     question_text=question_text,
@@ -792,14 +736,14 @@ class QuestionGenerator:
 
                     question_text = template.question_template.format(**params)
                     horizon = classify_horizon(snapshot_turn, resolution_turn)
-                    difficulty = calculate_difficulty(horizon, template.signal_type)
+                    difficulty = calculate_difficulty(horizon, template.info_availability)
 
                     questions.append(QuestionInstance(
                         question_id=f"q{question_counter:04d}",
                         template_id=template.template_id,
                         resolution_turn=resolution_turn,
                         horizon=horizon,
-                        base_rate=template.signal_type,
+                        info_availability=template.info_availability,
                         difficulty=difficulty,
                         parameters=params,
                         question_text=question_text,
@@ -853,14 +797,14 @@ class QuestionGenerator:
 
                     question_text = template.question_template.format(**params)
                     horizon = classify_horizon(snapshot_turn, resolution_turn)
-                    difficulty = calculate_difficulty(horizon, template.signal_type)
+                    difficulty = calculate_difficulty(horizon, template.info_availability)
 
                     questions.append(QuestionInstance(
                         question_id=f"q{question_counter:04d}",
                         template_id=template.template_id,
                         resolution_turn=resolution_turn,
                         horizon=horizon,
-                        base_rate=template.signal_type,
+                        info_availability=template.info_availability,
                         difficulty=difficulty,
                         parameters=params,
                         question_text=question_text,
@@ -885,14 +829,14 @@ class QuestionGenerator:
 
                         question_text = template.question_template.format(**params)
                         horizon = classify_horizon(snapshot_turn, resolution_turn)
-                        difficulty = calculate_difficulty(horizon, template.signal_type)
+                        difficulty = calculate_difficulty(horizon, template.info_availability)
 
                         questions.append(QuestionInstance(
                             question_id=f"q{question_counter:04d}",
                             template_id=template.template_id,
                             resolution_turn=resolution_turn,
                             horizon=horizon,
-                            base_rate=template.signal_type,
+                            info_availability=template.info_availability,
                             difficulty=difficulty,
                             parameters=params,
                             question_text=question_text,

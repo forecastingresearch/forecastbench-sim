@@ -37,10 +37,12 @@ class QuestionResolver:
         template = get_template(question.template_id)
 
         # Dispatch based on resolution type and template
-        if template.resolution_type == "threshold":
-            return self._resolve_threshold(question, game_data, template)
-        elif template.resolution_type == "comparison":
-            return self._resolve_comparison(question, game_data, template)
+        if template.resolution_type == "comparative":
+            return self._resolve_comparative(question, game_data, template)
+        elif template.resolution_type == "rank":
+            return self._resolve_rank(question, game_data, template)
+        elif template.resolution_type == "milestone":
+            return self._resolve_milestone(question, game_data, template)
         elif template.resolution_type == "event":
             return self._resolve_event(question, game_data, template, snapshot_turn)
         elif template.resolution_type == "state_check":
@@ -68,59 +70,6 @@ class QuestionResolver:
             question.resolution = resolution
 
         return question_bank
-
-    def _resolve_threshold(
-        self,
-        question: QuestionInstance,
-        game_data: dict[str, Any],
-        template: Any,
-    ) -> Resolution:
-        """Resolve a threshold-based question."""
-        params = question.parameters
-        resolution_turn = question.resolution_turn
-        player_id = params.get("player_id")
-        threshold = params.get("threshold")
-
-        # Handle special case for territory_gain
-        if template.template_id == "territory_gain":
-            return self._resolve_territory_gain(question, game_data, params)
-
-        # Get value at resolution turn
-        signal_name = template.signal_name
-        time_series = game_data.get("time_series", {}).get(signal_name, {})
-
-        # Handle both structures: turn -> player_id or player_id -> turn
-        value = self._get_signal_value(time_series, player_id, resolution_turn)
-
-        # For score_gte, check snapshots instead
-        if template.template_id == "score_gte":
-            snapshots = game_data.get("snapshots", {})
-            turn_snapshot = snapshots.get(str(resolution_turn), {})
-            scores = turn_snapshot.get("scores", {})
-            value = scores.get(str(player_id))
-
-        if value is None:
-            # No data - default to False
-            return Resolution(
-                answer=False,
-                resolution_turn=resolution_turn,
-                value_at_resolution=None,
-                threshold=threshold,
-                comparison_op=template.comparison_op,
-                computed_at=datetime.utcnow().isoformat() + "Z",
-            )
-
-        # Apply comparison
-        answer = self._compare(value, threshold, template.comparison_op)
-
-        return Resolution(
-            answer=answer,
-            resolution_turn=resolution_turn,
-            value_at_resolution=value,
-            threshold=threshold,
-            comparison_op=template.comparison_op,
-            computed_at=datetime.utcnow().isoformat() + "Z",
-        )
 
     def _get_signal_value(
         self,
@@ -158,76 +107,122 @@ class QuestionResolver:
 
         return None
 
-    def _resolve_territory_gain(
-        self,
-        question: QuestionInstance,
-        game_data: dict[str, Any],
-        params: dict[str, Any],
-    ) -> Resolution:
-        """Resolve territory gain question (delta between two turns)."""
-        player_id = params.get("player_id")
-        snapshot_turn = params.get("snapshot_turn")
-        resolution_turn = params.get("resolution_turn")
-        threshold = params.get("threshold")
-
-        time_series = game_data.get("time_series", {}).get("territory_size", {})
-
-        value_at_snapshot = self._get_signal_value(time_series, player_id, snapshot_turn)
-        value_at_resolution = self._get_signal_value(time_series, player_id, resolution_turn)
-
-        if value_at_snapshot is None or value_at_resolution is None:
-            return Resolution(
-                answer=False,
-                resolution_turn=resolution_turn,
-                value_at_resolution=None,
-                threshold=threshold,
-                comparison_op=">=",
-                computed_at=datetime.utcnow().isoformat() + "Z",
-            )
-
-        gain = value_at_resolution - value_at_snapshot
-        answer = gain >= threshold
-
-        return Resolution(
-            answer=answer,
-            resolution_turn=resolution_turn,
-            value_at_resolution=gain,
-            threshold=threshold,
-            comparison_op=">=",
-            event_details={"gain": gain, "from_value": value_at_snapshot, "to_value": value_at_resolution},
-            computed_at=datetime.utcnow().isoformat() + "Z",
-        )
-
-    def _resolve_comparison(
+    def _resolve_comparative(
         self,
         question: QuestionInstance,
         game_data: dict[str, Any],
         template: Any,
     ) -> Resolution:
-        """Resolve a comparison-based question (e.g., rank)."""
+        """Resolve a comparative question (comparing two civs)."""
+        params = question.parameters
+        resolution_turn = question.resolution_turn
+        player_id_a = params.get("player_id_a")
+        player_id_b = params.get("player_id_b")
+
+        signal_name = template.signal_name
+
+        # Get values at resolution turn
+        if signal_name == "scores":
+            # Scores are in snapshots
+            snapshots = game_data.get("snapshots", {})
+            turn_snapshot = snapshots.get(str(resolution_turn), {})
+            scores = turn_snapshot.get("scores", {})
+            value_a = scores.get(str(player_id_a))
+            value_b = scores.get(str(player_id_b))
+        else:
+            # Other signals are in time_series
+            time_series = game_data.get("time_series", {}).get(signal_name, {})
+            value_a = self._get_signal_value(time_series, player_id_a, resolution_turn)
+            value_b = self._get_signal_value(time_series, player_id_b, resolution_turn)
+
+        if value_a is None or value_b is None:
+            # No data - default to False
+            return Resolution(
+                answer=False,
+                resolution_turn=resolution_turn,
+                value_a=value_a,
+                value_b=value_b,
+                computed_at=datetime.utcnow().isoformat() + "Z",
+            )
+
+        # Compare: template.comparison_op is ">" for "more than"
+        answer = value_a > value_b
+
+        return Resolution(
+            answer=answer,
+            resolution_turn=resolution_turn,
+            value_a=value_a,
+            value_b=value_b,
+            computed_at=datetime.utcnow().isoformat() + "Z",
+        )
+
+    def _resolve_rank(
+        self,
+        question: QuestionInstance,
+        game_data: dict[str, Any],
+        template: Any,
+    ) -> Resolution:
+        """Resolve a rank-based question (e.g., rank #1)."""
         params = question.parameters
         resolution_turn = question.resolution_turn
         player_id = params.get("player_id")
 
-        if template.template_id == "score_rank_1":
-            # Check if player is ranked #1
-            snapshots = game_data.get("snapshots", {})
-            turn_snapshot = snapshots.get(str(resolution_turn), {})
-            rankings = turn_snapshot.get("rankings", [])
+        # Check if player is ranked #1
+        snapshots = game_data.get("snapshots", {})
+        turn_snapshot = snapshots.get(str(resolution_turn), {})
+        rankings = turn_snapshot.get("rankings", [])
 
-            rank = None
-            for entry in rankings:
-                if entry.get("player_id") == player_id:
-                    rank = entry.get("rank")
-                    break
+        rank = None
+        for entry in rankings:
+            if entry.get("player_id") == player_id:
+                rank = entry.get("rank")
+                break
 
-            answer = rank == 1
+        answer = rank == 1
+
+        return Resolution(
+            answer=answer,
+            resolution_turn=resolution_turn,
+            value_at_resolution=rank,
+            state_at_resolution=f"rank {rank}" if rank else None,
+            computed_at=datetime.utcnow().isoformat() + "Z",
+        )
+
+    def _resolve_milestone(
+        self,
+        question: QuestionInstance,
+        game_data: dict[str, Any],
+        template: Any,
+    ) -> Resolution:
+        """Resolve a milestone question (e.g., tech discovery)."""
+        params = question.parameters
+        resolution_turn = question.resolution_turn
+
+        if template.template_id == "tech_discovered":
+            player_id = str(params.get("player_id"))
+            tech_name = params.get("tech_name")
+            tech_id = params.get("tech_id")
+
+            # Check events for tech_discovered by this player up to resolution turn
+            events = game_data.get("events", [])
+            tech_events = [
+                e for e in events
+                if e.get("type") == "tech_discovered"
+                and str(e.get("player_id")) == player_id
+                and e.get("turn", float("inf")) <= resolution_turn
+                and (e.get("metadata", {}).get("tech_name") == tech_name
+                     or e.get("metadata", {}).get("tech_id") == tech_id)
+            ]
+
+            discovered = len(tech_events) > 0
+            discovery_turn = tech_events[0].get("turn") if tech_events else None
 
             return Resolution(
-                answer=answer,
+                answer=discovered,
                 resolution_turn=resolution_turn,
-                value_at_resolution=rank,
-                state_at_resolution=f"rank {rank}" if rank else None,
+                state_at_resolution=tech_name if discovered else None,
+                event_occurred=discovered,
+                event_details={"discovery_turn": discovery_turn} if discovered else None,
                 computed_at=datetime.utcnow().isoformat() + "Z",
             )
 
@@ -269,6 +264,40 @@ class QuestionResolver:
             event_occurred = len(matching) > 0
             if matching:
                 event_details = {"count": len(matching), "first_turn": matching[0].get("turn")}
+
+        elif template.template_id == "treasury_zero":
+            # Check if treasury hits 0 at any point in the window
+            player_id = params.get("player_id")
+            time_series = game_data.get("time_series", {}).get("treasury", {})
+
+            # Scan turns in window for treasury == 0
+            for turn in range(start_turn + 1, resolution_turn + 1):
+                value = self._get_signal_value(time_series, player_id, turn)
+                if value is not None and value <= 0:
+                    event_occurred = True
+                    event_details = {"turn": turn, "value": value}
+                    break
+
+        elif template.template_id == "border_contact":
+            # Check if borders touch by resolution turn
+            # This requires territory map data
+            player_id_a = params.get("player_id_a")
+            player_id_b = params.get("player_id_b")
+
+            territory_snapshots = game_data.get("territory_snapshots", {})
+            # Check the resolution turn snapshot (or closest available)
+            for turn in range(resolution_turn, start_turn, -1):
+                snapshot = territory_snapshots.get(str(turn))
+                if snapshot and "tile_owner" in snapshot.get("map_state", {}):
+                    # Check adjacency in tile_owner map
+                    event_occurred = self._check_border_contact(
+                        snapshot["map_state"]["tile_owner"],
+                        player_id_a,
+                        player_id_b
+                    )
+                    if event_occurred:
+                        event_details = {"contact_turn": turn}
+                    break
 
         elif template.template_id == "city_conquered_any":
             matching = [e for e in events_in_window if e.get("type") == "city_conquered"]
@@ -340,6 +369,56 @@ class QuestionResolver:
             event_details=event_details,
             computed_at=datetime.utcnow().isoformat() + "Z",
         )
+
+    def _check_border_contact(
+        self,
+        tile_owner: list,
+        player_id_a: int,
+        player_id_b: int,
+    ) -> bool:
+        """
+        Check if two players' territories are adjacent.
+
+        Args:
+            tile_owner: 2D list of tile ownership (player_id or -1 for unowned)
+            player_id_a: First player ID
+            player_id_b: Second player ID
+
+        Returns:
+            True if any tile owned by A is adjacent to a tile owned by B
+        """
+        import numpy as np
+
+        try:
+            tile_owner_arr = np.array(tile_owner)
+            # Handle both row-major and column-major layouts
+            if tile_owner_arr.ndim == 1:
+                # Assume it's flattened, try to reshape (80x50 is common)
+                try:
+                    tile_owner_arr = tile_owner_arr.reshape(50, 80)
+                except ValueError:
+                    return False
+
+            ysize, xsize = tile_owner_arr.shape
+
+            # Find all tiles owned by player A
+            player_a_tiles = np.argwhere(tile_owner_arr == player_id_a)
+
+            # Check 8-directional adjacency for each tile
+            for y, x in player_a_tiles:
+                for dy in [-1, 0, 1]:
+                    for dx in [-1, 0, 1]:
+                        if dy == 0 and dx == 0:
+                            continue
+                        ny, nx = y + dy, x + dx
+                        if 0 <= ny < ysize and 0 <= nx < xsize:
+                            if tile_owner_arr[ny, nx] == player_id_b:
+                                return True
+
+            return False
+        except Exception:
+            # If numpy operations fail, return False
+            return False
 
     def _resolve_state_check(
         self,
@@ -442,59 +521,12 @@ class QuestionResolver:
                 computed_at=datetime.utcnow().isoformat() + "Z",
             )
 
-        elif template.template_id == "tech_discovered":
-            player_id = str(params.get("player_id"))
-            tech_name = params.get("tech_name")
-            tech_id = params.get("tech_id")
-
-            # Check events for tech_discovered by this player up to resolution turn
-            events = game_data.get("events", [])
-            tech_events = [
-                e for e in events
-                if e.get("type") == "tech_discovered"
-                and str(e.get("player_id")) == player_id
-                and e.get("turn", float("inf")) <= resolution_turn
-                and (e.get("metadata", {}).get("tech_name") == tech_name
-                     or e.get("metadata", {}).get("tech_id") == tech_id)
-            ]
-
-            discovered = len(tech_events) > 0
-            discovery_turn = tech_events[0].get("turn") if tech_events else None
-
-            return Resolution(
-                answer=discovered,
-                resolution_turn=resolution_turn,
-                state_at_resolution=tech_name if discovered else None,
-                event_occurred=discovered,
-                event_details={"discovery_turn": discovery_turn} if discovered else None,
-                computed_at=datetime.utcnow().isoformat() + "Z",
-            )
-
         # Default fallback
         return Resolution(
             answer=False,
             resolution_turn=resolution_turn,
             computed_at=datetime.utcnow().isoformat() + "Z",
         )
-
-    def _get_value_at_turn(
-        self,
-        player_data: dict[str, Any],
-        target_turn: int,
-    ) -> float | int | None:
-        """Get the value at or closest before the target turn."""
-        if not player_data:
-            return None
-
-        # Convert keys to int and sort
-        turns = sorted([int(t) for t in player_data.keys()])
-
-        # Find closest turn <= target
-        for turn in reversed(turns):
-            if turn <= target_turn:
-                return player_data[str(turn)]
-
-        return None
 
     def _get_diplomatic_state_at_turn(
         self,
@@ -514,20 +546,3 @@ class QuestionResolver:
                 return pair_data[str(turn)].get("state")
 
         return None
-
-    def _compare(self, value: float | int, threshold: float | int, op: str) -> bool:
-        """Apply comparison operator."""
-        if op == ">=":
-            return value >= threshold
-        elif op == ">":
-            return value > threshold
-        elif op == "<=":
-            return value <= threshold
-        elif op == "<":
-            return value < threshold
-        elif op == "==":
-            return value == threshold
-        elif op == "!=":
-            return value != threshold
-        else:
-            raise ValueError(f"Unknown comparison operator: {op}")

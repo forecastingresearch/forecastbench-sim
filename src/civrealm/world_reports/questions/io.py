@@ -3,7 +3,6 @@ I/O utilities for question bank serialization.
 """
 
 import json
-from dataclasses import asdict
 from pathlib import Path
 from typing import Any
 
@@ -55,7 +54,7 @@ def _question_to_dict(q: QuestionInstance) -> dict[str, Any]:
         "resolution_turn": q.resolution_turn,
         "difficulty": {
             "horizon": q.horizon,
-            "base_rate": q.base_rate,
+            "info_availability": q.info_availability,
             "composite": q.difficulty,
         },
         "parameters": q.parameters,
@@ -72,16 +71,23 @@ def _resolution_to_dict(r: Resolution) -> dict[str, Any]:
     """Convert a Resolution to a dictionary, omitting None values."""
     result: dict[str, Any] = {"answer": r.answer}
 
+    # Comparative question fields
+    if r.value_a is not None:
+        result["value_a"] = r.value_a
+    if r.value_b is not None:
+        result["value_b"] = r.value_b
+
+    # Milestone/rank fields
     if r.value_at_resolution is not None:
         result["value_at_resolution"] = r.value_at_resolution
-    if r.threshold is not None:
-        result["threshold"] = r.threshold
-    if r.comparison_op is not None:
-        result["comparison_op"] = r.comparison_op
+
+    # Event fields
     if r.event_occurred is not None:
         result["event_occurred"] = r.event_occurred
     if r.event_details is not None:
         result["event_details"] = r.event_details
+
+    # State check fields
     if r.state_at_resolution is not None:
         result["state_at_resolution"] = r.state_at_resolution
 
@@ -185,12 +191,15 @@ def _dict_to_question(data: dict[str, Any]) -> QuestionInstance:
     if "resolution" in data:
         resolution = _dict_to_resolution(data["resolution"], data.get("resolution_turn", 0))
 
+    # Handle both old "base_rate" and new "info_availability" for backwards compatibility
+    info_availability = difficulty.get("info_availability") or difficulty.get("base_rate", "I1")
+
     return QuestionInstance(
         question_id=data.get("question_id", ""),
         template_id=data.get("template_id", ""),
         resolution_turn=data.get("resolution_turn", 0),
         horizon=difficulty.get("horizon", "H1"),
-        base_rate=difficulty.get("base_rate", "B1"),
+        info_availability=info_availability,
         difficulty=difficulty.get("composite", 2),
         parameters=data.get("parameters", {}),
         question_text=data.get("question_text", ""),
@@ -203,9 +212,9 @@ def _dict_to_resolution(data: dict[str, Any], resolution_turn: int) -> Resolutio
     return Resolution(
         answer=data.get("answer", False),
         resolution_turn=resolution_turn,
+        value_a=data.get("value_a"),
+        value_b=data.get("value_b"),
         value_at_resolution=data.get("value_at_resolution"),
-        threshold=data.get("threshold"),
-        comparison_op=data.get("comparison_op"),
         event_occurred=data.get("event_occurred"),
         event_details=data.get("event_details"),
         state_at_resolution=data.get("state_at_resolution"),

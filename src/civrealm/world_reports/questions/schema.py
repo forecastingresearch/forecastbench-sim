@@ -6,7 +6,6 @@ This module defines the core dataclasses for:
 - QuestionInstance: Specific questions generated from templates
 - Resolution: Computed answers with supporting data
 - WorldReportConfig: Configuration for world report generation
-- ThresholdConfig: Configurable threshold values
 - QuestionBank: Top-level container for a game's questions
 """
 
@@ -19,25 +18,35 @@ class QuestionTemplate:
     """Defines a reusable question pattern with placeholders."""
 
     template_id: str
-    """Unique identifier for this template, e.g., 'tech_count_gte'"""
+    """Unique identifier for this template, e.g., 'tech_comparative'"""
 
-    signal_type: Literal["B1", "B2", "B3"]
-    """Base rate availability category"""
+    info_availability: Literal["I1", "I2", "I3"]
+    """Information availability category:
+    I1: Computable from observable state + known mechanics
+    I2: Observable trends, but hidden priorities add noise
+    I3: Depends on genuinely hidden state
+    """
 
     signal_name: str
     """Name of the signal being measured, e.g., 'techs_known', 'treasury'"""
 
     question_template: str
-    """Question text with placeholders, e.g., 'Will {civ} have ≥{threshold} technologies at turn {resolution_turn}?'"""
+    """Question text with placeholders, e.g., 'Will {civ_a} have more technologies than {civ_b} at turn {resolution_turn}?'"""
 
-    resolution_type: Literal["threshold", "comparison", "event", "state_check"]
-    """How this question type is resolved"""
+    resolution_type: Literal["comparative", "milestone", "event", "state_check", "rank"]
+    """How this question type is resolved:
+    - comparative: Compare two civs on a metric
+    - milestone: Check if specific achievement reached
+    - event: Check if event occurred in time window
+    - state_check: Check state at resolution turn
+    - rank: Check ranking position
+    """
 
     data_path: str
     """Path to data in game_data dict, e.g., 'time_series.techs_known.{player_id}.{resolution_turn}'"""
 
     comparison_op: str
-    """Comparison operator: '>=', '>', '==', 'contains', 'exists', 'any', 'first'"""
+    """Comparison operator: '>', '==', 'contains', 'exists', 'any', 'first', 'rank==1'"""
 
     required_params: list[str]
     """Parameters required to instantiate this template"""
@@ -56,24 +65,25 @@ class Resolution:
     resolution_turn: int
     """Turn at which the question was resolved"""
 
-    # For threshold questions (B1, B2)
+    # For comparative questions
+    value_a: float | int | None = None
+    """Value for civ A (in comparative questions)"""
+
+    value_b: float | int | None = None
+    """Value for civ B (in comparative questions)"""
+
+    # For milestone/rank questions
     value_at_resolution: float | int | None = None
     """Actual value at resolution turn"""
 
-    threshold: float | int | None = None
-    """Threshold being compared against"""
-
-    comparison_op: str | None = None
-    """Comparison operator used"""
-
-    # For event questions (B3)
+    # For event questions
     event_occurred: bool | None = None
     """Whether the event occurred in the time window"""
 
     event_details: dict[str, Any] | None = None
     """Details about the event (turn, players, etc.)"""
 
-    # For state check questions (B3)
+    # For state check questions
     state_at_resolution: str | None = None
     """State value at resolution turn, e.g., 'War', 'Alliance'"""
 
@@ -97,14 +107,14 @@ class QuestionInstance:
     horizon: Literal["H1", "H2", "H3"]
     """Time horizon category (derived from resolution_turn - snapshot_turn)"""
 
-    base_rate: Literal["B1", "B2", "B3"]
-    """Base rate availability category (from template)"""
+    info_availability: Literal["I1", "I2", "I3"]
+    """Information availability category (from template)"""
 
     difficulty: int
-    """Composite difficulty score: H + B (range 2-6)"""
+    """Composite difficulty score: H + I (range 2-6)"""
 
     parameters: dict[str, Any]
-    """Filled parameter values, e.g., {'civ': 'Greek', 'player_id': 1, 'threshold': 25}"""
+    """Filled parameter values, e.g., {'civ_a': 'Greek', 'civ_b': 'Roman', 'player_id_a': 1, 'player_id_b': 2}"""
 
     question_text: str
     """Rendered question text"""
@@ -130,14 +140,6 @@ class WorldReportConfig:
 
     territory_snapshot_turns: list[int] | None = None
     """Turns for territory map snapshots (auto-selected if None)"""
-
-
-@dataclass
-class ThresholdConfig:
-    """Configurable threshold values for question generation."""
-
-    defaults: dict[str, list[int | float]] = field(default_factory=dict)
-    """Per-signal default thresholds, e.g., {'techs_known': [10, 15, 20, 25, 30]}"""
 
 
 @dataclass
@@ -182,14 +184,14 @@ def classify_horizon(snapshot_turn: int, resolution_turn: int) -> Literal["H1", 
     """
     Classify the time horizon based on turn delta.
 
-    H1: Short (10-30 turns) - trends visible in recent history
-    H2: Medium (50-100 turns) - requires reasoning about second-order effects
-    H3: Long (150+ turns) - regime changes likely, compounding uncertainty
+    H1: Short (≤20 turns) - trends visible in recent history
+    H2: Medium (21-80 turns) - requires reasoning about second-order effects
+    H3: Long (>80 turns) - regime changes likely, compounding uncertainty
     """
     delta = resolution_turn - snapshot_turn
-    if delta <= 30:
+    if delta <= 20:
         return "H1"
-    elif delta <= 100:
+    elif delta <= 80:
         return "H2"
     else:
         return "H3"
@@ -200,11 +202,11 @@ def horizon_to_int(horizon: Literal["H1", "H2", "H3"]) -> int:
     return {"H1": 1, "H2": 2, "H3": 3}[horizon]
 
 
-def base_rate_to_int(base_rate: Literal["B1", "B2", "B3"]) -> int:
-    """Convert base rate category to numeric value for difficulty calculation."""
-    return {"B1": 1, "B2": 2, "B3": 3}[base_rate]
+def info_availability_to_int(info_availability: Literal["I1", "I2", "I3"]) -> int:
+    """Convert information availability category to numeric value for difficulty calculation."""
+    return {"I1": 1, "I2": 2, "I3": 3}[info_availability]
 
 
-def calculate_difficulty(horizon: Literal["H1", "H2", "H3"], base_rate: Literal["B1", "B2", "B3"]) -> int:
+def calculate_difficulty(horizon: Literal["H1", "H2", "H3"], info_availability: Literal["I1", "I2", "I3"]) -> int:
     """Calculate composite difficulty score (2-6)."""
-    return horizon_to_int(horizon) + base_rate_to_int(base_rate)
+    return horizon_to_int(horizon) + info_availability_to_int(info_availability)

@@ -34,20 +34,20 @@ from civrealm.world_reports.questions import (
 def compute_base_rates(
     data_files: list[Path],
     snapshot_turn: int,
-    signal_types: list[str] = None,
+    info_availability_levels: list[str] = None,
 ) -> dict:
     """Compute base rates across all game data files.
 
     Args:
         data_files: List of paths to game data JSON files
         snapshot_turn: Turn at which forecasters see data
-        signal_types: Which signal types to include (default: all)
+        info_availability_levels: Which info availability levels to include (default: all)
 
     Returns:
         Dictionary with base rate statistics
     """
-    if signal_types is None:
-        signal_types = ['B1', 'B2', 'B3']
+    if info_availability_levels is None:
+        info_availability_levels = ['I1', 'I2', 'I3']
 
     generator = QuestionGenerator()
     resolver = QuestionResolver()
@@ -78,7 +78,7 @@ def compute_base_rates(
                 game_id=game_id,
                 game_data=game_data,
                 snapshot_turn=snapshot_turn,
-                signal_types=signal_types,
+                info_availability_levels=info_availability_levels,
             )
 
             if not bank.questions:
@@ -144,7 +144,7 @@ def compute_base_rates(
             'num_games': games_processed,
             'num_questions': questions_total,
             'snapshot_turn': snapshot_turn,
-            'signal_types': signal_types,
+            'info_availability_levels': info_availability_levels,
             'generated_at': datetime.now().isoformat() + 'Z',
         },
         'base_rates': base_rates,
@@ -236,10 +236,10 @@ def main():
         help='Output JSON file (default: base_rates.json)'
     )
     parser.add_argument(
-        '--signal-types',
+        '--info-availability',
         nargs='+',
-        default=['B1', 'B2', 'B3'],
-        help='Signal types to include (default: B1 B2 B3)'
+        default=['I1', 'I2', 'I3'],
+        help='Information availability levels to include (default: I1 I2 I3)'
     )
 
     args = parser.parse_args()
@@ -257,14 +257,14 @@ def main():
 
     print(f"Found {len(data_files)} data files in {data_dir}")
     print(f"Snapshot turn: {args.snapshot_turn}")
-    print(f"Signal types: {args.signal_types}")
+    print(f"Info availability levels: {args.info_availability}")
     print()
 
     # Compute base rates
     results = compute_base_rates(
         data_files=data_files,
         snapshot_turn=args.snapshot_turn,
-        signal_types=args.signal_types,
+        info_availability_levels=args.info_availability,
     )
 
     # Print summary

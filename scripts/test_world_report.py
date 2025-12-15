@@ -23,17 +23,17 @@ def main():
     # Configuration
     report_config = ReportConfig(
         # Input: where game recordings are stored
-        recording_dir='logs/recordings/myagent42/',
+        recording_dir='logs/recordings/s100/',
 
         # Output: where to save the report
-        output_dir='reports/myagent42/',
+        output_dir='reports/test',
 
         # Generate reports at specific turns
         # Set to the turns you want to analyze
-        report_turns=[380],  # Test with the full game data
+        report_turns=[50],  # Test with the full game data
 
         # Enable all implemented sections
-        enabled_sections=['overview', 'historical_events', 'economics', 'demographics', 'technology'],
+        # enabled_sections=['overview', 'historical_events', 'economics', 'demographics', 'technology'],
 
         # Output formats
         formats=['html'],

@@ -1,125 +1,119 @@
 """
-Predefined question templates for B1, B2, and B3 signals.
+Predefined question templates for I1, I2, and I3 information availability levels.
 
-B1 (High Base Rate): Deterministic/well-documented mechanics
-B2 (Medium Base Rate): Observable trends with stochastic elements
-B3 (Low Base Rate): Opaque AI behavior, emergent dynamics, rare events
+I1 (Computable): Outcome computable from observable state + known mechanics
+I2 (Noisy): Observable trends, but hidden priorities add noise
+I3 (Hidden): Depends on genuinely hidden state
 """
 
 from .schema import QuestionTemplate
 
 
 # =============================================================================
-# B1 Templates: High Base Rate Availability
+# I1 Templates: Computable from Observable State
 # =============================================================================
 
-TECH_COUNT_GTE = QuestionTemplate(
-    template_id="tech_count_gte",
-    signal_type="B1",
+# Comparative questions
+TECH_COMPARATIVE = QuestionTemplate(
+    template_id="tech_comparative",
+    info_availability="I1",
     signal_name="techs_known",
-    question_template="Will {civ} have ≥{threshold} technologies at turn {resolution_turn}?",
-    resolution_type="threshold",
+    question_template="Will {civ_a} have more technologies than {civ_b} at turn {resolution_turn}?",
+    resolution_type="comparative",
     data_path="time_series.techs_known.{player_id}.{resolution_turn}",
-    comparison_op=">=",
-    required_params=["civ", "player_id", "threshold", "resolution_turn"],
+    comparison_op=">",
+    required_params=["civ_a", "civ_b", "player_id_a", "player_id_b", "resolution_turn"],
 )
 
-TECH_DISCOVERED = QuestionTemplate(
-    template_id="tech_discovered",
-    signal_type="B1",
-    signal_name="techs_known",
-    question_template="Will {civ} have discovered {tech_name} by turn {resolution_turn}?",
-    resolution_type="state_check",
-    data_path="tech_state.{player_id}.{resolution_turn}",
-    comparison_op="contains",
-    required_params=["civ", "player_id", "tech_name", "tech_id", "resolution_turn"],
+SCORE_COMPARATIVE = QuestionTemplate(
+    template_id="score_comparative",
+    info_availability="I1",
+    signal_name="scores",
+    question_template="Will {civ_a} have a higher score than {civ_b} at turn {resolution_turn}?",
+    resolution_type="comparative",
+    data_path="snapshots.{resolution_turn}.scores.{player_id}",
+    comparison_op=">",
+    required_params=["civ_a", "civ_b", "player_id_a", "player_id_b", "resolution_turn"],
 )
 
-POPULATION_GTE = QuestionTemplate(
-    template_id="population_gte",
-    signal_type="B1",
+POPULATION_COMPARATIVE = QuestionTemplate(
+    template_id="population_comparative",
+    info_availability="I1",
     signal_name="population",
-    question_template="Will {civ}'s population exceed {threshold} at turn {resolution_turn}?",
-    resolution_type="threshold",
+    question_template="Will {civ_a} have a larger total population than {civ_b} at turn {resolution_turn}?",
+    resolution_type="comparative",
     data_path="time_series.population.{player_id}.{resolution_turn}",
     comparison_op=">",
-    required_params=["civ", "player_id", "threshold", "resolution_turn"],
+    required_params=["civ_a", "civ_b", "player_id_a", "player_id_b", "resolution_turn"],
 )
 
+# Rank question
 SCORE_RANK_1 = QuestionTemplate(
     template_id="score_rank_1",
-    signal_type="B1",
+    info_availability="I1",
     signal_name="scores",
     question_template="Will {civ} be ranked #1 at turn {resolution_turn}?",
-    resolution_type="comparison",
+    resolution_type="rank",
     data_path="snapshots.{resolution_turn}.rankings",
     comparison_op="rank==1",
     required_params=["civ", "player_id", "resolution_turn"],
 )
 
-SCORE_GTE = QuestionTemplate(
-    template_id="score_gte",
-    signal_type="B1",
-    signal_name="scores",
-    question_template="Will {civ}'s score exceed {threshold} at turn {resolution_turn}?",
-    resolution_type="threshold",
-    data_path="snapshots.{resolution_turn}.scores.{player_id}",
+# Milestone question
+TECH_DISCOVERED = QuestionTemplate(
+    template_id="tech_discovered",
+    info_availability="I1",
+    signal_name="techs_known",
+    question_template="Will {civ} have discovered {tech_name} by turn {resolution_turn}?",
+    resolution_type="milestone",
+    data_path="events",
+    comparison_op="contains",
+    required_params=["civ", "player_id", "tech_name", "tech_id", "resolution_turn"],
+)
+
+
+# =============================================================================
+# I2 Templates: Observable with Noise
+# =============================================================================
+
+# Comparative questions
+CITY_COUNT_COMPARATIVE = QuestionTemplate(
+    template_id="city_count_comparative",
+    info_availability="I2",
+    signal_name="cities_count",
+    question_template="Will {civ_a} have more cities than {civ_b} at turn {resolution_turn}?",
+    resolution_type="comparative",
+    data_path="time_series.cities_count.{player_id}.{resolution_turn}",
     comparison_op=">",
-    required_params=["civ", "player_id", "threshold", "resolution_turn"],
+    required_params=["civ_a", "civ_b", "player_id_a", "player_id_b", "resolution_turn"],
 )
 
-
-# =============================================================================
-# B2 Templates: Medium Base Rate Availability
-# =============================================================================
-
-TERRITORY_GTE = QuestionTemplate(
-    template_id="territory_gte",
-    signal_type="B2",
+TERRITORY_COMPARATIVE = QuestionTemplate(
+    template_id="territory_comparative",
+    info_availability="I2",
     signal_name="territory_size",
-    question_template="Will {civ} control ≥{threshold} tiles at turn {resolution_turn}?",
-    resolution_type="threshold",
+    question_template="Will {civ_a} control more tiles than {civ_b} at turn {resolution_turn}?",
+    resolution_type="comparative",
     data_path="time_series.territory_size.{player_id}.{resolution_turn}",
-    comparison_op=">=",
-    required_params=["civ", "player_id", "threshold", "resolution_turn"],
+    comparison_op=">",
+    required_params=["civ_a", "civ_b", "player_id_a", "player_id_b", "resolution_turn"],
 )
 
-TERRITORY_GAIN = QuestionTemplate(
-    template_id="territory_gain",
-    signal_type="B2",
-    signal_name="territory_size",
-    question_template="Will {civ} have gained ≥{threshold} tiles between turn {snapshot_turn} and turn {resolution_turn}?",
-    resolution_type="threshold",
-    data_path="time_series.territory_size.{player_id}",
-    comparison_op=">=",
-    required_params=["civ", "player_id", "threshold", "snapshot_turn", "resolution_turn"],
-)
-
-TREASURY_GTE = QuestionTemplate(
-    template_id="treasury_gte",
-    signal_type="B2",
+TREASURY_COMPARATIVE = QuestionTemplate(
+    template_id="treasury_comparative",
+    info_availability="I2",
     signal_name="treasury",
-    question_template="Will {civ}'s treasury exceed {threshold} gold at turn {resolution_turn}?",
-    resolution_type="threshold",
+    question_template="Will {civ_a} have a larger treasury than {civ_b} at turn {resolution_turn}?",
+    resolution_type="comparative",
     data_path="time_series.treasury.{player_id}.{resolution_turn}",
     comparison_op=">",
-    required_params=["civ", "player_id", "threshold", "resolution_turn"],
+    required_params=["civ_a", "civ_b", "player_id_a", "player_id_b", "resolution_turn"],
 )
 
-CITIES_GTE = QuestionTemplate(
-    template_id="cities_gte",
-    signal_type="B2",
-    signal_name="cities_count",
-    question_template="Will {civ} have ≥{threshold} cities at turn {resolution_turn}?",
-    resolution_type="threshold",
-    data_path="time_series.cities_count.{player_id}.{resolution_turn}",
-    comparison_op=">=",
-    required_params=["civ", "player_id", "threshold", "resolution_turn"],
-)
-
+# Event questions
 CITY_FOUNDED = QuestionTemplate(
     template_id="city_founded",
-    signal_type="B2",
+    info_availability="I2",
     signal_name="events",
     question_template="Will {civ} found a new city between turn {snapshot_turn} and turn {resolution_turn}?",
     resolution_type="event",
@@ -128,14 +122,32 @@ CITY_FOUNDED = QuestionTemplate(
     required_params=["civ", "player_id", "snapshot_turn", "resolution_turn"],
 )
 
+TREASURY_ZERO = QuestionTemplate(
+    template_id="treasury_zero",
+    info_availability="I2",
+    signal_name="treasury",
+    question_template="Will {civ}'s treasury fall to 0 at any point between turn {snapshot_turn} and turn {resolution_turn}?",
+    resolution_type="event",
+    data_path="time_series.treasury.{player_id}",
+    comparison_op="exists",
+    required_params=["civ", "player_id", "snapshot_turn", "resolution_turn"],
+)
 
-# =============================================================================
-# B3 Templates: Low Base Rate Availability
-# =============================================================================
+BORDER_CONTACT = QuestionTemplate(
+    template_id="border_contact",
+    info_availability="I2",
+    signal_name="territory",
+    question_template="Will {civ_a}'s borders touch {civ_b}'s borders by turn {resolution_turn}?",
+    resolution_type="event",
+    data_path="territory_snapshots",
+    comparison_op="exists",
+    required_params=["civ_a", "civ_b", "player_id_a", "player_id_b", "snapshot_turn", "resolution_turn"],
+)
 
+# State/diplomatic questions (moved from B3 per new spec - observable via love scores)
 AT_WAR_DYAD = QuestionTemplate(
     template_id="at_war_dyad",
-    signal_type="B3",
+    info_availability="I2",
     signal_name="diplomacy",
     question_template="Will {civ_a} and {civ_b} be at war at turn {resolution_turn}?",
     resolution_type="state_check",
@@ -146,7 +158,7 @@ AT_WAR_DYAD = QuestionTemplate(
 
 AT_WAR_ANY = QuestionTemplate(
     template_id="at_war_any",
-    signal_type="B3",
+    info_availability="I2",
     signal_name="diplomacy",
     question_template="Will {civ} be at war with any civilization at turn {resolution_turn}?",
     resolution_type="state_check",
@@ -155,9 +167,21 @@ AT_WAR_ANY = QuestionTemplate(
     required_params=["civ", "player_id", "resolution_turn"],
 )
 
+ALLIANCE_DYAD = QuestionTemplate(
+    template_id="alliance_dyad",
+    info_availability="I2",
+    signal_name="diplomacy",
+    question_template="Will {civ_a} and {civ_b} have an alliance at turn {resolution_turn}?",
+    resolution_type="state_check",
+    data_path="diplomacy.relations.{player_id_a}_{player_id_b}.{resolution_turn}.state",
+    comparison_op="==",
+    required_params=["civ_a", "civ_b", "player_id_a", "player_id_b", "resolution_turn"],
+)
+
+# Conquest events (moved from B3 - military strength is observable)
 CITY_CONQUERED_ANY = QuestionTemplate(
     template_id="city_conquered_any",
-    signal_type="B3",
+    info_availability="I2",
     signal_name="events",
     question_template="Will any city be conquered between turn {snapshot_turn} and turn {resolution_turn}?",
     resolution_type="event",
@@ -168,7 +192,7 @@ CITY_CONQUERED_ANY = QuestionTemplate(
 
 CITY_LOST = QuestionTemplate(
     template_id="city_lost",
-    signal_type="B3",
+    info_availability="I2",
     signal_name="events",
     question_template="Will {civ} lose a city between turn {snapshot_turn} and turn {resolution_turn}?",
     resolution_type="event",
@@ -177,9 +201,15 @@ CITY_LOST = QuestionTemplate(
     required_params=["civ", "player_id", "snapshot_turn", "resolution_turn"],
 )
 
+
+# =============================================================================
+# I3 Templates: Hidden State
+# =============================================================================
+
+# Government (happiness levels hidden)
 GOVERNMENT_AT = QuestionTemplate(
     template_id="government_at",
-    signal_type="B3",
+    info_availability="I3",
     signal_name="government",
     question_template="Will {civ} be in {government_type} at turn {resolution_turn}?",
     resolution_type="state_check",
@@ -190,7 +220,7 @@ GOVERNMENT_AT = QuestionTemplate(
 
 ANARCHY_EVENT = QuestionTemplate(
     template_id="anarchy_event",
-    signal_type="B3",
+    info_availability="I3",
     signal_name="events",
     question_template="Will {civ} experience anarchy between turn {snapshot_turn} and turn {resolution_turn}?",
     resolution_type="event",
@@ -199,22 +229,12 @@ ANARCHY_EVENT = QuestionTemplate(
     required_params=["civ", "player_id", "snapshot_turn", "resolution_turn"],
 )
 
-ALLIANCE_DYAD = QuestionTemplate(
-    template_id="alliance_dyad",
-    signal_type="B3",
-    signal_name="diplomacy",
-    question_template="Will {civ_a} and {civ_b} have an alliance at turn {resolution_turn}?",
-    resolution_type="state_check",
-    data_path="diplomacy.relations.{player_id_a}_{player_id_b}.{resolution_turn}.state",
-    comparison_op="==",
-    required_params=["civ_a", "civ_b", "player_id_a", "player_id_b", "resolution_turn"],
-)
-
+# Wonders (production queues hidden)
 WONDER_COMPLETED = QuestionTemplate(
     template_id="wonder_completed",
-    signal_type="B3",
+    info_availability="I3",
     signal_name="events",
-    question_template="Will {wonder_name} be completed by turn {resolution_turn}?",
+    question_template="Will {wonder_name} be completed by any civilization by turn {resolution_turn}?",
     resolution_type="event",
     data_path="events",
     comparison_op="exists",
@@ -223,7 +243,7 @@ WONDER_COMPLETED = QuestionTemplate(
 
 WONDER_FIRST = QuestionTemplate(
     template_id="wonder_first",
-    signal_type="B3",
+    info_availability="I3",
     signal_name="events",
     question_template="Will {civ} complete {wonder_name} before any other civilization?",
     resolution_type="event",
@@ -237,42 +257,43 @@ WONDER_FIRST = QuestionTemplate(
 # Template Registry
 # =============================================================================
 
-B1_TEMPLATES = [
-    TECH_COUNT_GTE,
-    TECH_DISCOVERED,
-    POPULATION_GTE,
+I1_TEMPLATES = [
+    TECH_COMPARATIVE,
+    SCORE_COMPARATIVE,
+    POPULATION_COMPARATIVE,
     SCORE_RANK_1,
-    SCORE_GTE,
+    TECH_DISCOVERED,
 ]
 
-B2_TEMPLATES = [
-    TERRITORY_GTE,
-    TERRITORY_GAIN,
-    TREASURY_GTE,
-    CITIES_GTE,
+I2_TEMPLATES = [
+    CITY_COUNT_COMPARATIVE,
+    TERRITORY_COMPARATIVE,
+    TREASURY_COMPARATIVE,
     CITY_FOUNDED,
-]
-
-B3_TEMPLATES = [
+    TREASURY_ZERO,
+    BORDER_CONTACT,
     AT_WAR_DYAD,
     AT_WAR_ANY,
+    ALLIANCE_DYAD,
     CITY_CONQUERED_ANY,
     CITY_LOST,
+]
+
+I3_TEMPLATES = [
     GOVERNMENT_AT,
     ANARCHY_EVENT,
-    ALLIANCE_DYAD,
     WONDER_COMPLETED,
     WONDER_FIRST,
 ]
 
-ALL_TEMPLATES = B1_TEMPLATES + B2_TEMPLATES + B3_TEMPLATES
+ALL_TEMPLATES = I1_TEMPLATES + I2_TEMPLATES + I3_TEMPLATES
 
 TEMPLATES_BY_ID: dict[str, QuestionTemplate] = {t.template_id: t for t in ALL_TEMPLATES}
 
-TEMPLATES_BY_SIGNAL_TYPE: dict[str, list[QuestionTemplate]] = {
-    "B1": B1_TEMPLATES,
-    "B2": B2_TEMPLATES,
-    "B3": B3_TEMPLATES,
+TEMPLATES_BY_INFO_AVAILABILITY: dict[str, list[QuestionTemplate]] = {
+    "I1": I1_TEMPLATES,
+    "I2": I2_TEMPLATES,
+    "I3": I3_TEMPLATES,
 }
 
 
@@ -283,8 +304,8 @@ def get_template(template_id: str) -> QuestionTemplate:
     return TEMPLATES_BY_ID[template_id]
 
 
-def get_templates_by_signal_type(signal_type: str) -> list[QuestionTemplate]:
-    """Get all templates for a given signal type (B1, B2, B3)."""
-    if signal_type not in TEMPLATES_BY_SIGNAL_TYPE:
-        raise ValueError(f"Unknown signal_type: {signal_type}")
-    return TEMPLATES_BY_SIGNAL_TYPE[signal_type]
+def get_templates_by_info_availability(info_availability: str) -> list[QuestionTemplate]:
+    """Get all templates for a given information availability level (I1, I2, I3)."""
+    if info_availability not in TEMPLATES_BY_INFO_AVAILABILITY:
+        raise ValueError(f"Unknown info_availability: {info_availability}")
+    return TEMPLATES_BY_INFO_AVAILABILITY[info_availability]

@@ -3,8 +3,7 @@ Question generation module for creating forecasting questions from game data.
 
 This module provides:
 - Data model schema (QuestionBank, QuestionInstance, Resolution, etc.)
-- Question templates (B1, B2, B3 signal types)
-- Configurable thresholds
+- Question templates (I1, I2, I3 information availability levels)
 - QuestionGenerator for creating question banks
 - QuestionResolver for computing answers
 
@@ -37,43 +36,23 @@ from .schema import (
     QuestionInstance,
     Resolution,
     WorldReportConfig,
-    ThresholdConfig,
     CivilizationInfo,
     QuestionBank,
     classify_horizon,
     horizon_to_int,
-    base_rate_to_int,
+    info_availability_to_int,
     calculate_difficulty,
 )
 
 from .templates import (
     ALL_TEMPLATES,
-    B1_TEMPLATES,
-    B2_TEMPLATES,
-    B3_TEMPLATES,
+    I1_TEMPLATES,
+    I2_TEMPLATES,
+    I3_TEMPLATES,
     TEMPLATES_BY_ID,
-    TEMPLATES_BY_SIGNAL_TYPE,
+    TEMPLATES_BY_INFO_AVAILABILITY,
     get_template,
-    get_templates_by_signal_type,
-)
-
-from .thresholds import (
-    DEFAULT_THRESHOLDS,
-    get_default_thresholds,
-    get_thresholds_for_signal,
-    select_threshold,
-    create_threshold_config,
-    select_threshold_for_rate,
-    select_growth_threshold_for_rate,
-)
-
-from .signal_statistics import (
-    get_threshold_for_rate,
-    get_growth_threshold_for_rate,
-    get_event_probability,
-    SIGNAL_STATS,
-    GROWTH_STATS,
-    EVENT_PROBABILITIES,
+    get_templates_by_info_availability,
 )
 
 from .generator import QuestionGenerator
@@ -95,37 +74,21 @@ __all__ = [
     "QuestionInstance",
     "Resolution",
     "WorldReportConfig",
-    "ThresholdConfig",
     "CivilizationInfo",
     "QuestionBank",
     "classify_horizon",
     "horizon_to_int",
-    "base_rate_to_int",
+    "info_availability_to_int",
     "calculate_difficulty",
     # Templates
     "ALL_TEMPLATES",
-    "B1_TEMPLATES",
-    "B2_TEMPLATES",
-    "B3_TEMPLATES",
+    "I1_TEMPLATES",
+    "I2_TEMPLATES",
+    "I3_TEMPLATES",
     "TEMPLATES_BY_ID",
-    "TEMPLATES_BY_SIGNAL_TYPE",
+    "TEMPLATES_BY_INFO_AVAILABILITY",
     "get_template",
-    "get_templates_by_signal_type",
-    # Thresholds
-    "DEFAULT_THRESHOLDS",
-    "get_default_thresholds",
-    "get_thresholds_for_signal",
-    "select_threshold",
-    "create_threshold_config",
-    "select_threshold_for_rate",
-    "select_growth_threshold_for_rate",
-    # Signal statistics
-    "get_threshold_for_rate",
-    "get_growth_threshold_for_rate",
-    "get_event_probability",
-    "SIGNAL_STATS",
-    "GROWTH_STATS",
-    "EVENT_PROBABILITIES",
+    "get_templates_by_info_availability",
     # Generator & Resolver
     "QuestionGenerator",
     "QuestionResolver",
