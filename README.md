@@ -4,21 +4,23 @@ A benchmark for evaluating LLM forecasting ability using procedurally-generated 
 
 A fork of [CivRealm](https://github.com/bigai-ai/civrealm).
 
-## About This Fork
+![Punic War](docs/assets/punic_war_base.jpg)
 
-This project builds on the excellent [CivRealm](https://github.com/bigai-ai/civrealm) framework developed by BIGAI, which provides a Gymnasium-compatible environment for the open-source strategy game [Freeciv-web](https://github.com/freeciv/freeciv-web).
 
-This package extends CivRealm with:
-- Configurable AI vs. AI gameplay with deterministic seeds
-- Specialized logging of world state, including:
-  - Economic metrics and trade analysis
-  - Demographic trends and population statistics
-  - Technology advancement tracking
-  - Historical event timelines
+## Quickstart
 
-We use these data to create world reports and forecasting questions.
+```bash
+# 1. Run games (generates recordings)
+python scripts/run_worlds.py --seeds 1-100 --max_turns 300
 
-## Research Contributions
+# 2. Generate data + questions
+python scripts/generate_data_batch.py && python scripts/regenerate_questions.py
+
+# 3. Evaluate models
+python scripts/evaluate_llm_forecasts_parallel.py --questions-per-difficulty 20
+```
+
+## What CivBench does
 
 CivBench provides a benchmark that enables **immediate feedback** on LLM forecasting ability:
 
@@ -28,75 +30,16 @@ CivBench provides a benchmark that enables **immediate feedback** on LLM forecas
 - **Tunable difficulty** via information masking, prediction horizon, question types (binary, multiple choice, quantile, conditional), and low-probability events
 - **Benchmark saturation resistance** - difficulty can be continuously increased as models improve
 
-### Research Questions
 
-1. **Correlation with existing benchmarks**: Do model rankings on CivBench correlate with ForecastBench and other forecasting benchmarks?
-2. **Human baselines**: How do models compare to superforecaster performance?
-3. **Extensibility**: Can CivBench serve as a harder, unsaturated extension of existing benchmarks?
-4. **Prompt/method A/B testing**: Which prompting strategies and scaffolding methods improve forecasting performance?
+## How CivBench works
 
-![Punic War](docs/assets/punic_war_base.jpg)
+This fork introduces a complete pipeline for running AI games, generating detailed world reports, creating forecasting questions, and evaluating LLMs based on those questions.
 
-# Contents
+### Running AI Games with run_worlds.py
 
-- [About This Fork](#about-this-fork)
-- [Research Contributions](#research-contributions)
-- [How It Works](#how-it-works)
-  - [Running AI Games with run_world.py](#running-ai-games-with-run_worldpy)
-  - [Data Production Pipeline](#data-production-pipeline)
-  - [World Report Generation](#world-report-generation)
-  - [Question Generation](#question-generation)
-  - [LLM Evaluation](#llm-evaluation)
-  - [Scripts](#scripts)
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Testing the Installation](#testing-the-installation)
-  - [Single player mode (against built-in AIs)](#single-player-mode-against-built-in-ais)
-  - [Multiplayer mode](#multiplayer-mode)
-- [Trouble Shooting](#trouble-shooting)
-- [Original CivRealm Project](#original-civrealm-project)
-
-## How It Works
-
-This fork introduces a complete pipeline for running AI games, generating detailed world reports, and creating forecasting questions. Here's how each component works:
-
-### Running AI Games with run_world.py
-
-The [run_world.py](scripts/run_world.py) script orchestrates fully-automated AI-vs-AI games and report generation:
-
-**Game Setup:**
-- Creates a competitive game with N AI players (default 5, all using Freeciv's built-in AI)
-- Configures game settings: max turns (default 50), AI difficulty (hard), random starting positions
-- Connects as a player and toggles to AI control via `/aitoggle`
-- Uses a NoOpAgent that simply returns `None` each turn, letting Freeciv AI play
-
-**Deterministic Runs:**
-- Each run is uniquely identified by a **seed** (required argument)
-- The seed controls both map generation (`mapseed`) and game logic (`gameseed`)
-- Games with the same seed produce identical results, enabling reproducible experiments
-- Run ID is derived from seed: `s{seed}` (e.g., seed 42 → run ID `s42`)
-
-**Recording During Gameplay:**
-- Enables `debug.record_action_and_observation` to capture game state every turn
-- Preserves all autosave files for complete historical data extraction
-- Records full game state as JSON files in `logs/recordings/s{seed}/`
-- Each turn produces: `turn_N_step_0_state.json` containing complete world state
-- Downloads and persists savegames from Docker container after completion
-
-**Automatic Report Generation:**
-- After game completion, automatically generates world reports
-- Analyzes all recorded turns (0 to max_turns)
-- Produces HTML reports with visualizations
-- Saves to `reports/s{seed}/`
-
-**Usage:**
 ```bash
-python scripts/run_world.py --seed 42
-python scripts/run_world.py --seed 42 --max_turns 100
-python scripts/run_world.py --seed 42 --max_turns 100 --num_ai_players 7
+python scripts/run_worlds.py --seed 42 --max_turns 300 --num_ai_players 5
 ```
-
-**Arguments:**
 - `--seed` (required): Random seed for deterministic gameplay and unique run identifier
 - `--max_turns` (default: 50): Maximum number of turns to simulate
 - `--num_ai_players` (default: 5): Total number of AI players in the game
@@ -106,6 +49,23 @@ This command:
 2. Records all game state data
 3. Generates comprehensive world reports
 4. Outputs report location for viewing
+
+The [run_worlds.py](scripts/run_world.py) script orchestrates fully-automated AI-vs-AI games and report generation:
+
+**Game Setup:**
+- Creates a competitive game with N AI players (default 5, all using Freeciv's built-in AI)
+- Configures game settings: max turns (default 50), AI difficulty (hard), random starting positions
+
+**Deterministic Runs:**
+- Each run is uniquely identified by a **seed** (required argument)
+- The seed controls both map generation (`mapseed`) and game logic (`gameseed`)
+- Games with the same seed produce identical results, enabling reproducible experiments
+- Run ID is derived from seed: `s{seed}` (e.g., seed 42 → run ID `s42`)
+
+**Recording During Gameplay:**
+- Records full game state files in `logs/recordings/s{seed}/`
+- Each turn produces: `turn_N_step_0_state.json` containing complete world state
+- Downloads and persists savegames from Docker container after completion
 
 ### Data Production Pipeline
 
@@ -148,21 +108,8 @@ Reports are produced through a two-stage pipeline implemented in [report_generat
 
 **Stage 1: Data Extraction (Python → JSON)**
 
-The [MetricsCollector](src/civrealm/world_reports/extractors/metrics_collector.py) processes game recordings:
+The [MetricsCollector](src/civrealm/world_reports/extractors/metrics_collector.py) processes game recordings, extracting:
 
-```python
-# Load all states from turn 0 to target turn
-states = data_loader.get_states_range(0, target_turn)
-
-# Extract metrics across all categories
-collector = MetricsCollector()
-data = collector.collect_all(states, config, data_loader)
-
-# Save intermediate JSON for reproducibility
-write_world_data(data, 'turn_500_data.json')
-```
-
-**What gets extracted:**
 - **Overview Metrics:** Player rankings, territory control, victory conditions
 - **Economic Data:** GDP, production, trade routes, treasury
 - **Demographics:** Population, growth rates, city distribution
@@ -171,7 +118,7 @@ write_world_data(data, 'turn_500_data.json')
 
 **Stage 2: Rendering (JSON → HTML)**
 
-The [HTMLRenderer](src/civrealm/world_reports/renderers/html.py) transforms extracted data into reports:
+The [HTMLRenderer](src/civrealm/world_reports/renderers/html.py) transforms extracted data into reports.
 
 **Report Components:**
 - **Charts:** Population trends, economic growth, tech progress
@@ -184,24 +131,6 @@ The [HTMLRenderer](src/civrealm/world_reports/renderers/html.py) transforms extr
 - **Event Timeline:** Chronological history of significant game events
   - Detected by [event_detector.py](src/civrealm/world_reports/utils/event_detector.py)
 
-**Configuration ([config.py](src/civrealm/world_reports/config.py)):**
-
-```python
-report_config = ReportConfig(
-    recording_dir='logs/recordings/s42/',  # s{seed} format
-    output_dir='reports/s42/',
-    report_turns=[30, 50],  # Generate reports at turn 30 and 50
-    enabled_sections=['overview', 'historical_events', 'economics',
-                     'demographics', 'technology'],
-    formats=['html'],
-    plot_style='seaborn',
-    dpi=150
-)
-
-generator = ReportGenerator(report_config)
-generator.generate_reports()
-```
-
 **Output:**
 - `turn_50_data.json` - Complete extracted metrics (intermediate format)
 - `turn_50_report.html` - HTML report
@@ -209,7 +138,7 @@ generator.generate_reports()
 
 ### Question Generation
 
-The question generation system creates forecasting questions from game data, with thresholds calibrated from empirical statistics across 103 game simulations.
+The question generation system creates forecasting questions from game data.
 
 **Difficulty Dimensions:**
 
@@ -331,20 +260,47 @@ python scripts/compute_base_rates.py --data-dir data/games --snapshot-turn 50
 
 ### LLM Evaluation
 
-The evaluation system measures LLM forecasting performance using standard metrics.
+The evaluation system measures LLM forecasting performance using parallel model queries and stratified-batched sampling.
 
 **Running Evaluations:**
 
 ```bash
-# Evaluate models on sampled questions
-python scripts/evaluate_llm_forecasts.py --seed 42 --num-questions 50
+# Standard evaluation: 100 questions (20 per difficulty level), batched by game
+python scripts/evaluate_llm_forecasts_parallel.py --seed 42 --questions-per-difficulty 20
 
-# Dry run to inspect questions without querying models
-python scripts/evaluate_llm_forecasts.py --dry-run --num-questions 10
+# Dry run to inspect sample without querying models
+python scripts/evaluate_llm_forecasts_parallel.py --dry-run --questions-per-difficulty 5
 
-# Specify models to evaluate
-python scripts/evaluate_llm_forecasts.py --models claude-sonnet-4-5-20250929 gpt-4o-mini
+# Evaluate only ForecastBench models (for rank correlation validation)
+python scripts/evaluate_llm_forecasts_parallel.py --forecastbench-only --questions-per-difficulty 20
+
+# Specify specific models
+python scripts/evaluate_llm_forecasts_parallel.py --models claude-3-7-sonnet-20250219 gpt-4o-mini
+
+# Resume from checkpoint after interruption
+python scripts/evaluate_llm_forecasts_parallel.py --resume logs/eval_20251216_143000/checkpoint.json
 ```
+
+**Stratified-Batched Sampling:**
+
+The `--questions-per-difficulty` flag uses a hybrid two-phase sampling approach that provides both **guaranteed difficulty balance** and **token efficiency**:
+
+1. **Phase 1 - Stratified sampling:** Sample exactly N questions from each difficulty level (2-6)
+2. **Phase 2 - Game batching:** Regroup sampled questions by game for efficient prompts
+
+| Difficulty | Sample Count | Description |
+|------------|--------------|-------------|
+| 2 | N questions | Easy: Short horizon (H1) + computable info (I1) |
+| 3 | N questions | Medium-easy: H1+I2 or H2+I1 |
+| 4 | N questions | Medium: H1+I3, H2+I2, or H3+I1 |
+| 5 | N questions | Medium-hard: H2+I3 or H3+I2 |
+| 6 | N questions | Hard: Long horizon (H3) + hidden state (I3) |
+
+With `--questions-per-difficulty 20`, you get exactly 100 questions (20 from each difficulty level), grouped into batches by game. Questions from the same game share a single world report in the prompt, reducing token usage by ~80%.
+
+**Parallel Execution:**
+
+The evaluation queries all models in parallel for each batch, with per-provider rate limiting to avoid API throttling. This provides ~7x speedup over sequential evaluation.
 
 **Metrics:**
 
@@ -352,6 +308,7 @@ The evaluation computes:
 
 - **Brier Score:** Mean squared error between predicted probabilities and outcomes. Lower is better (0.0 = perfect, 0.25 = uninformed 50% baseline, 1.0 = maximally wrong).
 - **Expected Calibration Error (ECE):** Measures how well predicted probabilities match actual frequencies.
+- **Brier by Difficulty:** Breakdown of Brier score for each difficulty level.
 
 ```python
 from civrealm.metrics import compute_brier_score, compute_calibration_error
@@ -365,7 +322,14 @@ ece = compute_calibration_error(predictions, outcomes)
 
 **Output:**
 
-Results are saved to `data/evaluations/` with per-question predictions and aggregate scores by model.
+Results are saved to `data/evaluations/` with:
+- Per-question predictions from each model (probability, latency, errors)
+- Per-model aggregate metrics (Brier score, ECE, by-difficulty breakdown)
+- Metadata for reproducibility (seed, difficulty distribution, timestamps)
+
+**ForecastBench Validation:**
+
+The default model list includes models with published ForecastBench scores, enabling rank correlation analysis between CivBench and ForecastBench performance.
 
 ### Scripts
 
@@ -399,7 +363,8 @@ All utility scripts are in the `scripts/` directory:
 
 | Script | Description |
 |--------|-------------|
-| [evaluate_llm_forecasts.py](scripts/evaluate_llm_forecasts.py) | Evaluate LLMs on forecasting questions (Brier scores) |
+| [evaluate_llm_forecasts_parallel.py](scripts/evaluate_llm_forecasts_parallel.py) | Parallel LLM evaluation with stratified sampling (primary) |
+| [evaluate_llm_forecasts.py](scripts/evaluate_llm_forecasts.py) | Sequential evaluation (legacy) |
 
 ## Prerequisites
 

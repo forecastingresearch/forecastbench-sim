@@ -22,8 +22,9 @@ __pycache__/
 tmp.prof
 dataset/
 
-
 .DS_Store
 logs/
 questions_s42.json
 reports/
+
+.env

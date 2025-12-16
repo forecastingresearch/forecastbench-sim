@@ -87,8 +87,8 @@ class QuestionGenerator:
         for level in info_availability_levels:
             templates_to_use.extend(TEMPLATES_BY_INFO_AVAILABILITY.get(level, []))
 
-        # Extract civilizations
-        civilizations = self._extract_civilizations(game_data)
+        # Extract civilizations (only those that exist at snapshot_turn)
+        civilizations = self._extract_civilizations(game_data, snapshot_turn)
 
         # Generate world report config if not provided
         if world_report_config is None:
@@ -148,11 +148,40 @@ class QuestionGenerator:
 
         return turns
 
-    def _extract_civilizations(self, game_data: dict[str, Any]) -> dict[int, CivilizationInfo]:
-        """Extract civilization info from game data."""
+    def _extract_civilizations(
+        self,
+        game_data: dict[str, Any],
+        snapshot_turn: int | None = None,
+    ) -> dict[int, CivilizationInfo]:
+        """Extract civilization info from game data.
+
+        Args:
+            game_data: The full game data dict
+            snapshot_turn: If provided, only include civs that exist at this turn
+
+        Returns:
+            Dict mapping player_id to CivilizationInfo
+        """
         civs = {}
+
+        # Determine which civs exist at snapshot_turn by checking time series data
+        existing_at_snapshot = None
+        if snapshot_turn is not None:
+            existing_at_snapshot = set()
+            time_series = game_data.get("time_series", {})
+            # Check any time series metric for player presence at snapshot_turn
+            for metric_name, metric_data in time_series.items():
+                turn_data = metric_data.get(str(snapshot_turn), {})
+                for player_id_str in turn_data.keys():
+                    existing_at_snapshot.add(int(player_id_str))
+
         for player_id_str, civ_data in game_data.get("civilizations", {}).items():
             player_id = int(player_id_str)
+
+            # Skip civs that don't exist at snapshot_turn
+            if existing_at_snapshot is not None and player_id not in existing_at_snapshot:
+                continue
+
             civs[player_id] = CivilizationInfo(
                 name=civ_data.get("name", f"Player {player_id}"),
                 nation_id=civ_data.get("nation_id", 0),
