@@ -46,6 +46,7 @@ CivBench provides a benchmark that enables **immediate feedback** on LLM forecas
   - [Data Production Pipeline](#data-production-pipeline)
   - [World Report Generation](#world-report-generation)
   - [Question Generation](#question-generation)
+  - [LLM Evaluation](#llm-evaluation)
   - [Scripts](#scripts)
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
@@ -210,17 +211,50 @@ generator.generate_reports()
 
 The question generation system creates forecasting questions from game data, with thresholds calibrated from empirical statistics across 103 game simulations.
 
-**Question Types:**
+**Difficulty Dimensions:**
 
-Questions are organized into three signal types based on predictability:
-- **B1 (High base rate):** Tech count, population, score - signals that generally increase
-- **B2 (Medium base rate):** Territory, treasury, cities - signals with more variance
-- **B3 (Low base rate):** Events like wars, alliances, conquests - harder to predict
+Questions are classified along two orthogonal dimensions:
 
-Each question has a time horizon:
-- **H1 (Short):** ≤30 turns ahead - immediate predictions
-- **H2 (Medium):** 30-100 turns ahead - medium-term forecasts
-- **H3 (Long):** >100 turns ahead - long-range predictions
+**Information Availability (I)** - Can the outcome be computed from observable state + known mechanics?
+
+| Level | Definition | Examples |
+|-------|------------|----------|
+| I1 | Computable from observable state + known mechanics | Tech count, population, score comparatives |
+| I2 | Observable trends, but hidden priorities add noise | War declarations, city founding, treasury |
+| I3 | Depends on genuinely hidden state | Government changes, wonder completion |
+
+**Time Horizon (H)** - How far ahead is the prediction?
+
+| Level | Turns Ahead | Rationale |
+|-------|-------------|-----------|
+| H1 | 20 | Short extrapolation; trends likely continue |
+| H2 | 80 | Medium; requires reasoning about second-order effects |
+| H3 | 150 | Long; regime changes likely; compounding uncertainty |
+
+**Difficulty Matrix:** D = H + I (scores range from 2 to 6)
+
+|  | H1 (short) | H2 (medium) | H3 (long) |
+|--|------------|-------------|-----------|
+| I1 (computable) | 2 (easiest) | 3 | 4 |
+| I2 (noisy) | 3 | 4 | 5 |
+| I3 (hidden) | 4 | 5 | 6 (hardest) |
+
+**Question Templates:**
+
+*I1 Questions (Computable):*
+- **tech_comparative:** "Will [Civ A] have more technologies than [Civ B] at turn T?"
+- **score_comparative:** "Will [Civ A] have a higher score than [Civ B] at turn T?"
+- **population_comparative:** "Will [Civ A] have a larger population than [Civ B] at turn T?"
+
+*I2 Questions (Observable with Noise):*
+- **at_war_dyad:** "Will [Civ A] and [Civ B] be at war at turn T?"
+- **alliance_dyad:** "Will [Civ A] and [Civ B] have an alliance at turn T?"
+- **city_founding:** "Will [Civ] found a new city between now and turn T?"
+- **conquest:** "Will any city change ownership between now and turn T?"
+
+*I3 Questions (Hidden State):*
+- **government_state:** "Will [Civ] be in [government type] at turn T?"
+- **wonder_completion:** "Will [Wonder] be completed by any civilization by turn T?"
 
 **Statistics-Based Threshold Calibration:**
 
@@ -295,19 +329,77 @@ python scripts/compute_base_rates.py --data-dir data/games --snapshot-turn 50
 - [signal_statistics.py](src/civrealm/world_reports/questions/signal_statistics.py) - Embedded statistics and threshold functions
 - [generator.py](src/civrealm/world_reports/questions/generator.py) - Question generation with calibrated thresholds
 
+### LLM Evaluation
+
+The evaluation system measures LLM forecasting performance using standard metrics.
+
+**Running Evaluations:**
+
+```bash
+# Evaluate models on sampled questions
+python scripts/evaluate_llm_forecasts.py --seed 42 --num-questions 50
+
+# Dry run to inspect questions without querying models
+python scripts/evaluate_llm_forecasts.py --dry-run --num-questions 10
+
+# Specify models to evaluate
+python scripts/evaluate_llm_forecasts.py --models claude-sonnet-4-5-20250929 gpt-4o-mini
+```
+
+**Metrics:**
+
+The evaluation computes:
+
+- **Brier Score:** Mean squared error between predicted probabilities and outcomes. Lower is better (0.0 = perfect, 0.25 = uninformed 50% baseline, 1.0 = maximally wrong).
+- **Expected Calibration Error (ECE):** Measures how well predicted probabilities match actual frequencies.
+
+```python
+from civrealm.metrics import compute_brier_score, compute_calibration_error
+
+predictions = [0.9, 0.1, 0.7]
+outcomes = [True, False, True]
+
+brier = compute_brier_score(predictions, outcomes)  # 0.03
+ece = compute_calibration_error(predictions, outcomes)
+```
+
+**Output:**
+
+Results are saved to `data/evaluations/` with per-question predictions and aggregate scores by model.
+
 ### Scripts
 
 All utility scripts are in the `scripts/` directory:
+
+**Game Simulation:**
 
 | Script | Description |
 |--------|-------------|
 | [run_world.py](scripts/run_world.py) | Run a single AI-vs-AI game with deterministic seed |
 | [run_worlds.py](scripts/run_worlds.py) | Run multiple games in parallel |
+
+**Data Extraction & Analysis:**
+
+| Script | Description |
+|--------|-------------|
 | [generate_data_batch.py](scripts/generate_data_batch.py) | Batch extract JSON data from game recordings |
 | [compute_signal_statistics.py](scripts/compute_signal_statistics.py) | Extract percentile statistics from game data |
 | [compute_base_rates.py](scripts/compute_base_rates.py) | Compute base rates across games |
-| [generate_questions.py](scripts/generate_questions.py) | Generate question banks from game data |
 | [calibrate_thresholds.py](scripts/calibrate_thresholds.py) | Calibrate threshold values |
+| [test_world_report.py](scripts/test_world_report.py) | Generate world reports from existing recordings |
+
+**Question Generation:**
+
+| Script | Description |
+|--------|-------------|
+| [generate_questions.py](scripts/generate_questions.py) | Generate all question types from a single game data file |
+| [generate_questions_batch.py](scripts/generate_questions_batch.py) | Generate all question types from all games (parallel processing) |
+
+**LLM Evaluation:**
+
+| Script | Description |
+|--------|-------------|
+| [evaluate_llm_forecasts.py](scripts/evaluate_llm_forecasts.py) | Evaluate LLMs on forecasting questions (Brier scores) |
 
 ## Prerequisites
 
