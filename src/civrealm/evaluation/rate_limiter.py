@@ -31,7 +31,7 @@ class ProviderRateLimiter:
     # e.g., 5 Anthropic models with limit 2 = max 2 concurrent Anthropic calls
     DEFAULT_LIMITS = {
         "OpenAIProvider": 3,      # 5 OpenAI models, stagger them
-        "AnthropicProvider": 2,   # 5 Anthropic models, stagger them
+        "AnthropicProvider": 1,   # 5 Anthropic models, stagger them
         "GoogleProvider": 3,      # 3 Google models
         "TogetherProvider": 3,    # 4 Together models
         "MistralProvider": 2,     # 1 Mistral model

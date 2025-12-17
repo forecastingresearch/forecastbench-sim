@@ -58,11 +58,48 @@ def parse_probability(response: str) -> float | None:
     return None
 
 
+def _extract_probabilities_from_text(text: str, num_questions: int) -> list[float | None]:
+    """
+    Extract probability values from text containing numeric lines.
+
+    Args:
+        text: Text containing probability values (one per line or comma-separated)
+        num_questions: Expected number of values
+
+    Returns:
+        List of probabilities clamped to [0, 1], padded with None if needed.
+    """
+    probabilities: list[float | None] = []
+
+    # Try line-by-line first
+    for line in text.strip().split('\n'):
+        line = line.strip()
+        if not line:
+            continue
+        # Extract any decimal number from the line
+        match = re.search(r'(\d*\.\d+|\d+\.?\d*)', line)
+        if match:
+            try:
+                value = float(match.group(1))
+                probabilities.append(max(0.0, min(1.0, value)))
+            except ValueError:
+                continue
+        if len(probabilities) >= num_questions:
+            break
+
+    # Pad with None if needed
+    while len(probabilities) < num_questions:
+        probabilities.append(None)
+
+    return probabilities[:num_questions]
+
+
 def parse_batch_probabilities(response: str, num_questions: int) -> list[float | None]:
     """
     Parse multiple probability values from a batched model response.
 
     Handles various response formats:
+    - Delimited block: <<<PROBABILITIES>>>\\n0.7\\n0.8\\n<<<END>>>
     - Numbered lines: "1. 0.7\\n2. 0.8\\n3. 0.6"
     - Plain lines: "0.7\\n0.8\\n0.6"
     - JSON array: [0.7, 0.8, 0.6]
@@ -76,6 +113,19 @@ def parse_batch_probabilities(response: str, num_questions: int) -> list[float |
         List of probabilities (clamped to [0, 1]) or None for unparseable values.
         Length matches num_questions, padding with None if needed.
     """
+    # Try delimiter extraction first (most reliable)
+    delimiter_match = re.search(
+        r'<<<PROBABILIT(?:Y|IES)>>>(.*?)<<<END>>>',
+        response,
+        re.DOTALL | re.IGNORECASE
+    )
+    if delimiter_match:
+        delimited_content = delimiter_match.group(1).strip()
+        probabilities = _extract_probabilities_from_text(delimited_content, num_questions)
+        # Only use if we got at least one valid probability
+        if any(p is not None for p in probabilities):
+            return probabilities
+
     probabilities: list[float | None] = []
 
     # Try JSON array first
@@ -193,14 +243,22 @@ def build_batch_prompt(questions: list[dict], world_report: str) -> str:
     # Use singular wording for single question, plural for multiple
     if num_questions == 1:
         question_section = "## Question"
-        instruction = "Respond with ONLY a number between 0.0 and 1.0 representing your probability estimate."
+        instruction = """You may analyze the data, but you MUST end your response with your probability in this exact format:
+<<<PROBABILITY>>>
+0.65
+<<<END>>>
+
+Replace 0.65 with your actual probability estimate between 0.0 and 1.0."""
     else:
         question_section = "## Questions"
-        instruction = f"""For each question, respond with a probability between 0.0 and 1.0.
-Format your response as one probability per line:
-1. [probability]
-2. [probability]
-...and so on for all {num_questions} questions."""
+        instruction = f"""You may analyze the data, but you MUST end your response with probabilities in this exact format:
+<<<PROBABILITIES>>>
+0.65
+0.42
+0.78
+<<<END>>>
+
+List one probability per line for all {num_questions} questions, in order. Replace the example values with your actual estimates between 0.0 and 1.0."""
 
     return f"""You are an expert superforecaster, familiar with the work of Tetlock and others. You are analyzing a FreeCiv game simulation. Make predictions based on the world report data below.
 
@@ -415,7 +473,7 @@ async def query_model_batch_async(
 
                 # Capture variables for thread (avoid closure issues)
                 # Allow more tokens for batched responses (20 per question)
-                max_tokens = max(100, num_questions * 20)
+                max_tokens = max(1000, num_questions * 150)  # Allow verbose reasoning + probabilities
 
                 def make_call(m=model, p=prompt, mt=max_tokens):
                     return m.get_response(p, temperature=0.0, max_tokens=mt)
@@ -601,24 +659,32 @@ async def evaluate_question(
     }
 
 
-def save_checkpoint(checkpoint_file: Path, results: list[dict], metadata: dict) -> None:
+def save_checkpoint(
+    checkpoint_file: Path,
+    results: list[dict],
+    metadata: dict,
+    completed_batches: set[int] | None = None,
+) -> None:
     """Save evaluation progress to checkpoint file."""
     checkpoint = {
         "metadata": metadata,
         "results": results,
         "completed_count": len(results),
     }
+    if completed_batches is not None:
+        checkpoint["completed_batches"] = sorted(completed_batches)
     with open(checkpoint_file, 'w') as f:
         json.dump(checkpoint, f, indent=2)
     logger.debug(f"Checkpoint saved: {len(results)} questions completed")
 
 
-def load_checkpoint(checkpoint_file: Path) -> tuple[list[dict], dict] | None:
+def load_checkpoint(checkpoint_file: Path) -> tuple[list[dict], dict, set[int] | None] | None:
     """
     Load checkpoint if it exists.
 
     Returns:
-        Tuple of (results, metadata) or None if no checkpoint
+        Tuple of (results, metadata, completed_batches) or None if no checkpoint.
+        completed_batches may be None for legacy checkpoints.
     """
     if not checkpoint_file.exists():
         return None
@@ -626,7 +692,15 @@ def load_checkpoint(checkpoint_file: Path) -> tuple[list[dict], dict] | None:
     with open(checkpoint_file) as f:
         checkpoint = json.load(f)
 
-    return checkpoint.get("results", []), checkpoint.get("metadata", {})
+    completed_batches = checkpoint.get("completed_batches")
+    if completed_batches is not None:
+        completed_batches = set(completed_batches)
+
+    return (
+        checkpoint.get("results", []),
+        checkpoint.get("metadata", {}),
+        completed_batches,
+    )
 
 
 async def _evaluate_single_question(
@@ -712,7 +786,7 @@ async def run_evaluation(
     if checkpoint_file:
         checkpoint_data = load_checkpoint(checkpoint_file)
         if checkpoint_data:
-            results, _ = checkpoint_data
+            results, _, _ = checkpoint_data
             start_idx = len(results)
             logger.info(f"Resuming from checkpoint at question {start_idx}")
 
@@ -765,65 +839,26 @@ async def run_evaluation(
     return results
 
 
-async def run_batch_evaluation(
-    question_batches: list[list[dict]],
+async def _process_single_batch(
+    batch_idx: int,
+    batch: list[dict],
     models: list[Any],
     rate_limiter: "ProviderRateLimiter",
     data_dir: Path,
-    checkpoint_file: Path | None = None,
-    checkpoint_interval: int = 5,
-    metadata: dict | None = None,
-    timeout: float | None = None,
-    verbose: bool = False,
-) -> list[dict]:
+    timeout: float | None,
+    verbose: bool,
+    semaphore: asyncio.Semaphore,
+    total_batches: int,
+) -> tuple[int, list[dict] | None]:
     """
-    Run batched evaluation where each batch contains questions from the same game.
-
-    This is more cost-efficient than per-question evaluation because the world
-    report is only included once per batch instead of once per question.
-
-    Args:
-        question_batches: List of question batches, one per game
-        models: List of model objects
-        rate_limiter: ProviderRateLimiter for managing concurrency
-        data_dir: Directory containing game data
-        checkpoint_file: Path to save/load checkpoints (optional)
-        checkpoint_interval: Save checkpoint every N batches
-        metadata: Evaluation metadata to include in checkpoint
-        timeout: Optional timeout in seconds per model query
+    Process a single batch with semaphore-based concurrency control.
 
     Returns:
-        Flat list of result dicts for all evaluated questions
+        Tuple of (batch_idx, results) where results may be None if skipped.
     """
-    results: list[dict] = []
-    start_batch_idx = 0
-
-    # Load checkpoint if exists
-    if checkpoint_file:
-        checkpoint_data = load_checkpoint(checkpoint_file)
-        if checkpoint_data:
-            results, saved_meta = checkpoint_data
-            # Determine which batch to resume from based on completed questions
-            completed_questions = len(results)
-            cumulative = 0
-            for i, batch in enumerate(question_batches):
-                cumulative += len(batch)
-                if cumulative > completed_questions:
-                    start_batch_idx = i
-                    break
-            else:
-                start_batch_idx = len(question_batches)  # All done
-            logger.info(f"Resuming from checkpoint: {completed_questions} questions, batch {start_batch_idx}")
-
-    total_batches = len(question_batches)
-    total_questions = sum(len(b) for b in question_batches)
-
-    logger.info(f"Processing {total_batches} game batches ({total_questions} total questions)")
-
-    for batch_idx in range(start_batch_idx, total_batches):
-        batch = question_batches[batch_idx]
+    async with semaphore:
         if not batch:
-            continue
+            return (batch_idx, None)
 
         game_id = batch[0]["game_id"]
         difficulties = [q.get("difficulty", {}).get("composite", "?") for q in batch]
@@ -835,14 +870,12 @@ async def run_batch_evaluation(
         world_report = load_world_report(data_dir, game_id)
         if not world_report:
             logger.warning(f"  No world report found for {game_id}, skipping batch")
-            continue
+            return (batch_idx, None)
 
         # Evaluate batch
         batch_results = await evaluate_question_batch(
             batch, models, rate_limiter, world_report, timeout=timeout, verbose=verbose
         )
-
-        results.extend(batch_results)
 
         # Log batch summary
         total_preds = sum(
@@ -851,14 +884,143 @@ async def run_batch_evaluation(
             if p.get("probability") is not None
         )
         expected_preds = len(batch) * len(models)
-        logger.info(f"  Batch complete: {total_preds}/{expected_preds} predictions successful")
+        logger.info(f"  Batch {batch_idx + 1} complete: {total_preds}/{expected_preds} predictions successful")
 
-        # Checkpoint
-        if checkpoint_file and (batch_idx + 1) % checkpoint_interval == 0:
-            save_checkpoint(checkpoint_file, results, metadata or {})
+        return (batch_idx, batch_results)
+
+
+async def run_batch_evaluation(
+    question_batches: list[list[dict]],
+    models: list[Any],
+    rate_limiter: "ProviderRateLimiter",
+    data_dir: Path,
+    checkpoint_file: Path | None = None,
+    checkpoint_interval: int = 5,
+    metadata: dict | None = None,
+    timeout: float | None = None,
+    verbose: bool = False,
+    concurrent_batches: int = 5,
+) -> list[dict]:
+    """
+    Run batched evaluation where each batch contains questions from the same game.
+
+    Batches are processed concurrently (up to concurrent_batches at a time) for
+    improved throughput. This is more cost-efficient than per-question evaluation
+    because the world report is only included once per batch.
+
+    Args:
+        question_batches: List of question batches, one per game
+        models: List of model objects
+        rate_limiter: ProviderRateLimiter for managing concurrency
+        data_dir: Directory containing game data
+        checkpoint_file: Path to save/load checkpoints (optional)
+        checkpoint_interval: Save checkpoint every N completed batches
+        metadata: Evaluation metadata to include in checkpoint
+        timeout: Optional timeout in seconds per model query
+        verbose: If True, log full prompts and responses
+        concurrent_batches: Number of batches to process concurrently (default: 5)
+
+    Returns:
+        Flat list of result dicts for all evaluated questions
+    """
+    # Track results by batch index for ordering, and completed batch indices
+    results_by_batch: dict[int, list[dict]] = {}
+    completed_batches: set[int] = set()
+
+    # Load checkpoint if exists
+    if checkpoint_file:
+        checkpoint_data = load_checkpoint(checkpoint_file)
+        if checkpoint_data:
+            existing_results, _, saved_completed = checkpoint_data
+
+            if saved_completed is not None:
+                # New checkpoint format: use completed batch indices directly
+                completed_batches = saved_completed
+                # Reconstruct results_by_batch from existing results
+                # Group by batch index (we need to infer from question order)
+                q_idx = 0
+                for batch_idx, batch in enumerate(question_batches):
+                    if batch_idx in completed_batches:
+                        results_by_batch[batch_idx] = existing_results[q_idx:q_idx + len(batch)]
+                        q_idx += len(batch)
+                logger.info(
+                    f"Resuming from checkpoint: {len(completed_batches)} batches completed "
+                    f"({len(existing_results)} questions)"
+                )
+            else:
+                # Legacy checkpoint format: infer completed batches from question count
+                completed_questions = len(existing_results)
+                cumulative = 0
+                q_idx = 0
+                for batch_idx, batch in enumerate(question_batches):
+                    if cumulative + len(batch) <= completed_questions:
+                        completed_batches.add(batch_idx)
+                        results_by_batch[batch_idx] = existing_results[q_idx:q_idx + len(batch)]
+                        q_idx += len(batch)
+                        cumulative += len(batch)
+                    else:
+                        break
+                logger.info(
+                    f"Resuming from legacy checkpoint: {len(completed_batches)} batches completed"
+                )
+
+    total_batches = len(question_batches)
+    total_questions = sum(len(b) for b in question_batches)
+    remaining_batches = [
+        (idx, batch) for idx, batch in enumerate(question_batches)
+        if idx not in completed_batches
+    ]
+
+    logger.info(
+        f"Processing {total_batches} game batches ({total_questions} total questions), "
+        f"{len(remaining_batches)} remaining, concurrency={concurrent_batches}"
+    )
+
+    if not remaining_batches:
+        # All done - just flatten and return
+        return [r for idx in sorted(results_by_batch.keys()) for r in results_by_batch[idx]]
+
+    # Create semaphore for batch-level concurrency
+    semaphore = asyncio.Semaphore(concurrent_batches)
+
+    # Launch all remaining batches (semaphore controls concurrency)
+    tasks = [
+        asyncio.create_task(
+            _process_single_batch(
+                batch_idx, batch, models, rate_limiter, data_dir,
+                timeout, verbose, semaphore, total_batches
+            )
+        )
+        for batch_idx, batch in remaining_batches
+    ]
+
+    # Process as batches complete
+    batches_since_checkpoint = 0
+    for coro in asyncio.as_completed(tasks):
+        batch_idx, batch_results = await coro
+
+        if batch_results is not None:
+            results_by_batch[batch_idx] = batch_results
+            completed_batches.add(batch_idx)
+            batches_since_checkpoint += 1
+
+            # Checkpoint periodically
+            if checkpoint_file and batches_since_checkpoint >= checkpoint_interval:
+                # Flatten results in order for checkpoint
+                ordered_results = [
+                    r for idx in sorted(results_by_batch.keys())
+                    for r in results_by_batch[idx]
+                ]
+                save_checkpoint(checkpoint_file, ordered_results, metadata or {}, completed_batches)
+                batches_since_checkpoint = 0
+                logger.info(f"  Checkpoint saved: {len(completed_batches)}/{total_batches} batches")
 
     # Final checkpoint
+    ordered_results = [
+        r for idx in sorted(results_by_batch.keys())
+        for r in results_by_batch[idx]
+    ]
     if checkpoint_file:
-        save_checkpoint(checkpoint_file, results, metadata or {})
+        save_checkpoint(checkpoint_file, ordered_results, metadata or {}, completed_batches)
 
-    return results
+    return ordered_results

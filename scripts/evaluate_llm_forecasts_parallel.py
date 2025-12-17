@@ -45,36 +45,40 @@ from utils.llm.model_registry import configure_api_keys, MODELS
 from civrealm.evaluation.sampling import (
     load_all_questions,
     stratified_sample_batched,
-    sample_questions_by_game,
     get_difficulty_distribution,
 )
 from civrealm.evaluation.rate_limiter import ProviderRateLimiter
 from civrealm.evaluation.parallel_evaluator import run_batch_evaluation
 from civrealm.metrics import compute_brier_score, compute_calibration_error
 
+# - [X] claude forecastbench models
+# - [ ] gpt/gemini fast models
+# - [ ] claude frontier models
+# - [ ] reasoning
+# - [ ] merge evals/recompute summary statistics
 
 # Models with ForecastBench scores for validation
 FORECASTBENCH_MODELS = [
-    "claude-3-7-sonnet-20250219",
-    "claude-opus-4-1-20250805",
-    "claude-sonnet-4-20250514",
+    # "claude-3-7-sonnet-20250219",
+    # "claude-opus-4-1-20250805",
+    # "claude-sonnet-4-20250514",
     "o3-2025-04-16",
     "gpt-4.1-2025-04-14",
     "gpt-5-2025-08-07",
     "gpt-5-mini-2025-08-07",
     "gemini-2.5-pro",
     "gemini-2.5-flash",
-    "DeepSeek-V3.1",
-    "Qwen3-235B-A22B-fp8-tput",
-    "Kimi-K2-Instruct",
-    "GLM-4.5-Air-FP8",
-    "mistral-large-2411",
+    # "DeepSeek-V3.1",
+    # "Qwen3-235B-A22B-fp8-tput",
+    # "Kimi-K2-Instruct",
+    # "GLM-4.5-Air-FP8",
+    # "mistral-large-2411",
 ]
 
 # Frontier models without ForecastBench scores yet
 FRONTIER_MODELS = [
-    "claude-opus-4-5-20251101",
-    "claude-sonnet-4-5-20250929",
+    # "claude-opus-4-5-20251101",
+    # "claude-sonnet-4-5-20250929",
     "gemini-3-pro-preview",
     "gpt-5.1-2025-11-13",
 ]
@@ -237,20 +241,8 @@ async def main():
         help="Random seed for reproducibility"
     )
     parser.add_argument(
-        "--questions-per-difficulty", "-n", type=int, default=None,
-        help="Questions to sample per difficulty level (total = n * 5). Mutually exclusive with --batched mode."
-    )
-    parser.add_argument(
-        "--questions-per-game", type=int, default=5,
-        help="Questions per game batch in batched mode (default: 5)"
-    )
-    parser.add_argument(
-        "--num-games", type=int, default=20,
-        help="Number of games to sample in batched mode (default: 20)"
-    )
-    parser.add_argument(
-        "--batched", action="store_true",
-        help="Use batched evaluation mode (groups questions by game to reduce token usage)"
+        "--questions-per-difficulty", "-n", type=int, default=20,
+        help="Questions to sample per difficulty level (total = n * 5, default: 20)"
     )
     parser.add_argument(
         "--output", "-o", type=str,
@@ -262,16 +254,16 @@ async def main():
         help="Model IDs to evaluate (default: ForecastBench + frontier models)"
     )
     parser.add_argument(
-        "--checkpoint-interval", type=int, default=10,
-        help="Save checkpoint every N questions"
+        "--checkpoint-interval", type=int, default=5,
+        help="Save checkpoint every N completed batches (default: 5)"
     )
     parser.add_argument(
         "--resume", type=str,
         help="Resume from checkpoint file"
     )
     parser.add_argument(
-        "--concurrent-questions", type=int, default=1,
-        help="Number of questions to evaluate concurrently (default: 1)"
+        "--concurrent-batches", type=int, default=5,
+        help="Number of game batches to process concurrently (default: 5)"
     )
     parser.add_argument(
         "--dry-run", action="store_true",
@@ -306,8 +298,8 @@ async def main():
     if not args.dry_run:
         logger.info("Configuring API keys...")
         configure_api_keys(
-            # from_gcp=True,
-            anthropic=os.getenv("ANTHROPIC_API_KEY"),
+            from_gcp=True,
+            # anthropic=os.getenv("ANTHROPIC_API_KEY"),
             # openai=os.getenv("OPENAI_API_KEY"),
             # google=os.getenv("GOOGLE_API_KEY"),
             # together=os.getenv("TOGETHER_API_KEY"),
@@ -328,39 +320,18 @@ async def main():
     full_dist = get_difficulty_distribution(all_questions)
     logger.info(f"Full difficulty distribution: {full_dist}")
 
-    # Determine evaluation mode and sample questions
-    question_batches = None
-
-    if args.questions_per_difficulty is not None:
-        # Hybrid mode: stratified by difficulty, then batched by game
-        # This gives both guaranteed difficulty balance AND token efficiency
-        logger.info(f"\nUsing STRATIFIED-BATCHED mode ({args.questions_per_difficulty} per difficulty)")
-        question_batches = stratified_sample_batched(
-            all_questions,
-            per_difficulty=args.questions_per_difficulty,
-            seed=args.seed,
-        )
-        # Flatten for metrics computation
-        questions = [q for batch in question_batches for q in batch]
-        logger.info(
-            f"Sampled {len(questions)} questions ({args.questions_per_difficulty} per difficulty) "
-            f"across {len(question_batches)} game batches (seed={args.seed})"
-        )
-    else:
-        # Legacy mode: sample by game (--questions-per-game --num-games)
-        logger.info(f"\nUsing GAME-BASED mode ({args.questions_per_game} questions/game, {args.num_games} games)")
-        question_batches = sample_questions_by_game(
-            all_questions,
-            questions_per_game=args.questions_per_game,
-            num_games=args.num_games,
-            seed=args.seed,
-        )
-        # Flatten for metrics computation
-        questions = [q for batch in question_batches for q in batch]
-        logger.info(
-            f"Sampled {len(questions)} questions across {len(question_batches)} games "
-            f"(seed={args.seed})"
-        )
+    # Stratified sampling by difficulty, then batched by game for token efficiency
+    logger.info(f"\nSampling {args.questions_per_difficulty} questions per difficulty level...")
+    question_batches = stratified_sample_batched(
+        all_questions,
+        per_difficulty=args.questions_per_difficulty,
+        seed=args.seed,
+    )
+    # Flatten for metrics computation
+    questions = [q for batch in question_batches for q in batch]
+    logger.info(
+        f"Sampled {len(questions)} questions across {len(question_batches)} game batches (seed={args.seed})"
+    )
 
     # Show sampled distribution
     sampled_dist = get_difficulty_distribution(questions)
@@ -436,8 +407,10 @@ async def main():
     timeout_str = f", timeout={timeout}s" if timeout else ", no timeout"
     start_time = datetime.now()
 
-    # Always use batched evaluation (both modes create question_batches)
-    logger.info(f"\nStarting BATCHED evaluation ({len(question_batches)} game batches{timeout_str})...")
+    logger.info(
+        f"\nStarting evaluation ({len(question_batches)} game batches, "
+        f"concurrency={args.concurrent_batches}{timeout_str})..."
+    )
     results = await run_batch_evaluation(
         question_batches=question_batches,
         models=models_to_use,
@@ -448,6 +421,7 @@ async def main():
         metadata=metadata,
         timeout=timeout,
         verbose=args.verbose,
+        concurrent_batches=args.concurrent_batches,
     )
 
     end_time = datetime.now()
