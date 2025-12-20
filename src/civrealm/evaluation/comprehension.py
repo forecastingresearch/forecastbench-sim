@@ -492,8 +492,15 @@ async def query_model_batch_yesno_async(
             answers = parse_batch_yesno(response, num_questions)
             probs = [1.0 if a is True else 0.0 if a is False else None for a in answers]
 
+        except asyncio.TimeoutError as e:
+            error = "timeout"
+            if verbose:
+                print(f"[ERROR] Model {model.id} timed out after {timeout}s")
+            probs = [None] * num_questions
         except Exception as e:
-            error = str(e)
+            error = repr(e)
+            if verbose:
+                print(f"[ERROR] Model {model.id} failed: {error}")
             probs = [None] * num_questions
 
         latency = (time.monotonic() - start) * 1000

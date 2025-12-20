@@ -82,7 +82,7 @@ async def main() -> int:
     parser.add_argument("--data-dir", type=str, default="data/questions", help="Directory containing game folders with world_report/")
     parser.add_argument("--models", nargs="+", default=None, help="Model IDs to use (default: ForecastBench + frontier)")
     parser.add_argument("--forecastbench-only", action="store_true", help="Use only ForecastBench models")
-    parser.add_argument("--timeout", type=int, default=120, help="Timeout per model query in seconds (0 = no timeout)")
+    parser.add_argument("--timeout", type=int, default=480, help="Timeout per model query in seconds (0 = no timeout)")
     parser.add_argument("--verbose", "-v", action="store_true", help="Verbose logging of prompts/responses")
     parser.add_argument("--output", type=str, help="Optional output JSON path for results")
     parser.add_argument("--dry-run", action="store_true", help="List targets but do not query models")
@@ -147,7 +147,7 @@ async def main() -> int:
         timeout=timeout,
         verbose=args.verbose,
         logger=logger,
-        batch_size=11,
+        batch_size=10,
     )
 
     logger.info("\nComprehension accuracy:")
