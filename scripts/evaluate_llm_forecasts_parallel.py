@@ -49,6 +49,7 @@ from civrealm.evaluation.sampling import (
 )
 from civrealm.evaluation.rate_limiter import ProviderRateLimiter
 from civrealm.evaluation.parallel_evaluator import run_batch_evaluation
+from civrealm.evaluation.comprehension import run_comprehension_checks
 from civrealm.metrics import compute_brier_score, compute_calibration_error
 
 # - [X] claude forecastbench models
@@ -270,6 +271,10 @@ async def main():
         help="Load questions but do not query models"
     )
     parser.add_argument(
+        "--comprehension-checks", action="store_true",
+        help="Run a small comprehension check per game before forecasting"
+    )
+    parser.add_argument(
         "--forecastbench-only", action="store_true",
         help="Only evaluate models with ForecastBench scores"
     )
@@ -402,8 +407,34 @@ async def main():
     else:
         checkpoint_file = log_dir / "checkpoint.json"
 
-    # Run evaluation
     timeout = args.timeout if args.timeout > 0 else None
+
+    comprehension_results: list[dict] = []
+    comprehension_summary: dict[str, dict[str, float | int]] = {}
+    if args.comprehension_checks:
+        game_ids = sorted({batch[0]["game_id"] for batch in question_batches if batch})
+        comp_results, comp_summary = await run_comprehension_checks(
+            game_ids=game_ids,
+            models=models_to_use,
+            rate_limiter=rate_limiter,
+            data_dir=data_dir,
+            timeout=timeout,
+            verbose=args.verbose,
+            logger=logger,
+        )
+        comprehension_results = comp_results
+        comprehension_summary = comp_summary
+
+        logger.info("\nComprehension accuracy:")
+        for mid, stats in comp_summary.items():
+            total = stats.get("total", 0)
+            correct = stats.get("correct", 0)
+            acc = stats.get("accuracy", float("nan"))
+            logger.info(f"  {mid}: {correct}/{total} ({acc:.2%} accuracy)" if total else f"  {mid}: no answers")
+
+        metadata["comprehension"] = comprehension_summary
+
+    # Run evaluation
     timeout_str = f", timeout={timeout}s" if timeout else ", no timeout"
     start_time = datetime.now()
 
@@ -443,6 +474,9 @@ async def main():
         "model_results": model_metrics,
         "questions": results,
     }
+
+    if comprehension_results:
+        output["comprehension_questions"] = comprehension_results
 
     # Save results
     if args.output:
