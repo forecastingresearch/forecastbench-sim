@@ -273,7 +273,12 @@ You MUST give a probability estimate between 0 and 1 for each question UNDER ALL
 {instruction}"""
 
 
-def load_world_report(data_dir: Path, game_id: str, compress: bool = True) -> str:
+def load_world_report(
+    data_dir: Path,
+    game_id: str,
+    compress: bool = True,
+    sample_interval: int = 10,
+) -> str:
     """
     Load world report JSON data as compressed JSON string.
 
@@ -295,7 +300,7 @@ def load_world_report(data_dir: Path, game_id: str, compress: bool = True) -> st
         data = json.load(f)
 
     if compress:
-        data = compress_world_report(data)
+        data = compress_world_report(data, sample_interval=sample_interval)
 
     return json.dumps(data, separators=(",", ":"))
 
@@ -849,6 +854,7 @@ async def _process_single_batch(
     verbose: bool,
     semaphore: asyncio.Semaphore,
     total_batches: int,
+    sample_interval: int,
 ) -> tuple[int, list[dict] | None]:
     """
     Process a single batch with semaphore-based concurrency control.
@@ -867,7 +873,9 @@ async def _process_single_batch(
         logger.info(f"  Questions: {len(batch)}, difficulties: {difficulties}")
 
         # Load world report
-        world_report = load_world_report(data_dir, game_id)
+        world_report = load_world_report(
+            data_dir, game_id, sample_interval=sample_interval
+        )
         if not world_report:
             logger.warning(f"  No world report found for {game_id}, skipping batch")
             return (batch_idx, None)
@@ -900,6 +908,7 @@ async def run_batch_evaluation(
     timeout: float | None = None,
     verbose: bool = False,
     concurrent_batches: int = 5,
+    sample_interval: int = 10,
 ) -> list[dict]:
     """
     Run batched evaluation where each batch contains questions from the same game.
@@ -919,6 +928,7 @@ async def run_batch_evaluation(
         timeout: Optional timeout in seconds per model query
         verbose: If True, log full prompts and responses
         concurrent_batches: Number of batches to process concurrently (default: 5)
+        sample_interval: Turns between samples when compressing world reports (default: 10)
 
     Returns:
         Flat list of result dicts for all evaluated questions
@@ -988,7 +998,7 @@ async def run_batch_evaluation(
         asyncio.create_task(
             _process_single_batch(
                 batch_idx, batch, models, rate_limiter, data_dir,
-                timeout, verbose, semaphore, total_batches
+                timeout, verbose, semaphore, total_batches, sample_interval
             )
         )
         for batch_idx, batch in remaining_batches

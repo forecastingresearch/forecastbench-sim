@@ -139,6 +139,7 @@ def compute_metrics(results: list[dict], models: list) -> dict:
     Returns dict with per-model metrics including:
     - brier_score: Overall Brier score
     - brier_by_difficulty: Brier score broken down by difficulty level
+    - brier_by_question_type: Brier score broken down by question template
     - ece: Expected Calibration Error
     - num_predictions: Count of successful predictions
     - num_failures: Count of failed predictions
@@ -152,6 +153,9 @@ def compute_metrics(results: list[dict], models: list) -> dict:
         predictions = []
         outcomes = []
         by_difficulty: dict[int, tuple[list[float], list[bool]]] = defaultdict(
+            lambda: ([], [])
+        )
+        by_question_type: dict[str, tuple[list[float], list[bool]]] = defaultdict(
             lambda: ([], [])
         )
 
@@ -168,6 +172,11 @@ def compute_metrics(results: list[dict], models: list) -> dict:
                 by_difficulty[difficulty][0].append(prob)
                 by_difficulty[difficulty][1].append(qr["ground_truth"])
 
+                # Group by question template/type
+                qtype = qr.get("template_id", "unknown")
+                by_question_type[qtype][0].append(prob)
+                by_question_type[qtype][1].append(qr["ground_truth"])
+
         # Compute overall metrics
         brier = compute_brier_score(predictions, outcomes) if predictions else float('nan')
         ece = compute_calibration_error(predictions, outcomes) if predictions else float('nan')
@@ -178,6 +187,12 @@ def compute_metrics(results: list[dict], models: list) -> dict:
             if preds:
                 brier_by_difficulty[d] = compute_brier_score(preds, outs)
 
+        # Compute per-question-type Brier scores
+        brier_by_question_type = {}
+        for qtype, (preds, outs) in sorted(by_question_type.items()):
+            if preds:
+                brier_by_question_type[qtype] = compute_brier_score(preds, outs)
+
         # Count failures
         num_failures = sum(
             1 for qr in results
@@ -187,6 +202,7 @@ def compute_metrics(results: list[dict], models: list) -> dict:
         model_metrics[model_id] = {
             "brier_score": brier,
             "brier_by_difficulty": brier_by_difficulty,
+            "brier_by_question_type": brier_by_question_type,
             "ece": ece,
             "num_predictions": len(predictions),
             "num_failures": num_failures,
@@ -219,6 +235,11 @@ def print_results_summary(model_metrics: dict, base_rate: float, logger: logging
                 f"d{d}={b:.3f}" for d, b in sorted(metrics['brier_by_difficulty'].items())
             )
             logger.info(f"  By difficulty: {diff_str}")
+        if metrics['brier_by_question_type']:
+            type_str = ", ".join(
+                f"{qt}={b:.3f}" for qt, b in sorted(metrics['brier_by_question_type'].items())
+            )
+            logger.info(f"  By question type: {type_str}")
 
     # Reference baselines
     uninformed_brier = base_rate * (1 - base_rate) + (1 - base_rate) * base_rate**2
@@ -281,6 +302,10 @@ async def main():
     parser.add_argument(
         "--timeout", type=int, default=180,
         help="Timeout per model query in seconds (default: 180). Use 0 for no timeout."
+    )
+    parser.add_argument(
+        "--sample-interval", type=int, default=10,
+        help="Turns between samples when compressing world reports (default: 10; lower = denser history)"
     )
     parser.add_argument(
         "--verbose", "-v", action="store_true",
@@ -396,6 +421,7 @@ async def main():
         "difficulty_distribution": sampled_dist,
         "models": [m.id for m in models_to_use],
         "start_time": datetime.now().isoformat() + "Z",
+        "sample_interval": args.sample_interval,
     }
 
     # Setup rate limiter
@@ -453,6 +479,7 @@ async def main():
         timeout=timeout,
         verbose=args.verbose,
         concurrent_batches=args.concurrent_batches,
+        sample_interval=args.sample_interval,
     )
 
     end_time = datetime.now()
