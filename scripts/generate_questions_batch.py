@@ -58,7 +58,9 @@ def process_single_game(args: tuple) -> dict | None:
         resolver = QuestionResolver()
         resolved_bank = resolver.resolve_batch(bank, game_data)
 
-        return question_bank_to_dict(resolved_bank)
+        bank_dict = question_bank_to_dict(resolved_bank)
+        bank_dict["game_id"] = game_id
+        return bank_dict
 
     except Exception as e:
         print(f"Error processing {data_file}: {e}")
@@ -92,6 +94,7 @@ def main():
     # Process in parallel
     all_questions = []
     all_banks = []
+    per_game_dir = Path(args.output).parent
 
     with ProcessPoolExecutor(max_workers=args.workers) as executor:
         futures = {executor.submit(process_single_game, arg): arg[0] for arg in task_args}
@@ -101,6 +104,12 @@ def main():
             if result:
                 all_banks.append(result)
                 all_questions.extend(result.get('questions', []))
+                # Write per-game questions.json in evaluator-friendly layout
+                game_id = result.get("game_id", "unknown_game")
+                game_dir = per_game_dir / game_id
+                game_dir.mkdir(parents=True, exist_ok=True)
+                with open(game_dir / "questions.json", "w") as f:
+                    json.dump(result, f, indent=2)
 
     # Compute statistics
     true_count = sum(1 for q in all_questions if q.get('resolution', {}).get('answer', False))
