@@ -156,21 +156,40 @@ def main(seed: int, max_turns: int = 50, num_ai_players: int = 5, quiet: bool = 
             done = terminated or truncated
 
         except Exception as e:
+            # If the server closes the connection after game end, treat as a clean finish.
+            last_turn = info.get('turn', 0) if isinstance(info, dict) else 0
+            msg = str(e)
+            if "Log in rejected" in msg:
+                if not quiet:
+                    print(f"Error: {e}")
+                raise e
+            if "Connection to server is closed" in msg or "web socket connection has not been established" in msg or "Web socket connection is closed" in msg:
+                log(f"Connection closed after turn {last_turn}; treating as completed.")
+                break
+            if last_turn >= max_turns:
+                log(f"Stopping after turn {last_turn} due to exception: {msg}")
+                break
             if not quiet:
                 print(f"Error: {e}")
             raise e
 
     # Save and preserve the final game state for extracting complete production data
     # Autosave only happens at the beginning of turns, so we need to manually save at the end
-    env.unwrapped.civ_controller.save_game()
-    env.unwrapped.civ_controller.delete_save = False  # Prevent deletion
+    try:
+        env.unwrapped.civ_controller.save_game()
+        env.unwrapped.civ_controller.delete_save = False  # Prevent deletion
+    except Exception as e:
+        log(f"Warning: failed to save game: {e}")
 
     env.close()
 
     # Download and persist all savegames from Docker container
     recording_dir = f'logs/recordings/{run_id}'
-    downloaded, skipped, failed = download_all_savegames_from_docker(run_id, recording_dir)
-    log(f"Downloaded {downloaded} savegames (skipped {skipped} existing, {failed} failed)")
+    try:
+        downloaded, skipped, failed = download_all_savegames_from_docker(run_id, recording_dir)
+        log(f"Downloaded {downloaded} savegames (skipped {skipped} existing, {failed} failed)")
+    except Exception as e:
+        log(f"Warning: failed to download savegames: {e}")
 
     return 0
 
