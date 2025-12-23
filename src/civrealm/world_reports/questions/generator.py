@@ -126,8 +126,8 @@ class QuestionGenerator:
         Auto-select resolution turns for H1, H2, H3 horizons.
 
         H1: 20 turns ahead (short extrapolation)
-        H2: 80 turns ahead (medium, second-order effects)
-        H3: 150 turns ahead (long, regime changes likely)
+        H2: 45 turns ahead (medium, second-order effects)
+        H3: 70 turns ahead (long, regime changes likely)
         """
         turns = []
 
@@ -136,13 +136,13 @@ class QuestionGenerator:
         if h1_turn <= max_turn:
             turns.append(h1_turn)
 
-        # H2: Medium horizon (80 turns ahead)
-        h2_turn = snapshot_turn + 80
+        # H2: Medium horizon (45 turns ahead)
+        h2_turn = snapshot_turn + 45
         if h2_turn <= max_turn:
             turns.append(h2_turn)
 
-        # H3: Long horizon (150 turns ahead)
-        h3_turn = snapshot_turn + 150
+        # H3: Long horizon (70 turns ahead)
+        h3_turn = snapshot_turn + 70
         if h3_turn <= max_turn:
             turns.append(h3_turn)
 

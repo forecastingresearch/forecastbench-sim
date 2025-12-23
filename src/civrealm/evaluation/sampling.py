@@ -129,9 +129,10 @@ def get_difficulty_distribution(questions: list[dict]) -> dict[int, int]:
 
 def stratified_sample_batched(
     questions: list[dict],
-    per_difficulty: int,
+    per_difficulty: int | None,
     seed: int,
     difficulties: list[int] | None = None,
+    min_per_template: int | None = None,
 ) -> list[list[dict]]:
     """
     Sample questions with balanced difficulty, then group by game for batching.
@@ -146,9 +147,10 @@ def stratified_sample_batched(
 
     Args:
         questions: Full list of questions to sample from
-        per_difficulty: Number of questions per difficulty level
+        per_difficulty: Number of questions per difficulty level (optional)
         seed: Random seed for reproducibility
         difficulties: Difficulty levels to sample (default: [2, 3, 4, 5, 6])
+        min_per_template: Minimum questions to include per template_id (optional)
 
     Returns:
         List of question batches, grouped by game_id.
@@ -160,8 +162,75 @@ def stratified_sample_batched(
         100
         >>> # Each batch contains questions from same game
     """
-    # Phase 1: Stratified sampling (reuse existing function for guaranteed balance)
-    sampled = stratified_sample(questions, per_difficulty, seed, difficulties)
+    # Phase 1: Optional per-template minimums (can be used standalone)
+    sampled = []
+    remaining_questions = questions
+    if min_per_template and min_per_template > 0:
+        random.seed(seed)
+        by_template: dict[str, list[dict]] = defaultdict(list)
+        for q in questions:
+            by_template[q.get("template_id", "unknown")].append(q)
+
+        sampled_ids = set()
+        for template_id, pool in sorted(by_template.items()):
+            n = min(min_per_template, len(pool))
+            if n < min_per_template:
+                print(
+                    f"Warning: Only {len(pool)} questions available for template {template_id}, "
+                    f"requested {min_per_template}"
+                )
+            if n > 0:
+                chosen = random.sample(pool, n)
+                sampled.extend(chosen)
+                for q in chosen:
+                    sampled_ids.add((q.get("game_id"), q.get("question_id")))
+
+        remaining_questions = [
+            q for q in questions
+            if (q.get("game_id"), q.get("question_id")) not in sampled_ids
+        ]
+
+        if per_difficulty is None:
+            # Return just the per-template minimums, batched by game
+            by_game: dict[str, list[dict]] = defaultdict(list)
+            for q in sampled:
+                by_game[q["game_id"]].append(q)
+            return [by_game[gid] for gid in sorted(by_game.keys())]
+
+        if difficulties is None:
+            difficulties = [2, 3, 4, 5, 6]
+
+        preselected_by_diff: dict[int, int] = defaultdict(int)
+        for q in sampled:
+            d = q.get("difficulty", {}).get("composite", 0)
+            preselected_by_diff[d] += 1
+
+        remaining_by_diff: dict[int, list[dict]] = defaultdict(list)
+        for q in remaining_questions:
+            d = q.get("difficulty", {}).get("composite", 0)
+            remaining_by_diff[d].append(q)
+
+        for d in difficulties:
+            if preselected_by_diff[d] > per_difficulty:
+                print(
+                    f"Warning: Difficulty {d} has {preselected_by_diff[d]} preselected questions, "
+                    f"exceeding target {per_difficulty}"
+                )
+            needed = max(per_difficulty - preselected_by_diff[d], 0)
+            pool = remaining_by_diff[d]
+            n = min(needed, len(pool))
+            if n < needed:
+                print(
+                    f"Warning: Only {len(pool)} remaining questions available for difficulty {d}, "
+                    f"requested {needed}"
+                )
+            if n > 0:
+                sampled.extend(random.sample(pool, n))
+    elif per_difficulty is not None:
+        # Phase 1: Stratified sampling (reuse existing function for guaranteed balance)
+        sampled = stratified_sample(questions, per_difficulty, seed, difficulties)
+    else:
+        raise ValueError("per_difficulty is required unless min_per_template is provided")
 
     # Phase 2: Regroup by game_id
     by_game: dict[str, list[dict]] = defaultdict(list)

@@ -138,6 +138,8 @@ def compute_metrics(results: list[dict], models: list) -> dict:
     Returns dict with per-model metrics including:
     - brier_score: Overall Brier score
     - brier_by_difficulty: Brier score broken down by difficulty level
+    - brier_by_template: Brier score broken down by template ID
+    - brier_grid: Brier score by (template_id, horizon)
     - ece: Expected Calibration Error
     - num_predictions: Count of successful predictions
     - num_failures: Count of failed predictions
@@ -153,6 +155,12 @@ def compute_metrics(results: list[dict], models: list) -> dict:
         by_difficulty: dict[int, tuple[list[float], list[bool]]] = defaultdict(
             lambda: ([], [])
         )
+        by_template: dict[str, tuple[list[float], list[bool]]] = defaultdict(
+            lambda: ([], [])
+        )
+        by_template_horizon: dict[tuple[str, str], tuple[list[float], list[bool]]] = defaultdict(
+            lambda: ([], [])
+        )
 
         for qr in results:
             pred_data = qr.get("predictions", {}).get(model_id, {})
@@ -166,6 +174,14 @@ def compute_metrics(results: list[dict], models: list) -> dict:
                 difficulty = qr.get("difficulty", {}).get("composite", 0)
                 by_difficulty[difficulty][0].append(prob)
                 by_difficulty[difficulty][1].append(qr["ground_truth"])
+                # Group by template
+                template_id = qr.get("template_id", "unknown")
+                by_template[template_id][0].append(prob)
+                by_template[template_id][1].append(qr["ground_truth"])
+                # Group by template + horizon
+                horizon = qr.get("difficulty", {}).get("horizon", "H1")
+                by_template_horizon[(template_id, horizon)][0].append(prob)
+                by_template_horizon[(template_id, horizon)][1].append(qr["ground_truth"])
 
         # Compute overall metrics
         brier = compute_brier_score(predictions, outcomes) if predictions else float('nan')
@@ -177,6 +193,18 @@ def compute_metrics(results: list[dict], models: list) -> dict:
             if preds:
                 brier_by_difficulty[d] = compute_brier_score(preds, outs)
 
+        # Compute per-template Brier scores
+        brier_by_template = {}
+        for t, (preds, outs) in sorted(by_template.items()):
+            if preds:
+                brier_by_template[t] = compute_brier_score(preds, outs)
+
+        # Compute template x horizon grid of Brier scores
+        brier_grid = {}
+        for (t, h), (preds, outs) in sorted(by_template_horizon.items()):
+            if preds:
+                brier_grid.setdefault(t, {})[h] = compute_brier_score(preds, outs)
+
         # Count failures
         num_failures = sum(
             1 for qr in results
@@ -186,6 +214,8 @@ def compute_metrics(results: list[dict], models: list) -> dict:
         model_metrics[model_id] = {
             "brier_score": brier,
             "brier_by_difficulty": brier_by_difficulty,
+            "brier_by_template": brier_by_template,
+            "brier_grid": brier_grid,
             "ece": ece,
             "num_predictions": len(predictions),
             "num_failures": num_failures,
@@ -219,6 +249,26 @@ def print_results_summary(model_metrics: dict, base_rate: float, logger: logging
             )
             logger.info(f"  By difficulty: {diff_str}")
 
+        if metrics['brier_by_template']:
+            tmpl_str = ", ".join(
+                f"{t}={b:.3f}" for t, b in sorted(metrics['brier_by_template'].items())
+            )
+            logger.info(f"  By template: {tmpl_str}")
+
+        if metrics.get("brier_grid"):
+            logger.info("  Template x Horizon (Brier):")
+            for template_id in sorted(metrics["brier_grid"].keys()):
+                row = metrics["brier_grid"][template_id]
+                h1 = row.get("H1")
+                h2 = row.get("H2")
+                h3 = row.get("H3")
+                h1_str = f"{h1:.3f}" if h1 is not None else "NA"
+                h2_str = f"{h2:.3f}" if h2 is not None else "NA"
+                h3_str = f"{h3:.3f}" if h3 is not None else "NA"
+                logger.info(
+                    f"    {template_id}: H1={h1_str} H2={h2_str} H3={h3_str}"
+                )
+
     # Reference baselines
     uninformed_brier = base_rate * (1 - base_rate) + (1 - base_rate) * base_rate**2
     # Simpler: just use base_rate as constant prediction
@@ -226,6 +276,74 @@ def print_results_summary(model_metrics: dict, base_rate: float, logger: logging
 
     logger.info(f"\nBaseline (always predict {base_rate:.2f}):")
     logger.info(f"  Brier Score: {uninformed_brier:.4f}")
+
+
+def compute_template_model_spread(results: list[dict], models: list) -> list[dict]:
+    """Compute per-template model separation using Brier scores."""
+    model_order = [m.id for m in models]
+    template_spread = []
+    for template_id in sorted({q.get("template_id", "unknown") for q in results}):
+        by_model = {}
+        for model in models:
+            model_id = model.id
+            preds = []
+            outs = []
+            for qr in results:
+                if qr.get("template_id", "unknown") != template_id:
+                    continue
+                prob = qr.get("predictions", {}).get(model_id, {}).get("probability")
+                if prob is not None:
+                    preds.append(prob)
+                    outs.append(qr["ground_truth"])
+            if preds:
+                by_model[model_id] = compute_brier_score(preds, outs)
+        brier_values = list(by_model.values())
+        if len(brier_values) >= 2:
+            pairwise_diffs = []
+            for i in range(len(brier_values)):
+                for j in range(i + 1, len(brier_values)):
+                    pairwise_diffs.append(abs(brier_values[i] - brier_values[j]))
+            separation = sum(pairwise_diffs) / len(pairwise_diffs) if pairwise_diffs else float("nan")
+        else:
+            separation = float("nan")
+        template_spread.append({
+            "template_id": template_id,
+            "brier_by_model": by_model,
+            "model_order": model_order,
+            "separation": separation,
+        })
+    return template_spread
+
+
+def print_template_spread_summary(template_spread: list[dict], logger: logging.Logger):
+    """Print per-template model spread summary."""
+    logger.info("")
+    logger.info("=" * 70)
+    logger.info("TEMPLATE DISCRIMINATION (Mean pairwise Brier distance)")
+    logger.info("=" * 70)
+    if template_spread:
+        model_order = template_spread[0].get("model_order", [])
+        if model_order:
+            logger.info("Model order: " + ", ".join(model_order))
+    ranked = sorted(
+        template_spread,
+        key=lambda x: x["separation"] if x["separation"] == x["separation"] else float("-inf"),
+        reverse=True,
+    )
+    for entry in ranked:
+        template_id = entry["template_id"]
+        separation = entry["separation"]
+        if separation != separation:
+            logger.info(f"{template_id}: separation=NA (insufficient models)")
+            continue
+        model_order = entry.get("model_order", [])
+        by_model = entry.get("brier_by_model", {})
+        ordered_scores = []
+        for model_id in model_order:
+            if model_id in by_model:
+                ordered_scores.append(f"({model_id}, {by_model[model_id]:.4f})")
+        ordered_str = ", ".join(ordered_scores) if ordered_scores else "NA"
+        logger.info(f"{template_id}: separation={separation:.4f} | {ordered_str}")
 
 
 async def main():
@@ -241,8 +359,12 @@ async def main():
         help="Random seed for reproducibility"
     )
     parser.add_argument(
-        "--questions-per-difficulty", "-n", type=int, default=20,
-        help="Questions to sample per difficulty level (total = n * 5, default: 20)"
+        "--questions-per-difficulty", "-n", type=int, default=None,
+        help="Questions to sample per difficulty level (total = n * 5)"
+    )
+    parser.add_argument(
+        "--min-per-template", type=int, default=0,
+        help="Minimum questions to include per template_id (default: 0)"
     )
     parser.add_argument(
         "--output", "-o", type=str,
@@ -321,11 +443,24 @@ async def main():
     logger.info(f"Full difficulty distribution: {full_dist}")
 
     # Stratified sampling by difficulty, then batched by game for token efficiency
-    logger.info(f"\nSampling {args.questions_per_difficulty} questions per difficulty level...")
+    if args.questions_per_difficulty is None and args.min_per_template <= 0:
+        logger.error("Must set --questions-per-difficulty or --min-per-template")
+        return 1
+
+    if args.questions_per_difficulty is None:
+        logger.info(
+            f"\nSampling minimum per template only (min per template: {args.min_per_template})..."
+        )
+    else:
+        logger.info(
+            f"\nSampling {args.questions_per_difficulty} questions per difficulty level "
+            f"(min per template: {args.min_per_template})..."
+        )
     question_batches = stratified_sample_batched(
         all_questions,
         per_difficulty=args.questions_per_difficulty,
         seed=args.seed,
+        min_per_template=args.min_per_template if args.min_per_template > 0 else None,
     )
     # Flatten for metrics computation
     questions = [q for batch in question_batches for q in batch]
@@ -430,9 +565,11 @@ async def main():
 
     # Compute metrics
     model_metrics = compute_metrics(results, models_to_use)
+    template_spread = compute_template_model_spread(results, models_to_use)
 
     # Print summary
     print_results_summary(model_metrics, base_rate, logger)
+    print_template_spread_summary(template_spread, logger)
 
     # Build final output
     metadata["end_time"] = end_time.isoformat() + "Z"
@@ -441,6 +578,7 @@ async def main():
     output = {
         "metadata": metadata,
         "model_results": model_metrics,
+        "template_spread": template_spread,
         "questions": results,
     }
 

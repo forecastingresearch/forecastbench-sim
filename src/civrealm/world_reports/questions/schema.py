@@ -185,13 +185,13 @@ def classify_horizon(snapshot_turn: int, resolution_turn: int) -> Literal["H1", 
     Classify the time horizon based on turn delta.
 
     H1: Short (≤20 turns) - trends visible in recent history
-    H2: Medium (21-80 turns) - requires reasoning about second-order effects
-    H3: Long (>80 turns) - regime changes likely, compounding uncertainty
+    H2: Medium (21-45 turns) - requires reasoning about second-order effects
+    H3: Long (>45 turns) - regime changes likely, compounding uncertainty
     """
     delta = resolution_turn - snapshot_turn
     if delta <= 20:
         return "H1"
-    elif delta <= 80:
+    elif delta <= 45:
         return "H2"
     else:
         return "H3"
