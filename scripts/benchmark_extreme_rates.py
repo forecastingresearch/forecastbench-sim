@@ -7,7 +7,7 @@ import re
 import os
 from pathlib import Path
 
-from utils.llm.model_registry import configure_api_keys, MODELS
+from utils.llm.litellm_models import configure_api_keys, get_models
 from dotenv import load_dotenv
 
 def load_questions_by_template(data_dir: Path, template_filters: dict[str, str | None]) -> dict[str, list]:
@@ -112,14 +112,10 @@ def main():
         samples[t] = random.sample(qs, min(25, len(qs)))
         print(f"  Sampled {len(samples[t])} {t} questions")
 
-    # Models to test
-    model_ids = ['gpt-4o-mini', 'claude-sonnet-4-5-20250929']
-    models = {}
-    for mid in model_ids:
-        for m in MODELS:
-            if mid in m.id or m.id in mid:
-                models[mid] = m
-                break
+    # Models to test (LiteLLM format: provider/model)
+    model_ids = ['openai/gpt-4o-mini', 'anthropic/claude-sonnet-4-5-20250929']
+    model_list = get_models(model_ids)
+    models = {m.id: m for m in model_list}
 
     print(f"\nModels: {list(models.keys())}")
 
