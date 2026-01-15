@@ -34,7 +34,12 @@ class QuestionResolver:
         Returns:
             Resolution with computed answer
         """
-        template = get_template(question.template_id)
+        # Handle H0 template IDs (e.g., "h0_tech_comparative" -> "tech_comparative")
+        template_id = question.template_id
+        if template_id.startswith("h0_"):
+            template_id = template_id[3:]  # Strip "h0_" prefix
+
+        template = get_template(template_id)
 
         # Dispatch based on resolution type and template
         if template.resolution_type == "comparative":
@@ -121,19 +126,11 @@ class QuestionResolver:
 
         signal_name = template.signal_name
 
-        # Get values at resolution turn
-        if signal_name == "scores":
-            # Scores are in snapshots
-            snapshots = game_data.get("snapshots", {})
-            turn_snapshot = snapshots.get(str(resolution_turn), {})
-            scores = turn_snapshot.get("scores", {})
-            value_a = scores.get(str(player_id_a))
-            value_b = scores.get(str(player_id_b))
-        else:
-            # Other signals are in time_series
-            time_series = game_data.get("time_series", {}).get(signal_name, {})
-            value_a = self._get_signal_value(time_series, player_id_a, resolution_turn)
-            value_b = self._get_signal_value(time_series, player_id_b, resolution_turn)
+        # Get values at resolution turn from time_series
+        # (scores are now in time_series too, not just snapshots)
+        time_series = game_data.get("time_series", {}).get(signal_name, {})
+        value_a = self._get_signal_value(time_series, player_id_a, resolution_turn)
+        value_b = self._get_signal_value(time_series, player_id_b, resolution_turn)
 
         if value_a is None or value_b is None:
             # No data - default to False
@@ -167,16 +164,34 @@ class QuestionResolver:
         resolution_turn = question.resolution_turn
         player_id = params.get("player_id")
 
-        # Check if player is ranked #1
+        rank = None
+
+        # First try to get rankings from snapshots
         snapshots = game_data.get("snapshots", {})
         turn_snapshot = snapshots.get(str(resolution_turn), {})
         rankings = turn_snapshot.get("rankings", [])
 
-        rank = None
-        for entry in rankings:
-            if entry.get("player_id") == player_id:
-                rank = entry.get("rank")
-                break
+        if rankings:
+            for entry in rankings:
+                if entry.get("player_id") == player_id:
+                    rank = entry.get("rank")
+                    break
+        else:
+            # Fall back to computing rank from scores time series
+            scores_series = game_data.get("time_series", {}).get("scores", {})
+            turn_scores = scores_series.get(str(resolution_turn), scores_series.get(resolution_turn, {}))
+
+            if turn_scores:
+                # Sort by score descending
+                sorted_players = sorted(
+                    turn_scores.items(),
+                    key=lambda x: x[1],
+                    reverse=True
+                )
+                for r, (pid, score) in enumerate(sorted_players, 1):
+                    if int(pid) == player_id:
+                        rank = r
+                        break
 
         answer = rank == 1
 

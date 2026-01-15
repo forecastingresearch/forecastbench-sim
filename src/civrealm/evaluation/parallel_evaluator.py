@@ -12,7 +12,6 @@ from pathlib import Path
 from typing import Any
 
 from .rate_limiter import ProviderRateLimiter
-from .compress_world_report import compress_world_report
 
 logger = logging.getLogger("civbench_eval")
 
@@ -260,11 +259,11 @@ Replace 0.65 with your actual probability estimate between 0.0 and 1.0."""
 
 List one probability per line for all {num_questions} questions, in order. Replace the example values with your actual estimates between 0.0 and 1.0."""
 
-    return f"""You are an expert superforecaster, familiar with the work of Tetlock and others. You are analyzing a FreeCiv game simulation. Make predictions based on the world report data below.
+    return f"""You are an expert superforecaster, familiar with the work of Tetlock and others. You are analyzing a FreeCiv game simulation. Make predictions based on the world report below.
 
 You MUST give a probability estimate between 0 and 1 for each question UNDER ALL CIRCUMSTANCES. If for some reason you can't answer, estimate 0.5, but return a number between 0 and 1.
 
-## World Report Data (Turn 50)
+## World Report
 {world_report}
 
 {question_section}
@@ -273,31 +272,25 @@ You MUST give a probability estimate between 0 and 1 for each question UNDER ALL
 {instruction}"""
 
 
-def load_world_report(data_dir: Path, game_id: str, compress: bool = True) -> str:
+def load_world_report(data_dir: Path, game_id: str) -> str:
     """
-    Load world report JSON data as compressed JSON string.
+    Load world report as TXT for LLM context.
 
     Args:
         data_dir: Base directory containing game folders
         game_id: Game identifier (e.g., "s100")
-        compress: If True, compress the world report for token efficiency (default: True)
 
     Returns:
-        Compact JSON string of world report data, or empty string if not found.
-        Compressed reports are ~10-15% of original size (~15-30KB vs ~260KB).
+        TXT world report content, or empty string if not found.
     """
-    report_path = data_dir / game_id / "world_report" / "turn_050_data.json"
+    # Look for TXT report (preferred)
+    txt_path = data_dir / game_id / "world_report" / "turn_050_report.txt"
 
-    if not report_path.exists():
-        return ""
+    if txt_path.exists():
+        with open(txt_path) as f:
+            return f.read()
 
-    with open(report_path) as f:
-        data = json.load(f)
-
-    if compress:
-        data = compress_world_report(data)
-
-    return json.dumps(data, separators=(",", ":"))
+    return ""
 
 
 async def query_model_async(
@@ -861,10 +854,10 @@ async def _process_single_batch(
             return (batch_idx, None)
 
         game_id = batch[0]["game_id"]
-        difficulties = [q.get("difficulty", {}).get("composite", "?") for q in batch]
+        templates = set(q.get("template_id", "?") for q in batch)
 
         logger.info(f"\n[Batch {batch_idx + 1}/{total_batches}] Game: {game_id}")
-        logger.info(f"  Questions: {len(batch)}, difficulties: {difficulties}")
+        logger.info(f"  Questions: {len(batch)}, templates: {len(templates)} unique")
 
         # Load world report
         world_report = load_world_report(data_dir, game_id)

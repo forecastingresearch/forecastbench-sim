@@ -25,7 +25,7 @@ from civrealm.world_reports.questions import (
 
 def process_single_game(args: tuple) -> dict | None:
     """Process a single game file and return resolved question bank as dict."""
-    data_file, snapshot_turn, info_availability_levels = args
+    data_file, snapshot_turn = args
 
     try:
         # Import inside function for multiprocessing
@@ -51,7 +51,6 @@ def process_single_game(args: tuple) -> dict | None:
             game_id=game_id,
             game_data=game_data,
             snapshot_turn=snapshot_turn,
-            info_availability_levels=info_availability_levels,
         )
 
         # Resolve questions
@@ -73,8 +72,6 @@ def main():
                         help='Turn at which forecasters see data (default: 50)')
     parser.add_argument('--output', '-o', type=str, default='data/questions/questions_all.json',
                         help='Output JSON file')
-    parser.add_argument('--info-availability', nargs='+', default=['I1', 'I2', 'I3'],
-                        help='Information availability levels to include (default: I1 I2 I3)')
     parser.add_argument('--workers', type=int, default=4,
                         help='Number of parallel workers (default: 4)')
     args = parser.parse_args()
@@ -84,10 +81,9 @@ def main():
     data_files = sorted(data_dir.glob('*_data.json'))
     print(f"Found {len(data_files)} data files in {data_dir}")
     print(f"Snapshot turn: {args.snapshot_turn}")
-    print(f"Info availability levels: {args.info_availability}")
 
     # Prepare arguments for each game
-    task_args = [(str(f), args.snapshot_turn, args.info_availability) for f in data_files]
+    task_args = [(str(f), args.snapshot_turn) for f in data_files]
 
     # Process in parallel
     all_questions = []
@@ -106,18 +102,24 @@ def main():
     true_count = sum(1 for q in all_questions if q.get('resolution', {}).get('answer', False))
     false_count = len(all_questions) - true_count
 
-    # Count by template and horizon (horizon is nested under difficulty)
+    # Count by template and horizon
     by_template = {}
-    by_horizon = {'H1': {'true': 0, 'false': 0}, 'H2': {'true': 0, 'false': 0}, 'H3': {'true': 0, 'false': 0}}
+    by_horizon = {'H0': {'true': 0, 'false': 0}, 'H1': {'true': 0, 'false': 0}, 'H2': {'true': 0, 'false': 0}, 'H3': {'true': 0, 'false': 0}}
 
     for q in all_questions:
         t = q.get('template_id', 'unknown')
-        h = q.get('difficulty', {}).get('horizon', 'H1')
+        # Handle both new format (horizon at top level) and old format (in difficulty)
+        h = q.get('horizon')
+        if h is None:
+            h = q.get('difficulty', {}).get('horizon', 'H1')
         answer = q.get('resolution', {}).get('answer', False)
 
         if t not in by_template:
             by_template[t] = {'total': 0, 'true': 0, 'false': 0}
         by_template[t]['total'] += 1
+
+        if h not in by_horizon:
+            by_horizon[h] = {'true': 0, 'false': 0}
 
         if answer:
             by_template[t]['true'] += 1
@@ -132,13 +134,14 @@ def main():
     print("=" * 70)
     print(f"\nGames processed: {len(all_banks)}")
     print(f"Total questions: {len(all_questions)}")
-    print(f"Answers: {true_count} True ({100*true_count/len(all_questions):.1f}%), {false_count} False")
+    if all_questions:
+        print(f"Answers: {true_count} True ({100*true_count/len(all_questions):.1f}%), {false_count} False")
 
     print("\n" + "-" * 70)
     print("BY HORIZON")
     print("-" * 70)
-    for h in ['H1', 'H2', 'H3']:
-        total = by_horizon[h]['true'] + by_horizon[h]['false']
+    for h in ['H0', 'H1', 'H2', 'H3']:
+        total = by_horizon.get(h, {}).get('true', 0) + by_horizon.get(h, {}).get('false', 0)
         if total > 0:
             rate = 100 * by_horizon[h]['true'] / total
             print(f"  {h}: {total:5d} questions, {rate:5.1f}% True")
@@ -158,7 +161,6 @@ def main():
             'num_games': len(all_banks),
             'num_questions': len(all_questions),
             'snapshot_turn': args.snapshot_turn,
-            'info_availability_levels': args.info_availability,
             'true_rate': true_count / len(all_questions) if all_questions else 0,
         },
         'questions': all_questions,

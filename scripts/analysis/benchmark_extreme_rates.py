@@ -29,7 +29,10 @@ def load_questions_by_template(data_dir: Path, template_filters: dict[str, str |
         for q in data.get("questions", []):
             tid = q.get("template_id")
             if tid in template_filters:
-                horizon = q.get("difficulty", {}).get("horizon", "?")
+                # Handle both new format (horizon at top level) and old format (in difficulty)
+                horizon = q.get("horizon")
+                if horizon is None:
+                    horizon = q.get("difficulty", {}).get("horizon", "?")
                 required_horizon = template_filters[tid]
                 # Filter by horizon if specified
                 if required_horizon is not None and horizon != required_horizon:

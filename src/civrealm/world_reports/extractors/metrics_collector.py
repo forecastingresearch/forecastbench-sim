@@ -6,10 +6,30 @@ organizing it into a flat, metric-based structure.
 
 from typing import Dict, List, Any, Optional
 from datetime import datetime
+from collections import defaultdict
 
 from ..utils import metrics
 from ..utils.event_detector import EventDetector
 from ..utils.savegame_parser import get_savegame_data_for_report
+
+# Diplomatic state constants (from player_const.py)
+DS_ARMISTICE = 0
+DS_WAR = 1
+DS_CEASEFIRE = 2
+DS_PEACE = 3
+DS_ALLIANCE = 4
+DS_NO_CONTACT = 5
+DS_TEAM = 6
+
+DS_TXT = {
+    DS_ARMISTICE: "Armistice",
+    DS_WAR: "War",
+    DS_CEASEFIRE: "Ceasefire",
+    DS_PEACE: "Peace",
+    DS_ALLIANCE: "Alliance",
+    DS_NO_CONTACT: "No contact",
+    DS_TEAM: "Team",
+}
 
 
 def select_snapshot_turns(max_turn: int, max_snapshots: int = 5,
@@ -88,23 +108,26 @@ class MetricsCollector:
         # Update civilization count in metadata to match what we're actually displaying
         metadata["num_civilizations"] = len(civilizations)
 
-        print("  Collecting time series data...")
-        time_series = self.collect_time_series(states, config, civilizations, data_loader)
-
         print("  Detecting events...")
         events = self.collect_events(states, data_loader, config)
 
-        print("  Collecting snapshots...")
-        snapshots = self.collect_snapshots(states, max_turn)
+        print("  Collecting time series data...")
+        # Pass events so we can count techs from tech_discovered events
+        time_series = self.collect_time_series(states, config, civilizations, data_loader, events)
 
-        print("  Determining territory snapshot turns...")
-        territory_snapshots = {
-            "turns": select_snapshot_turns(max_turn),
-            "note": "Territory maps generated during rendering from state files"
-        }
+        print("  Collecting snapshots...")
+        # Collect snapshots at multiple turns, not just max_turn
+        snapshot_turns = select_snapshot_turns(max_turn, max_snapshots=5)
+        snapshots = self.collect_snapshots(states, snapshot_turns)
+
+        print("  Collecting territory snapshots...")
+        # Actually capture territory data at selected turns
+        territory_snapshot_turns = select_snapshot_turns(max_turn, max_snapshots=3)
+        territory_snapshots = self.collect_territory_snapshots(states, territory_snapshot_turns)
 
         print("  Collecting diplomacy data...")
-        diplomacy = self.collect_diplomacy(states, config, civilizations)
+        # Use state-based diplomacy extraction (more reliable than savegames)
+        diplomacy = self.collect_diplomacy_from_states(states, civilizations)
 
         return {
             "metadata": metadata,
@@ -232,7 +255,8 @@ class MetricsCollector:
         states: Dict[int, Dict],
         config: Any,
         civilizations: Dict[int, Dict],
-        data_loader: Any = None
+        data_loader: Any = None,
+        events: List[Dict] = None,
     ) -> Dict[str, Dict[int, Dict[int, float]]]:
         """Collect all time series metrics
 
@@ -240,18 +264,36 @@ class MetricsCollector:
             states: Dict mapping turn numbers to game states
             config: ReportConfig instance
             civilizations: Dict of civilization info
+            data_loader: DataLoader instance
+            events: List of event dicts (for counting techs from discoveries)
 
         Returns:
             Dict mapping metric_name to {turn: {player_id: value}}
         """
         sorted_turns = sorted(states.keys())
         player_ids = list(civilizations.keys())
+        events = events or []
+
+        # Build cumulative tech counts from tech_discovered events
+        # This is more reliable than reading from state files (which have None values)
+        tech_discoveries_by_player = defaultdict(list)
+        for event in events:
+            if event.get("type") == "tech_discovered":
+                pid = event.get("player_id")
+                turn = event.get("turn", 0)
+                if pid is not None:
+                    tech_discoveries_by_player[pid].append(turn)
+
+        # Sort discoveries by turn for cumulative counting
+        for pid in tech_discoveries_by_player:
+            tech_discoveries_by_player[pid].sort()
 
         # Initialize data structures
         time_series = {
             "treasury": {},
             "population": {},
             "science": {},
+            "scores": {},  # NEW: track scores over time
             "territory_size": {},
             "arable_land": {},
             "food_production": {},
@@ -290,7 +332,11 @@ class MetricsCollector:
                 time_series["treasury"][turn][pid] = metrics.get_player_gold(state, pid)
                 time_series["science"][turn][pid] = metrics.get_player_science_production(state, pid)
                 time_series["culture"][turn][pid] = player_info.get('culture', 0)
-                time_series["techs_known"][turn][pid] = metrics.count_known_techs(player_info)
+                time_series["scores"][turn][pid] = player_info.get('score', 0)
+
+                # Count techs from events (cumulative count of discoveries up to this turn)
+                tech_count = sum(1 for t in tech_discoveries_by_player.get(pid, []) if t <= turn)
+                time_series["techs_known"][turn][pid] = tech_count
 
                 # Aggregated city metrics
                 time_series["population"][turn][pid] = metrics.aggregate_city_metric(state, pid, 'size')
@@ -327,7 +373,7 @@ class MetricsCollector:
                     state, pid, data_loader.ruleset if data_loader else None
                 )
 
-            # Try to override with complete savegame data
+            # Try to override with complete savegame data (production/science only)
             savegame_data = get_savegame_data_for_report(config, turn)
             if savegame_data:
                 # Override production data
@@ -338,41 +384,13 @@ class MetricsCollector:
                             time_series["food_production"][turn][player_id] = prod['food']
                             time_series["shield_production"][turn][player_id] = prod['shields']
 
-                # Override science data
+                # Override science data (but NOT techs_known - we use events for that)
                 if 'science' in savegame_data:
                     for player_id, sci in savegame_data['science'].items():
                         if player_id in player_ids:
                             time_series["science"][turn][player_id] = sci['science_per_turn']
 
-                            # Only override techs_known if it's higher or equal
-                            # Technologies can never decrease (can't un-discover a tech)
-                            savegame_techs = sci['techs_known']
-                            if player_id in time_series["techs_known"][turn]:
-                                current_techs = time_series["techs_known"][turn][player_id]
-                                if savegame_techs >= current_techs:
-                                    time_series["techs_known"][turn][player_id] = savegame_techs
-                                # Otherwise keep the state file value (it's more reliable)
-                            else:
-                                # No state data for this player, use savegame data
-                                time_series["techs_known"][turn][player_id] = savegame_techs
-
-        # Post-processing: Enforce monotonicity for techs_known
-        # Technologies can never decrease - if we see a drop, it's bad data
-        sorted_turns = sorted(time_series["techs_known"].keys())
-        for pid in player_ids:
-            max_techs_seen = 0
-            for turn in sorted_turns:
-                # Skip if this turn doesn't have data for this player
-                if turn not in time_series["techs_known"]:
-                    continue
-                if pid in time_series["techs_known"][turn]:
-                    current_techs = time_series["techs_known"][turn][pid]
-                    # If current is less than max seen, use max instead (bad data)
-                    if current_techs < max_techs_seen:
-                        time_series["techs_known"][turn][pid] = max_techs_seen
-                    else:
-                        max_techs_seen = current_techs
-
+        # Note: techs_known is already monotonic by construction (cumulative event count)
         return time_series
 
     def collect_events(
@@ -491,94 +509,221 @@ class MetricsCollector:
     def collect_snapshots(
         self,
         states: Dict[int, Dict],
-        target_turn: int
+        target_turns: List[int]
     ) -> Dict[int, Dict[str, Any]]:
         """Collect snapshot data for specific turns
 
-        Currently only collects for the final turn, but structure supports multiple snapshots.
+        Collects scores, rankings, and counts at multiple turns for resolution.
 
         Args:
             states: Dict mapping turn numbers to game states
-            target_turn: Turn to collect snapshot for (typically max turn)
+            target_turns: List of turns to collect snapshots for
 
         Returns:
             Dict mapping turn to snapshot data
         """
         snapshots = {}
 
-        if target_turn not in states:
-            return snapshots
+        for target_turn in target_turns:
+            if target_turn not in states:
+                continue
 
-        state = states[target_turn]
-        players = state.get('player', {})
+            state = states[target_turn]
+            players = state.get('player', {})
 
-        # Collect scores and rankings
-        scores = {}
-        for pid_str, player_info in players.items():
-            if isinstance(player_info, dict):
-                pid = int(pid_str)
-                scores[pid] = player_info.get('score', 0)
+            # Collect scores and rankings
+            scores = {}
+            for pid_str, player_info in players.items():
+                if isinstance(player_info, dict):
+                    pid = int(pid_str)
+                    scores[pid] = player_info.get('score', 0)
 
-        # Create rankings
-        rankings = []
-        for rank, (pid, score) in enumerate(
-            sorted(scores.items(), key=lambda x: x[1], reverse=True), 1
-        ):
-            rankings.append({
-                "rank": rank,
-                "player_id": pid,
-                "score": score
-            })
+            # Create rankings
+            rankings = []
+            for rank, (pid, score) in enumerate(
+                sorted(scores.items(), key=lambda x: x[1], reverse=True), 1
+            ):
+                rankings.append({
+                    "rank": rank,
+                    "player_id": pid,
+                    "score": score
+                })
 
-        # Count cities and units per player
-        cities = state.get('city', {})
-        units = state.get('unit', {})
+            # Count cities and units per player
+            cities = state.get('city', {})
+            units = state.get('unit', {})
 
-        cities_count = {}
-        units_count = {}
-        military_units_count = {}
+            cities_count = {}
+            units_count = {}
+            military_units_count = {}
 
-        for pid in scores.keys():
-            cities_count[pid] = len([
-                c for c in cities.values()
-                if isinstance(c, dict) and c.get('owner') == pid
-            ])
-            units_count[pid] = len([
+            for pid in scores.keys():
+                cities_count[pid] = len([
+                    c for c in cities.values()
+                    if isinstance(c, dict) and c.get('owner') == pid
+                ])
+                units_count[pid] = len([
+                    u for u in units.values()
+                    if isinstance(u, dict) and u.get('owner') == pid
+                ])
+                military_units_count[pid] = len([
+                    u for u in units.values()
+                    if isinstance(u, dict) and u.get('owner') == pid
+                    and u.get('type_attack_strength', 0) > 0
+                ])
+
+            # World totals
+            total_cities = len([c for c in cities.values() if isinstance(c, dict)])
+            total_units = len([u for u in units.values() if isinstance(u, dict)])
+            total_military_units = len([
                 u for u in units.values()
-                if isinstance(u, dict) and u.get('owner') == pid
+                if isinstance(u, dict) and u.get('type_attack_strength', 0) > 0
             ])
-            military_units_count[pid] = len([
-                u for u in units.values()
-                if isinstance(u, dict) and u.get('owner') == pid
-                and u.get('type_attack_strength', 0) > 0
-            ])
+            total_population = sum(
+                c.get('size', 0) for c in cities.values() if isinstance(c, dict)
+            )
 
-        # World totals
-        total_cities = len([c for c in cities.values() if isinstance(c, dict)])
-        total_units = len([u for u in units.values() if isinstance(u, dict)])
-        total_military_units = len([
-            u for u in units.values()
-            if isinstance(u, dict) and u.get('type_attack_strength', 0) > 0
-        ])
-        total_population = sum(
-            c.get('size', 0) for c in cities.values() if isinstance(c, dict)
-        )
-
-        snapshots[target_turn] = {
-            "scores": scores,
-            "rankings": rankings,
-            "cities_count": cities_count,
-            "units_count": units_count,
-            "military_units_count": military_units_count,
-            "world_totals": {
-                "total_cities": total_cities,
-                "total_units": total_units,
-                "total_military_units": total_military_units,
-                "total_population": total_population
+            snapshots[target_turn] = {
+                "scores": scores,
+                "rankings": rankings,
+                "cities_count": cities_count,
+                "units_count": units_count,
+                "military_units_count": military_units_count,
+                "world_totals": {
+                    "total_cities": total_cities,
+                    "total_units": total_units,
+                    "total_military_units": total_military_units,
+                    "total_population": total_population
+                }
             }
-        }
 
         return snapshots
+
+    def collect_territory_snapshots(
+        self,
+        states: Dict[int, Dict],
+        target_turns: List[int]
+    ) -> Dict[int, Dict[str, Any]]:
+        """Collect territory map data at specific turns
+
+        Args:
+            states: Dict mapping turn numbers to game states
+            target_turns: List of turns to collect territory data for
+
+        Returns:
+            Dict mapping turn to territory snapshot with tile_owner data
+        """
+        territory_snapshots = {}
+
+        for turn in target_turns:
+            if turn not in states:
+                continue
+
+            state = states[turn]
+            map_state = state.get('map', {})
+
+            if 'tile_owner' not in map_state:
+                continue
+
+            territory_snapshots[turn] = {
+                "map_state": {
+                    "tile_owner": map_state['tile_owner'],
+                    "xsize": map_state.get('xsize', 0),
+                    "ysize": map_state.get('ysize', 0),
+                }
+            }
+
+        return territory_snapshots
+
+    def collect_diplomacy_from_states(
+        self,
+        states: Dict[int, Dict],
+        civilizations: Dict[int, Dict]
+    ) -> Dict[str, Any]:
+        """Collect diplomatic relationships over time from state files
+
+        Extracts diplomatic state (War, Peace, Alliance, etc.) from state['dipl'].
+
+        Args:
+            states: Dict mapping turn numbers to game states
+            civilizations: Dict of civilization info
+
+        Returns:
+            Dict with structure:
+            {
+                "relations": {
+                    "{from_player}_{to_player}": {
+                        turn: {
+                            "state": str,  # War, Peace, Alliance, etc.
+                        }
+                    }
+                },
+                "attitude_thresholds": {...}
+            }
+        """
+        relations = {}
+        sorted_turns = sorted(states.keys())
+        player_ids = list(civilizations.keys())
+
+        # Attitude thresholds (for reference)
+        attitude_thresholds = {
+            "worshipful": 820,
+            "admiring": 640,
+            "enthusiastic": 460,
+            "helpful": 280,
+            "respectful": 100,
+            "neutral": -100,
+            "uneasy": -280,
+            "uncooperative": -460,
+            "hostile": -640,
+            "belligerent": -820,
+            "genocidal": -1000
+        }
+
+        for turn in sorted_turns:
+            state = states[turn]
+            dipl_data = state.get('dipl', {})
+
+            if not dipl_data:
+                continue
+
+            # Each entry in dipl is keyed by player_id, containing their view of diplomacy
+            # with other players. The diplomatic_state value maps to DS_* constants.
+            for from_player_str, dipl_info in dipl_data.items():
+                if not isinstance(dipl_info, dict):
+                    continue
+
+                from_player = int(from_player_str)
+                if from_player not in player_ids:
+                    continue
+
+                # dipl_info contains diplomatic_state for this player's view
+                # This is their relationship status with the controlling player
+                dipl_state = dipl_info.get('diplomatic_state')
+
+                if dipl_state is not None:
+                    state_name = DS_TXT.get(dipl_state, "Unknown")
+
+                    # For each other player, record the relationship
+                    # Note: dipl structure is {player_id: {diplomatic_state: N, ...}}
+                    # where the key is the other player's ID
+                    for to_player in player_ids:
+                        if to_player == from_player:
+                            continue
+
+                        relation_key = f"{from_player}_{to_player}"
+
+                        if relation_key not in relations:
+                            relations[relation_key] = {}
+
+                        relations[relation_key][turn] = {
+                            "state": state_name,
+                        }
+
+        return {
+            "relations": relations,
+            "attitude_thresholds": attitude_thresholds
+        }
 
     def collect_diplomacy(
         self,
@@ -586,7 +731,9 @@ class MetricsCollector:
         config: Any,
         civilizations: Dict[int, Dict]
     ) -> Dict[str, Any]:
-        """Collect diplomatic relationships over time from savegames
+        """Collect diplomatic relationships over time from savegames (DEPRECATED)
+
+        Note: Prefer collect_diplomacy_from_states() which uses state files directly.
 
         Extracts both diplomatic state (War, Peace, Alliance, etc.) and
         AI love values (-1000 to 1000) for all player pairs.

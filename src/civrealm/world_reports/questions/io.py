@@ -52,11 +52,7 @@ def _question_to_dict(q: QuestionInstance) -> dict[str, Any]:
         "question_id": q.question_id,
         "template_id": q.template_id,
         "resolution_turn": q.resolution_turn,
-        "difficulty": {
-            "horizon": q.horizon,
-            "info_availability": q.info_availability,
-            "composite": q.difficulty,
-        },
+        "horizon": q.horizon,
         "parameters": q.parameters,
         "question_text": q.question_text,
     }
@@ -185,22 +181,22 @@ def dict_to_question_bank(data: dict[str, Any]) -> QuestionBank:
 
 def _dict_to_question(data: dict[str, Any]) -> QuestionInstance:
     """Convert a dictionary to a QuestionInstance."""
-    difficulty = data.get("difficulty", {})
-
     resolution = None
     if "resolution" in data:
         resolution = _dict_to_resolution(data["resolution"], data.get("resolution_turn", 0))
 
-    # Handle both old "base_rate" and new "info_availability" for backwards compatibility
-    info_availability = difficulty.get("info_availability") or difficulty.get("base_rate", "I1")
+    # Handle both old format (difficulty.horizon) and new format (horizon)
+    horizon = data.get("horizon")
+    if horizon is None:
+        # Fallback to old format
+        difficulty = data.get("difficulty", {})
+        horizon = difficulty.get("horizon", "H1")
 
     return QuestionInstance(
         question_id=data.get("question_id", ""),
         template_id=data.get("template_id", ""),
         resolution_turn=data.get("resolution_turn", 0),
-        horizon=difficulty.get("horizon", "H1"),
-        info_availability=info_availability,
-        difficulty=difficulty.get("composite", 2),
+        horizon=horizon,
         parameters=data.get("parameters", {}),
         question_text=data.get("question_text", ""),
         resolution=resolution,

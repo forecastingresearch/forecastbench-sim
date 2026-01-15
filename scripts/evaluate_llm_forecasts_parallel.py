@@ -3,17 +3,17 @@
 Parallel LLM evaluation for CivBench forecasting questions.
 
 Features:
-- Stratified sampling across composite difficulty levels (2-6)
+- Stratified sampling across question templates
 - Parallel queries across models with per-provider rate limiting
 - Checkpoint/resume for long-running evaluations
 - Comprehensive logging for debugging
 
 Usage:
     # Run with default models (ForecastBench + frontier)
-    python scripts/evaluate_llm_forecasts_parallel.py --seed 42 --questions-per-difficulty 20
+    python scripts/evaluate_llm_forecasts_parallel.py --seed 42 --questions-per-template 10
 
     # Dry run to inspect questions without querying models
-    python scripts/evaluate_llm_forecasts_parallel.py --dry-run --questions-per-difficulty 5
+    python scripts/evaluate_llm_forecasts_parallel.py --dry-run --questions-per-template 5
 
     # Resume from checkpoint
     python scripts/evaluate_llm_forecasts_parallel.py --resume logs/eval_20251216_143000/checkpoint.json
@@ -45,7 +45,7 @@ from utils.llm.model_registry import configure_api_keys, MODELS
 from civrealm.evaluation.sampling import (
     load_all_questions,
     stratified_sample_batched,
-    get_difficulty_distribution,
+    get_template_distribution,
 )
 from civrealm.evaluation.rate_limiter import ProviderRateLimiter
 from civrealm.evaluation.parallel_evaluator import run_batch_evaluation
@@ -137,7 +137,7 @@ def compute_metrics(results: list[dict], models: list) -> dict:
 
     Returns dict with per-model metrics including:
     - brier_score: Overall Brier score
-    - brier_by_difficulty: Brier score broken down by difficulty level
+    - brier_by_template: Brier score broken down by template
     - ece: Expected Calibration Error
     - num_predictions: Count of successful predictions
     - num_failures: Count of failed predictions
@@ -150,7 +150,7 @@ def compute_metrics(results: list[dict], models: list) -> dict:
         # Collect predictions and outcomes
         predictions = []
         outcomes = []
-        by_difficulty: dict[int, tuple[list[float], list[bool]]] = defaultdict(
+        by_template: dict[str, tuple[list[float], list[bool]]] = defaultdict(
             lambda: ([], [])
         )
 
@@ -162,20 +162,20 @@ def compute_metrics(results: list[dict], models: list) -> dict:
                 predictions.append(prob)
                 outcomes.append(qr["ground_truth"])
 
-                # Group by difficulty
-                difficulty = qr.get("difficulty", {}).get("composite", 0)
-                by_difficulty[difficulty][0].append(prob)
-                by_difficulty[difficulty][1].append(qr["ground_truth"])
+                # Group by template
+                template_id = qr.get("template_id", "unknown")
+                by_template[template_id][0].append(prob)
+                by_template[template_id][1].append(qr["ground_truth"])
 
         # Compute overall metrics
         brier = compute_brier_score(predictions, outcomes) if predictions else float('nan')
         ece = compute_calibration_error(predictions, outcomes) if predictions else float('nan')
 
-        # Compute per-difficulty Brier scores
-        brier_by_difficulty = {}
-        for d, (preds, outs) in sorted(by_difficulty.items()):
+        # Compute per-template Brier scores
+        brier_by_template = {}
+        for t, (preds, outs) in sorted(by_template.items()):
             if preds:
-                brier_by_difficulty[d] = compute_brier_score(preds, outs)
+                brier_by_template[t] = compute_brier_score(preds, outs)
 
         # Count failures
         num_failures = sum(
@@ -185,7 +185,7 @@ def compute_metrics(results: list[dict], models: list) -> dict:
 
         model_metrics[model_id] = {
             "brier_score": brier,
-            "brier_by_difficulty": brier_by_difficulty,
+            "brier_by_template": brier_by_template,
             "ece": ece,
             "num_predictions": len(predictions),
             "num_failures": num_failures,
@@ -213,11 +213,11 @@ def print_results_summary(model_metrics: dict, base_rate: float, logger: logging
         logger.info(f"  ECE: {metrics['ece']:.4f}")
         logger.info(f"  Predictions: {metrics['num_predictions']} (failures: {metrics['num_failures']})")
 
-        if metrics['brier_by_difficulty']:
-            diff_str = ", ".join(
-                f"d{d}={b:.3f}" for d, b in sorted(metrics['brier_by_difficulty'].items())
-            )
-            logger.info(f"  By difficulty: {diff_str}")
+        if metrics.get('brier_by_template'):
+            # Show all templates, sorted alphabetically
+            logger.info("  By template:")
+            for t, b in sorted(metrics['brier_by_template'].items()):
+                logger.info(f"    {t}: {b:.4f}")
 
     # Reference baselines
     uninformed_brier = base_rate * (1 - base_rate) + (1 - base_rate) * base_rate**2
@@ -241,8 +241,8 @@ async def main():
         help="Random seed for reproducibility"
     )
     parser.add_argument(
-        "--questions-per-difficulty", "-n", type=int, default=20,
-        help="Questions to sample per difficulty level (total = n * 5, default: 20)"
+        "--questions-per-template", "-n", type=int, default=10,
+        help="Questions to sample per template (total = n * num_templates, default: 10)"
     )
     parser.add_argument(
         "--output", "-o", type=str,
@@ -281,6 +281,11 @@ async def main():
         "--verbose", "-v", action="store_true",
         help="Verbose logging: print full prompts and responses"
     )
+    parser.add_argument(
+        "--horizon", type=str, nargs="+",
+        choices=["H0", "H1", "H2", "H3"],
+        help="Filter questions by horizon (H0=comprehension, H1=1-20 turns, H2=21-80 turns, H3=>80 turns)"
+    )
     args = parser.parse_args()
 
     # Setup run ID and logging
@@ -316,15 +321,25 @@ async def main():
         logger.error("No questions found")
         return 1
 
-    # Show available difficulty distribution
-    full_dist = get_difficulty_distribution(all_questions)
-    logger.info(f"Full difficulty distribution: {full_dist}")
+    # Filter by horizon if specified
+    if args.horizon:
+        horizon_set = set(args.horizon)
+        all_questions = [q for q in all_questions if q.get("horizon") in horizon_set]
+        logger.info(f"Filtered to {len(all_questions)} questions with horizons: {args.horizon}")
 
-    # Stratified sampling by difficulty, then batched by game for token efficiency
-    logger.info(f"\nSampling {args.questions_per_difficulty} questions per difficulty level...")
+        if not all_questions:
+            logger.error(f"No questions found with horizons: {args.horizon}")
+            return 1
+
+    # Show available template distribution
+    full_dist = get_template_distribution(all_questions)
+    logger.info(f"Full template distribution: {full_dist}")
+
+    # Stratified sampling by template, then batched by game for token efficiency
+    logger.info(f"\nSampling {args.questions_per_template} questions per template...")
     question_batches = stratified_sample_batched(
         all_questions,
-        per_difficulty=args.questions_per_difficulty,
+        per_template=args.questions_per_template,
         seed=args.seed,
     )
     # Flatten for metrics computation
@@ -334,8 +349,8 @@ async def main():
     )
 
     # Show sampled distribution
-    sampled_dist = get_difficulty_distribution(questions)
-    logger.info(f"Sampled difficulty distribution: {sampled_dist}")
+    sampled_dist = get_template_distribution(questions)
+    logger.info(f"Sampled template distribution: {sampled_dist}")
 
     # Calculate base rate
     true_count = sum(1 for q in questions if q['ground_truth'])
@@ -349,7 +364,7 @@ async def main():
             game_id = batch[0]["game_id"] if batch else "?"
             logger.info(f"\n  Game: {game_id}")
             for q in batch[:3]:
-                logger.info(f"    - [{q['difficulty'].get('composite', '?')}] {q['question_text'][:60]}...")
+                logger.info(f"    - [{q.get('template_id', '?')}] {q['question_text'][:60]}...")
             if len(batch) > 3:
                 logger.info(f"    ... and {len(batch) - 3} more questions")
         if len(question_batches) > 3:
@@ -385,10 +400,11 @@ async def main():
     metadata = {
         "run_id": run_id,
         "seed": args.seed,
-        "questions_per_difficulty": args.questions_per_difficulty,
+        "questions_per_template": args.questions_per_template,
         "total_questions": len(questions),
         "base_rate": base_rate,
-        "difficulty_distribution": sampled_dist,
+        "template_distribution": sampled_dist,
+        "horizon_filter": args.horizon,
         "models": [m.id for m in models_to_use],
         "start_time": datetime.now().isoformat() + "Z",
     }
