@@ -4,9 +4,7 @@ import asyncio
 import json
 import logging
 import re
-import threading
 import time
-from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, asdict
 from pathlib import Path
 from typing import Any
@@ -15,10 +13,6 @@ from .rate_limiter import ProviderRateLimiter
 from .compress_world_report import compress_world_report
 
 logger = logging.getLogger("civbench_eval")
-
-# Create a large thread pool to handle many concurrent model calls
-# Default is min(32, cpu_count+4) which can exhaust with 18 models timing out
-_thread_pool = ThreadPoolExecutor(max_workers=100, thread_name_prefix="llm_query")
 
 
 @dataclass
@@ -311,11 +305,10 @@ async def query_model_async(
     """
     Query a model asynchronously with rate limiting and retries.
 
-    Uses asyncio.to_thread() to wrap the synchronous model.get_response() call,
-    allowing it to run without blocking the event loop.
+    Uses native async model.get_response_async() call.
 
     Args:
-        model: Model object with get_response() method
+        model: Model object with get_response_async() method
         prompt: The prompt to send
         semaphore: Rate limiting semaphore for this provider
         max_retries: Maximum retry attempts on failure
@@ -333,20 +326,8 @@ async def query_model_async(
 
         for attempt in range(max_retries):
             try:
-                # Wrap sync call in thread to not block event loop
-                # Use custom thread pool to avoid exhaustion with many timeouts
-                loop = asyncio.get_running_loop()
-
-                # Log thread pool status periodically
-                active = threading.active_count()
-                if active > 20:
-                    logger.debug(f"    [{model.id}] Active threads: {active}")
-
-                # Capture variables for thread (avoid closure issues)
-                def make_call(m=model, p=prompt):
-                    return m.get_response(p, temperature=0.0, max_tokens=50)
-
-                api_call = loop.run_in_executor(_thread_pool, make_call)
+                # Native async call
+                api_call = model.get_response_async(prompt, temperature=0.0, max_tokens=50)
 
                 # Apply timeout if specified
                 if timeout:
@@ -440,7 +421,7 @@ async def query_model_batch_async(
     from the response.
 
     Args:
-        model: Model object with get_response() method
+        model: Model object with get_response_async() method
         prompt: The batched prompt to send
         num_questions: Number of questions in the batch
         semaphore: Rate limiting semaphore for this provider
@@ -464,21 +445,11 @@ async def query_model_batch_async(
 
         for attempt in range(max_retries):
             try:
-                loop = asyncio.get_running_loop()
+                # Allow more tokens for batched responses
+                max_tokens = max(1000, num_questions * 150)
 
-                # Log thread pool status periodically
-                active = threading.active_count()
-                if active > 20:
-                    logger.debug(f"    [{model.id}] Active threads: {active}")
-
-                # Capture variables for thread (avoid closure issues)
-                # Allow more tokens for batched responses (20 per question)
-                max_tokens = max(1000, num_questions * 150)  # Allow verbose reasoning + probabilities
-
-                def make_call(m=model, p=prompt, mt=max_tokens):
-                    return m.get_response(p, temperature=0.0, max_tokens=mt)
-
-                api_call = loop.run_in_executor(_thread_pool, make_call)
+                # Native async call
+                api_call = model.get_response_async(prompt, temperature=0.0, max_tokens=max_tokens)
 
                 # Apply timeout if specified
                 if timeout:
