@@ -5,7 +5,7 @@ This script processes game data JSON files to compute base rates for each
 (template_id, horizon) combination. These rates can be used to:
 1. Calibrate thresholds for balanced True/False distributions
 2. Create a BaseRateForecaster baseline
-3. Empirically measure question difficulty
+3. Analyze question predictability by template
 
 Usage:
     python compute_base_rates.py
@@ -34,21 +34,16 @@ from civrealm.world_reports.questions import (
 def compute_base_rates(
     data_files: list[Path],
     snapshot_turn: int,
-    info_availability_levels: list[str] = None,
 ) -> dict:
     """Compute base rates across all game data files.
 
     Args:
         data_files: List of paths to game data JSON files
         snapshot_turn: Turn at which forecasters see data
-        info_availability_levels: Which info availability levels to include (default: all)
 
     Returns:
         Dictionary with base rate statistics
     """
-    if info_availability_levels is None:
-        info_availability_levels = ['I1', 'I2', 'I3']
-
     generator = QuestionGenerator()
     resolver = QuestionResolver()
 
@@ -78,7 +73,6 @@ def compute_base_rates(
                 game_id=game_id,
                 game_data=game_data,
                 snapshot_turn=snapshot_turn,
-                info_availability_levels=info_availability_levels,
             )
 
             if not bank.questions:
@@ -144,7 +138,6 @@ def compute_base_rates(
             'num_games': games_processed,
             'num_questions': questions_total,
             'snapshot_turn': snapshot_turn,
-            'info_availability_levels': info_availability_levels,
             'generated_at': datetime.now().isoformat() + 'Z',
         },
         'base_rates': base_rates,
@@ -167,7 +160,7 @@ def print_summary(data: dict):
     print("\n" + "-" * 70)
     print("BASE RATES BY TEMPLATE AND HORIZON")
     print("-" * 70)
-    print(f"{'Template':<25} {'H1':>10} {'H2':>10} {'H3':>10} {'Overall':>10}")
+    print(f"{'Template':<25} {'H0':>10} {'H1':>10} {'H2':>10} {'H3':>10} {'Overall':>10}")
     print("-" * 70)
 
     base_rates = data['base_rates']
@@ -175,6 +168,7 @@ def print_summary(data: dict):
         horizons = base_rates[template_id]
 
         # Compute rates for each horizon
+        h0_rate = horizons.get('H0', {}).get('rate', '-')
         h1_rate = horizons.get('H1', {}).get('rate', '-')
         h2_rate = horizons.get('H2', {}).get('rate', '-')
         h3_rate = horizons.get('H3', {}).get('rate', '-')
@@ -185,11 +179,12 @@ def print_summary(data: dict):
         overall = total_true / total_all if total_all > 0 else 0
 
         # Format rates
-        h1_str = f"{h1_rate:.1%}" if isinstance(h1_rate, float) else h1_rate
-        h2_str = f"{h2_rate:.1%}" if isinstance(h2_rate, float) else h2_rate
-        h3_str = f"{h3_rate:.1%}" if isinstance(h3_rate, float) else h3_rate
+        h0_str = f"{h0_rate:.1%}" if isinstance(h0_rate, float) else str(h0_rate)
+        h1_str = f"{h1_rate:.1%}" if isinstance(h1_rate, float) else str(h1_rate)
+        h2_str = f"{h2_rate:.1%}" if isinstance(h2_rate, float) else str(h2_rate)
+        h3_str = f"{h3_rate:.1%}" if isinstance(h3_rate, float) else str(h3_rate)
 
-        print(f"{template_id:<25} {h1_str:>10} {h2_str:>10} {h3_str:>10} {overall:>10.1%}")
+        print(f"{template_id:<25} {h0_str:>10} {h1_str:>10} {h2_str:>10} {h3_str:>10} {overall:>10.1%}")
 
     # Print threshold analysis for key templates
     by_threshold = data.get('by_threshold', {})
@@ -235,12 +230,6 @@ def main():
         default='base_rates.json',
         help='Output JSON file (default: base_rates.json)'
     )
-    parser.add_argument(
-        '--info-availability',
-        nargs='+',
-        default=['I1', 'I2', 'I3'],
-        help='Information availability levels to include (default: I1 I2 I3)'
-    )
 
     args = parser.parse_args()
 
@@ -257,14 +246,12 @@ def main():
 
     print(f"Found {len(data_files)} data files in {data_dir}")
     print(f"Snapshot turn: {args.snapshot_turn}")
-    print(f"Info availability levels: {args.info_availability}")
     print()
 
     # Compute base rates
     results = compute_base_rates(
         data_files=data_files,
         snapshot_turn=args.snapshot_turn,
-        info_availability_levels=args.info_availability,
     )
 
     # Print summary

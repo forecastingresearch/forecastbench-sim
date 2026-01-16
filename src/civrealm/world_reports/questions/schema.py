@@ -20,13 +20,6 @@ class QuestionTemplate:
     template_id: str
     """Unique identifier for this template, e.g., 'tech_comparative'"""
 
-    info_availability: Literal["I1", "I2", "I3"]
-    """Information availability category:
-    I1: Computable from observable state + known mechanics
-    I2: Observable trends, but hidden priorities add noise
-    I3: Depends on genuinely hidden state
-    """
-
     signal_name: str
     """Name of the signal being measured, e.g., 'techs_known', 'treasury'"""
 
@@ -104,14 +97,13 @@ class QuestionInstance:
     resolution_turn: int
     """Turn at which this question resolves"""
 
-    horizon: Literal["H1", "H2", "H3"]
-    """Time horizon category (derived from resolution_turn - snapshot_turn)"""
-
-    info_availability: Literal["I1", "I2", "I3"]
-    """Information availability category (from template)"""
-
-    difficulty: int
-    """Composite difficulty score: H + I (range 2-6)"""
+    horizon: Literal["H0", "H1", "H2", "H3"]
+    """Time horizon category (derived from resolution_turn - snapshot_turn)
+    H0: Zero horizon (comprehension questions, resolution_turn == snapshot_turn)
+    H1: Short horizon (≤20 turns)
+    H2: Medium horizon (21-80 turns)
+    H3: Long horizon (>80 turns)
+    """
 
     parameters: dict[str, Any]
     """Filled parameter values, e.g., {'civ_a': 'Greek', 'civ_b': 'Roman', 'player_id_a': 1, 'player_id_b': 2}"""
@@ -180,33 +172,21 @@ class QuestionBank:
 
 
 # Horizon classification helper
-def classify_horizon(snapshot_turn: int, resolution_turn: int) -> Literal["H1", "H2", "H3"]:
+def classify_horizon(snapshot_turn: int, resolution_turn: int) -> Literal["H0", "H1", "H2", "H3"]:
     """
     Classify the time horizon based on turn delta.
 
+    H0: Zero (0 turns) - comprehension questions, answer observable at snapshot
     H1: Short (≤20 turns) - trends visible in recent history
     H2: Medium (21-80 turns) - requires reasoning about second-order effects
     H3: Long (>80 turns) - regime changes likely, compounding uncertainty
     """
     delta = resolution_turn - snapshot_turn
-    if delta <= 20:
+    if delta <= 0:
+        return "H0"
+    elif delta <= 20:
         return "H1"
     elif delta <= 80:
         return "H2"
     else:
         return "H3"
-
-
-def horizon_to_int(horizon: Literal["H1", "H2", "H3"]) -> int:
-    """Convert horizon category to numeric value for difficulty calculation."""
-    return {"H1": 1, "H2": 2, "H3": 3}[horizon]
-
-
-def info_availability_to_int(info_availability: Literal["I1", "I2", "I3"]) -> int:
-    """Convert information availability category to numeric value for difficulty calculation."""
-    return {"I1": 1, "I2": 2, "I3": 3}[info_availability]
-
-
-def calculate_difficulty(horizon: Literal["H1", "H2", "H3"], info_availability: Literal["I1", "I2", "I3"]) -> int:
-    """Calculate composite difficulty score (2-6)."""
-    return horizon_to_int(horizon) + info_availability_to_int(info_availability)

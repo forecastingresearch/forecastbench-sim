@@ -3,7 +3,7 @@ Question generation module for creating forecasting questions from game data.
 
 This module provides:
 - Data model schema (QuestionBank, QuestionInstance, Resolution, etc.)
-- Question templates (I1, I2, I3 information availability levels)
+- Question templates
 - QuestionGenerator for creating question banks
 - QuestionResolver for computing answers
 
@@ -39,20 +39,12 @@ from .schema import (
     CivilizationInfo,
     QuestionBank,
     classify_horizon,
-    horizon_to_int,
-    info_availability_to_int,
-    calculate_difficulty,
 )
 
 from .templates import (
     ALL_TEMPLATES,
-    I1_TEMPLATES,
-    I2_TEMPLATES,
-    I3_TEMPLATES,
     TEMPLATES_BY_ID,
-    TEMPLATES_BY_INFO_AVAILABILITY,
     get_template,
-    get_templates_by_info_availability,
 )
 
 from .generator import QuestionGenerator
@@ -77,18 +69,10 @@ __all__ = [
     "CivilizationInfo",
     "QuestionBank",
     "classify_horizon",
-    "horizon_to_int",
-    "info_availability_to_int",
-    "calculate_difficulty",
     # Templates
     "ALL_TEMPLATES",
-    "I1_TEMPLATES",
-    "I2_TEMPLATES",
-    "I3_TEMPLATES",
     "TEMPLATES_BY_ID",
-    "TEMPLATES_BY_INFO_AVAILABILITY",
     "get_template",
-    "get_templates_by_info_availability",
     # Generator & Resolver
     "QuestionGenerator",
     "QuestionResolver",

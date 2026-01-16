@@ -25,8 +25,6 @@ def main():
     parser.add_argument('--snapshot-turn', type=int, default=50,
                         help='Turn at which forecasters see data (default: 50)')
     parser.add_argument('--output', '-o', help='Output JSON file path')
-    parser.add_argument('--info-availability', nargs='+', default=['I1', 'I2', 'I3'],
-                        help='Information availability levels to include (default: I1 I2 I3)')
     parser.add_argument('--resolution-turns', nargs='+', type=int,
                         help='Specific resolution turns (default: auto-select)')
     parser.add_argument('--summary', action='store_true',
@@ -56,7 +54,6 @@ def main():
         game_data=game_data,
         snapshot_turn=args.snapshot_turn,
         resolution_turns=args.resolution_turns,
-        info_availability_levels=args.info_availability,
     )
 
     print(f"Generated {len(bank.questions)} questions")
@@ -97,19 +94,19 @@ def main():
     print("SAMPLE QUESTIONS")
     print("=" * 60)
 
-    # Group by difficulty
-    by_difficulty = {}
+    # Group by template
+    by_template = {}
     for q in resolved_bank.questions:
-        d = q.difficulty
-        if d not in by_difficulty:
-            by_difficulty[d] = []
-        by_difficulty[d].append(q)
+        t = q.template_id
+        if t not in by_template:
+            by_template[t] = []
+        by_template[t].append(q)
 
-    for d in sorted(by_difficulty.keys()):
-        print(f"\n--- Difficulty {d} ({len(by_difficulty[d])} questions) ---")
-        for q in by_difficulty[d][:3]:
+    for t in sorted(by_template.keys()):
+        print(f"\n--- {t} ({len(by_template[t])} questions) ---")
+        for q in by_template[t][:2]:
             answer = q.resolution.answer if q.resolution else "?"
-            print(f"  [{q.horizon}/{q.info_availability}] {q.question_text}")
+            print(f"  [{q.horizon}] {q.question_text}")
             print(f"           Answer: {answer}")
 
     # Save output
