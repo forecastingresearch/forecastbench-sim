@@ -40,7 +40,7 @@ from dotenv import load_dotenv
 # Add src to path for local imports
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from utils.llm.model_registry import configure_api_keys, MODELS
+from utils.llm.litellm_models import configure_api_keys, get_models
 
 from civrealm.evaluation.sampling import (
     load_all_questions,
@@ -57,30 +57,30 @@ from civrealm.metrics import compute_brier_score, compute_calibration_error
 # - [ ] reasoning
 # - [ ] merge evals/recompute summary statistics
 
-# Models with ForecastBench scores for validation
+# Models with ForecastBench scores for validation (LiteLLM format: provider/model)
 FORECASTBENCH_MODELS = [
-    # "claude-3-7-sonnet-20250219",
-    # "claude-opus-4-1-20250805",
-    # "claude-sonnet-4-20250514",
-    "o3-2025-04-16",
-    "gpt-4.1-2025-04-14",
-    "gpt-5-2025-08-07",
-    "gpt-5-mini-2025-08-07",
-    "gemini-2.5-pro",
-    "gemini-2.5-flash",
-    # "DeepSeek-V3.1",
-    # "Qwen3-235B-A22B-fp8-tput",
-    # "Kimi-K2-Instruct",
-    # "GLM-4.5-Air-FP8",
-    # "mistral-large-2411",
+    # "anthropic/claude-3-7-sonnet-20250219",
+    # "anthropic/claude-opus-4-1-20250805",
+    # "anthropic/claude-sonnet-4-20250514",
+    "openai/o3-2025-04-16",
+    "openai/gpt-4.1-2025-04-14",
+    "openai/gpt-5-2025-08-07",
+    "openai/gpt-5-mini-2025-08-07",
+    "google/gemini-2.5-pro",
+    "google/gemini-2.5-flash",
+    # "together/DeepSeek-V3.1",
+    # "together/Qwen3-235B-A22B-fp8-tput",
+    # "together/Kimi-K2-Instruct",
+    # "together/GLM-4.5-Air-FP8",
+    # "mistral/mistral-large-2411",
 ]
 
-# Frontier models without ForecastBench scores yet
+# Frontier models without ForecastBench scores yet (LiteLLM format: provider/model)
 FRONTIER_MODELS = [
-    # "claude-opus-4-5-20251101",
-    # "claude-sonnet-4-5-20250929",
-    "gemini-3-pro-preview",
-    "gpt-5.1-2025-11-13",
+    # "anthropic/claude-opus-4-5-20251101",
+    # "anthropic/claude-sonnet-4-5-20250929",
+    "google/gemini-3-pro-preview",
+    "openai/gpt-5.1-2025-11-13",
 ]
 
 
@@ -123,12 +123,6 @@ def setup_logging(run_id: str, log_dir: Path) -> logging.Logger:
     return logger
 
 
-def get_model_by_id(models_list, model_id: str):
-    """Find a model in the MODELS list by ID (partial match)."""
-    for model in models_list:
-        if model_id in model.id or model.id in model_id:
-            return model
-    return None
 
 
 def compute_metrics(results: list[dict], models: list) -> dict:
@@ -379,20 +373,9 @@ async def main():
     else:
         model_ids = FORECASTBENCH_MODELS + FRONTIER_MODELS
 
-    # Find models in registry
-    models_to_use = []
-    logger.info(f"\nFinding models ({len(model_ids)} requested)...")
-    for model_id in model_ids:
-        model = get_model_by_id(MODELS, model_id)
-        if model:
-            models_to_use.append(model)
-            logger.info(f"  Found: {model_id} -> {model.id}")
-        else:
-            logger.warning(f"  Not found: {model_id}")
-
-    if not models_to_use:
-        logger.error("No valid models found")
-        return 1
+    # Create model objects from IDs
+    models_to_use = get_models(model_ids)
+    logger.info(f"\nCreated {len(models_to_use)} models: {[m.id for m in models_to_use]}")
 
     logger.info(f"\nWill evaluate {len(models_to_use)} models on {len(questions)} questions")
 
