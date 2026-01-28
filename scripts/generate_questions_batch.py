@@ -24,7 +24,10 @@ from civrealm.world_reports.questions import (
 
 
 def process_single_game(args: tuple) -> dict | None:
-    """Process a single game file and return resolved question bank as dict."""
+    """Process a single game file and return resolved question bank as dict.
+
+    Generates both H0 (comprehension) and H1-H7 (forecasting) questions.
+    """
     data_file, snapshot_turn = args
 
     try:
@@ -45,19 +48,39 @@ def process_single_game(args: tuple) -> dict | None:
         if snapshot_turn >= max_turn:
             return None
 
-        # Generate questions
         generator = QuestionGenerator()
-        bank = generator.generate_question_bank(
+        resolver = QuestionResolver()
+
+        # Generate H0 (comprehension) questions
+        h0_bank = generator.generate_zero_turn_questions(
             game_id=game_id,
             game_data=game_data,
             snapshot_turn=snapshot_turn,
         )
+        resolved_h0 = resolver.resolve_batch(h0_bank, game_data)
 
-        # Resolve questions
-        resolver = QuestionResolver()
-        resolved_bank = resolver.resolve_batch(bank, game_data)
+        # Generate H1-H7 (forecasting) questions
+        forecast_bank = generator.generate_question_bank(
+            game_id=game_id,
+            game_data=game_data,
+            snapshot_turn=snapshot_turn,
+        )
+        resolved_forecast = resolver.resolve_batch(forecast_bank, game_data)
 
-        return question_bank_to_dict(resolved_bank)
+        # Combine questions from both banks
+        h0_dict = question_bank_to_dict(resolved_h0)
+        forecast_dict = question_bank_to_dict(resolved_forecast)
+
+        # Merge questions into forecast_dict (use it as base)
+        all_questions = h0_dict.get('questions', []) + forecast_dict.get('questions', [])
+
+        # Add game_id to each question's parameters for later retrieval
+        for q in all_questions:
+            q['parameters']['game_id'] = game_id
+
+        forecast_dict['questions'] = all_questions
+
+        return forecast_dict
 
     except Exception as e:
         print(f"Error processing {data_file}: {e}")
@@ -68,8 +91,8 @@ def main():
     parser = argparse.ArgumentParser(description='Batch generate questions from game data')
     parser.add_argument('--data-dir', type=str, default='data/games',
                         help='Directory containing game data JSON files')
-    parser.add_argument('--snapshot-turn', type=int, default=50,
-                        help='Turn at which forecasters see data (default: 50)')
+    parser.add_argument('--snapshot-turn', type=int, default=60,
+                        help='Turn at which forecasters see data (default: 60)')
     parser.add_argument('--output', '-o', type=str, default='data/questions/questions_all.json',
                         help='Output JSON file')
     parser.add_argument('--workers', type=int, default=4,
@@ -104,7 +127,16 @@ def main():
 
     # Count by template and horizon
     by_template = {}
-    by_horizon = {'H0': {'true': 0, 'false': 0}, 'H1': {'true': 0, 'false': 0}, 'H2': {'true': 0, 'false': 0}, 'H3': {'true': 0, 'false': 0}}
+    by_horizon = {
+        'H0': {'true': 0, 'false': 0},
+        'H1': {'true': 0, 'false': 0},
+        'H2': {'true': 0, 'false': 0},
+        'H3': {'true': 0, 'false': 0},
+        'H4': {'true': 0, 'false': 0},
+        'H5': {'true': 0, 'false': 0},
+        'H6': {'true': 0, 'false': 0},
+        'H7': {'true': 0, 'false': 0},
+    }
 
     for q in all_questions:
         t = q.get('template_id', 'unknown')
@@ -140,7 +172,7 @@ def main():
     print("\n" + "-" * 70)
     print("BY HORIZON")
     print("-" * 70)
-    for h in ['H0', 'H1', 'H2', 'H3']:
+    for h in ['H0', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'H7']:
         total = by_horizon.get(h, {}).get('true', 0) + by_horizon.get(h, {}).get('false', 0)
         if total > 0:
             rate = 100 * by_horizon[h]['true'] / total

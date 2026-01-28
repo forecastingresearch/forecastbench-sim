@@ -5,7 +5,7 @@ Generate tech_comparative questions and world reports for all games.
 This script generates questions of the form:
 "Will [Civ A] have more technologies than [Civ B] at turn T?"
 
-at all 3 time horizons (H1, H2, H3) and produces world reports for each.
+at all 7 time horizons (H1-H7) and produces world reports for each.
 
 Usage:
     python scripts/generate_tech_comparative.py
@@ -115,7 +115,7 @@ def generate_for_game(
             print(f"  Warning: No recordings found for {game_id}")
 
         # Return summary
-        by_horizon = {'H1': 0, 'H2': 0, 'H3': 0}
+        by_horizon = {'H1': 0, 'H2': 0, 'H3': 0, 'H4': 0, 'H5': 0, 'H6': 0, 'H7': 0}
         true_count = 0
         for q in resolved_bank.questions:
             by_horizon[q.horizon] = by_horizon.get(q.horizon, 0) + 1
@@ -154,7 +154,7 @@ def main():
         help='Output directory for questions and reports'
     )
     parser.add_argument(
-        '--snapshot-turn', type=int, default=50,
+        '--snapshot-turn', type=int, default=60,
         help='Turn at which forecasters see data'
     )
     parser.add_argument(

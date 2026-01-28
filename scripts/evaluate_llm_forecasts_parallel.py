@@ -45,7 +45,9 @@ from utils.llm.litellm_models import configure_api_keys, get_models
 from civrealm.evaluation.sampling import (
     load_all_questions,
     stratified_sample_batched,
+    stratified_sample_by_horizon_template,
     get_template_distribution,
+    get_horizon_template_distribution,
 )
 from civrealm.evaluation.rate_limiter import ProviderRateLimiter
 from civrealm.evaluation.parallel_evaluator import run_batch_evaluation
@@ -239,6 +241,11 @@ async def main():
         help="Questions to sample per template (total = n * num_templates, default: 10)"
     )
     parser.add_argument(
+        "--questions-per-horizon-template", type=int, default=None,
+        help="Questions to sample per (horizon, template) pair. Overrides --questions-per-template. "
+             "Use 1 for anchor runs (e.g., 13 templates * 8 horizons = up to 104 questions)"
+    )
+    parser.add_argument(
         "--output", "-o", type=str,
         help="Output JSON file path"
     )
@@ -277,8 +284,20 @@ async def main():
     )
     parser.add_argument(
         "--horizon", type=str, nargs="+",
-        choices=["H0", "H1", "H2", "H3"],
-        help="Filter questions by horizon (H0=comprehension, H1=1-20 turns, H2=21-80 turns, H3=>80 turns)"
+        choices=["H0", "H1", "H2", "H3", "H4", "H5", "H6", "H7"],
+        help="Filter questions by horizon (H0=comprehension, H1=30 turns, H2=60 turns, H3=90 turns, H4=120 turns, H5=150 turns, H6=180 turns, H7=210 turns)"
+    )
+    parser.add_argument(
+        "--min-difficulty", type=float,
+        help="Minimum difficulty score (0.0-1.0, higher = harder)"
+    )
+    parser.add_argument(
+        "--max-difficulty", type=float,
+        help="Maximum difficulty score (0.0-1.0, higher = harder)"
+    )
+    parser.add_argument(
+        "--update-difficulty", action="store_true",
+        help="Recompute and update difficulty scores after evaluation completes"
     )
     args = parser.parse_args()
 
@@ -305,11 +324,18 @@ async def main():
             # mistral=os.getenv("MISTRAL_API_KEY"),
         )
 
-    # Load all questions
+    # Load all questions (with optional difficulty filtering)
     data_dir = Path(args.data_dir)
     logger.info(f"Loading questions from {data_dir}...")
-    all_questions = load_all_questions(data_dir)
+    all_questions = load_all_questions(
+        data_dir,
+        min_difficulty=args.min_difficulty,
+        max_difficulty=args.max_difficulty,
+    )
     logger.info(f"Found {len(all_questions)} total questions")
+
+    if args.min_difficulty is not None or args.max_difficulty is not None:
+        logger.info(f"Difficulty filter: min={args.min_difficulty}, max={args.max_difficulty}")
 
     if not all_questions:
         logger.error("No questions found")
@@ -329,22 +355,59 @@ async def main():
     full_dist = get_template_distribution(all_questions)
     logger.info(f"Full template distribution: {full_dist}")
 
-    # Stratified sampling by template, then batched by game for token efficiency
-    logger.info(f"\nSampling {args.questions_per_template} questions per template...")
-    question_batches = stratified_sample_batched(
-        all_questions,
-        per_template=args.questions_per_template,
-        seed=args.seed,
-    )
-    # Flatten for metrics computation
-    questions = [q for batch in question_batches for q in batch]
+    # Stratified sampling - either by (horizon, template) pair or by template only
+    if args.questions_per_horizon_template is not None:
+        # Fine-grained stratification by (horizon, template) pair
+        logger.info(f"\nSampling {args.questions_per_horizon_template} questions per (horizon, template) pair...")
+        questions = stratified_sample_by_horizon_template(
+            all_questions,
+            per_pair=args.questions_per_horizon_template,
+            seed=args.seed,
+            horizons=args.horizon,  # Use horizon filter if specified
+        )
+        sampling_note = f"(horizon-template stratified, seed={args.seed})"
+    else:
+        # Standard stratification by template only
+        logger.info(f"\nSampling {args.questions_per_template} questions per template...")
+        question_batches = stratified_sample_batched(
+            all_questions,
+            per_template=args.questions_per_template,
+            seed=args.seed,
+        )
+        # Flatten for metrics computation
+        questions = [q for batch in question_batches for q in batch]
+        sampling_note = f"(seed={args.seed})"
+
+    if not questions:
+        logger.error("No questions sampled; check filters and sampling settings.")
+        return 1
+
+    # Group by game for batching, then chunk each game into fixed-size batches
+    batch_size = 20
+    by_game: dict[str, list[dict]] = defaultdict(list)
+    for q in questions:
+        by_game[q["game_id"]].append(q)
+
+    question_batches = []
+    for gid in sorted(by_game.keys()):
+        game_questions = by_game[gid]
+        for start in range(0, len(game_questions), batch_size):
+            question_batches.append(game_questions[start:start + batch_size])
     logger.info(
-        f"Sampled {len(questions)} questions across {len(question_batches)} game batches (seed={args.seed})"
+        f"Sampled {len(questions)} questions across {len(question_batches)} batches "
+        f"(chunk size={batch_size}) {sampling_note}"
     )
 
     # Show sampled distribution
     sampled_dist = get_template_distribution(questions)
     logger.info(f"Sampled template distribution: {sampled_dist}")
+
+    # Show horizon-template distribution when using that sampling mode
+    if args.questions_per_horizon_template is not None:
+        ht_dist = get_horizon_template_distribution(questions)
+        logger.info("Sampled (horizon, template) distribution:")
+        for horizon, templates in ht_dist.items():
+            logger.info(f"  {horizon}: {len(templates)} templates, {sum(templates.values())} questions")
 
     # Calculate base rate
     true_count = sum(1 for q in questions if q['ground_truth'])
@@ -384,6 +447,8 @@ async def main():
         "run_id": run_id,
         "seed": args.seed,
         "questions_per_template": args.questions_per_template,
+        "questions_per_horizon_template": args.questions_per_horizon_template,
+        "sampling_mode": "horizon_template" if args.questions_per_horizon_template else "template",
         "total_questions": len(questions),
         "base_rate": base_rate,
         "template_distribution": sampled_dist,
@@ -454,6 +519,29 @@ async def main():
         json.dump(output, f, indent=2)
 
     logger.info(f"\nResults saved to: {output_path}")
+
+    # Optionally update difficulty scores
+    if args.update_difficulty:
+        logger.info("\nUpdating difficulty scores...")
+        try:
+            from civrealm.evaluation.difficulty import (
+                aggregate_evaluations,
+                compute_question_difficulties,
+                compute_percentile_ranks,
+                update_question_files,
+            )
+
+            eval_dir = Path("data/evaluations")
+            questions_dir = Path("data/questions")
+
+            aggregated = aggregate_evaluations(eval_dir)
+            difficulties = compute_question_difficulties(aggregated)
+            difficulties = compute_percentile_ranks(difficulties)
+            updated, files = update_question_files(questions_dir, difficulties)
+
+            logger.info(f"Updated {updated} questions in {files} files")
+        except Exception as e:
+            logger.warning(f"Failed to update difficulty scores: {e}")
 
     return 0
 

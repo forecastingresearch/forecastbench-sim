@@ -12,6 +12,7 @@ from .schema import (
     Resolution,
     WorldReportConfig,
     CivilizationInfo,
+    EmpiricalDifficulty,
 )
 
 
@@ -60,6 +61,9 @@ def _question_to_dict(q: QuestionInstance) -> dict[str, Any]:
     if q.resolution is not None:
         result["resolution"] = _resolution_to_dict(q.resolution)
 
+    if q.empirical_difficulty is not None:
+        result["empirical_difficulty"] = _empirical_difficulty_to_dict(q.empirical_difficulty)
+
     return result
 
 
@@ -88,6 +92,32 @@ def _resolution_to_dict(r: Resolution) -> dict[str, Any]:
         result["state_at_resolution"] = r.state_at_resolution
 
     return result
+
+
+def _empirical_difficulty_to_dict(d: EmpiricalDifficulty) -> dict[str, Any]:
+    """Convert an EmpiricalDifficulty to a dictionary."""
+    return {
+        "score": d.score,
+        "percentile": d.percentile,
+        "num_evaluations": d.num_evaluations,
+        "num_models": d.num_models,
+        "model_scores": d.model_scores,
+        "last_updated": d.last_updated,
+        "version": d.version,
+    }
+
+
+def _dict_to_empirical_difficulty(data: dict[str, Any]) -> EmpiricalDifficulty:
+    """Convert a dictionary to an EmpiricalDifficulty."""
+    return EmpiricalDifficulty(
+        score=data.get("score"),
+        percentile=data.get("percentile"),
+        num_evaluations=data.get("num_evaluations", 0),
+        num_models=data.get("num_models", 0),
+        model_scores=data.get("model_scores", {}),
+        last_updated=data.get("last_updated", ""),
+        version=data.get("version", "v1.0"),
+    )
 
 
 def question_bank_to_json(bank: QuestionBank, indent: int = 2) -> str:
@@ -192,6 +222,11 @@ def _dict_to_question(data: dict[str, Any]) -> QuestionInstance:
         difficulty = data.get("difficulty", {})
         horizon = difficulty.get("horizon", "H1")
 
+    # Parse empirical difficulty if present
+    empirical_difficulty = None
+    if "empirical_difficulty" in data:
+        empirical_difficulty = _dict_to_empirical_difficulty(data["empirical_difficulty"])
+
     return QuestionInstance(
         question_id=data.get("question_id", ""),
         template_id=data.get("template_id", ""),
@@ -200,6 +235,7 @@ def _dict_to_question(data: dict[str, Any]) -> QuestionInstance:
         parameters=data.get("parameters", {}),
         question_text=data.get("question_text", ""),
         resolution=resolution,
+        empirical_difficulty=empirical_difficulty,
     )
 
 

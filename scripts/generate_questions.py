@@ -22,7 +22,7 @@ from civrealm.world_reports.questions import (
 def main():
     parser = argparse.ArgumentParser(description='Generate questions from game data')
     parser.add_argument('data_file', help='Path to game data JSON file')
-    parser.add_argument('--snapshot-turn', type=int, default=50,
+    parser.add_argument('--snapshot-turn', type=int, default=60,
                         help='Turn at which forecasters see data (default: 50)')
     parser.add_argument('--output', '-o', help='Output JSON file path')
     parser.add_argument('--resolution-turns', nargs='+', type=int,
