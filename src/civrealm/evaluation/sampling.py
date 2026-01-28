@@ -10,19 +10,114 @@ def load_all_questions(
     data_dir: Path,
     template_filter: str | None = None,
     include_h0: bool = True,
+    min_difficulty: float | None = None,
+    max_difficulty: float | None = None,
+    difficulty_percentile_min: float | None = None,
+    difficulty_percentile_max: float | None = None,
 ) -> list[dict]:
     """
-    Load all questions from game folders.
+    Load all questions from game folders or a combined questions file.
+
+    Supports two formats:
+    1. Combined file: data_dir/questions_all.json (from generate_questions_batch.py)
+    2. Per-game directories: data_dir/{game_id}/questions.json
 
     Args:
-        data_dir: Directory containing game folders with questions.json files
+        data_dir: Directory containing questions (either combined file or game folders)
         template_filter: Optional filter to only load questions of a specific template
         include_h0: Whether to also load from h0_questions.json (default: True)
+        min_difficulty: Minimum difficulty score (0.0-1.0, higher = harder)
+        max_difficulty: Maximum difficulty score (0.0-1.0, higher = harder)
+        difficulty_percentile_min: Minimum difficulty percentile (0-100)
+        difficulty_percentile_max: Maximum difficulty percentile (0-100)
 
     Returns:
         List of question dicts with keys: game_id, question_id, question_text,
-        ground_truth, parameters, template_id, horizon
+        ground_truth, parameters, template_id, horizon, empirical_difficulty (if present)
     """
+    data_dir = Path(data_dir)
+    questions = []
+
+    # Check for combined questions file first (from generate_questions_batch.py)
+    combined_file = data_dir / "questions_all.json"
+    if combined_file.exists():
+        questions = _load_from_combined_file(combined_file, template_filter)
+    else:
+        # Fall back to per-game directory structure
+        questions = _load_from_game_directories(data_dir, template_filter, include_h0)
+
+    # Apply difficulty filtering if specified
+    if any([min_difficulty, max_difficulty, difficulty_percentile_min, difficulty_percentile_max]):
+        questions = _filter_by_difficulty(
+            questions,
+            min_difficulty=min_difficulty,
+            max_difficulty=max_difficulty,
+            percentile_min=difficulty_percentile_min,
+            percentile_max=difficulty_percentile_max,
+        )
+
+    return questions
+
+
+def _load_from_combined_file(
+    combined_file: Path,
+    template_filter: str | None = None,
+) -> list[dict]:
+    """Load questions from a combined questions_all.json file."""
+    questions = []
+    missing_game_id_warned = False
+
+    with open(combined_file) as f:
+        data = json.load(f)
+
+    # Combined file has metadata and questions at top level
+    for q in data.get("questions", []):
+        if template_filter and q.get("template_id") != template_filter:
+            continue
+
+        resolution = q.get("resolution", {})
+        answer = resolution.get("answer")
+        if answer is None:
+            continue
+
+        # Handle both new format (horizon at top level) and old format (in difficulty)
+        horizon = q.get("horizon")
+        if horizon is None:
+            difficulty = q.get("difficulty", {})
+            horizon = difficulty.get("horizon", "H1")
+
+        # Get empirical difficulty if present
+        empirical_difficulty = q.get("empirical_difficulty")
+
+        # game_id is stored in parameters for combined format
+        game_id = q.get("parameters", {}).get("game_id")
+        if game_id is None:
+            if not missing_game_id_warned:
+                print("Warning: questions_all.json is missing game_id in parameters. "
+                      "Re-run generate_questions_batch.py to fix. Using 'unknown' as fallback.")
+                missing_game_id_warned = True
+            game_id = "unknown"
+
+        questions.append({
+            "game_id": game_id,
+            "question_id": q.get("question_id"),
+            "template_id": q.get("template_id"),
+            "question_text": q.get("question_text"),
+            "ground_truth": bool(answer),
+            "parameters": q.get("parameters", {}),
+            "horizon": horizon,
+            "empirical_difficulty": empirical_difficulty,
+        })
+
+    return questions
+
+
+def _load_from_game_directories(
+    data_dir: Path,
+    template_filter: str | None = None,
+    include_h0: bool = True,
+) -> list[dict]:
+    """Load questions from per-game directory structure."""
     questions = []
 
     # Question files to load from (in order of priority)
@@ -59,6 +154,9 @@ def load_all_questions(
                     difficulty = q.get("difficulty", {})
                     horizon = difficulty.get("horizon", "H1")
 
+                # Get empirical difficulty if present
+                empirical_difficulty = q.get("empirical_difficulty")
+
                 questions.append({
                     "game_id": game_id,
                     "question_id": q.get("question_id"),
@@ -67,9 +165,127 @@ def load_all_questions(
                     "ground_truth": bool(answer),
                     "parameters": q.get("parameters", {}),
                     "horizon": horizon,
+                    "empirical_difficulty": empirical_difficulty,
                 })
 
     return questions
+
+
+def _filter_by_difficulty(
+    questions: list[dict],
+    min_difficulty: float | None = None,
+    max_difficulty: float | None = None,
+    percentile_min: float | None = None,
+    percentile_max: float | None = None,
+) -> list[dict]:
+    """
+    Filter questions by difficulty score or percentile.
+
+    Questions without empirical_difficulty are excluded when filtering.
+
+    Args:
+        questions: List of question dicts
+        min_difficulty: Minimum difficulty score (0.0-1.0)
+        max_difficulty: Maximum difficulty score (0.0-1.0)
+        percentile_min: Minimum difficulty percentile (0-100)
+        percentile_max: Maximum difficulty percentile (0-100)
+
+    Returns:
+        Filtered list of questions
+    """
+    filtered = []
+
+    for q in questions:
+        emp_diff = q.get("empirical_difficulty")
+
+        # Skip questions without difficulty data when filtering
+        if emp_diff is None:
+            continue
+
+        score = emp_diff.get("score")
+        percentile = emp_diff.get("percentile")
+
+        # Check score bounds
+        if min_difficulty is not None and (score is None or score < min_difficulty):
+            continue
+        if max_difficulty is not None and (score is None or score > max_difficulty):
+            continue
+
+        # Check percentile bounds
+        if percentile_min is not None and (percentile is None or percentile < percentile_min):
+            continue
+        if percentile_max is not None and (percentile is None or percentile > percentile_max):
+            continue
+
+        filtered.append(q)
+
+    return filtered
+
+
+def stratified_sample_by_horizon_template(
+    questions: list[dict],
+    per_pair: int,
+    seed: int,
+    horizons: list[str] | None = None,
+    templates: list[str] | None = None,
+) -> list[dict]:
+    """
+    Sample questions with balanced representation across (horizon, template) pairs.
+
+    Guarantees up to `per_pair` questions from each available (horizon, template)
+    combination, providing fine-grained control for anchor runs and difficulty
+    calibration. Templates are selected per horizon from what's available.
+
+    Args:
+        questions: Full list of questions to sample from
+        per_pair: Number of questions to sample from each (horizon, template) pair
+        seed: Random seed for reproducibility
+        horizons: Horizon levels to include (default: all horizons found)
+        templates: Template IDs to include (default: all templates found)
+
+    Returns:
+        List of sampled questions, balanced across (horizon, template) pairs.
+
+    Example:
+        >>> questions = load_all_questions(Path("data/questions"))
+        >>> sampled = stratified_sample_by_horizon_template(questions, per_pair=1, seed=42)
+        >>> # With 13 templates and 8 horizons, up to 104 questions (1 per pair)
+    """
+    random.seed(seed)
+    sampled = []
+
+    # Group questions by (horizon, template_id)
+    by_pair: dict[tuple[str, str], list[dict]] = defaultdict(list)
+    for q in questions:
+        horizon = q.get("horizon", "H1")
+        template_id = q.get("template_id", "unknown")
+        by_pair[(horizon, template_id)].append(q)
+
+    # Determine which horizons to sample from
+    all_horizons = set(h for h, _ in by_pair.keys())
+    if horizons is None:
+        horizons = sorted(all_horizons)
+
+    template_filter = set(templates) if templates is not None else None
+
+    # Sample from each (horizon, template) pair (use all templates available per horizon)
+    for horizon in horizons:
+        templates_for_horizon = sorted(
+            t for (h, t) in by_pair.keys()
+            if h == horizon and (template_filter is None or t in template_filter)
+        )
+        for template_id in templates_for_horizon:
+            pool = by_pair.get((horizon, template_id), [])
+            n = min(per_pair, len(pool))
+
+            if n < per_pair and pool:
+                print(f"Warning: Only {len(pool)} questions available for "
+                      f"({horizon}, {template_id}), requested {per_pair}")
+
+            if pool:
+                sampled.extend(random.sample(pool, n))
+
+    return sampled
 
 
 def stratified_sample(
@@ -142,6 +358,29 @@ def get_template_distribution(questions: list[dict]) -> dict[str, int]:
         template_id = q.get("template_id", "unknown")
         dist[template_id] += 1
     return dict(sorted(dist.items()))
+
+
+def get_horizon_template_distribution(questions: list[dict]) -> dict[str, dict[str, int]]:
+    """
+    Get the count of questions for each (horizon, template) pair.
+
+    Args:
+        questions: List of question dicts
+
+    Returns:
+        Nested dict: {horizon: {template_id: count}}
+    """
+    dist: dict[str, dict[str, int]] = defaultdict(lambda: defaultdict(int))
+    for q in questions:
+        horizon = q.get("horizon", "H1")
+        template_id = q.get("template_id", "unknown")
+        dist[horizon][template_id] += 1
+
+    # Convert to regular dicts and sort
+    return {
+        h: dict(sorted(templates.items()))
+        for h, templates in sorted(dist.items())
+    }
 
 
 def stratified_sample_batched(

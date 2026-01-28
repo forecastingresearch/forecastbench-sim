@@ -85,6 +85,32 @@ class Resolution:
 
 
 @dataclass
+class EmpiricalDifficulty:
+    """Empirical difficulty computed from model performance."""
+
+    score: float | None
+    """Mean Brier score across all model evaluations (0.0-1.0, higher = harder)"""
+
+    percentile: float | None
+    """Percentile rank within question pool (0-100, higher = harder)"""
+
+    num_evaluations: int
+    """Total number of (model, run) pairs contributing to this score"""
+
+    num_models: int
+    """Number of unique models that have evaluated this question"""
+
+    model_scores: dict[str, float]
+    """Per-model mean Brier scores for transparency"""
+
+    last_updated: str
+    """ISO timestamp of last update"""
+
+    version: str = "v1.0"
+    """Difficulty computation version"""
+
+
+@dataclass
 class QuestionInstance:
     """A specific question generated from a template."""
 
@@ -97,12 +123,16 @@ class QuestionInstance:
     resolution_turn: int
     """Turn at which this question resolves"""
 
-    horizon: Literal["H0", "H1", "H2", "H3"]
+    horizon: Literal["H0", "H1", "H2", "H3", "H4", "H5", "H6", "H7"]
     """Time horizon category (derived from resolution_turn - snapshot_turn)
     H0: Zero horizon (comprehension questions, resolution_turn == snapshot_turn)
-    H1: Short horizon (≤20 turns)
-    H2: Medium horizon (21-80 turns)
-    H3: Long horizon (>80 turns)
+    H1: 30 turns ahead
+    H2: 60 turns ahead
+    H3: 90 turns ahead
+    H4: 120 turns ahead
+    H5: 150 turns ahead
+    H6: 180 turns ahead
+    H7: 210 turns ahead
     """
 
     parameters: dict[str, Any]
@@ -113,6 +143,9 @@ class QuestionInstance:
 
     resolution: Resolution | None = None
     """Computed answer (None until resolved)"""
+
+    empirical_difficulty: EmpiricalDifficulty | None = None
+    """Empirical difficulty from model evaluations (None if not yet computed)"""
 
 
 @dataclass
@@ -172,21 +205,33 @@ class QuestionBank:
 
 
 # Horizon classification helper
-def classify_horizon(snapshot_turn: int, resolution_turn: int) -> Literal["H0", "H1", "H2", "H3"]:
+def classify_horizon(snapshot_turn: int, resolution_turn: int) -> Literal["H0", "H1", "H2", "H3", "H4", "H5", "H6", "H7"]:
     """
     Classify the time horizon based on turn delta.
 
     H0: Zero (0 turns) - comprehension questions, answer observable at snapshot
-    H1: Short (≤20 turns) - trends visible in recent history
-    H2: Medium (21-80 turns) - requires reasoning about second-order effects
-    H3: Long (>80 turns) - regime changes likely, compounding uncertainty
+    H1: 30 turns ahead (e.g., turn 60 → turn 90)
+    H2: 60 turns ahead (e.g., turn 60 → turn 120)
+    H3: 90 turns ahead (e.g., turn 60 → turn 150)
+    H4: 120 turns ahead (e.g., turn 60 → turn 180)
+    H5: 150 turns ahead (e.g., turn 60 → turn 210)
+    H6: 180 turns ahead (e.g., turn 60 → turn 240)
+    H7: 210 turns ahead (e.g., turn 60 → turn 270)
     """
     delta = resolution_turn - snapshot_turn
     if delta <= 0:
         return "H0"
-    elif delta <= 20:
+    elif delta <= 30:
         return "H1"
-    elif delta <= 80:
+    elif delta <= 60:
         return "H2"
-    else:
+    elif delta <= 90:
         return "H3"
+    elif delta <= 120:
+        return "H4"
+    elif delta <= 150:
+        return "H5"
+    elif delta <= 180:
+        return "H6"
+    else:
+        return "H7"

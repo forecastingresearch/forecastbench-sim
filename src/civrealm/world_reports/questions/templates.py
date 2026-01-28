@@ -254,18 +254,23 @@ ALL_TEMPLATES = [
     # Milestone
     TECH_DISCOVERED,
     # Event
-    CITY_FOUNDED,
-    TREASURY_ZERO,
-    BORDER_CONTACT,
-    CITY_CONQUERED_ANY,
-    CITY_LOST,
-    ANARCHY_EVENT,
+    # NOTE: The following templates are commented out because they use "between X and Y"
+    # event-window framing that doesn't translate well to H0 comprehension questions.
+    # CITY_FOUNDED,
+    # TREASURY_ZERO,
+    # BORDER_CONTACT,
+    # CITY_CONQUERED_ANY,
+    # CITY_LOST,
+    # ANARCHY_EVENT,
     WONDER_COMPLETED,
-    WONDER_FIRST,
+    # WONDER_FIRST,  # Competitive framing doesn't work for H0
     # State check
-    AT_WAR_DYAD,
-    AT_WAR_ANY,
-    ALLIANCE_DYAD,
+    # NOTE: Diplomacy templates commented out due to asymmetric/incorrect data in game_data.json files.
+    # The savegame parser stores both directions (X_Y and Y_X) which can have inconsistent states.
+    # See verify_ground_truth.py output for details on the 18 mismatches found.
+    # AT_WAR_DYAD,
+    # AT_WAR_ANY,
+    # ALLIANCE_DYAD,
     GOVERNMENT_AT,
 ]
 

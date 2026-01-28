@@ -126,8 +126,10 @@ class MetricsCollector:
         territory_snapshots = self.collect_territory_snapshots(states, territory_snapshot_turns)
 
         print("  Collecting diplomacy data...")
-        # Use state-based diplomacy extraction (more reliable than savegames)
-        diplomacy = self.collect_diplomacy_from_states(states, civilizations)
+        # Use savegame-based diplomacy extraction (has all pairwise relationships)
+        # Note: collect_diplomacy_from_states is buggy - state['dipl'] only contains
+        # the controlled player's relationships, not all pairwise diplomatic states.
+        diplomacy = self.collect_diplomacy(states, config, civilizations)
 
         return {
             "metadata": metadata,
@@ -640,7 +642,14 @@ class MetricsCollector:
         states: Dict[int, Dict],
         civilizations: Dict[int, Dict]
     ) -> Dict[str, Any]:
-        """Collect diplomatic relationships over time from state files
+        """Collect diplomatic relationships over time from state files.
+
+        WARNING: This function is BUGGY and should NOT be used for question resolution.
+        The state['dipl'] structure only contains the CONTROLLED player's diplomatic
+        relationships, not all pairwise relationships. This function incorrectly
+        broadcasts a single diplomatic state to all relationship pairs.
+
+        Use collect_diplomacy() instead, which reads from savegame files.
 
         Extracts diplomatic state (War, Peace, Alliance, etc.) from state['dipl'].
 
@@ -731,9 +740,11 @@ class MetricsCollector:
         config: Any,
         civilizations: Dict[int, Dict]
     ) -> Dict[str, Any]:
-        """Collect diplomatic relationships over time from savegames (DEPRECATED)
+        """Collect diplomatic relationships over time from savegames.
 
-        Note: Prefer collect_diplomacy_from_states() which uses state files directly.
+        This function reads from savegame files which contain complete pairwise
+        diplomatic relationships between ALL players. This is the correct method
+        for question resolution.
 
         Extracts both diplomatic state (War, Peace, Alliance, etc.) and
         AI love values (-1000 to 1000) for all player pairs.

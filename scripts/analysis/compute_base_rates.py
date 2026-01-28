@@ -160,7 +160,7 @@ def print_summary(data: dict):
     print("\n" + "-" * 70)
     print("BASE RATES BY TEMPLATE AND HORIZON")
     print("-" * 70)
-    print(f"{'Template':<25} {'H0':>10} {'H1':>10} {'H2':>10} {'H3':>10} {'Overall':>10}")
+    print(f"{'Template':<25} {'H0':>8} {'H1':>8} {'H2':>8} {'H3':>8} {'H4':>8} {'H5':>8} {'H6':>8} {'H7':>8} {'Overall':>10}")
     print("-" * 70)
 
     base_rates = data['base_rates']
@@ -168,10 +168,9 @@ def print_summary(data: dict):
         horizons = base_rates[template_id]
 
         # Compute rates for each horizon
-        h0_rate = horizons.get('H0', {}).get('rate', '-')
-        h1_rate = horizons.get('H1', {}).get('rate', '-')
-        h2_rate = horizons.get('H2', {}).get('rate', '-')
-        h3_rate = horizons.get('H3', {}).get('rate', '-')
+        horizon_rates = {}
+        for h in ['H0', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'H7']:
+            horizon_rates[h] = horizons.get(h, {}).get('rate', '-')
 
         # Compute overall rate
         total_true = sum(h.get('true', 0) for h in horizons.values())
@@ -179,12 +178,12 @@ def print_summary(data: dict):
         overall = total_true / total_all if total_all > 0 else 0
 
         # Format rates
-        h0_str = f"{h0_rate:.1%}" if isinstance(h0_rate, float) else str(h0_rate)
-        h1_str = f"{h1_rate:.1%}" if isinstance(h1_rate, float) else str(h1_rate)
-        h2_str = f"{h2_rate:.1%}" if isinstance(h2_rate, float) else str(h2_rate)
-        h3_str = f"{h3_rate:.1%}" if isinstance(h3_rate, float) else str(h3_rate)
+        formatted_rates = []
+        for h in ['H0', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'H7']:
+            rate = horizon_rates[h]
+            formatted_rates.append(f"{rate:.1%}" if isinstance(rate, float) else str(rate))
 
-        print(f"{template_id:<25} {h0_str:>10} {h1_str:>10} {h2_str:>10} {h3_str:>10} {overall:>10.1%}")
+        print(f"{template_id:<25} {formatted_rates[0]:>8} {formatted_rates[1]:>8} {formatted_rates[2]:>8} {formatted_rates[3]:>8} {formatted_rates[4]:>8} {formatted_rates[5]:>8} {formatted_rates[6]:>8} {formatted_rates[7]:>8} {overall:>10.1%}")
 
     # Print threshold analysis for key templates
     by_threshold = data.get('by_threshold', {})
@@ -195,17 +194,15 @@ def print_summary(data: dict):
 
         if 'tech_count_gte' in by_threshold:
             thresholds = by_threshold['tech_count_gte']
-            print(f"{'Threshold':<15} {'H1':>10} {'H2':>10} {'H3':>10}")
-            print("-" * 45)
+            print(f"{'Threshold':<15} {'H1':>8} {'H2':>8} {'H3':>8} {'H4':>8} {'H5':>8} {'H6':>8} {'H7':>8}")
+            print("-" * 70)
             for threshold in sorted(thresholds.keys())[:10]:
                 horizons = thresholds[threshold]
-                h1 = horizons.get('H1', '-')
-                h2 = horizons.get('H2', '-')
-                h3 = horizons.get('H3', '-')
-                h1_str = f"{h1:.1%}" if isinstance(h1, float) else str(h1)
-                h2_str = f"{h2:.1%}" if isinstance(h2, float) else str(h2)
-                h3_str = f"{h3:.1%}" if isinstance(h3, float) else str(h3)
-                print(f"{threshold:<15} {h1_str:>10} {h2_str:>10} {h3_str:>10}")
+                formatted_rates = []
+                for h in ['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'H7']:
+                    rate = horizons.get(h, '-')
+                    formatted_rates.append(f"{rate:.1%}" if isinstance(rate, float) else str(rate))
+                print(f"{threshold:<15} {formatted_rates[0]:>8} {formatted_rates[1]:>8} {formatted_rates[2]:>8} {formatted_rates[3]:>8} {formatted_rates[4]:>8} {formatted_rates[5]:>8} {formatted_rates[6]:>8}")
 
 
 def main():

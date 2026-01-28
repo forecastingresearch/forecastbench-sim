@@ -266,19 +266,20 @@ You MUST give a probability estimate between 0 and 1 for each question UNDER ALL
 {instruction}"""
 
 
-def load_world_report(data_dir: Path, game_id: str) -> str:
+def load_world_report(data_dir: Path, game_id: str, snapshot_turn: int = 60) -> str:
     """
     Load world report as TXT for LLM context.
 
     Args:
         data_dir: Base directory containing game folders
         game_id: Game identifier (e.g., "s100")
+        snapshot_turn: The turn number for the world report (default: 60)
 
     Returns:
         TXT world report content, or empty string if not found.
     """
-    # Look for TXT report (preferred)
-    txt_path = data_dir / game_id / "world_report" / "turn_050_report.txt"
+    # Look for TXT report at the specified snapshot turn
+    txt_path = data_dir / game_id / "world_report" / f"turn_{snapshot_turn:03d}_report.txt"
 
     if txt_path.exists():
         with open(txt_path) as f:
@@ -319,8 +320,9 @@ async def query_model_async(
 
         for attempt in range(max_retries):
             try:
-                # Native async call
-                api_call = model.get_response_async(prompt, temperature=0.0, max_tokens=50)
+                # Native async call - use higher max_tokens for reasoning models
+                max_tokens = model.effective_max_tokens(50)
+                api_call = model.get_response_async(prompt, temperature=0.0, max_tokens=max_tokens)
 
                 # Apply timeout if specified
                 if timeout:
@@ -439,7 +441,9 @@ async def query_model_batch_async(
         for attempt in range(max_retries):
             try:
                 # Allow more tokens for batched responses
-                max_tokens = max(1000, num_questions * 150)
+                # Use higher budget for reasoning models since reasoning consumes tokens
+                base_tokens = max(6000, num_questions * 900)
+                max_tokens = model.effective_max_tokens(base_tokens)
 
                 # Native async call
                 api_call = model.get_response_async(prompt, temperature=0.0, max_tokens=max_tokens)

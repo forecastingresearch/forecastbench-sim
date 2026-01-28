@@ -126,7 +126,15 @@ def _format_rankings(scores_by_turn: dict[int, dict[int, int]], civs: list[tuple
     return lines
 
 
-def _format_events(events: list[dict[str, Any]], civ_names: dict[int, str]) -> list[str]:
+def _format_events(
+    events: list[dict[str, Any]],
+    civ_names: dict[int, str],
+    max_turn: int | None = None,
+) -> list[str]:
+    # Filter events by turn if max_turn is specified
+    if max_turn is not None:
+        events = [e for e in events if e.get("turn", 0) <= max_turn]
+
     if not events:
         return ["EVENTS", "No events recorded."]
     lines = ["EVENTS (chronological)", "Turn | Type | Civ | Description | Metadata"]
@@ -191,37 +199,41 @@ def _derive_government_from_states(states: dict[int, dict[str, Any]], civ_ids: l
     return gov_by_turn
 
 
-def _format_diplomacy(diplomacy: dict[str, Any], civs: list[tuple[int, dict[str, Any]]]) -> list[str]:
-    civ_names = {cid: civ.get("name", f"Player {cid}") for cid, civ in civs}
-    relations = diplomacy.get("relations", {})
-    if not relations:
-        return ["DIPLOMACY", "No diplomacy data available (savegames missing or not parsed)."]
-
-    lines = ["DIPLOMACY (state change timeline)"]
-    for pair_key in sorted(relations.keys()):
-        turn_data = relations[pair_key]
-        if not turn_data:
-            continue
-        parts = pair_key.split("_")
-        if len(parts) != 2:
-            continue
-        p1, p2 = int(parts[0]), int(parts[1])
-        header = f"PAIR {p1}-{civ_names.get(p1, p1)} vs {p2}-{civ_names.get(p2, p2)}"
-        lines.append(header)
-
-        last_state = None
-        changes = []
-        for turn in sorted(turn_data.keys()):
-            data = turn_data[turn]
-            state = data.get("state", "Unknown")
-            if state != last_state:
-                changes.append(f"{turn} {state}")
-                last_state = state
-        if changes:
-            lines.append("  State: " + "; ".join(changes))
-        else:
-            lines.append("  State: NA")
-    return lines
+# NOTE: Diplomacy formatting commented out due to asymmetric/incorrect data in game_data.json files.
+# The savegame parser stores both directions (X_Y and Y_X) which can have inconsistent states.
+# See verify_ground_truth.py output for details.
+#
+# def _format_diplomacy(diplomacy: dict[str, Any], civs: list[tuple[int, dict[str, Any]]]) -> list[str]:
+#     civ_names = {cid: civ.get("name", f"Player {cid}") for cid, civ in civs}
+#     relations = diplomacy.get("relations", {})
+#     if not relations:
+#         return ["DIPLOMACY", "No diplomacy data available (savegames missing or not parsed)."]
+#
+#     lines = ["DIPLOMACY (state change timeline)"]
+#     for pair_key in sorted(relations.keys()):
+#         turn_data = relations[pair_key]
+#         if not turn_data:
+#             continue
+#         parts = pair_key.split("_")
+#         if len(parts) != 2:
+#             continue
+#         p1, p2 = int(parts[0]), int(parts[1])
+#         header = f"PAIR {p1}-{civ_names.get(p1, p1)} vs {p2}-{civ_names.get(p2, p2)}"
+#         lines.append(header)
+#
+#         last_state = None
+#         changes = []
+#         for turn in sorted(turn_data.keys()):
+#             data = turn_data[turn]
+#             state = data.get("state", "Unknown")
+#             if state != last_state:
+#                 changes.append(f"{turn} {state}")
+#                 last_state = state
+#         if changes:
+#             lines.append("  State: " + "; ".join(changes))
+#         else:
+#             lines.append("  State: NA")
+#     return lines
 
 
 def _write_lines(path: Path, lines: list[str]) -> None:
@@ -264,7 +276,8 @@ def generate_txt_report(
         formats=["html"],
     )
     collector = MetricsCollector()
-    diplomacy = collector.collect_diplomacy(states, config, {cid: civ for cid, civ in civs})
+    # NOTE: Diplomacy collection commented out - data has asymmetric state issues
+    # diplomacy = collector.collect_diplomacy(states, config, {cid: civ for cid, civ in civs})
 
     sampled_turns = _build_turn_list(turns_analyzed, sample_interval)
     full_turns = sorted(turns_analyzed)
@@ -329,9 +342,10 @@ def generate_txt_report(
     lines.extend(_format_government_timeline(gov_by_turn, civs))
     lines.append("")
 
-    # Diplomacy
-    lines.extend(_format_diplomacy(diplomacy, civs))
-    lines.append("")
+    # NOTE: Diplomacy section commented out - data has asymmetric state issues
+    # # Diplomacy
+    # lines.extend(_format_diplomacy(diplomacy, civs))
+    # lines.append("")
 
     # Time series (sampled)
     ts = data.get("time_series", {})
@@ -359,10 +373,10 @@ def generate_txt_report(
     lines.extend(_format_rankings(scores_by_turn, civs, sampled_turns))
     lines.append("")
 
-    # Events
+    # Events (filtered to snapshot turn to prevent leakage)
     lines.extend(_format_event_types())
     lines.append("")
-    lines.extend(_format_events(data.get("events", []), civ_names))
+    lines.extend(_format_events(data.get("events", []), civ_names, max_turn=report_turn))
     lines.append("")
 
     # Territory maps

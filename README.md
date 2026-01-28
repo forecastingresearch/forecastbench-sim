@@ -156,9 +156,13 @@ Questions are classified along two orthogonal dimensions:
 
 | Level | Turns Ahead | Rationale |
 |-------|-------------|-----------|
-| H1 | 20 | Short extrapolation; trends likely continue |
-| H2 | 80 | Medium; requires reasoning about second-order effects |
-| H3 | 150 | Long; regime changes likely; compounding uncertainty |
+| H1 | 30 | Short extrapolation; trends likely continue |
+| H2 | 60 | Medium-short; early second-order effects |
+| H3 | 90 | Medium; requires reasoning about second-order effects |
+| H4 | 120 | Medium-long; regime changes begin |
+| H5 | 150 | Long; significant regime changes likely |
+| H6 | 180 | Very long; compounding uncertainty |
+| H7 | 210 | Extreme long; maximum uncertainty |
 
 **Difficulty Matrix:** D = H + I (scores range from 2 to 6)
 
@@ -231,7 +235,7 @@ generator = QuestionGenerator()
 question_bank = generator.generate_question_bank(
     game_id="s42",
     game_data=game_data,
-    snapshot_turn=50,  # Forecaster sees data up to turn 50
+    snapshot_turn=60,  # Forecaster sees data up to turn 60
 )
 
 # Resolve questions against actual outcomes
@@ -245,7 +249,7 @@ To verify calibration across multiple games:
 
 ```bash
 # Compute base rates across all games
-python scripts/compute_base_rates.py --data-dir data/games --snapshot-turn 50
+python scripts/compute_base_rates.py --data-dir data/games --snapshot-turn 60
 
 # Output shows True rate by template and horizon:
 # Template                          H1         H2         H3

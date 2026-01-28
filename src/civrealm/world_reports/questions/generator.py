@@ -26,7 +26,7 @@ class QuestionGenerator:
     Generates question banks from game data.
 
     The generator creates questions using predefined templates,
-    supporting H0/H1/H2/H3 time horizons.
+    supporting H0/H1/H2/H3/H4/H5/H6/H7 time horizons.
     """
 
     def __init__(
@@ -224,63 +224,67 @@ class QuestionGenerator:
                 ))
                 question_counter += 1
 
-        # Diplomatic state questions (H0): current war/alliance status
-        for p1, p2 in itertools.combinations(civilizations.keys(), 2):
-            civ_a = civilizations[p1].name
-            civ_b = civilizations[p2].name
-
-            # At war?
-            questions.append(QuestionInstance(
-                question_id=f"q{question_counter:04d}",
-                template_id="h0_at_war_dyad",
-                resolution_turn=snapshot_turn,
-                horizon="H0",
-                parameters={
-                    "civ_a": civ_a,
-                    "civ_b": civ_b,
-                    "player_id_a": p1,
-                    "player_id_b": p2,
-                    "snapshot_turn": snapshot_turn,
-                },
-                question_text=f"At turn {snapshot_turn}, are {civ_a} and {civ_b} currently at war?",
-                resolution=None,
-            ))
-            question_counter += 1
-
-            # Alliance?
-            questions.append(QuestionInstance(
-                question_id=f"q{question_counter:04d}",
-                template_id="h0_alliance_dyad",
-                resolution_turn=snapshot_turn,
-                horizon="H0",
-                parameters={
-                    "civ_a": civ_a,
-                    "civ_b": civ_b,
-                    "player_id_a": p1,
-                    "player_id_b": p2,
-                    "snapshot_turn": snapshot_turn,
-                },
-                question_text=f"At turn {snapshot_turn}, do {civ_a} and {civ_b} currently have an alliance?",
-                resolution=None,
-            ))
-            question_counter += 1
-
-        # At war with any?
-        for player_id, civ_info in civilizations.items():
-            questions.append(QuestionInstance(
-                question_id=f"q{question_counter:04d}",
-                template_id="h0_at_war_any",
-                resolution_turn=snapshot_turn,
-                horizon="H0",
-                parameters={
-                    "civ": civ_info.name,
-                    "player_id": player_id,
-                    "snapshot_turn": snapshot_turn,
-                },
-                question_text=f"At turn {snapshot_turn}, is {civ_info.name} currently at war with any civilization?",
-                resolution=None,
-            ))
-            question_counter += 1
+        # NOTE: Diplomatic state questions (H0) commented out due to asymmetric/incorrect
+        # data in game_data.json files. The savegame parser stores both directions (X_Y and Y_X)
+        # which can have inconsistent states. See verify_ground_truth.py for details.
+        #
+        # # Diplomatic state questions (H0): current war/alliance status
+        # for p1, p2 in itertools.combinations(civilizations.keys(), 2):
+        #     civ_a = civilizations[p1].name
+        #     civ_b = civilizations[p2].name
+        #
+        #     # At war?
+        #     questions.append(QuestionInstance(
+        #         question_id=f"q{question_counter:04d}",
+        #         template_id="h0_at_war_dyad",
+        #         resolution_turn=snapshot_turn,
+        #         horizon="H0",
+        #         parameters={
+        #             "civ_a": civ_a,
+        #             "civ_b": civ_b,
+        #             "player_id_a": p1,
+        #             "player_id_b": p2,
+        #             "snapshot_turn": snapshot_turn,
+        #         },
+        #         question_text=f"At turn {snapshot_turn}, are {civ_a} and {civ_b} currently at war?",
+        #         resolution=None,
+        #     ))
+        #     question_counter += 1
+        #
+        #     # Alliance?
+        #     questions.append(QuestionInstance(
+        #         question_id=f"q{question_counter:04d}",
+        #         template_id="h0_alliance_dyad",
+        #         resolution_turn=snapshot_turn,
+        #         horizon="H0",
+        #         parameters={
+        #             "civ_a": civ_a,
+        #             "civ_b": civ_b,
+        #             "player_id_a": p1,
+        #             "player_id_b": p2,
+        #             "snapshot_turn": snapshot_turn,
+        #         },
+        #         question_text=f"At turn {snapshot_turn}, do {civ_a} and {civ_b} currently have an alliance?",
+        #         resolution=None,
+        #     ))
+        #     question_counter += 1
+        #
+        # # At war with any?
+        # for player_id, civ_info in civilizations.items():
+        #     questions.append(QuestionInstance(
+        #         question_id=f"q{question_counter:04d}",
+        #         template_id="h0_at_war_any",
+        #         resolution_turn=snapshot_turn,
+        #         horizon="H0",
+        #         parameters={
+        #             "civ": civ_info.name,
+        #             "player_id": player_id,
+        #             "snapshot_turn": snapshot_turn,
+        #         },
+        #         question_text=f"At turn {snapshot_turn}, is {civ_info.name} currently at war with any civilization?",
+        #         resolution=None,
+        #     ))
+        #     question_counter += 1
 
         return QuestionBank(
             game_id=game_id,
@@ -354,28 +358,52 @@ class QuestionGenerator:
 
     def _auto_select_resolution_turns(self, snapshot_turn: int, max_turn: int) -> list[int]:
         """
-        Auto-select resolution turns for H1, H2, H3 horizons.
+        Auto-select resolution turns for H1-H7 horizons.
 
-        H1: 20 turns ahead (short extrapolation)
-        H2: 80 turns ahead (medium, second-order effects)
-        H3: 150 turns ahead (long, regime changes likely)
+        H1: 30 turns ahead
+        H2: 60 turns ahead
+        H3: 90 turns ahead
+        H4: 120 turns ahead
+        H5: 150 turns ahead
+        H6: 180 turns ahead
+        H7: 210 turns ahead
         """
         turns = []
 
-        # H1: Short horizon (20 turns ahead)
-        h1_turn = snapshot_turn + 20
+        # H1: 30 turns ahead
+        h1_turn = snapshot_turn + 30
         if h1_turn <= max_turn:
             turns.append(h1_turn)
 
-        # H2: Medium horizon (80 turns ahead)
-        h2_turn = snapshot_turn + 80
+        # H2: 60 turns ahead
+        h2_turn = snapshot_turn + 60
         if h2_turn <= max_turn:
             turns.append(h2_turn)
 
-        # H3: Long horizon (150 turns ahead)
-        h3_turn = snapshot_turn + 150
+        # H3: 90 turns ahead
+        h3_turn = snapshot_turn + 90
         if h3_turn <= max_turn:
             turns.append(h3_turn)
+
+        # H4: 120 turns ahead
+        h4_turn = snapshot_turn + 120
+        if h4_turn <= max_turn:
+            turns.append(h4_turn)
+
+        # H5: 150 turns ahead
+        h5_turn = snapshot_turn + 150
+        if h5_turn <= max_turn:
+            turns.append(h5_turn)
+
+        # H6: 180 turns ahead
+        h6_turn = snapshot_turn + 180
+        if h6_turn <= max_turn:
+            turns.append(h6_turn)
+
+        # H7: 210 turns ahead
+        h7_turn = snapshot_turn + 210
+        if h7_turn <= max_turn:
+            turns.append(h7_turn)
 
         return turns
 
