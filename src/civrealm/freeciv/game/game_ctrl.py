@@ -169,6 +169,14 @@ class GameCtrl(CivPropController):
         # /* TODO: implement */
         pass
 
+    def handle_edit_startpos(self, packet):
+        # Edit mode packet - stub handler to prevent crashes
+        pass
+
+    def handle_edit_startpos_full(self, packet):
+        # Edit mode packet - stub handler to prevent crashes
+        pass
+
     def handle_edit_object_created(self, packet):
         # /* TODO: implement */
         pass
