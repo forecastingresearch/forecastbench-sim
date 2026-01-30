@@ -743,6 +743,177 @@ def parse_player_technologies(savegame_content: str, ruleset_techs: Optional[Dic
     return player_techs
 
 
+def parse_player_gold(savegame_content: str) -> Dict[int, int]:
+    """Parse player gold/treasury from savegame.
+
+    Gold is stored in each player section as 'gold=N' after ai.level and ai.barb_type.
+    This extracts the gold value for each player, enabling baseline comparison
+    without needing to replay the game.
+
+    Args:
+        savegame_content: Decompressed savegame file content
+
+    Returns:
+        Dict mapping player_id to gold amount:
+        {0: 1409, 1: 425, 2: 1290, ...}
+    """
+    player_gold = {}
+
+    # Find all player sections
+    player_sections = re.finditer(r'\[player(\d+)\]', savegame_content)
+    player_starts = []
+
+    for match in player_sections:
+        player_starts.append((int(match.group(1)), match.end()))
+
+    # Process each player section
+    for i, (player_id, start_pos) in enumerate(player_starts):
+        # Find end of this player section
+        if i + 1 < len(player_starts):
+            end_pos = player_starts[i + 1][1] - len(f'[player{player_starts[i + 1][0]}]')
+        else:
+            # Find next section marker
+            next_section = savegame_content.find('\n[', start_pos)
+            end_pos = next_section if next_section != -1 else len(savegame_content)
+
+        player_content = savegame_content[start_pos:end_pos]
+
+        # Extract gold value
+        gold_match = re.search(r'\ngold=(\d+)', player_content)
+        if gold_match:
+            player_gold[player_id] = int(gold_match.group(1))
+
+    return player_gold
+
+
+def parse_player_scores(savegame_content: str) -> Dict[int, Dict[str, int]]:
+    """Parse player score data from savegame [scoreN] sections.
+
+    Score sections contain comprehensive metrics for each player including
+    population, cities, techs, wonders, etc. This enables baseline comparison
+    without needing to replay the game.
+
+    Args:
+        savegame_content: Decompressed savegame file content
+
+    Returns:
+        Dict mapping player_id to score metrics:
+        {
+            0: {
+                'happy': 9, 'content': 25, 'unhappy': 9,
+                'techs': 22, 'population': 1480, 'cities': 16,
+                'units': 3, 'wonders': 0, 'landarea': 166000, ...
+            },
+            ...
+        }
+    """
+    player_scores = {}
+
+    # Find all [scoreN] sections
+    score_sections = re.finditer(r'\[score(\d+)\](.*?)(?=\[score\d+\]|\[|\Z)', savegame_content, re.DOTALL)
+
+    for match in score_sections:
+        player_id = int(match.group(1))
+        section_content = match.group(2)
+
+        scores = {}
+        # Parse key=value pairs
+        for line in section_content.strip().split('\n'):
+            line = line.strip()
+            if '=' in line:
+                key, value = line.split('=', 1)
+                key = key.strip()
+                value = value.strip()
+                # Try to parse as int
+                try:
+                    scores[key] = int(value)
+                except ValueError:
+                    scores[key] = value
+
+        if scores:
+            player_scores[player_id] = scores
+
+    return player_scores
+
+
+def parse_player_states_for_conditional(savegame_content: str) -> Dict[int, dict]:
+    """Parse player states in the format expected by conditional fork evaluation.
+
+    This is a convenience function that combines gold and score parsing into
+    the same format returned by ForkResult.player_states, enabling direct
+    comparison between savegame baseline and fork intervention results.
+
+    OPTIMIZATION: This function enables skipping the control fork entirely.
+    Instead of running a fork to get baseline values, we parse them directly
+    from the existing savegame. This cuts fork execution time in half.
+
+    Args:
+        savegame_content: Decompressed savegame file content
+
+    Returns:
+        Dict mapping player_id to player state (matching ForkResult.player_states format):
+        {
+            0: {
+                'name': 'S100',
+                'nation': 'Egyptian',
+                'score': 0,  # Note: raw score not directly available, use techs/cities/etc
+                'gold': 1409,
+                'is_alive': True,
+                'researching': 'Astronomy',
+                'techs': 22,
+                'cities': 16,
+                'population': 1480,
+            },
+            ...
+        }
+    """
+    player_states = {}
+
+    # Get gold for each player
+    gold_data = parse_player_gold(savegame_content)
+
+    # Get score metrics for each player
+    score_data = parse_player_scores(savegame_content)
+
+    # Get nation names
+    nation_data = parse_player_nations(savegame_content)
+
+    # Get science/research data
+    science_data = parse_player_science(savegame_content)
+
+    # Find player names and alive status from player sections
+    player_sections = re.finditer(r'\[player(\d+)\](.*?)(?=\[player\d+\]|\[game\]|\Z)', savegame_content, re.DOTALL)
+
+    for match in player_sections:
+        player_id = int(match.group(1))
+        player_content = match.group(2)
+
+        # Extract name
+        name_match = re.search(r'\nname="([^"]+)"', player_content)
+        name = name_match.group(1) if name_match else f"Player {player_id}"
+
+        # Extract is_alive
+        alive_match = re.search(r'\nis_alive=(TRUE|FALSE)', player_content)
+        is_alive = alive_match.group(1) == 'TRUE' if alive_match else True
+
+        player_states[player_id] = {
+            'name': name,
+            'nation': nation_data.get(player_id, f"Nation {player_id}"),
+            'gold': gold_data.get(player_id, 0),
+            'is_alive': is_alive,
+            'researching': science_data.get(player_id, {}).get('researching'),
+            # From score section
+            'techs': score_data.get(player_id, {}).get('techs', 0),
+            'cities': score_data.get(player_id, {}).get('cities', 0),
+            'population': score_data.get(player_id, {}).get('population', 0),
+            'units': score_data.get(player_id, {}).get('units', 0),
+            'wonders': score_data.get(player_id, {}).get('wonders', 0),
+            'landarea': score_data.get(player_id, {}).get('landarea', 0),
+        }
+
+    return player_states
+
+
 def parse_city_wonders(savegame_content: str) -> Dict[int, Dict[str, any]]:
     """Parse city improvement data from savegame to track wonders
 
@@ -898,13 +1069,21 @@ def extract_complete_data_from_savegame(username: str, turn: int, host: str = 'l
         diplomacy = parse_player_diplomacy(content)
         city_wonders = parse_city_wonders(content)
 
+        # Parse gold and scores for conditional evaluation
+        gold = parse_player_gold(content)
+        scores = parse_player_scores(content)
+        player_states = parse_player_states_for_conditional(content)
+
         return {
             'production': production,
             'science': science,
             'nations': nations,
             'technologies': technologies,
             'diplomacy': diplomacy,
-            'city_wonders': city_wonders
+            'city_wonders': city_wonders,
+            'gold': gold,
+            'scores': scores,
+            'player_states': player_states,  # For conditional fork comparison
         }
 
     except Exception as e:
