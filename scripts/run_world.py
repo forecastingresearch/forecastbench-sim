@@ -109,10 +109,8 @@ def main(seed: int, max_turns: int = 50, num_ai_players: int = 5, quiet: bool = 
     # Note: DO NOT enter observer mode - it prevents autosaves on turns 2-50
     # Observer mode causes handle_begin_turn to exit early without calling save_game()
 
-    # Set AI difficulty level for all AI players
-    log(f"Setting AI difficulty to {AI_DIFFICULTY}...")
-    env.unwrapped.civ_controller.ws_client.send_message(f"/set skilllevel {AI_DIFFICULTY}")
-    time.sleep(1)
+    # AI difficulty is set to hard in client_state.py set_multiplayer_game()
+    # via /set skilllevel hard (before aifill) and /hard (after aifill)
 
     # NOTE: phasemode=PLAYER doesn't work with singleplayer + NoOpAgent setup
     # It causes the game to hang waiting for explicit turn control
@@ -128,7 +126,12 @@ def main(seed: int, max_turns: int = 50, num_ai_players: int = 5, quiet: bool = 
     # Toggle the connected player to be AI-controlled by Freeciv's built-in AI
     log(f"Toggling {fc_args['username']} to Freeciv AI control...")
     env.unwrapped.civ_controller.ws_client.send_message(f"/aitoggle {fc_args['username']}")
-    time.sleep(1)
+    time.sleep(0.5)
+
+    # Set the connected player to hard difficulty (after aitoggle makes it an AI)
+    log(f"Setting {fc_args['username']} to hard difficulty...")
+    env.unwrapped.civ_controller.ws_client.send_message(f"/hard {fc_args['username']}")
+    time.sleep(0.5)
 
     # Aifill players are already AI-controlled by default (PLRF_AI flag set)
     # DO NOT toggle them - that would turn OFF their AI!
