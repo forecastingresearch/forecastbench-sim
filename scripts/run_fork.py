@@ -81,6 +81,12 @@ def parse_modification(mod_str: str) -> dict:
             "player_id": player_id,
             "value": int(parts[2])
         }
+    elif mod_type == "gold_add":
+        return {
+            "type": "gold_add",
+            "player_id": player_id,
+            "value": int(parts[2])
+        }
     elif mod_type == "government":
         return {
             "type": "government",
@@ -103,7 +109,9 @@ def modification_to_name(mod: dict) -> str:
     player_id = mod["player_id"]
 
     if mod_type == "gold":
-        return f"gold{mod['value']}_p{player_id}"
+        return f"gold{mod['value']}p{player_id}"
+    elif mod_type == "gold_add":
+        return f"goldadd{mod['value']}p{player_id}"
     elif mod_type == "government":
         return f"gov{mod['value']}_p{player_id}"
     elif mod_type == "tech":

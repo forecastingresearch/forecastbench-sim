@@ -68,7 +68,7 @@ def cleanup_docker_savegames(username: str, container_name: str = 'freeciv-web')
     )
 
 
-def main(seed: int, max_turns: int = 50, num_ai_players: int = 5, quiet: bool = False):
+def main(seed: int, max_turns: int = 50, num_ai_players: int = 5, quiet: bool = False, load_game: str = ""):
     # Use seed as the unique identifier for this run
     # Username requirements (from freeciv-proxy validate_username):
     # - Must be 3-31 characters long
@@ -81,6 +81,7 @@ def main(seed: int, max_turns: int = 50, num_ai_players: int = 5, quiet: bool = 
     fc_args['debug.record_action_and_observation'] = True
     fc_args['max_turns'] = max_turns
     fc_args['aifill'] = num_ai_players
+    fc_args['begin_turn_timeout'] = 120  # Longer timeout for stable long games
 
     # Set seed for deterministic runs
     fc_args['debug.randomly_generate_seeds'] = False
@@ -89,22 +90,37 @@ def main(seed: int, max_turns: int = 50, num_ai_players: int = 5, quiet: bool = 
     # Also seed Python's random module for nation selection (used in civ_controller.py)
     random.seed(seed)
 
+    # Load game support - continue from a previous savegame
+    if load_game:
+        fc_args['debug.load_game'] = load_game
+        fc_args['debug.take_player'] = run_id  # Take control of our player
+        fc_args['begin_turn_timeout'] = 60  # Increase timeout for loaded games
+
     def log(msg):
         if not quiet:
             print(msg)
 
-    log("Starting all-AI game collection...")
+    if load_game:
+        log(f"Continuing game from savegame: {load_game}")
+    else:
+        log("Starting all-AI game collection...")
     log(f"Seed: {seed}")
     log(f"AI Players: {num_ai_players} total (all Freeciv AI at {AI_DIFFICULTY} difficulty)")
-    log(f"Setup: {num_ai_players - 1} via aifill + 1 connected player toggled to AI")
-    log(f"Max turns: {max_turns}")
+    if not load_game:
+        log(f"Setup: {num_ai_players - 1} via aifill + 1 connected player toggled to AI")
+    log(f"Max turns: {max_turns} (fc_args: {fc_args['max_turns']})")
     log(f"Recording to: logs/recordings/{run_id}/")
     log("")
 
-    # Clean up any existing savegames for this run
-    cleanup_docker_savegames(run_id)
+    # Clean up any existing savegames for this run (skip if loading)
+    if not load_game:
+        cleanup_docker_savegames(run_id)
 
-    env = gymnasium.make('civrealm/FreecivBase-v0')
+    # Disable env checker when loading games (observations may be empty initially)
+    if load_game:
+        env = gymnasium.make('civrealm/FreecivBase-v0', disable_env_checker=True)
+    else:
+        env = gymnasium.make('civrealm/FreecivBase-v0')
     # NoOpAgent just ends turn - connected player will be toggled to Freeciv AI
     agent = NoOpAgent()
 
@@ -127,25 +143,32 @@ def main(seed: int, max_turns: int = 50, num_ai_players: int = 5, quiet: bool = 
     # In singleplayer mode, Freeciv uses concurrent turns with built-in randomization
     # which helps mitigate first-mover advantage automatically
 
-    # Randomize starting position assignments to balance the game
-    # teamplacement=DISABLED assigns starting positions randomly rather than by team
-    log("Randomizing starting positions...")
-    env.unwrapped.civ_controller.ws_client.send_message("/set teamplacement DISABLED")
-    time.sleep(0.5)
+    # Skip initial setup if loading a game (settings already in savegame)
+    if not load_game:
+        # Randomize starting position assignments to balance the game
+        # teamplacement=DISABLED assigns starting positions randomly rather than by team
+        log("Randomizing starting positions...")
+        env.unwrapped.civ_controller.ws_client.send_message("/set teamplacement DISABLED")
+        time.sleep(0.5)
 
-    # Toggle the connected player to be AI-controlled by Freeciv's built-in AI
-    log(f"Toggling {fc_args['username']} to Freeciv AI control...")
-    env.unwrapped.civ_controller.ws_client.send_message(f"/aitoggle {fc_args['username']}")
-    time.sleep(0.5)
+        # Toggle the connected player to be AI-controlled by Freeciv's built-in AI
+        log(f"Toggling {fc_args['username']} to Freeciv AI control...")
+        env.unwrapped.civ_controller.ws_client.send_message(f"/aitoggle {fc_args['username']}")
+        time.sleep(0.5)
 
-    # Set the connected player to hard difficulty (after aitoggle makes it an AI)
-    log(f"Setting {fc_args['username']} to hard difficulty...")
-    env.unwrapped.civ_controller.ws_client.send_message(f"/hard {fc_args['username']}")
-    time.sleep(0.5)
+        # Set the connected player to hard difficulty (after aitoggle makes it an AI)
+        log(f"Setting {fc_args['username']} to hard difficulty...")
+        env.unwrapped.civ_controller.ws_client.send_message(f"/hard {fc_args['username']}")
+        time.sleep(0.5)
 
-    # Aifill players are already AI-controlled by default (PLRF_AI flag set)
-    # DO NOT toggle them - that would turn OFF their AI!
-    log(f"All {num_ai_players - 1} aifill players are AI-controlled by default")
+        # Aifill players are already AI-controlled by default (PLRF_AI flag set)
+        # DO NOT toggle them - that would turn OFF their AI!
+        log(f"All {num_ai_players - 1} aifill players are AI-controlled by default")
+    else:
+        # When loading, toggle player back to AI control
+        log(f"Toggling {fc_args['username']} back to Freeciv AI control...")
+        env.unwrapped.civ_controller.ws_client.send_message(f"/aitoggle {fc_args['username']}")
+        time.sleep(0.5)
 
     done = False
     step = 0
@@ -215,11 +238,18 @@ if __name__ == '__main__':
         action='store_true',
         help='Suppress output (useful for batch runs)'
     )
+    parser.add_argument(
+        '--load_game',
+        type=str,
+        default="",
+        help='Load and continue from a savegame (e.g., seed0_T260_2026-01-30-18_01)'
+    )
 
     args = parser.parse_args()
     exit(main(
         seed=args.seed,
         max_turns=args.max_turns,
         num_ai_players=args.num_ai_players,
-        quiet=args.quiet
+        quiet=args.quiet,
+        load_game=args.load_game
     ))
