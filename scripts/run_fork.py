@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 """Run game forks from a checkpoint with modifications.
 
-This script demonstrates the ForkManager by creating and running forks
-from an existing game recording. It enables conditional forecasting by
-comparing game outcomes under different interventions.
+This script runs forks from an existing game recording. Use
+generate_conditional_results.py afterward to generate conditional questions.
 
 Usage:
     # Run baseline (no modifications) from turn 50 to 100
@@ -23,11 +22,15 @@ Usage:
 
 Modification format:
     gold:player_id:amount        - Set player's gold
+    gold_add:player_id:amount    - Add gold to player's treasury
     government:player_id:name    - Set player's government (e.g., Republic)
     tech:player_id:tech_id       - Grant technology by ID
 
+Output:
+    logs/recordings/{seed}fork{name}/savegames/ — Fork savegames
+
 Prerequisites:
-    - A completed game recording at logs/recordings/s{seed}/
+    - A completed game recording at logs/recordings/seed{seed}/
     - Savegames downloaded from Docker to savegames/ subdirectory
     - Run `uv run python scripts/run_world.py --seed {seed} --max_turns {turns}` first
 """

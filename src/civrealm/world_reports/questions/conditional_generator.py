@@ -31,11 +31,44 @@ class ConditionalQuestionGenerator:
     """
 
     # Which target templates make sense for each condition type
+    # Expanded to include all comparative templates for comprehensive conditional questions
     CONDITION_TARGET_MAP: dict[str, list[str]] = {
-        "gold": ["treasury_comparative", "score_comparative", "score_rank_1"],
-        "gold_add": ["treasury_comparative", "score_comparative", "score_rank_1"],
-        "government": ["government_at", "score_comparative", "population_comparative"],
-        "tech": ["tech_discovered", "tech_comparative", "score_comparative"],
+        "gold": [
+            "treasury_comparative",
+            "score_comparative",
+            "score_rank_1",
+            "tech_comparative",
+            "population_comparative",
+            "city_count_comparative",
+            "territory_comparative",
+        ],
+        "gold_add": [
+            "treasury_comparative",
+            "score_comparative",
+            "score_rank_1",
+            "tech_comparative",
+            "population_comparative",
+            "city_count_comparative",
+            "territory_comparative",
+        ],
+        "government": [
+            "government_at",
+            "score_comparative",
+            "population_comparative",
+            "tech_comparative",
+            "city_count_comparative",
+            "territory_comparative",
+            "score_rank_1",
+        ],
+        "tech": [
+            "tech_discovered",
+            "tech_comparative",
+            "score_comparative",
+            "population_comparative",
+            "city_count_comparative",
+            "territory_comparative",
+            "score_rank_1",
+        ],
     }
 
     # Default gold amounts for interventions
@@ -54,6 +87,7 @@ class ConditionalQuestionGenerator:
         game_data: dict[str, Any],
         checkpoint_turn: int,
         end_turn: int,
+        resolution_turns: list[int] | None = None,
         conditions: list[Condition] | None = None,
         target_templates: list[str] | None = None,
     ) -> ConditionalQuestionBank:
@@ -64,7 +98,8 @@ class ConditionalQuestionGenerator:
             game_id: Simulation run identifier (e.g., seed)
             game_data: Output from MetricsCollector.collect_all()
             checkpoint_turn: Turn to create forks from
-            end_turn: Turn to run forks until (resolution turn)
+            end_turn: Maximum turn (used for auto-selecting resolution turns)
+            resolution_turns: Specific turns to resolve questions at; auto-selected if None
             conditions: Specific conditions to use; auto-generated if None
             target_templates: Specific templates to use; uses CONDITION_TARGET_MAP if None
 
@@ -78,18 +113,23 @@ class ConditionalQuestionGenerator:
         if conditions is None:
             conditions = self._auto_generate_conditions(game_data, checkpoint_turn, civilizations)
 
-        # Generate questions pairing conditions with targets
+        # Auto-select resolution turns matching unconditional horizons (H1, H2, H3)
+        if resolution_turns is None:
+            resolution_turns = self._auto_select_resolution_turns(checkpoint_turn, end_turn)
+
+        # Generate questions pairing conditions with targets for each resolution turn
         questions = []
         for condition in conditions:
-            new_questions = self._pair_condition_with_questions(
-                condition=condition,
-                game_data=game_data,
-                checkpoint_turn=checkpoint_turn,
-                end_turn=end_turn,
-                civilizations=civilizations,
-                target_templates=target_templates,
-            )
-            questions.extend(new_questions)
+            for resolution_turn in resolution_turns:
+                new_questions = self._pair_condition_with_questions(
+                    condition=condition,
+                    game_data=game_data,
+                    checkpoint_turn=checkpoint_turn,
+                    resolution_turn=resolution_turn,
+                    civilizations=civilizations,
+                    target_templates=target_templates,
+                )
+                questions.extend(new_questions)
 
         return ConditionalQuestionBank(
             game_id=game_id,
@@ -197,12 +237,25 @@ class ConditionalQuestionGenerator:
 
         return "Despotism"  # Default starting government
 
+    def _auto_select_resolution_turns(self, checkpoint_turn: int, max_turn: int) -> list[int]:
+        """
+        Select resolution turns for H1, H2, H3 horizons.
+
+        Matches the unconditional question generator horizons:
+        - H1: checkpoint_turn + 30
+        - H2: checkpoint_turn + 60
+        - H3: checkpoint_turn + 90
+        """
+        horizons = [30, 60, 90]  # H1, H2, H3
+        turns = [checkpoint_turn + h for h in horizons]
+        return [t for t in turns if t <= max_turn]
+
     def _pair_condition_with_questions(
         self,
         condition: Condition,
         game_data: dict[str, Any],
         checkpoint_turn: int,
-        end_turn: int,
+        resolution_turn: int,
         civilizations: dict[int, CivilizationInfo],
         target_templates: list[str] | None = None,
     ) -> list[ConditionalQuestion]:
@@ -213,7 +266,7 @@ class ConditionalQuestionGenerator:
             condition: The condition to pair
             game_data: Game data for parameter generation
             checkpoint_turn: Fork turn
-            end_turn: Resolution turn
+            resolution_turn: Turn to resolve question at
             civilizations: Available civilizations
             target_templates: Override templates; uses CONDITION_TARGET_MAP if None
 
@@ -237,7 +290,7 @@ class ConditionalQuestionGenerator:
                 template_id=template_id,
                 game_data=game_data,
                 checkpoint_turn=checkpoint_turn,
-                end_turn=end_turn,
+                resolution_turn=resolution_turn,
                 civilizations=civilizations,
             )
             questions.extend(new_questions)
@@ -250,7 +303,7 @@ class ConditionalQuestionGenerator:
         template_id: str,
         game_data: dict[str, Any],
         checkpoint_turn: int,
-        end_turn: int,
+        resolution_turn: int,
         civilizations: dict[int, CivilizationInfo],
     ) -> list[ConditionalQuestion]:
         """Generate conditional questions for a specific template."""
@@ -259,7 +312,14 @@ class ConditionalQuestionGenerator:
         cond_civ = civilizations.get(cond_player)
         cond_civ_name = cond_civ.name if cond_civ else f"Player {cond_player}"
 
-        if template_id in ["treasury_comparative", "score_comparative", "tech_comparative", "population_comparative"]:
+        if template_id in [
+            "treasury_comparative",
+            "score_comparative",
+            "tech_comparative",
+            "population_comparative",
+            "city_count_comparative",
+            "territory_comparative",
+        ]:
             # Comparative: condition player vs each other player
             for other_id, other_civ in civilizations.items():
                 if other_id == cond_player:
@@ -270,7 +330,7 @@ class ConditionalQuestionGenerator:
                     "civ_b": other_civ.name,
                     "player_id_a": cond_player,
                     "player_id_b": other_id,
-                    "resolution_turn": end_turn,
+                    "resolution_turn": resolution_turn,
                     "checkpoint_turn": checkpoint_turn,
                 }
 
@@ -280,7 +340,7 @@ class ConditionalQuestionGenerator:
                     target_template_id=template_id,
                     target_parameters=params,
                     checkpoint_turn=checkpoint_turn,
-                    resolution_turn=end_turn,
+                    resolution_turn=resolution_turn,
                 ))
                 self._question_counter += 1
 
@@ -289,7 +349,7 @@ class ConditionalQuestionGenerator:
             params = {
                 "civ": cond_civ_name,
                 "player_id": cond_player,
-                "resolution_turn": end_turn,
+                "resolution_turn": resolution_turn,
                 "checkpoint_turn": checkpoint_turn,
             }
 
@@ -299,7 +359,7 @@ class ConditionalQuestionGenerator:
                 target_template_id=template_id,
                 target_parameters=params,
                 checkpoint_turn=checkpoint_turn,
-                resolution_turn=end_turn,
+                resolution_turn=resolution_turn,
             ))
             self._question_counter += 1
 
@@ -315,7 +375,7 @@ class ConditionalQuestionGenerator:
                 "civ": cond_civ_name,
                 "player_id": cond_player,
                 "government_type": gov_type,
-                "resolution_turn": end_turn,
+                "resolution_turn": resolution_turn,
                 "checkpoint_turn": checkpoint_turn,
             }
 
@@ -325,7 +385,7 @@ class ConditionalQuestionGenerator:
                 target_template_id=template_id,
                 target_parameters=params,
                 checkpoint_turn=checkpoint_turn,
-                resolution_turn=end_turn,
+                resolution_turn=resolution_turn,
             ))
             self._question_counter += 1
 
@@ -349,7 +409,7 @@ class ConditionalQuestionGenerator:
                 "player_id": cond_player,
                 "tech_name": tech_name,
                 "tech_id": tech_id,
-                "resolution_turn": end_turn,
+                "resolution_turn": resolution_turn,
                 "checkpoint_turn": checkpoint_turn,
             }
 
@@ -359,7 +419,7 @@ class ConditionalQuestionGenerator:
                 target_template_id=template_id,
                 target_parameters=params,
                 checkpoint_turn=checkpoint_turn,
-                resolution_turn=end_turn,
+                resolution_turn=resolution_turn,
             ))
             self._question_counter += 1
 

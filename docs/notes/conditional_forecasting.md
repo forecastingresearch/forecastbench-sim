@@ -62,41 +62,66 @@ Currently supported interventions:
 
 | Type | Value | Example |
 |------|-------|---------|
-| `gold` | Amount to add | `gold:0:5000` — Give player 0 5000 gold |
+| `gold` | Amount to set | `gold:0:5000` — Set player 0 gold to 5000 |
+| `gold_add` | Amount to add | `gold_add:0:5000` — Add 5000 gold to player 0 |
 | `government` | Government name | `government:1:Republic` — Switch player 1 to Republic |
 | `tech` | Tech ID | `tech:0:23` — Grant player 0 Iron Working |
 
 ## Usage
 
-### Generate conditional questions for a seed
+Conditional forecasting is a two-step process:
+
+### Step 1: Run fork (simulation)
+
+The `run_fork.py` script runs the fork simulation only:
 
 ```bash
-uv run python scripts/run_conditional_forks.py \
-  --seed 100 \
+# Run fork with gold modification
+uv run python scripts/run_fork.py \
+  --base-seed 0 \
   --checkpoint-turn 50 \
-  --end-turn 100 \
-  --output data/questions/s100/
+  --end-turn 300 \
+  --modification "gold_add:0:5000"
 ```
 
-### With a specific condition
+This produces:
+- `logs/recordings/s0forkgoldadd5000p0/savegames/` — Fork savegames
+
+### Step 2: Generate conditional results (benchmark prep)
+
+Use `generate_conditional_results.py` to create conditional questions:
 
 ```bash
-uv run python scripts/run_conditional_forks.py \
-  --seed 100 \
+uv run python scripts/generate_conditional_results.py \
+  --baseline-dir logs/recordings/s0 \
+  --fork-dir logs/recordings/s0forkgoldadd5000p0 \
+  --condition "gold_add:0:5000" \
   --checkpoint-turn 50 \
-  --end-turn 100 \
-  --condition "gold:0:5000" \
-  --output data/questions/s100/
+  --end-turn 300
 ```
 
-### Dry run (generate questions without executing forks)
+This produces:
+- `logs/recordings/s0forkgoldadd5000p0/conditional_results.json` — Results
+
+### Multiple modifications
 
 ```bash
-uv run python scripts/run_conditional_forks.py \
-  --seed 100 \
+# Step 1: Run fork
+uv run python scripts/run_fork.py \
+  --base-seed 0 \
   --checkpoint-turn 50 \
   --end-turn 100 \
-  --dry-run
+  --modification "gold_add:0:5000" \
+  --modification "tech:0:23"
+
+# Step 2: Generate results
+uv run python scripts/generate_conditional_results.py \
+  --baseline-dir logs/recordings/s0 \
+  --fork-dir logs/recordings/s0forkgoldadd5000p0_tech23p0 \
+  --condition "gold_add:0:5000" \
+  --condition "tech:0:23" \
+  --checkpoint-turn 50 \
+  --end-turn 100
 ```
 
 ## Output Format
@@ -156,11 +181,10 @@ Evaluation-compatible format (matches unconditional question format):
 
 Before running conditional forks:
 
-1. **Complete game recording** at `logs/recordings/s{seed}/`
-2. **Savegames downloaded** from Docker to `logs/recordings/s{seed}/savegames/`
-3. **Game data** at `data/games/s{seed}_data.json`
+1. **Complete game recording** at `logs/recordings/seed{seed}/`
+2. **Savegames downloaded** from Docker to `logs/recordings/seed{seed}/savegames/`
 
-See the main recording workflow for generating these.
+Game data is optional but improves civilization names in question text.
 
 ## Evaluation
 
