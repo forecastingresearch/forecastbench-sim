@@ -10,6 +10,7 @@ def load_all_questions(
     data_dir: Path,
     template_filter: str | None = None,
     include_h0: bool = True,
+    include_conditional: bool = True,
     min_difficulty: float | None = None,
     max_difficulty: float | None = None,
     difficulty_percentile_min: float | None = None,
@@ -26,6 +27,7 @@ def load_all_questions(
         data_dir: Directory containing questions (either combined file or game folders)
         template_filter: Optional filter to only load questions of a specific template
         include_h0: Whether to also load from h0_questions.json (default: True)
+        include_conditional: Whether to also load from conditional_questions.json (default: True)
         min_difficulty: Minimum difficulty score (0.0-1.0, higher = harder)
         max_difficulty: Maximum difficulty score (0.0-1.0, higher = harder)
         difficulty_percentile_min: Minimum difficulty percentile (0-100)
@@ -44,7 +46,9 @@ def load_all_questions(
         questions = _load_from_combined_file(combined_file, template_filter)
     else:
         # Fall back to per-game directory structure
-        questions = _load_from_game_directories(data_dir, template_filter, include_h0)
+        questions = _load_from_game_directories(
+            data_dir, template_filter, include_h0, include_conditional
+        )
 
     # Apply difficulty filtering if specified
     if any([min_difficulty, max_difficulty, difficulty_percentile_min, difficulty_percentile_max]):
@@ -116,6 +120,7 @@ def _load_from_game_directories(
     data_dir: Path,
     template_filter: str | None = None,
     include_h0: bool = True,
+    include_conditional: bool = True,
 ) -> list[dict]:
     """Load questions from per-game directory structure."""
     questions = []
@@ -124,6 +129,8 @@ def _load_from_game_directories(
     question_files = ["questions.json"]
     if include_h0:
         question_files.append("h0_questions.json")
+    if include_conditional:
+        question_files.append("conditional_questions.json")
 
     for game_dir in sorted(data_dir.iterdir()):
         if not game_dir.is_dir():

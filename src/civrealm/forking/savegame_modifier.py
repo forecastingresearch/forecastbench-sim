@@ -85,6 +85,17 @@ class SavegameModifier:
         replacement = rf'\g<1>{gold}'
         self.content = re.sub(pattern, replacement, self.content, flags=re.DOTALL)
 
+    def add_player_gold(self, player_id: int, amount: int) -> None:
+        """
+        Add gold to a player's current amount.
+
+        Args:
+            player_id: Player number (0-indexed)
+            amount: Gold amount to add (can be negative)
+        """
+        current = self.get_player_gold(player_id)
+        self.set_player_gold(player_id, current + amount)
+
     def set_player_government(self, player_id: int, government: str) -> None:
         """
         Set a player's government type.

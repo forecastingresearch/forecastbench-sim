@@ -332,25 +332,30 @@ def _build_conditional_question_text(
     """
     Build the question text for a conditional question.
 
-    For intervention: "Given that X happens, will Y?"
-    For control: "Assuming X does NOT happen, will Y?"
+    For intervention: "If X received Y next turn, would Z?"
+    For control: "Without any X bonus, would Z?"
     """
     # Build condition description
     if condition.condition_type == "gold":
         if is_intervention:
-            condition_phrase = f"Given that {civ_name} receives {condition.value} gold at turn {target_params.get('checkpoint_turn', 'N')}"
+            condition_phrase = f"If {civ_name} received {condition.value} gold next turn"
         else:
-            condition_phrase = f"Assuming {civ_name} does NOT receive a gold bonus"
+            condition_phrase = f"Without any gold bonus"
+    elif condition.condition_type == "gold_add":
+        if is_intervention:
+            condition_phrase = f"If {civ_name} received +{condition.value} gold next turn"
+        else:
+            condition_phrase = f"Without any gold bonus"
     elif condition.condition_type == "government":
         if is_intervention:
-            condition_phrase = f"Given that {civ_name} changes to {condition.value} government"
+            condition_phrase = f"If {civ_name} changed to {condition.value} government"
         else:
-            condition_phrase = f"Assuming {civ_name} does NOT change government"
+            condition_phrase = f"Without changing government"
     elif condition.condition_type == "tech":
         if is_intervention:
-            condition_phrase = f"Given that {civ_name} is granted technology {condition.value}"
+            condition_phrase = f"If {civ_name} were granted technology {condition.value}"
         else:
-            condition_phrase = f"Assuming {civ_name} is NOT granted additional technology"
+            condition_phrase = f"Without any technology grant"
     else:
         condition_phrase = condition.description
 
@@ -370,23 +375,23 @@ def _build_target_question(
     civ_b = params.get("civ_b", "the other civilization")
 
     if template_id == "treasury_comparative":
-        return f"will {civ_a} have more treasury than {civ_b} at turn {resolution_turn}?"
+        return f"would {civ_a} have a larger treasury than {civ_b} at turn {resolution_turn}?"
     elif template_id == "score_comparative":
-        return f"will {civ_a} have a higher score than {civ_b} at turn {resolution_turn}?"
+        return f"would {civ_a} have a higher score than {civ_b} at turn {resolution_turn}?"
     elif template_id == "tech_comparative":
-        return f"will {civ_a} have more technologies than {civ_b} at turn {resolution_turn}?"
+        return f"would {civ_a} have more technologies than {civ_b} at turn {resolution_turn}?"
     elif template_id == "population_comparative":
-        return f"will {civ_a} have a larger population than {civ_b} at turn {resolution_turn}?"
+        return f"would {civ_a} have a larger population than {civ_b} at turn {resolution_turn}?"
     elif template_id == "score_rank_1":
-        return f"will {civ_a} be ranked #1 at turn {resolution_turn}?"
+        return f"would {civ_a} be ranked #1 at turn {resolution_turn}?"
     elif template_id == "government_at":
         gov_type = params.get("government_type", "Republic")
-        return f"will {civ_a} be in {gov_type} at turn {resolution_turn}?"
+        return f"would {civ_a} be in {gov_type} at turn {resolution_turn}?"
     elif template_id == "tech_discovered":
         tech_name = params.get("tech_name", "the technology")
-        return f"will {civ_a} have discovered {tech_name} by turn {resolution_turn}?"
+        return f"would {civ_a} have discovered {tech_name} by turn {resolution_turn}?"
     else:
-        return f"will the target outcome occur at turn {resolution_turn}?"
+        return f"would the target outcome occur at turn {resolution_turn}?"
 
 
 def to_question_bank(

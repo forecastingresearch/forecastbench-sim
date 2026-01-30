@@ -33,6 +33,7 @@ class ConditionalQuestionGenerator:
     # Which target templates make sense for each condition type
     CONDITION_TARGET_MAP: dict[str, list[str]] = {
         "gold": ["treasury_comparative", "score_comparative", "score_rank_1"],
+        "gold_add": ["treasury_comparative", "score_comparative", "score_rank_1"],
         "government": ["government_at", "score_comparative", "population_comparative"],
         "tech": ["tech_discovered", "tech_comparative", "score_comparative"],
     }
@@ -432,6 +433,14 @@ def create_condition(
             player_id=player_id,
             value=int(value),
             description=f"{civ_name} receives {value} gold",
+        )
+    elif condition_type == "gold_add":
+        return Condition(
+            condition_id=f"goldadd_{value}_p{player_id}",
+            condition_type="gold_add",
+            player_id=player_id,
+            value=int(value),
+            description=f"{civ_name} receives +{value} gold",
         )
     elif condition_type == "government":
         return Condition(

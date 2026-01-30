@@ -187,7 +187,7 @@ class ForkManager:
         # Note: username CANNOT contain underscores - Freeciv extracts host_name
         # from savegame filename by splitting on '_', so underscores in username
         # will break the load_game authentication.
-        username = f"s{self.base_seed}fork{fork_name}"
+        username = f"seed{self.base_seed}fork{fork_name}"
 
         # Create output directory for this fork
         output_dir = str(self.base_dir.parent / username)
@@ -349,6 +349,8 @@ class ForkManager:
                     mod_type = mod.get("type")
                     if mod_type == "gold":
                         modifier.set_player_gold(mod["player_id"], mod["value"])
+                    elif mod_type == "gold_add":
+                        modifier.add_player_gold(mod["player_id"], mod["value"])
                     elif mod_type == "government":
                         modifier.set_player_government(mod["player_id"], mod["value"])
                     elif mod_type == "tech":

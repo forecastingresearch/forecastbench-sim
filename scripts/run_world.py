@@ -17,7 +17,12 @@ Setup:
 - All players use the same Freeciv AI algorithm
 
 Output:
-- Recordings saved to: logs/recordings/s{seed}/
+- Recordings saved to: logs/recordings/seed{seed}/
+
+Authentication note:
+- The freeciv-proxy validates usernames via regex: [a-z][a-z0-9]* with 3-31 char length
+- If usernames exist in the auth table with different passwords, authentication fails
+- Solution: Use fresh usernames OR clear auth table: mysql -u docker -pchangeme freeciv_web -e 'DELETE FROM auth;'
 """
 
 import sys
@@ -65,8 +70,13 @@ def cleanup_docker_savegames(username: str, container_name: str = 'freeciv-web')
 
 def main(seed: int, max_turns: int = 50, num_ai_players: int = 5, quiet: bool = False):
     # Use seed as the unique identifier for this run
-    # Freeciv requires non-numeric usernames, so prefix with 's' for seed
-    run_id = f's{seed}'
+    # Username requirements (from freeciv-proxy validate_username):
+    # - Must be 3-31 characters long
+    # - Must start with a letter [a-z]
+    # - Can only contain letters and numbers [a-z0-9]
+    # - Cannot be "pbem"
+    # Using 'seed' prefix ensures minimum 5 chars even for seed=0
+    run_id = f'seed{seed}'
     fc_args['username'] = run_id
     fc_args['debug.record_action_and_observation'] = True
     fc_args['max_turns'] = max_turns
@@ -171,8 +181,9 @@ def main(seed: int, max_turns: int = 50, num_ai_players: int = 5, quiet: bool = 
     env.close()
 
     # Download and persist all savegames from Docker container
-    recording_dir = f'logs/recordings/{run_id}'
-    downloaded, skipped, failed = download_all_savegames_from_docker(run_id, recording_dir)
+    recording_dir = Path(__file__).parent.parent / 'logs' / 'recordings' / run_id
+    recording_dir.mkdir(parents=True, exist_ok=True)
+    downloaded, skipped, failed = download_all_savegames_from_docker(run_id, str(recording_dir))
     log(f"Downloaded {downloaded} savegames (skipped {skipped} existing, {failed} failed)")
 
     return 0

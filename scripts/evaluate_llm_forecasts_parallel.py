@@ -79,8 +79,8 @@ FORECASTBENCH_MODELS = [
 
 # Frontier models without ForecastBench scores yet (LiteLLM format: provider/model)
 FRONTIER_MODELS = [
-    # "anthropic/claude-opus-4-5-20251101",
-    # "anthropic/claude-sonnet-4-5-20250929",
+    "anthropic/claude-opus-4-5-20251101",
+    "anthropic/claude-sonnet-4-5-20250929",
     "google/gemini-3-pro-preview",
     "openai/gpt-5.1-2025-11-13",
 ]

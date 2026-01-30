@@ -187,12 +187,14 @@ class ConditionalQuestionRunner:
             )
 
         # Run only the intervention fork
+        # Generate descriptive name from condition (no underscores allowed by Freeciv)
+        fork_name = f"{cond.condition_type.replace('_', '')}{cond.value}p{cond.player_id}"
         intervention_mods = [self._condition_to_modification(cond)]
         intervention_script = self._create_fork_script(
             checkpoint_turn=checkpoint,
             end_turn=end_turn,
             modifications=intervention_mods,
-            fork_name=f"intv{self._fork_counter}",
+            fork_name=fork_name,
         )
         self._fork_counter += 1
 
@@ -303,13 +305,14 @@ class ConditionalQuestionRunner:
                 print(f"  Running fork for {len(questions)} questions...")
 
             # Run the intervention fork ONCE for this condition
-            # Use simple numeric fork names to avoid freeciv username restrictions
+            # Generate descriptive name from condition (no underscores allowed by Freeciv)
+            fork_name = f"{cond.condition_type.replace('_', '')}{cond.value}p{cond.player_id}"
             intervention_mods = [self._condition_to_modification(cond)]
             intervention_script = self._create_fork_script(
                 checkpoint_turn=checkpoint,
                 end_turn=bank.end_turn,
                 modifications=intervention_mods,
-                fork_name=f"intv{self._fork_counter}",
+                fork_name=fork_name,
             )
             self._fork_counter += 1
 

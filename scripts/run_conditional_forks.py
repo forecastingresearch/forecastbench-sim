@@ -74,6 +74,8 @@ def parse_condition(cond_str: str) -> dict:
 
     if cond_type == "gold":
         value = int(parts[2])
+    elif cond_type == "gold_add":
+        value = int(parts[2])
     elif cond_type == "government":
         value = parts[2]
     elif cond_type == "tech":
@@ -93,7 +95,7 @@ def main():
 
     # Determine paths
     civbench_dir = Path(__file__).parent.parent
-    recording_dir = args.recording_dir or f"logs/recordings/s{args.seed}"
+    recording_dir = args.recording_dir or f"logs/recordings/seed{args.seed}"
     recording_path = civbench_dir / recording_dir
 
     if not recording_path.exists():
@@ -107,7 +109,7 @@ def main():
         print("Download savegames from Docker first.")
         return 1
 
-    game_data_path = args.game_data or civbench_dir / "data" / "games" / f"s{args.seed}_data.json"
+    game_data_path = args.game_data or civbench_dir / "data" / "games" / f"seed{args.seed}_data.json"
     game_data_path = Path(game_data_path)
 
     if not game_data_path.exists():
@@ -115,7 +117,7 @@ def main():
         print(f"Run `python scripts/generate_questions.py --seed {args.seed}` first.")
         return 1
 
-    output_dir = Path(args.output) if args.output else civbench_dir / "data" / "questions" / f"s{args.seed}"
+    output_dir = Path(args.output) if args.output else civbench_dir / "data" / "questions" / f"seed{args.seed}"
     output_dir.mkdir(parents=True, exist_ok=True)
 
     # Load game data
@@ -160,7 +162,7 @@ def main():
 
     generator = ConditionalQuestionGenerator()
     cond_bank = generator.generate_conditional_bank(
-        game_id=f"s{args.seed}",
+        game_id=f"seed{args.seed}",
         game_data=game_data,
         checkpoint_turn=args.checkpoint_turn,
         end_turn=args.end_turn,
