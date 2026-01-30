@@ -7,16 +7,57 @@ A fork of [CivRealm](https://github.com/bigai-ai/civrealm).
 ![Punic War](docs/assets/punic_war_base.jpg)
 
 
+## Pipeline Overview
+
+CivBench has three clearly separated stages:
+
+### Stage 1: Generate Worlds (Simulation)
+```bash
+# Run baseline games
+python scripts/run_worlds.py --seeds 1-100 --max_turns 300
+
+# Run forked games with interventions (for conditional forecasting)
+python scripts/run_fork.py --base-seed 0 --checkpoint-turn 50 --end-turn 300 \
+  --modification "gold_add:0:5000"
+```
+
+### Stage 2: Prepare Benchmark (Question Generation)
+```bash
+# Extract game data from recordings
+python scripts/generate_data_batch.py
+
+# Generate world reports + questions
+python scripts/prepare_benchmark.py --all
+
+# Generate conditional questions from forks
+python scripts/generate_conditional_results.py \
+  --baseline-dir logs/recordings/s0 \
+  --fork-dir logs/recordings/s0forkgoldadd5000p0 \
+  --condition "gold_add:0:5000" \
+  --checkpoint-turn 50 --end-turn 300
+```
+
+### Stage 3: Run Benchmark (Evaluation)
+```bash
+python scripts/evaluate_llm_forecasts_parallel.py --questions-per-difficulty 20
+```
+
 ## Quickstart
 
 ```bash
 # 1. Run games (generates recordings)
 python scripts/run_worlds.py --seeds 1-100 --max_turns 300
 
-# 2. Generate data + questions
-python scripts/generate_data_batch.py && python scripts/regenerate_questions.py
+# 2. Extract game data
+python scripts/generate_data_batch.py
 
-# 3. Evaluate models
+# 3. Prepare benchmark (world reports + questions)
+python scripts/prepare_benchmark.py --all
+
+# For a single game (e.g., seed0):
+python scripts/prepare_benchmark.py --game-id seed0
+
+# 4. Evaluate models
 python scripts/evaluate_llm_forecasts_parallel.py --questions-per-difficulty 20
 ```
 
@@ -262,6 +303,41 @@ python scripts/compute_base_rates.py --data-dir data/games --snapshot-turn 60
 - [signal_statistics.py](src/civrealm/world_reports/questions/signal_statistics.py) - Embedded statistics and threshold functions
 - [generator.py](src/civrealm/world_reports/questions/generator.py) - Question generation with calibrated thresholds
 
+### Conditional Forecasting
+
+Conditional forecasting tests counterfactual reasoning: "If X happened, how would that change Y?"
+
+This is implemented via **world forking** — running parallel simulations where one world has an intervention applied.
+
+```bash
+# Step 1: Run fork (simulation only)
+uv run python scripts/run_fork.py \
+  --base-seed 0 \
+  --checkpoint-turn 50 \
+  --end-turn 300 \
+  --modification "gold_add:0:5000"
+
+# Step 2: Generate conditional results (benchmark prep)
+uv run python scripts/generate_conditional_results.py \
+  --baseline-dir logs/recordings/s0 \
+  --fork-dir logs/recordings/s0forkgoldadd5000p0 \
+  --condition "gold_add:0:5000" \
+  --checkpoint-turn 50 \
+  --end-turn 300
+```
+
+This produces:
+- `logs/recordings/s0forkgoldadd5000p0/savegames/` — Fork savegames
+- `logs/recordings/s0forkgoldadd5000p0/conditional_results.json` — Conditional question results
+
+**Supported interventions:**
+- `gold_add:player_id:amount` — Add gold to player's treasury
+- `gold:player_id:amount` — Set player's gold
+- `government:player_id:name` — Change government (e.g., Republic)
+- `tech:player_id:tech_id` — Grant technology
+
+See [docs/notes/conditional_forecasting.md](docs/notes/conditional_forecasting.md) for detailed documentation.
+
 ### LLM Evaluation
 
 The evaluation system measures LLM forecasting performance using parallel model queries and stratified-batched sampling.
@@ -346,29 +422,33 @@ All utility scripts are in the `scripts/` directory:
 | [run_world.py](scripts/run_world.py) | Run a single AI-vs-AI game with deterministic seed |
 | [run_worlds.py](scripts/run_worlds.py) | Run multiple games in parallel |
 
-**Data Extraction & Analysis:**
+**Conditional Forecasting (World Forks):**
+
+| Script | Description |
+|--------|-------------|
+| [run_fork.py](scripts/run_fork.py) | Run fork from checkpoint with modifications (simulation only) |
+| [generate_conditional_results.py](scripts/generate_conditional_results.py) | Generate conditional results from fork savegames |
+
+**Data Extraction & Benchmark Preparation:**
 
 | Script | Description |
 |--------|-------------|
 | [generate_data_batch.py](scripts/generate_data_batch.py) | Batch extract JSON data from game recordings |
-| [compute_signal_statistics.py](scripts/compute_signal_statistics.py) | Extract percentile statistics from game data |
-| [compute_base_rates.py](scripts/compute_base_rates.py) | Compute base rates across games |
-| [calibrate_thresholds.py](scripts/calibrate_thresholds.py) | Calibrate threshold values |
-| [test_world_report.py](scripts/test_world_report.py) | Generate world reports from existing recordings |
-
-**Question Generation:**
-
-| Script | Description |
-|--------|-------------|
-| [generate_questions.py](scripts/generate_questions.py) | Generate all question types from a single game data file |
-| [generate_questions_batch.py](scripts/generate_questions_batch.py) | Generate all question types from all games (parallel processing) |
+| [prepare_benchmark.py](scripts/prepare_benchmark.py) | Generate world reports + questions (single game with `--game-id` or batch with `--all`) |
 
 **LLM Evaluation:**
 
 | Script | Description |
 |--------|-------------|
-| [evaluate_llm_forecasts_parallel.py](scripts/evaluate_llm_forecasts_parallel.py) | Parallel LLM evaluation with stratified sampling (primary) |
-| [evaluate_llm_forecasts.py](scripts/evaluate_llm_forecasts.py) | Sequential evaluation (legacy) |
+| [evaluate_llm_forecasts_parallel.py](scripts/evaluate_llm_forecasts_parallel.py) | Parallel LLM evaluation with stratified sampling |
+
+**Validation (require Docker + recordings):**
+
+| Script | Description |
+|--------|-------------|
+| [check_determinism.py](scripts/check_determinism.py) | Verify game determinism across runs |
+| [check_difficulty.py](scripts/check_difficulty.py) | Validate difficulty calibration |
+| [check_parallel_forks.py](scripts/check_parallel_forks.py) | Test parallel fork execution |
 
 ## Prerequisites
 
