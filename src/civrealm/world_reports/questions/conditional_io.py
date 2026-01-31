@@ -390,6 +390,13 @@ def _build_target_question(
     elif template_id == "tech_discovered":
         tech_name = params.get("tech_name", "the technology")
         return f"would {civ_a} have discovered {tech_name} by turn {resolution_turn}?"
+    elif template_id == "city_count_comparative":
+        return f"would {civ_a} have more cities than {civ_b} at turn {resolution_turn}?"
+    elif template_id == "territory_comparative":
+        return f"would {civ_a} control more territory than {civ_b} at turn {resolution_turn}?"
+    elif template_id == "wonder_completed":
+        wonder_name = params.get("wonder_name", "a wonder")
+        return f"would {civ_a} have completed {wonder_name} by turn {resolution_turn}?"
     else:
         return f"would the target outcome occur at turn {resolution_turn}?"
 

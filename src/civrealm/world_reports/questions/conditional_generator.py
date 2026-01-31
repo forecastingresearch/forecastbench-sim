@@ -3,10 +3,10 @@ Generator for conditional forecasting questions.
 
 Creates ConditionalQuestions by pairing:
 - Conditions (interventions): gold boost, tech grant, government change
-- Target questions: existing templates like treasury_comparative, score_rank_1
+- Target questions: ALL templates (same as unconditional questions)
 
-The generator selects appropriate target questions based on condition type
-to ensure meaningful causal relationships.
+Uses the same templates as unconditional questions - let the data show
+what's causally linked rather than assuming it.
 """
 
 from datetime import datetime
@@ -24,52 +24,22 @@ class ConditionalQuestionGenerator:
     """
     Generates conditional questions pairing interventions with target questions.
 
-    Condition-Target Mappings:
-    - gold: treasury_comparative, score_comparative, score_rank_1
-    - government: government_at, score_comparative, population_comparative
-    - tech: tech_discovered, tech_comparative, score_comparative
+    Uses ALL templates (same as unconditional) for every condition type.
     """
 
-    # Which target templates make sense for each condition type
-    # Expanded to include all comparative templates for comprehensive conditional questions
-    CONDITION_TARGET_MAP: dict[str, list[str]] = {
-        "gold": [
-            "treasury_comparative",
-            "score_comparative",
-            "score_rank_1",
-            "tech_comparative",
-            "population_comparative",
-            "city_count_comparative",
-            "territory_comparative",
-        ],
-        "gold_add": [
-            "treasury_comparative",
-            "score_comparative",
-            "score_rank_1",
-            "tech_comparative",
-            "population_comparative",
-            "city_count_comparative",
-            "territory_comparative",
-        ],
-        "government": [
-            "government_at",
-            "score_comparative",
-            "population_comparative",
-            "tech_comparative",
-            "city_count_comparative",
-            "territory_comparative",
-            "score_rank_1",
-        ],
-        "tech": [
-            "tech_discovered",
-            "tech_comparative",
-            "score_comparative",
-            "population_comparative",
-            "city_count_comparative",
-            "territory_comparative",
-            "score_rank_1",
-        ],
-    }
+    # All templates used for conditional questions (same as unconditional)
+    ALL_TARGET_TEMPLATES: list[str] = [
+        "treasury_comparative",
+        "score_comparative",
+        "tech_comparative",
+        "population_comparative",
+        "city_count_comparative",
+        "territory_comparative",
+        "score_rank_1",
+        "tech_discovered",
+        "wonder_completed",
+        "government_at",
+    ]
 
     # Default gold amounts for interventions
     DEFAULT_GOLD_AMOUNTS = [5000, 10000]
@@ -237,6 +207,41 @@ class ConditionalQuestionGenerator:
 
         return "Despotism"  # Default starting government
 
+    def _get_government_types(
+        self,
+        game_data: dict[str, Any],
+        player_id: int,
+        checkpoint_turn: int,
+    ) -> list[str]:
+        """
+        Get government types to ask about for a player.
+
+        Returns government types that make sense to ask about:
+        - The player's current government
+        - Common government types (Republic, Monarchy, Democracy)
+        - Governments used by other players
+        """
+        gov_types = set()
+
+        # Add player's current government
+        current_gov = self._get_current_government(game_data, player_id, checkpoint_turn)
+        if current_gov:
+            gov_types.add(current_gov)
+
+        # Add common government types
+        for gov in self.DEFAULT_GOVERNMENTS:
+            gov_types.add(gov)
+
+        # Add governments from game events (other players' governments)
+        events = game_data.get("events", [])
+        for e in events:
+            if e.get("type") == "government_change" and e.get("turn", 0) <= checkpoint_turn:
+                gov_to = e.get("metadata", {}).get("to")
+                if gov_to:
+                    gov_types.add(gov_to)
+
+        return list(gov_types)
+
     def _auto_select_resolution_turns(self, checkpoint_turn: int, max_turn: int) -> list[int]:
         """
         Select resolution turns for H1, H2, H3 horizons.
@@ -260,7 +265,7 @@ class ConditionalQuestionGenerator:
         target_templates: list[str] | None = None,
     ) -> list[ConditionalQuestion]:
         """
-        Create conditional questions pairing a condition with appropriate targets.
+        Create conditional questions pairing a condition with ALL templates.
 
         Args:
             condition: The condition to pair
@@ -268,20 +273,15 @@ class ConditionalQuestionGenerator:
             checkpoint_turn: Fork turn
             resolution_turn: Turn to resolve question at
             civilizations: Available civilizations
-            target_templates: Override templates; uses CONDITION_TARGET_MAP if None
+            target_templates: Override templates; uses ALL_TARGET_TEMPLATES if None
 
         Returns:
             List of ConditionalQuestions
         """
         questions = []
 
-        # Determine which templates to use
-        if target_templates is None:
-            templates = self.CONDITION_TARGET_MAP.get(condition.condition_type, [])
-        else:
-            # Filter to templates valid for this condition type
-            valid = set(self.CONDITION_TARGET_MAP.get(condition.condition_type, []))
-            templates = [t for t in target_templates if t in valid]
+        # Use all templates (same as unconditional)
+        templates = target_templates if target_templates else self.ALL_TARGET_TEMPLATES
 
         # Generate questions for each template
         for template_id in templates:
@@ -364,64 +364,89 @@ class ConditionalQuestionGenerator:
             self._question_counter += 1
 
         elif template_id == "government_at":
-            # Government: check if player is in a specific government
-            # For government conditions, ask about the target government
-            if condition.condition_type == "government":
-                gov_type = condition.value
-            else:
-                gov_type = "Republic"
+            # Government: check if player is in specific governments
+            # Generate questions for multiple government types (like unconditional)
+            gov_types_to_ask = self._get_government_types(game_data, cond_player, checkpoint_turn)
 
-            params = {
-                "civ": cond_civ_name,
-                "player_id": cond_player,
-                "government_type": gov_type,
-                "resolution_turn": resolution_turn,
-                "checkpoint_turn": checkpoint_turn,
-            }
+            for gov_type in gov_types_to_ask:
+                params = {
+                    "civ": cond_civ_name,
+                    "player_id": cond_player,
+                    "government_type": gov_type,
+                    "resolution_turn": resolution_turn,
+                    "checkpoint_turn": checkpoint_turn,
+                }
 
-            questions.append(ConditionalQuestion(
-                conditional_id=f"cond_q{self._question_counter:04d}",
-                condition=condition,
-                target_template_id=template_id,
-                target_parameters=params,
-                checkpoint_turn=checkpoint_turn,
-                resolution_turn=resolution_turn,
-            ))
-            self._question_counter += 1
+                questions.append(ConditionalQuestion(
+                    conditional_id=f"cond_q{self._question_counter:04d}",
+                    condition=condition,
+                    target_template_id=template_id,
+                    target_parameters=params,
+                    checkpoint_turn=checkpoint_turn,
+                    resolution_turn=resolution_turn,
+                ))
+                self._question_counter += 1
 
         elif template_id == "tech_discovered":
-            # Tech: check if player discovers a specific tech
-            # For tech conditions, ask about the granted tech
+            # Tech: check if player discovers specific techs
+            # Generate questions for multiple undiscovered techs (like unconditional)
             if condition.condition_type == "tech":
+                # For tech conditions, ask about the granted tech
                 tech_id = condition.value
                 tech_name = self._get_tech_name(game_data, tech_id)
+                techs_to_ask = [(tech_name, tech_id)]
             else:
-                # Pick a tech the player doesn't have yet
-                tech_info = self._get_undiscovered_tech(
-                    game_data, cond_player, checkpoint_turn
+                # Get multiple techs the player doesn't have yet
+                techs_to_ask = self._get_undiscovered_techs(
+                    game_data, cond_player, checkpoint_turn, limit=3
                 )
-                if tech_info is None:
-                    return questions
-                tech_name, tech_id = tech_info
 
-            params = {
-                "civ": cond_civ_name,
-                "player_id": cond_player,
-                "tech_name": tech_name,
-                "tech_id": tech_id,
-                "resolution_turn": resolution_turn,
-                "checkpoint_turn": checkpoint_turn,
-            }
+            for tech_name, tech_id in techs_to_ask:
+                params = {
+                    "civ": cond_civ_name,
+                    "player_id": cond_player,
+                    "tech_name": tech_name,
+                    "tech_id": tech_id,
+                    "resolution_turn": resolution_turn,
+                    "checkpoint_turn": checkpoint_turn,
+                }
 
-            questions.append(ConditionalQuestion(
-                conditional_id=f"cond_q{self._question_counter:04d}",
-                condition=condition,
-                target_template_id=template_id,
-                target_parameters=params,
-                checkpoint_turn=checkpoint_turn,
-                resolution_turn=resolution_turn,
-            ))
-            self._question_counter += 1
+                questions.append(ConditionalQuestion(
+                    conditional_id=f"cond_q{self._question_counter:04d}",
+                    condition=condition,
+                    target_template_id=template_id,
+                    target_parameters=params,
+                    checkpoint_turn=checkpoint_turn,
+                    resolution_turn=resolution_turn,
+                ))
+                self._question_counter += 1
+
+        elif template_id == "wonder_completed":
+            # Wonder: check if any civ completes a specific wonder
+            # Get wonders not yet completed by checkpoint_turn
+            wonders_to_ask = self._get_uncompleted_wonders(
+                game_data, checkpoint_turn, limit=3
+            )
+
+            for wonder_name, wonder_id in wonders_to_ask:
+                params = {
+                    "civ": cond_civ_name,
+                    "player_id": cond_player,
+                    "wonder_name": wonder_name,
+                    "wonder_id": wonder_id,
+                    "snapshot_turn": checkpoint_turn,
+                    "resolution_turn": resolution_turn,
+                }
+
+                questions.append(ConditionalQuestion(
+                    conditional_id=f"cond_q{self._question_counter:04d}",
+                    condition=condition,
+                    target_template_id=template_id,
+                    target_parameters=params,
+                    checkpoint_turn=checkpoint_turn,
+                    resolution_turn=resolution_turn,
+                ))
+                self._question_counter += 1
 
         return questions
 
@@ -464,6 +489,68 @@ class ConditionalQuestionGenerator:
                     return (tech_name, tech_id)
 
         return None
+
+    def _get_undiscovered_techs(
+        self,
+        game_data: dict[str, Any],
+        player_id: int,
+        checkpoint_turn: int,
+        limit: int = 3,
+    ) -> list[tuple[str, int]]:
+        """Find multiple techs the player hasn't discovered by checkpoint turn."""
+        events = game_data.get("events", [])
+        player_id_str = str(player_id)
+
+        # Find techs this player has
+        player_techs = set()
+        for e in events:
+            if (e.get("type") == "tech_discovered"
+                and str(e.get("player_id")) == player_id_str
+                and e.get("turn", float("inf")) <= checkpoint_turn):
+                tech_name = e.get("metadata", {}).get("tech_name")
+                if tech_name:
+                    player_techs.add(tech_name)
+
+        # Find techs any player discovers (that this player doesn't have)
+        undiscovered = []
+        seen_techs = set()
+        for e in events:
+            if e.get("type") == "tech_discovered":
+                tech_name = e.get("metadata", {}).get("tech_name")
+                tech_id = e.get("metadata", {}).get("tech_id")
+                if tech_name and tech_name not in player_techs and tech_name not in seen_techs:
+                    undiscovered.append((tech_name, tech_id))
+                    seen_techs.add(tech_name)
+                    if len(undiscovered) >= limit:
+                        break
+
+        return undiscovered
+
+    def _get_uncompleted_wonders(
+        self,
+        game_data: dict[str, Any],
+        checkpoint_turn: int,
+        limit: int = 3,
+    ) -> list[tuple[str, int]]:
+        """Find wonders not yet completed by checkpoint turn."""
+        events = game_data.get("events", [])
+
+        # Find wonders completed after checkpoint_turn
+        uncompleted = []
+        seen_wonders = set()
+        for e in events:
+            if e.get("type") == "wonder_completed":
+                turn = e.get("turn", 0)
+                if turn > checkpoint_turn:
+                    wonder_name = e.get("metadata", {}).get("wonder_name")
+                    wonder_id = e.get("metadata", {}).get("wonder_id")
+                    if wonder_name and wonder_name not in seen_wonders:
+                        uncompleted.append((wonder_name, wonder_id))
+                        seen_wonders.add(wonder_name)
+                        if len(uncompleted) >= limit:
+                            break
+
+        return uncompleted
 
 
 def create_condition(
