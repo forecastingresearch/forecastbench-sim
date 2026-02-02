@@ -370,7 +370,6 @@ class ForkManager:
                 fc_args["debug.take_player"] = fork.username  # Take control of our player
                 fc_args["debug.record_action_and_observation"] = True
                 fc_args["max_turns"] = end_turn
-                fc_args["begin_turn_timeout"] = 120  # Increase timeout for stable long games
 
                 # Seed random for consistency
                 random.seed(self.base_seed)
