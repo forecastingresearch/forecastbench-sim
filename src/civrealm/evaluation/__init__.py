@@ -6,6 +6,7 @@ from .sampling import (
     load_all_questions,
 )
 from .rate_limiter import ProviderRateLimiter
+from .models import LiteLLMModel, get_models
 from .parallel_evaluator import (
     PredictionResult,
     query_model_async,

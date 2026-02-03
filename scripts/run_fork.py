@@ -5,19 +5,19 @@ This script runs forks from an existing game recording. Use
 generate_conditional_results.py afterward to generate conditional questions.
 
 Usage:
-    # Run baseline (no modifications) from turn 50 to 100
-    uv run python scripts/run_fork.py --base-seed 100 --checkpoint-turn 50 --end-turn 100
+    # Run baseline (no modifications) from turn 60 to 100
+    uv run python scripts/run_fork.py --base-seed 100 --checkpoint-turn 60 --end-turn 100
 
     # Run with gold modification
-    uv run python scripts/run_fork.py --base-seed 100 --checkpoint-turn 50 \
+    uv run python scripts/run_fork.py --base-seed 100 --checkpoint-turn 60 \
         --modification "gold:0:5000" --end-turn 100
 
     # Run multiple modifications
-    uv run python scripts/run_fork.py --base-seed 100 --checkpoint-turn 50 \
+    uv run python scripts/run_fork.py --base-seed 100 --checkpoint-turn 60 \
         --modification "gold:0:5000" --modification "tech:0:23" --end-turn 100
 
     # Compare baseline vs modified (runs both)
-    uv run python scripts/run_fork.py --base-seed 100 --checkpoint-turn 50 \
+    uv run python scripts/run_fork.py --base-seed 100 --checkpoint-turn 60 \
         --modification "gold:0:5000" --compare --end-turn 100
 
 Modification format:

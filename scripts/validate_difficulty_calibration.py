@@ -29,17 +29,14 @@ from typing import Any
 import numpy as np
 from scipy import stats
 
-# Load .env file if present
-try:
-    from dotenv import load_dotenv
-    load_dotenv()
-except ImportError:
-    pass  # python-dotenv not installed, skip
+# Load .env file
+from dotenv import load_dotenv
+load_dotenv(Path(__file__).parent.parent / ".env")
 
 # Add src to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from utils.llm.litellm_models import get_models, configure_api_keys
+from civrealm.evaluation.models import get_models
 from civrealm.evaluation.parallel_evaluator import (
     evaluate_question_batch,
     ProviderRateLimiter,
@@ -469,8 +466,6 @@ def main():
     if args.gcp_project:
         os.environ["GCP_PROJECT_ID"] = args.gcp_project
     logger.info("Configuring API keys...")
-    configure_api_keys(from_gcp=True)
-
     # Load questions with difficulty
     logger.info(f"Loading questions from {args.questions_file}...")
     questions = load_questions_with_difficulty(args.questions_file)

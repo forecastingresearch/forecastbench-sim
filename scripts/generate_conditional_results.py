@@ -1,34 +1,19 @@
 #!/usr/bin/env python3
 """Generate conditional_results.json from existing fork savegames.
 
-This script enables extracting conditional forecasting results from already-completed
-fork runs without re-running the simulation. It parses player states from both the
-baseline (original recording) and intervention (fork) savegames, then generates
-and resolves conditional questions.
+This script generates and resolves conditional forecasting questions by comparing
+baseline (from game_data.json) with fork (from savegames).
+
+Uses the same QuestionResolver as unconditional questions for consistency.
 
 Usage:
-    # Basic usage with existing fork
     uv run python scripts/generate_conditional_results.py \
         --baseline-dir logs/recordings/seed0 \
         --fork-dir logs/recordings/seed0forkgoldadd5000p0 \
         --condition "gold_add:0:5000" \
-        --end-turn 300
-
-    # Specify output directory
-    uv run python scripts/generate_conditional_results.py \
-        --baseline-dir logs/recordings/seed0 \
-        --fork-dir logs/recordings/seed0forkgoldadd5000p0 \
-        --condition "gold_add:0:5000" \
+        --checkpoint-turn 60 \
         --end-turn 300 \
-        --output data/questions/seed0/
-
-    # With checkpoint turn (for question generation)
-    uv run python scripts/generate_conditional_results.py \
-        --baseline-dir logs/recordings/seed0 \
-        --fork-dir logs/recordings/seed0forkgoldadd5000p0 \
-        --condition "gold_add:0:5000" \
-        --checkpoint-turn 50 \
-        --end-turn 300
+        --game-data data/games/seed0_data.json
 """
 
 import argparse
@@ -44,9 +29,9 @@ parser = argparse.ArgumentParser(
 parser.add_argument("--baseline-dir", required=True, help="Path to baseline recording directory")
 parser.add_argument("--fork-dir", required=True, help="Path to fork recording directory")
 parser.add_argument("--condition", required=True, help="Condition in format 'type:player_id:value' (e.g., 'gold_add:0:5000')")
-parser.add_argument("--checkpoint-turn", type=int, default=50, help="Turn the fork started from (default: 50)")
+parser.add_argument("--checkpoint-turn", type=int, default=60, help="Turn the fork started from (default: 60)")
 parser.add_argument("--end-turn", type=int, required=True, help="Turn to evaluate at")
-parser.add_argument("--game-data", type=str, default=None, help="Path to game data JSON (optional, improves civ names)")
+parser.add_argument("--game-data", type=str, required=True, help="Path to baseline game data JSON (required)")
 parser.add_argument("--output", type=str, default=None, help="Output directory (default: fork-dir)")
 parser.add_argument("--verbose", "-v", action="store_true", help="Print detailed progress")
 args = parser.parse_args()
@@ -59,17 +44,18 @@ from civrealm.world_reports.utils.savegame_parser import (
     load_local_savegame,
     decompress_savegame_content,
     parse_player_states_for_conditional,
+    parse_player_technologies,
+    parse_city_wonders,
 )
 from civrealm.world_reports.questions import (
     ConditionalQuestionGenerator,
-    ConditionalQuestionBank,
-    ConditionalQuestion,
     ConditionalResult,
-    Condition,
     ForkOutcome,
     create_condition,
     save_conditional_bank,
 )
+from civrealm.world_reports.questions.resolver import QuestionResolver
+from civrealm.world_reports.questions.schema import QuestionInstance
 
 
 def parse_condition_string(cond_str: str) -> dict:
@@ -90,11 +76,7 @@ def parse_condition_string(cond_str: str) -> dict:
     else:
         raise ValueError(f"Unknown condition type: {cond_type}")
 
-    return {
-        "type": cond_type,
-        "player_id": player_id,
-        "value": value,
-    }
+    return {"type": cond_type, "player_id": player_id, "value": value}
 
 
 def get_username_from_dir(recording_dir: str) -> str:
@@ -102,8 +84,8 @@ def get_username_from_dir(recording_dir: str) -> str:
     return Path(recording_dir).name
 
 
-def load_player_states(recording_dir: str, turn: int, verbose: bool = False) -> dict[int, dict] | None:
-    """Load player states from a savegame at the given turn."""
+def load_savegame_content(recording_dir: str, turn: int, verbose: bool = False) -> str | None:
+    """Load and decompress savegame content at the given turn."""
     username = get_username_from_dir(recording_dir)
 
     savegame_name = find_local_savegame_for_turn(username, turn, recording_dir)
@@ -122,100 +104,120 @@ def load_player_states(recording_dir: str, turn: int, verbose: bool = False) -> 
 
     try:
         content = decompress_savegame_content(savegame_bytes, actual_filename)
-        player_states = parse_player_states_for_conditional(content)
         if verbose:
-            print(f"  Loaded player states from {actual_filename}")
-        return player_states
+            print(f"  Loaded savegame from {actual_filename}")
+        return content
     except Exception as e:
         if verbose:
             print(f"  Warning: Error parsing savegame: {e}")
         return None
 
 
-def resolve_comparative(params: dict, player_states: dict[int, dict], field: str) -> bool | None:
-    """Resolve a comparative question (A > B)."""
-    player_a = params.get("player_id_a")
-    player_b = params.get("player_id_b")
+def build_game_data_from_savegames(
+    recording_dir: str,
+    turns: list[int],
+    base_game_data: dict,
+    verbose: bool = False,
+) -> dict:
+    """Build a game_data-like structure from savegames for use with QuestionResolver.
 
-    if player_a is None or player_b is None:
-        return None
+    Args:
+        recording_dir: Path to recording directory with savegames
+        turns: List of turns to load data for
+        base_game_data: Base game_data to copy civilizations and metadata from
+        verbose: Print progress
 
-    state_a = player_states.get(player_a, {})
-    state_b = player_states.get(player_b, {})
+    Returns:
+        Dict compatible with QuestionResolver (has time_series, events, snapshots)
+    """
+    # Start with civilizations and metadata from base
+    game_data = {
+        "metadata": base_game_data.get("metadata", {}),
+        "civilizations": base_game_data.get("civilizations", {}),
+        "time_series": {},
+        "events": [],
+        "snapshots": {},
+    }
 
-    value_a = state_a.get(field)
-    value_b = state_b.get(field)
+    # Load savegame data for each turn
+    for turn in turns:
+        content = load_savegame_content(recording_dir, turn, verbose)
+        if content is None:
+            continue
 
-    if value_a is None or value_b is None:
-        return None
+        # Parse player states
+        player_states = parse_player_states_for_conditional(content)
 
-    return value_a > value_b
+        # Build time_series entries for this turn
+        for metric in ["treasury", "population", "scores", "territory_size"]:
+            if metric not in game_data["time_series"]:
+                game_data["time_series"][metric] = {}
+            game_data["time_series"][metric][str(turn)] = {}
 
-
-def resolve_target_question(question: ConditionalQuestion, player_states: dict[int, dict]) -> bool | None:
-    """Resolve target question using player states."""
-    template_id = question.target_template_id
-    params = question.target_parameters
-
-    if template_id == "treasury_comparative":
-        return resolve_comparative(params, player_states, "gold")
-    elif template_id == "score_comparative":
-        # Score not directly in savegame, use proxy
-        return resolve_comparative_with_score_proxy(params, player_states)
-    elif template_id == "tech_comparative":
-        return resolve_comparative(params, player_states, "techs")
-    elif template_id == "population_comparative":
-        return resolve_comparative(params, player_states, "population")
-    elif template_id in ["cities_comparative", "city_count_comparative"]:
-        return resolve_comparative(params, player_states, "cities")
-    elif template_id == "territory_comparative":
-        # Territory uses land_area if available, otherwise fall back to cities as proxy
-        return resolve_comparative(params, player_states, "land_area") or \
-               resolve_comparative(params, player_states, "cities")
-    elif template_id == "score_rank_1":
-        # Check if player is ranked #1 by score proxy
-        player_id = params.get("player_id")
-        if player_id is None:
-            return None
-        # Compute score proxy for all players and check if this one is ranked #1
-        scores = []
         for pid, state in player_states.items():
+            pid_str = str(pid)
+            game_data["time_series"]["treasury"][str(turn)][pid_str] = state.get("gold", 0)
+            game_data["time_series"]["population"][str(turn)][pid_str] = state.get("population", 0)
+            game_data["time_series"]["territory_size"][str(turn)][pid_str] = state.get("landarea", 0)
+            # Compute score proxy
             score = (
                 state.get("techs", 0) * 10 +
                 state.get("cities", 0) * 5 +
                 state.get("population", 0) // 100 +
                 state.get("wonders", 0) * 20
             )
-            scores.append((pid, score))
-        scores.sort(key=lambda x: x[1], reverse=True)
-        return scores[0][0] == player_id if scores else None
+            game_data["time_series"]["scores"][str(turn)][pid_str] = score
 
-    return None
+        # Build snapshots for this turn
+        game_data["snapshots"][str(turn)] = {
+            "scores": {str(pid): state.get("techs", 0) * 10 + state.get("cities", 0) * 5
+                       for pid, state in player_states.items()},
+            "tech_count": {str(pid): state.get("techs", 0) for pid, state in player_states.items()},
+            "city_count": {str(pid): state.get("cities", 0) for pid, state in player_states.items()},
+        }
+
+        # Parse detailed tech info for tech_discovered questions
+        try:
+            player_techs = parse_player_technologies(content)
+            for pid, tech_ids in player_techs.items():
+                for tech_id in tech_ids:
+                    # Create synthetic tech_discovered event
+                    game_data["events"].append({
+                        "turn": turn,  # We don't know exact turn, use this turn
+                        "type": "tech_discovered",
+                        "player_id": pid,
+                        "metadata": {"tech_id": str(tech_id), "tech_name": f"Tech #{tech_id}"},
+                    })
+        except Exception as e:
+            if verbose:
+                print(f"  Warning: Could not parse technologies: {e}")
+
+        # Parse wonder info for wonder_completed questions
+        try:
+            wonder_data = parse_city_wonders(content)
+            for pid, pdata in wonder_data.items():
+                for imp_id in pdata.get("improvements_built", set()):
+                    # Note: We can't distinguish wonders from regular improvements without ruleset
+                    # For now, skip wonder events (they'll be unresolvable)
+                    pass
+        except Exception as e:
+            if verbose:
+                print(f"  Warning: Could not parse wonders: {e}")
+
+    return game_data
 
 
-def resolve_comparative_with_score_proxy(params: dict, player_states: dict[int, dict]) -> bool | None:
-    """Resolve comparative question using a score proxy computed from components."""
-    player_a = params.get("player_id_a")
-    player_b = params.get("player_id_b")
-
-    if player_a is None or player_b is None:
-        return None
-
-    state_a = player_states.get(player_a, {})
-    state_b = player_states.get(player_b, {})
-
-    def compute_score_proxy(state: dict) -> int:
-        return (
-            state.get("techs", 0) * 10 +
-            state.get("cities", 0) * 5 +
-            state.get("population", 0) // 100 +
-            state.get("wonders", 0) * 20
-        )
-
-    score_a = compute_score_proxy(state_a)
-    score_b = compute_score_proxy(state_b)
-
-    return score_a > score_b
+def conditional_to_question_instance(cond_question, snapshot_turn: int) -> QuestionInstance:
+    """Convert a ConditionalQuestion to a QuestionInstance for the resolver."""
+    return QuestionInstance(
+        question_id=cond_question.conditional_id,
+        template_id=cond_question.target_template_id,
+        resolution_turn=cond_question.resolution_turn,
+        horizon="H1",  # Not used by resolver
+        parameters=cond_question.target_parameters,
+        question_text="",  # Not used by resolver
+        resolution=None,
+    )
 
 
 def main():
@@ -230,6 +232,15 @@ def main():
         print(f"Error: Fork directory not found: {fork_dir}")
         return 1
 
+    # Load game data (required for baseline resolution)
+    game_data_path = Path(args.game_data)
+    if not game_data_path.exists():
+        print(f"Error: Game data file not found: {game_data_path}")
+        return 1
+
+    with open(game_data_path) as f:
+        game_data = json.load(f)
+
     # Parse condition
     cond_dict = parse_condition_string(args.condition)
 
@@ -239,48 +250,32 @@ def main():
     print(f"  Condition: {args.condition}")
     print(f"  Checkpoint turn: {args.checkpoint_turn}")
     print(f"  End turn: {args.end_turn}")
-
-    # Load game data if provided (for better civ names)
-    game_data = None
-    if args.game_data:
-        game_data_path = Path(args.game_data)
-        if game_data_path.exists():
-            with open(game_data_path) as f:
-                game_data = json.load(f)
-            print(f"  Game data: {game_data_path}")
+    print(f"  Game data: {game_data_path}")
 
     # Infer game_id from baseline directory
     game_id = baseline_dir.name
 
-    # Load baseline player states
-    print(f"\nLoading baseline player states...")
-    baseline_states = load_player_states(str(baseline_dir), args.end_turn, args.verbose)
-    if baseline_states is None:
-        print("Error: Could not load baseline player states")
+    # Calculate resolution turns (H1=+30, H2=+60, H3=+90 from checkpoint)
+    horizons = [30, 60, 90]
+    resolution_turns = [args.checkpoint_turn + h for h in horizons if args.checkpoint_turn + h <= args.end_turn]
+    print(f"  Resolution turns: {resolution_turns}")
+
+    # Build fork game_data from savegames
+    print(f"\nBuilding fork game_data from savegames...")
+    fork_game_data = build_game_data_from_savegames(
+        str(fork_dir), resolution_turns, game_data, args.verbose
+    )
+
+    # Check which turns have data
+    valid_turns = [t for t in resolution_turns if str(t) in fork_game_data["snapshots"]]
+    if not valid_turns:
+        print("Error: No valid resolution turns found in fork savegames")
         return 1
+    print(f"  Valid resolution turns: {valid_turns}")
 
-    if args.verbose:
-        print(f"  Found {len(baseline_states)} players in baseline")
-        for pid, state in sorted(baseline_states.items()):
-            print(f"    Player {pid}: gold={state.get('gold', 0)}, techs={state.get('techs', 0)}")
-
-    # Load fork player states
-    print(f"\nLoading fork player states...")
-    fork_states = load_player_states(str(fork_dir), args.end_turn, args.verbose)
-    if fork_states is None:
-        print("Error: Could not load fork player states")
-        return 1
-
-    if args.verbose:
-        print(f"  Found {len(fork_states)} players in fork")
-        for pid, state in sorted(fork_states.items()):
-            print(f"    Player {pid}: gold={state.get('gold', 0)}, techs={state.get('techs', 0)}")
-
-    # Get civ name from game data or baseline states
-    civ_data = {}
-    if game_data:
-        civ_data = game_data.get("civilizations", {}).get(str(cond_dict["player_id"]), {})
-    civ_name = civ_data.get("name") or baseline_states.get(cond_dict["player_id"], {}).get("nation", f"Player {cond_dict['player_id']}")
+    # Get civ name
+    civ_data = game_data.get("civilizations", {}).get(str(cond_dict["player_id"]), {})
+    civ_name = civ_data.get("name", f"Player {cond_dict['player_id']}")
 
     # Create condition object
     condition = create_condition(
@@ -294,69 +289,77 @@ def main():
     print(f"\nGenerating conditional questions...")
     generator = ConditionalQuestionGenerator()
 
-    # Build minimal game_data if not provided
-    if game_data is None:
-        # Create game_data from baseline states with time_series so generator
-        # can find civilizations at checkpoint_turn
-        game_data = {
-            "civilizations": {
-                str(pid): {
-                    "name": state.get("nation", f"Player {pid}"),
-                    "player_id": pid,
-                }
-                for pid, state in baseline_states.items()
-            },
-            # Fake time_series so generator can find players at checkpoint
-            "time_series": {
-                "score": {
-                    str(args.checkpoint_turn): {
-                        str(pid): 0 for pid in baseline_states.keys()
-                    }
-                }
-            }
-        }
-
-    # Use treasury_comparative template (works with gold from savegame)
-    # score_rank_1 requires score field not available in savegame parser
     cond_bank = generator.generate_conditional_bank(
         game_id=game_id,
         game_data=game_data,
         checkpoint_turn=args.checkpoint_turn,
         end_turn=args.end_turn,
+        resolution_turns=valid_turns,
         conditions=[condition],
-        target_templates=["treasury_comparative"],
+        target_templates=None,  # Use all templates from CONDITION_TARGET_MAP
     )
 
     print(f"  Generated {len(cond_bank.questions)} conditional questions")
+    print(f"  Resolution turns: {sorted(set(q.resolution_turn for q in cond_bank.questions))}")
+    print(f"  Templates: {sorted(set(q.target_template_id for q in cond_bank.questions))}")
 
-    # Resolve questions
-    print(f"\nResolving questions...")
+    # Use QuestionResolver for both baseline and fork
+    resolver = QuestionResolver()
 
-    baseline_outcome = ForkOutcome(
-        fork_name="savegame_baseline",
-        success=True,
-        final_turn=args.end_turn,
-        player_states=baseline_states,
-        error=None,
-    )
-
-    intervention_outcome = ForkOutcome(
-        fork_name="fork_intervention",
-        success=True,
-        final_turn=args.end_turn,
-        player_states=fork_states,
-        error=None,
-    )
+    print(f"\nResolving questions using QuestionResolver...")
 
     effects = []
+    resolved_count = 0
+    unresolved_templates = set()
+
     for question in cond_bank.questions:
-        answer_control = resolve_target_question(question, baseline_states)
-        answer_intervention = resolve_target_question(question, fork_states)
+        resolution_turn = question.resolution_turn
+
+        # Convert to QuestionInstance for resolver
+        q_instance = conditional_to_question_instance(question, args.checkpoint_turn)
+
+        # Resolve using baseline game_data
+        try:
+            baseline_resolution = resolver.resolve(q_instance, game_data, args.checkpoint_turn)
+            answer_control = baseline_resolution.answer
+        except Exception as e:
+            if args.verbose:
+                print(f"  Warning: Could not resolve baseline for {question.conditional_id}: {e}")
+            answer_control = None
+
+        # Resolve using fork game_data (built from savegames)
+        try:
+            fork_resolution = resolver.resolve(q_instance, fork_game_data, args.checkpoint_turn)
+            answer_intervention = fork_resolution.answer
+        except Exception as e:
+            if args.verbose:
+                print(f"  Warning: Could not resolve fork for {question.conditional_id}: {e}")
+            answer_intervention = None
 
         conditional_effect = None
         if answer_control is not None and answer_intervention is not None:
             conditional_effect = 1.0 if answer_control != answer_intervention else 0.0
             effects.append(conditional_effect)
+            resolved_count += 1
+        else:
+            unresolved_templates.add(question.target_template_id)
+
+        # Create placeholder outcomes (we don't have full player_states in new format)
+        baseline_outcome = ForkOutcome(
+            fork_name="baseline",
+            success=True,
+            final_turn=resolution_turn,
+            player_states={},
+            error=None,
+        )
+
+        intervention_outcome = ForkOutcome(
+            fork_name="fork_intervention",
+            success=True,
+            final_turn=resolution_turn,
+            player_states={},
+            error=None,
+        )
 
         cond_bank.results[question.conditional_id] = ConditionalResult(
             conditional_id=question.conditional_id,
@@ -369,12 +372,14 @@ def main():
         )
 
         if args.verbose:
-            print(f"  {question.conditional_id}: control={answer_control}, intervention={answer_intervention}, effect={conditional_effect}")
+            print(f"  {question.conditional_id} (T{resolution_turn}): control={answer_control}, intervention={answer_intervention}, effect={conditional_effect}")
 
     # Summary
     print(f"\nResults summary:")
     print(f"  Total questions: {len(cond_bank.questions)}")
-    print(f"  Resolved: {len(effects)}")
+    print(f"  Resolved: {resolved_count}")
+    if unresolved_templates:
+        print(f"  Unresolved templates: {sorted(unresolved_templates)}")
     if effects:
         differing = sum(1 for e in effects if e > 0)
         avg_effect = sum(effects) / len(effects)

@@ -17,7 +17,7 @@ CivBench has three clearly separated stages:
 python scripts/run_worlds.py --seeds 1-100 --max_turns 300
 
 # Run forked games with interventions (for conditional forecasting)
-python scripts/run_fork.py --base-seed 0 --checkpoint-turn 50 --end-turn 300 \
+python scripts/run_fork.py --base-seed 0 --checkpoint-turn 60 --end-turn 300 \
   --modification "gold_add:0:5000"
 ```
 
@@ -34,7 +34,7 @@ python scripts/generate_conditional_results.py \
   --baseline-dir logs/recordings/s0 \
   --fork-dir logs/recordings/s0forkgoldadd5000p0 \
   --condition "gold_add:0:5000" \
-  --checkpoint-turn 50 --end-turn 300
+  --checkpoint-turn 60 --end-turn 300
 ```
 
 ### Stage 3: Run Benchmark (Evaluation)
@@ -313,7 +313,7 @@ This is implemented via **world forking** — running parallel simulations where
 # Step 1: Run fork (simulation only)
 uv run python scripts/run_fork.py \
   --base-seed 0 \
-  --checkpoint-turn 50 \
+  --checkpoint-turn 60 \
   --end-turn 300 \
   --modification "gold_add:0:5000"
 
@@ -322,7 +322,7 @@ uv run python scripts/generate_conditional_results.py \
   --baseline-dir logs/recordings/s0 \
   --fork-dir logs/recordings/s0forkgoldadd5000p0 \
   --condition "gold_add:0:5000" \
-  --checkpoint-turn 50 \
+  --checkpoint-turn 60 \
   --end-turn 300
 ```
 
@@ -341,6 +341,45 @@ See [docs/notes/conditional_forecasting.md](docs/notes/conditional_forecasting.m
 ### LLM Evaluation
 
 The evaluation system measures LLM forecasting performance using parallel model queries and stratified-batched sampling.
+
+#### Evaluation Design Principles
+
+**Question sampling:** Questions are selected via stratified random sampling to ensure balanced representation across difficulty levels (or templates/horizons). The same seed produces identical question sets across runs.
+
+**Model assignment:** All models evaluate the identical sampled question set. This enables direct comparison — performance differences reflect model capability, not question variance.
+
+**Conditional vs unconditional questions:**
+
+| Type | Storage | Template Pattern | How to filter |
+|------|---------|------------------|---------------|
+| Unconditional | `data/questions/{game_id}/questions.json` | `tech_comparative`, `score_rank_1`, etc. | `not template_id.startswith('conditional_')` |
+| Conditional | `data/questions/{game_id}/conditional_questions.json` | `conditional_*` prefix | `template_id.startswith('conditional_')` |
+
+To load conditional questions, use `--include-conditional` flag or set `include_conditional=True` in the sampling functions.
+
+**Breaking out results by question type:** Results include `brier_by_template`. To compute conditional vs unconditional accuracy:
+
+```python
+import json
+
+with open('data/evaluations/eval_YYYYMMDD_HHMMSS.json') as f:
+    results = json.load(f)
+
+# Split by conditional status
+conditional = [q for q in results['questions'] if q['template_id'].startswith('conditional_')]
+unconditional = [q for q in results['questions'] if not q['template_id'].startswith('conditional_')]
+
+# Compute Brier for each
+def brier(questions, model):
+    preds = [q['predictions'][model]['probability'] for q in questions
+             if q['predictions'][model]['probability'] is not None]
+    outcomes = [q['ground_truth'] for q in questions
+                if q['predictions'][model]['probability'] is not None]
+    return sum((p - o)**2 for p, o in zip(preds, outcomes)) / len(preds)
+
+print(f"Conditional Brier: {brier(conditional, 'gpt-4o'):.3f}")
+print(f"Unconditional Brier: {brier(unconditional, 'gpt-4o'):.3f}")
+```
 
 **Running Evaluations:**
 

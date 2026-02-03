@@ -9,8 +9,8 @@ Usage:
     # Single game
     uv run python scripts/prepare_benchmark.py --game-id seed0
 
-    # With explicit snapshot turn (default: 50)
-    uv run python scripts/prepare_benchmark.py --game-id seed0 --snapshot-turn 50
+    # With explicit snapshot turn (default: 60)
+    uv run python scripts/prepare_benchmark.py --game-id seed0 --snapshot-turn 60
 
     # Batch mode: all games
     uv run python scripts/prepare_benchmark.py --all
@@ -216,8 +216,8 @@ def main() -> int:
                         help='Glob pattern for --all mode (e.g., "seed1*")')
 
     # Parameters
-    parser.add_argument('--snapshot-turn', type=int, default=50,
-                        help='Turn where forecasters see the world (default: 50)')
+    parser.add_argument('--snapshot-turn', type=int, default=60,
+                        help='Turn where forecasters see the world (default: 60)')
     parser.add_argument('--sample-interval', type=int, default=5,
                         help='Sampling interval for time series in report (default: 5)')
     parser.add_argument('--map-interval', type=int, default=10,
