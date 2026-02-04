@@ -63,8 +63,13 @@ class TurnManager(object):
 
     def log_begin_turn(self):
         fc_logger.info('==============================================')
+        # Handle observer mode where _turn_ctrls or player may be None
+        if self._turn_ctrls is None or self._turn_ctrls.get('player') is None:
+            player_info = "Observer"
+        else:
+            player_info = self._turn_ctrls['player'].my_player_id
         fc_logger.info(
-            f"============== Begin turn: {self._turn:04d}. Port: {self.client_port}. Player: {self._turn_ctrls['player'].my_player_id} ==============")
+            f"============== Begin turn: {self._turn:04d}. Port: {self.client_port}. Player: {player_info} ==============")
         fc_logger.info('==============================================')
         # print(f'\nBegin turn: {self._turn:04d}\n')
 
@@ -126,6 +131,10 @@ class TurnManager(object):
         return gymnasium.spaces.Dict(observation_space)
 
     def get_observation(self):
+        # Handle observer mode where _turn_ctrls may be None
+        if self._turn_ctrls is None:
+            return {}
+
         fc_logger.debug("Acquiring state for: ")
         for ctrl_type, ctrl in self._turn_ctrls.items():
             fc_logger.debug(f'....: {ctrl_type}')
@@ -143,6 +152,10 @@ class TurnManager(object):
     def get_available_actions(self):
         """This function will send queries to the server to get the probabilities for probabilistic actions.
         """
+        # Handle observer mode where _turn_ctrls may be None
+        if self._turn_ctrls is None:
+            return {}
+
         fc_logger.debug("Acquiring action for: ")
         for ctrl_type in self._turn_ctrls.keys():
             fc_logger.debug(f'....: {ctrl_type}')
@@ -156,6 +169,10 @@ class TurnManager(object):
         """This function will return a dictionary of the availability information about the actions for each controller.
         NOTE: This function should be called after get_available_actions has sent probability queries, and we have processed the responses by civ_controller (using lock_control()). Otherwise, the availability information will be missing.
         """
+        # Handle observer mode where _turn_ctrls may be None
+        if self._turn_ctrls is None:
+            return {}
+
         fc_logger.debug("Acquiring info for: ")
         for ctrl_type in self._turn_ctrls.keys():
             fc_logger.debug(f'....: {ctrl_type}')

@@ -101,6 +101,7 @@ nav:
   - Notes:
       - Contribute To CivRealm: notes/contribute.md
       - Performance Benchmarks: notes/benchmarks.md
+      - Conditional Forecasting: notes/conditional_forecasting.md
   - Misc:
       - FAQ: misc/faq.md
       - Resources: misc/resources.md

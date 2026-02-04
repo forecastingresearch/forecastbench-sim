@@ -107,6 +107,37 @@ class FreecivBaseEnv(gymnasium.Env, utils.EzPickle):
         self._record_to_file('state', observation, lambda x: x.get_bitvector_in_ascii()
                              if isinstance(x, BitVector) else x.tolist())
 
+    def _record_ruleset(self):
+        """Save ruleset data (nations, improvements, etc.) to the recording directory"""
+        ruleset_data = {
+            'nations': {},
+            'improvements': {}
+        }
+
+        # Get nations from the ruleset controller
+        if hasattr(self.civ_controller, 'rule_ctrl') and hasattr(self.civ_controller.rule_ctrl, 'nations'):
+            # Convert OrderedDict to regular dict with string keys for JSON serialization
+            for nation_id, nation_data in self.civ_controller.rule_ctrl.nations.items():
+                ruleset_data['nations'][str(nation_id)] = nation_data
+
+        # Get improvements from the ruleset controller (includes wonders)
+        # Wonders can be identified by: soundtag starting with 'w' or genus == 0 (great) or 1 (small)
+        if hasattr(self.civ_controller, 'rule_ctrl') and hasattr(self.civ_controller.rule_ctrl, 'improvements'):
+            for impr_id, impr_data in self.civ_controller.rule_ctrl.improvements.items():
+                # Store relevant fields for wonder identification
+                ruleset_data['improvements'][str(impr_id)] = {
+                    'id': impr_id,
+                    'name': impr_data.get('name', ''),
+                    'genus': impr_data.get('genus', 2),  # 0=great wonder, 1=small wonder, 2=improvement
+                    'soundtag': impr_data.get('soundtag', ''),
+                    'build_cost': impr_data.get('build_cost', 0)
+                }
+
+        # Save to recording directory
+        ruleset_file = os.path.join(self.recording_dir, 'ruleset.json')
+        with open(ruleset_file, 'w') as f:
+            json.dump(ruleset_data, f, indent=2, sort_keys=True)
+
     def _record_action(self, available_actions, action):
         def encode_action(x):
             if hasattr(x, 'encode_to_json'):
@@ -202,6 +233,10 @@ class FreecivBaseEnv(gymnasium.Env, utils.EzPickle):
         # Log in and get the first info and observation
         self.civ_controller.init_network()
         info, observation = self._get_info_and_observation()
+
+        # Save ruleset data (nations, etc.) for world reports
+        self._record_ruleset()
+
         # Log in success, set running as True
         self.running = True
         return observation, info

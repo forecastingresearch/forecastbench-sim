@@ -1,0 +1,318 @@
+#!/usr/bin/env python3
+"""
+Set up the three evaluation directories for Republic conditional experiment.
+
+Uses the same underlying questions (from conditional_results.json) for all three conditions,
+with different framing and appropriate ground truth:
+
+1. questions_baseline_eval/ - Unconditional framing, baseline (control) answer
+2. questions_conditional_eval/ - "If switches to Republic" framing, fork (intervention) answer
+3. questions_conditional_no_eval/ - "If does NOT switch to Republic" framing, baseline (control) answer
+
+All three conditions share the same world_report per seed and the same underlying questions.
+
+Usage:
+    python scripts/setup_republic_conditional_eval.py
+"""
+
+import json
+import shutil
+import sys
+from datetime import datetime
+from pathlib import Path
+
+# Add src to path
+sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
+
+# Republic fork directories for each seed
+REPUBLIC_FORKS = {
+    "seed0": "logs/recordings/seed0forkgovRepp0v1770146193",
+    "seed2": "logs/recordings/seed2forkgovRepublicp0",
+    "seed3": "logs/recordings/seed3forkgovRepublicp0",
+    "seed4": "logs/recordings/seed4forkgovRepublicp0",
+    "seed5": "logs/recordings/seed5forkgovRepublicp0",
+    "seed6": "logs/recordings/seed6forkgovRepublicp0",
+    "seed7": "logs/recordings/seed7forkgovRepublicp0",
+    "seed8": "logs/recordings/seed8forkgovRepublicp0",
+}
+
+# Template text for baseline (unconditional) questions
+BASELINE_TEXT_TEMPLATES = {
+    "treasury_comparative": "Will {civ_a} have a larger treasury than {civ_b} at turn {resolution_turn}?",
+    "score_comparative": "Will {civ_a} have a higher score than {civ_b} at turn {resolution_turn}?",
+    "tech_comparative": "Will {civ_a} have more technologies than {civ_b} at turn {resolution_turn}?",
+    "population_comparative": "Will {civ_a} have a larger total population than {civ_b} at turn {resolution_turn}?",
+    "city_count_comparative": "Will {civ_a} have more cities than {civ_b} at turn {resolution_turn}?",
+    "territory_comparative": "Will {civ_a} control more tiles than {civ_b} at turn {resolution_turn}?",
+    "score_rank_1": "Will {civ} be ranked #1 at turn {resolution_turn}?",
+    "tech_discovered": "Will {civ} have discovered {tech_name} by turn {resolution_turn}?",
+    "wonder_completed": "Will {wonder_name} be completed by any civilization by turn {resolution_turn}?",
+    "government_at": "Will {civ} be in {government_type} at turn {resolution_turn}?",
+}
+
+# Template text for conditional (intervention) questions
+CONDITIONAL_TEXT_TEMPLATES = {
+    "treasury_comparative": "If {civ_a} switches to Republic next turn, would {civ_a} have a larger treasury than {civ_b} at turn {resolution_turn}?",
+    "score_comparative": "If {civ_a} switches to Republic next turn, would {civ_a} have a higher score than {civ_b} at turn {resolution_turn}?",
+    "tech_comparative": "If {civ_a} switches to Republic next turn, would {civ_a} have more technologies than {civ_b} at turn {resolution_turn}?",
+    "population_comparative": "If {civ_a} switches to Republic next turn, would {civ_a} have a larger total population than {civ_b} at turn {resolution_turn}?",
+    "city_count_comparative": "If {civ_a} switches to Republic next turn, would {civ_a} have more cities than {civ_b} at turn {resolution_turn}?",
+    "territory_comparative": "If {civ_a} switches to Republic next turn, would {civ_a} control more tiles than {civ_b} at turn {resolution_turn}?",
+    "score_rank_1": "If {civ} switches to Republic next turn, would {civ} be ranked #1 at turn {resolution_turn}?",
+    "tech_discovered": "If {civ} switches to Republic next turn, would {civ} have discovered {tech_name} by turn {resolution_turn}?",
+    "wonder_completed": "If the civilization switches to Republic next turn, would {wonder_name} be completed by any civilization by turn {resolution_turn}?",
+    "government_at": "If {civ} switches to Republic next turn, would {civ} be in {government_type} at turn {resolution_turn}?",
+}
+
+# Template text for null conditional (negated intervention) questions
+NULL_CONDITIONAL_TEXT_TEMPLATES = {
+    "treasury_comparative": "If {civ_a} does NOT switch to Republic next turn, would {civ_a} have a larger treasury than {civ_b} at turn {resolution_turn}?",
+    "score_comparative": "If {civ_a} does NOT switch to Republic next turn, would {civ_a} have a higher score than {civ_b} at turn {resolution_turn}?",
+    "tech_comparative": "If {civ_a} does NOT switch to Republic next turn, would {civ_a} have more technologies than {civ_b} at turn {resolution_turn}?",
+    "population_comparative": "If {civ_a} does NOT switch to Republic next turn, would {civ_a} have a larger total population than {civ_b} at turn {resolution_turn}?",
+    "city_count_comparative": "If {civ_a} does NOT switch to Republic next turn, would {civ_a} have more cities than {civ_b} at turn {resolution_turn}?",
+    "territory_comparative": "If {civ_a} does NOT switch to Republic next turn, would {civ_a} control more tiles than {civ_b} at turn {resolution_turn}?",
+    "score_rank_1": "If {civ} does NOT switch to Republic next turn, would {civ} be ranked #1 at turn {resolution_turn}?",
+    "tech_discovered": "If {civ} does NOT switch to Republic next turn, would {civ} have discovered {tech_name} by turn {resolution_turn}?",
+    "wonder_completed": "If no civilization switches to Republic next turn, would {wonder_name} be completed by any civilization by turn {resolution_turn}?",
+    "government_at": "If {civ} does NOT switch to Republic next turn, would {civ} be in {government_type} at turn {resolution_turn}?",
+}
+
+
+def get_horizon(checkpoint_turn: int, resolution_turn: int) -> str:
+    """Calculate horizon based on turn difference."""
+    diff = resolution_turn - checkpoint_turn
+    if diff <= 30:
+        return "H1"
+    elif diff <= 60:
+        return "H2"
+    else:
+        return "H3"
+
+
+def format_question_text(template_id: str, params: dict, text_templates: dict) -> str:
+    """Format question text using the appropriate template."""
+    text_template = text_templates.get(template_id)
+    if text_template:
+        try:
+            params_with_civ = dict(params)
+            if "civ" not in params_with_civ:
+                params_with_civ["civ"] = params.get("civ_a", "the civilization")
+            return text_template.format(**params_with_civ)
+        except KeyError as e:
+            return f"Question about {template_id} (missing param: {e})"
+    return f"Question about {template_id}"
+
+
+def generate_questions_from_conditional_results(
+    conditional_results_path: Path,
+    game_id: str,
+    civilizations: dict,
+    condition_type: str,  # "baseline", "conditional", or "null_conditional"
+) -> dict:
+    """
+    Generate questions from conditional_results.json with appropriate framing and answers.
+
+    Args:
+        conditional_results_path: Path to conditional_results.json
+        game_id: Game identifier
+        civilizations: Civilization info from baseline questions
+        condition_type: Which condition to generate ("baseline", "conditional", "null_conditional")
+
+    Returns:
+        Question bank dict ready for evaluation
+    """
+    with open(conditional_results_path) as f:
+        cond_data = json.load(f)
+
+    results = cond_data.get("results", {})
+    checkpoint_turn = cond_data.get("checkpoint_turn", 60)
+
+    # Select text templates and answer key based on condition type
+    if condition_type == "baseline":
+        text_templates = BASELINE_TEXT_TEMPLATES
+        answer_key = "answer_control"
+        template_prefix = ""
+        question_id_suffix = ""
+    elif condition_type == "conditional":
+        text_templates = CONDITIONAL_TEXT_TEMPLATES
+        answer_key = "answer_intervention"
+        template_prefix = "conditional_"
+        question_id_suffix = "_intervention"
+    else:  # null_conditional
+        text_templates = NULL_CONDITIONAL_TEXT_TEMPLATES
+        answer_key = "answer_control"
+        template_prefix = "null_conditional_"
+        question_id_suffix = "_null"
+
+    questions = []
+    skipped = 0
+
+    for q in cond_data.get("questions", []):
+        cond_id = q["conditional_id"]
+        result = results.get(cond_id, {})
+
+        # Get the appropriate answer
+        answer = result.get(answer_key)
+        if answer is None:
+            skipped += 1
+            continue
+
+        template_id = q["target_template_id"]
+        params = q["target_parameters"]
+        resolution_turn = q["resolution_turn"]
+
+        # Generate question text with appropriate framing
+        question_text = format_question_text(template_id, params, text_templates)
+        horizon = get_horizon(checkpoint_turn, resolution_turn)
+
+        questions.append({
+            "question_id": f"{cond_id}{question_id_suffix}",
+            "template_id": f"{template_prefix}{template_id}",
+            "resolution_turn": resolution_turn,
+            "horizon": horizon,
+            "parameters": {
+                **params,
+                "checkpoint_turn": checkpoint_turn,
+            },
+            "question_text": question_text,
+            "resolution": {"answer": answer},
+        })
+
+    if skipped > 0:
+        print(f"      Skipped {skipped} questions with missing {answer_key}")
+
+    return {
+        "game_id": game_id,
+        "snapshot_turn": checkpoint_turn,
+        "game_max_turn": cond_data.get("end_turn", 270),
+        "generated_at": datetime.now().isoformat() + "Z",
+        "civilizations": civilizations,
+        "questions": questions,
+        "condition_metadata": {
+            "condition_type": condition_type,
+            "source": "conditional_results.json",
+            "intervention": "Republic government change",
+        },
+    }
+
+
+def setup_evaluation_directories():
+    """Set up all three evaluation directories."""
+    base_dir = Path(__file__).parent.parent
+
+    # Output directories
+    baseline_eval_dir = base_dir / "data" / "questions_baseline_eval"
+    conditional_eval_dir = base_dir / "data" / "questions_conditional_eval"
+    conditional_no_eval_dir = base_dir / "data" / "questions_conditional_no_eval"
+
+    # Source directory for baseline questions (for civilizations info and world_report)
+    questions_dir = base_dir / "data" / "questions"
+
+    total_baseline = 0
+    total_conditional = 0
+    total_null_conditional = 0
+
+    print("Setting up evaluation directories for Republic conditional experiment...")
+    print("Using same underlying questions across all three conditions.")
+    print()
+
+    for seed, fork_dir in REPUBLIC_FORKS.items():
+        fork_path = base_dir / fork_dir
+        conditional_results_path = fork_path / "conditional_results.json"
+
+        if not conditional_results_path.exists():
+            print(f"  {seed}: Skipping - no conditional_results.json")
+            continue
+
+        baseline_questions_path = questions_dir / seed / "questions.json"
+        if not baseline_questions_path.exists():
+            print(f"  {seed}: Skipping - no baseline questions.json")
+            continue
+
+        world_report_dir = questions_dir / seed / "world_report"
+        if not world_report_dir.exists():
+            print(f"  {seed}: Skipping - no world_report")
+            continue
+
+        print(f"  Processing {seed}...")
+
+        # Load baseline data for civilizations info
+        with open(baseline_questions_path) as f:
+            baseline_data = json.load(f)
+        civilizations = baseline_data.get("civilizations", {})
+
+        # 1. Generate baseline questions (unconditional framing, control answer)
+        baseline_seed_dir = baseline_eval_dir / seed
+        baseline_seed_dir.mkdir(parents=True, exist_ok=True)
+        baseline_questions = generate_questions_from_conditional_results(
+            conditional_results_path, seed, civilizations, "baseline"
+        )
+        with open(baseline_seed_dir / "questions.json", "w") as f:
+            json.dump(baseline_questions, f, indent=2)
+        if (baseline_seed_dir / "world_report").exists():
+            shutil.rmtree(baseline_seed_dir / "world_report")
+        shutil.copytree(world_report_dir, baseline_seed_dir / "world_report")
+        n_baseline = len(baseline_questions.get("questions", []))
+        total_baseline += n_baseline
+
+        # 2. Generate conditional questions (intervention framing, intervention answer)
+        conditional_seed_dir = conditional_eval_dir / seed
+        conditional_seed_dir.mkdir(parents=True, exist_ok=True)
+        conditional_questions = generate_questions_from_conditional_results(
+            conditional_results_path, seed, civilizations, "conditional"
+        )
+        with open(conditional_seed_dir / "conditional_questions.json", "w") as f:
+            json.dump(conditional_questions, f, indent=2)
+        if (conditional_seed_dir / "world_report").exists():
+            shutil.rmtree(conditional_seed_dir / "world_report")
+        shutil.copytree(world_report_dir, conditional_seed_dir / "world_report")
+        n_conditional = len(conditional_questions.get("questions", []))
+        total_conditional += n_conditional
+
+        # 3. Generate null conditional questions (negated intervention framing, control answer)
+        null_cond_seed_dir = conditional_no_eval_dir / seed
+        null_cond_seed_dir.mkdir(parents=True, exist_ok=True)
+        null_cond_questions = generate_questions_from_conditional_results(
+            conditional_results_path, seed, civilizations, "null_conditional"
+        )
+        with open(null_cond_seed_dir / "questions.json", "w") as f:
+            json.dump(null_cond_questions, f, indent=2)
+        if (null_cond_seed_dir / "world_report").exists():
+            shutil.rmtree(null_cond_seed_dir / "world_report")
+        shutil.copytree(world_report_dir, null_cond_seed_dir / "world_report")
+        n_null_conditional = len(null_cond_questions.get("questions", []))
+        total_null_conditional += n_null_conditional
+
+        print(f"    Baseline: {n_baseline}, Conditional: {n_conditional}, Null-conditional: {n_null_conditional}")
+
+    print()
+    print("=" * 60)
+    print("Summary:")
+    print(f"  Baseline questions:        {total_baseline}")
+    print(f"  Conditional questions:     {total_conditional}")
+    print(f"  Null-conditional questions: {total_null_conditional}")
+    print()
+    print("All three conditions use the SAME underlying questions with:")
+    print("  - Baseline: unconditional framing, control (baseline) answer")
+    print("  - Conditional: 'If switches to Republic' framing, intervention (fork) answer")
+    print("  - Null-conditional: 'If does NOT switch' framing, control (baseline) answer")
+    print()
+    print("Evaluation directories created:")
+    print(f"  {baseline_eval_dir}")
+    print(f"  {conditional_eval_dir}")
+    print(f"  {conditional_no_eval_dir}")
+    print()
+    print("To run evaluations:")
+    print("  # Baseline")
+    print(f"  python scripts/evaluate_llm_forecasts_parallel.py --data-dir data/questions_baseline_eval --models anthropic/claude-opus-4-5-20251101")
+    print()
+    print("  # Conditional (Republic intervention)")
+    print(f"  python scripts/evaluate_llm_forecasts_parallel.py --data-dir data/questions_conditional_eval --models anthropic/claude-opus-4-5-20251101")
+    print()
+    print("  # Null conditional (NOT Republic)")
+    print(f"  python scripts/evaluate_llm_forecasts_parallel.py --data-dir data/questions_conditional_no_eval --models anthropic/claude-opus-4-5-20251101")
+
+
+if __name__ == "__main__":
+    setup_evaluation_directories()

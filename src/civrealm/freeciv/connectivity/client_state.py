@@ -185,8 +185,13 @@ class ClientState(CivPropController):
 
     def try_create_user_account(self, host, username, password):
         url = f"http://{host}:{fc_web_args['port']}/create_pbem_user?username={username}&email={username}@civrealm.org&password={password}&captcha=null"
-        response = requests.post(url)
-        return response.status_code
+        try:
+            response = requests.post(url, timeout=5)
+            return response.status_code
+        except Exception as e:
+            # PBEM service may not be running, but user accounts might not be required for singleplayer/multiplayer
+            fc_logger.warning(f"Failed to create user account: {e}")
+            return 0
 
     def login(self):
         freeciv_version = "+Freeciv.Web.Devel-3.3"
@@ -238,7 +243,20 @@ class ClientState(CivPropController):
     def set_multiplayer_game(self):
         # Set AI player to 0. Based on HACKING file
         self.ws_client.send_message(f"/rulesetdir {fc_args['ruleset']}")
+        # Set AI difficulty to hard before aifill creates AI players
+        self.ws_client.send_message("/set skilllevel hard")
+        time.sleep(0.5)
         self.ws_client.send_message(f"/set aifill {fc_args['aifill']}")
+        time.sleep(0.5)
+        # Set all AI-filled players to hard difficulty
+        self.ws_client.send_message("/hard")
+        time.sleep(0.2)
+        # Try to gain admin access first, then disable fog of war
+        self.ws_client.send_message("/cmdlevel hack")
+        # Disable fog of war to get complete world data for reports
+        self.ws_client.send_message("/set fogofwar 0")
+        # Try alternative: reveal the map
+        self.ws_client.send_message("/revealmap")
         self.ws_client.send_message(f"/set endvictory {fc_args['endvictory']}")
         self.ws_client.send_message(f"/set advisor {fc_args['advisor']}")
         self.ws_client.send_message(f"/set victories {fc_args['victories']}")

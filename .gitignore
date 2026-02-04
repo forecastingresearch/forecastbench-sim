@@ -2,6 +2,7 @@
 .vscode/
 .settings/
 .ipynb_checkpoints/
+.claude/
 
 # Generated files
 plot_game_scores/
@@ -21,3 +22,12 @@ __pycache__/
 *.log
 tmp.prof
 dataset/
+data/
+archive/
+
+.DS_Store
+logs/
+questions_s42.json
+reports/
+
+.env
