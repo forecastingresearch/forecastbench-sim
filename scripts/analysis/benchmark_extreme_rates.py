@@ -5,10 +5,16 @@ import json
 import random
 import re
 import os
+import sys
 from pathlib import Path
 
-from utils.llm.litellm_models import configure_api_keys, get_models
 from dotenv import load_dotenv
+load_dotenv(Path(__file__).parent.parent.parent / ".env")
+
+# Add src to path
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
+
+from civrealm.evaluation.models import get_models
 
 def load_questions_by_template(data_dir: Path, template_filters: dict[str, str | None]) -> dict[str, list]:
     """Load questions filtered by template_id and optionally by horizon.
@@ -91,10 +97,7 @@ def main():
     env_path = Path(__file__).parent.parent / ".env"
     if env_path.exists():
         load_dotenv(env_path)
-    configure_api_keys(from_gcp=True)
-    print("API keys configured")
-
-    data_dir = Path(__file__).parent.parent / "data" / "questions"
+    data_dir = Path(__file__).parent.parent.parent / "data" / "questions"
     # Filter: wonder_first H1 (lower base rate), city_conquered_any H2 (higher base rate)
     template_filters = {
         "wonder_first": "H1",

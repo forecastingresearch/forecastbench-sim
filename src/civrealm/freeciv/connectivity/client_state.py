@@ -243,7 +243,14 @@ class ClientState(CivPropController):
     def set_multiplayer_game(self):
         # Set AI player to 0. Based on HACKING file
         self.ws_client.send_message(f"/rulesetdir {fc_args['ruleset']}")
+        # Set AI difficulty to hard before aifill creates AI players
+        self.ws_client.send_message("/set skilllevel hard")
+        time.sleep(0.5)
         self.ws_client.send_message(f"/set aifill {fc_args['aifill']}")
+        time.sleep(0.5)
+        # Set all AI-filled players to hard difficulty
+        self.ws_client.send_message("/hard")
+        time.sleep(0.2)
         # Try to gain admin access first, then disable fog of war
         self.ws_client.send_message("/cmdlevel hack")
         # Disable fog of war to get complete world data for reports

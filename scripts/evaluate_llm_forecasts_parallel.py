@@ -37,11 +37,16 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
+# Load environment variables from .env file
+load_dotenv(Path(__file__).parent.parent / ".env")
+
 # Add src to path for local imports
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from utils.llm.litellm_models import configure_api_keys, get_models
+from civrealm.evaluation.models import get_models, load_api_keys_from_gcp
 
+# Load API keys from GCP Secret Manager (uses GOOGLE_CLOUD_PROJECT from .env)
+load_api_keys_from_gcp()
 from civrealm.evaluation.sampling import (
     load_all_questions,
     stratified_sample_batched,
@@ -79,8 +84,8 @@ FORECASTBENCH_MODELS = [
 
 # Frontier models without ForecastBench scores yet (LiteLLM format: provider/model)
 FRONTIER_MODELS = [
-    # "anthropic/claude-opus-4-5-20251101",
-    # "anthropic/claude-sonnet-4-5-20250929",
+    "anthropic/claude-opus-4-5-20251101",
+    "anthropic/claude-sonnet-4-5-20250929",
     "google/gemini-3-pro-preview",
     "openai/gpt-5.1-2025-11-13",
 ]
@@ -308,21 +313,6 @@ async def main():
 
     logger.info(f"CivBench Parallel Evaluation - Run {run_id}")
     logger.info(f"Log directory: {log_dir}")
-
-    # Load environment variables
-    load_dotenv()
-
-    # Configure API keys (skip in dry-run mode)
-    if not args.dry_run:
-        logger.info("Configuring API keys...")
-        configure_api_keys(
-            from_gcp=True,
-            # anthropic=os.getenv("ANTHROPIC_API_KEY"),
-            # openai=os.getenv("OPENAI_API_KEY"),
-            # google=os.getenv("GOOGLE_API_KEY"),
-            # together=os.getenv("TOGETHER_API_KEY"),
-            # mistral=os.getenv("MISTRAL_API_KEY"),
-        )
 
     # Load all questions (with optional difficulty filtering)
     data_dir = Path(args.data_dir)

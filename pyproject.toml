@@ -47,6 +47,9 @@ dependencies = [
     'tqdm',
     # The following packages are for parallel training
     'ray==2.6.3; python_version < "3.12"',
+    "python-dotenv>=1.0.1",
+    "litellm>=1.80.0",
+    "google-cloud-secret-manager>=2.16.0",
 ]
 requires-python = ">= 3.8"
 

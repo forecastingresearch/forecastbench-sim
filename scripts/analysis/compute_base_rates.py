@@ -9,7 +9,7 @@ This script processes game data JSON files to compute base rates for each
 
 Usage:
     python compute_base_rates.py
-    python compute_base_rates.py --data-dir data/games --snapshot-turn 50
+    python compute_base_rates.py --data-dir data/games --snapshot-turn 60
     python compute_base_rates.py --output base_rates.json
 """
 
@@ -218,8 +218,8 @@ def main():
     parser.add_argument(
         '--snapshot-turn',
         type=int,
-        default=50,
-        help='Turn at which forecasters see data (default: 50)'
+        default=60,
+        help='Turn at which forecasters see data (default: 60)'
     )
     parser.add_argument(
         '--output', '-o',

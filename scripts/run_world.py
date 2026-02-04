@@ -17,7 +17,12 @@ Setup:
 - All players use the same Freeciv AI algorithm
 
 Output:
-- Recordings saved to: logs/recordings/s{seed}/
+- Recordings saved to: logs/recordings/seed{seed}/
+
+Authentication note:
+- The freeciv-proxy validates usernames via regex: [a-z][a-z0-9]* with 3-31 char length
+- If usernames exist in the auth table with different passwords, authentication fails
+- Solution: Use fresh usernames OR clear auth table: mysql -u docker -pchangeme freeciv_web -e 'DELETE FROM auth;'
 """
 
 import sys
@@ -63,14 +68,20 @@ def cleanup_docker_savegames(username: str, container_name: str = 'freeciv-web')
     )
 
 
-def main(seed: int, max_turns: int = 50, num_ai_players: int = 5, quiet: bool = False):
+def main(seed: int, max_turns: int = 50, num_ai_players: int = 5, quiet: bool = False, load_game: str = ""):
     # Use seed as the unique identifier for this run
-    # Freeciv requires non-numeric usernames, so prefix with 's' for seed
-    run_id = f's{seed}'
+    # Username requirements (from freeciv-proxy validate_username):
+    # - Must be 3-31 characters long
+    # - Must start with a letter [a-z]
+    # - Can only contain letters and numbers [a-z0-9]
+    # - Cannot be "pbem"
+    # Using 'seed' prefix ensures minimum 5 chars even for seed=0
+    run_id = f'seed{seed}'
     fc_args['username'] = run_id
     fc_args['debug.record_action_and_observation'] = True
     fc_args['max_turns'] = max_turns
     fc_args['aifill'] = num_ai_players
+    fc_args['begin_turn_timeout'] = 120  # Longer timeout for stable long games
 
     # Set seed for deterministic runs
     fc_args['debug.randomly_generate_seeds'] = False
@@ -79,22 +90,37 @@ def main(seed: int, max_turns: int = 50, num_ai_players: int = 5, quiet: bool = 
     # Also seed Python's random module for nation selection (used in civ_controller.py)
     random.seed(seed)
 
+    # Load game support - continue from a previous savegame
+    if load_game:
+        fc_args['debug.load_game'] = load_game
+        fc_args['debug.take_player'] = run_id  # Take control of our player
+        fc_args['begin_turn_timeout'] = 60  # Increase timeout for loaded games
+
     def log(msg):
         if not quiet:
             print(msg)
 
-    log("Starting all-AI game collection...")
+    if load_game:
+        log(f"Continuing game from savegame: {load_game}")
+    else:
+        log("Starting all-AI game collection...")
     log(f"Seed: {seed}")
     log(f"AI Players: {num_ai_players} total (all Freeciv AI at {AI_DIFFICULTY} difficulty)")
-    log(f"Setup: {num_ai_players - 1} via aifill + 1 connected player toggled to AI")
-    log(f"Max turns: {max_turns}")
+    if not load_game:
+        log(f"Setup: {num_ai_players - 1} via aifill + 1 connected player toggled to AI")
+    log(f"Max turns: {max_turns} (fc_args: {fc_args['max_turns']})")
     log(f"Recording to: logs/recordings/{run_id}/")
     log("")
 
-    # Clean up any existing savegames for this run
-    cleanup_docker_savegames(run_id)
+    # Clean up any existing savegames for this run (skip if loading)
+    if not load_game:
+        cleanup_docker_savegames(run_id)
 
-    env = gymnasium.make('civrealm/FreecivBase-v0')
+    # Disable env checker when loading games (observations may be empty initially)
+    if load_game:
+        env = gymnasium.make('civrealm/FreecivBase-v0', disable_env_checker=True)
+    else:
+        env = gymnasium.make('civrealm/FreecivBase-v0')
     # NoOpAgent just ends turn - connected player will be toggled to Freeciv AI
     agent = NoOpAgent()
 
@@ -109,30 +135,40 @@ def main(seed: int, max_turns: int = 50, num_ai_players: int = 5, quiet: bool = 
     # Note: DO NOT enter observer mode - it prevents autosaves on turns 2-50
     # Observer mode causes handle_begin_turn to exit early without calling save_game()
 
-    # Set AI difficulty level for all AI players
-    log(f"Setting AI difficulty to {AI_DIFFICULTY}...")
-    env.unwrapped.civ_controller.ws_client.send_message(f"/set skilllevel {AI_DIFFICULTY}")
-    time.sleep(1)
+    # AI difficulty is set to hard in client_state.py set_multiplayer_game()
+    # via /set skilllevel hard (before aifill) and /hard (after aifill)
 
     # NOTE: phasemode=PLAYER doesn't work with singleplayer + NoOpAgent setup
     # It causes the game to hang waiting for explicit turn control
     # In singleplayer mode, Freeciv uses concurrent turns with built-in randomization
     # which helps mitigate first-mover advantage automatically
 
-    # Randomize starting position assignments to balance the game
-    # teamplacement=DISABLED assigns starting positions randomly rather than by team
-    log("Randomizing starting positions...")
-    env.unwrapped.civ_controller.ws_client.send_message("/set teamplacement DISABLED")
-    time.sleep(0.5)
+    # Skip initial setup if loading a game (settings already in savegame)
+    if not load_game:
+        # Randomize starting position assignments to balance the game
+        # teamplacement=DISABLED assigns starting positions randomly rather than by team
+        log("Randomizing starting positions...")
+        env.unwrapped.civ_controller.ws_client.send_message("/set teamplacement DISABLED")
+        time.sleep(0.5)
 
-    # Toggle the connected player to be AI-controlled by Freeciv's built-in AI
-    log(f"Toggling {fc_args['username']} to Freeciv AI control...")
-    env.unwrapped.civ_controller.ws_client.send_message(f"/aitoggle {fc_args['username']}")
-    time.sleep(1)
+        # Toggle the connected player to be AI-controlled by Freeciv's built-in AI
+        log(f"Toggling {fc_args['username']} to Freeciv AI control...")
+        env.unwrapped.civ_controller.ws_client.send_message(f"/aitoggle {fc_args['username']}")
+        time.sleep(0.5)
 
-    # Aifill players are already AI-controlled by default (PLRF_AI flag set)
-    # DO NOT toggle them - that would turn OFF their AI!
-    log(f"All {num_ai_players - 1} aifill players are AI-controlled by default")
+        # Set the connected player to hard difficulty (after aitoggle makes it an AI)
+        log(f"Setting {fc_args['username']} to hard difficulty...")
+        env.unwrapped.civ_controller.ws_client.send_message(f"/hard {fc_args['username']}")
+        time.sleep(0.5)
+
+        # Aifill players are already AI-controlled by default (PLRF_AI flag set)
+        # DO NOT toggle them - that would turn OFF their AI!
+        log(f"All {num_ai_players - 1} aifill players are AI-controlled by default")
+    else:
+        # When loading, toggle player back to AI control
+        log(f"Toggling {fc_args['username']} back to Freeciv AI control...")
+        env.unwrapped.civ_controller.ws_client.send_message(f"/aitoggle {fc_args['username']}")
+        time.sleep(0.5)
 
     done = False
     step = 0
@@ -168,8 +204,9 @@ def main(seed: int, max_turns: int = 50, num_ai_players: int = 5, quiet: bool = 
     env.close()
 
     # Download and persist all savegames from Docker container
-    recording_dir = f'logs/recordings/{run_id}'
-    downloaded, skipped, failed = download_all_savegames_from_docker(run_id, recording_dir)
+    recording_dir = Path(__file__).parent.parent / 'logs' / 'recordings' / run_id
+    recording_dir.mkdir(parents=True, exist_ok=True)
+    downloaded, skipped, failed = download_all_savegames_from_docker(run_id, str(recording_dir))
     log(f"Downloaded {downloaded} savegames (skipped {skipped} existing, {failed} failed)")
 
     return 0
@@ -201,11 +238,18 @@ if __name__ == '__main__':
         action='store_true',
         help='Suppress output (useful for batch runs)'
     )
+    parser.add_argument(
+        '--load_game',
+        type=str,
+        default="",
+        help='Load and continue from a savegame (e.g., seed0_T260_2026-01-30-18_01)'
+    )
 
     args = parser.parse_args()
     exit(main(
         seed=args.seed,
         max_turns=args.max_turns,
         num_ai_players=args.num_ai_players,
-        quiet=args.quiet
+        quiet=args.quiet,
+        load_game=args.load_game
     ))
