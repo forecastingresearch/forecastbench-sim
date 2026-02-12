@@ -55,8 +55,8 @@ from civrealm.evaluation.sampling import (
     get_horizon_template_distribution,
 )
 from civrealm.evaluation.rate_limiter import ProviderRateLimiter
-from civrealm.evaluation.parallel_evaluator import run_batch_evaluation
-from civrealm.metrics import compute_brier_score, compute_calibration_error
+from civrealm.evaluation.parallel_evaluator import run_batch_evaluation, run_continuous_batch_evaluation
+from civrealm.metrics import compute_brier_score, compute_calibration_error, compute_crps, compute_aggregate_crps, compute_aggregate_mae
 
 # - [X] claude forecastbench models
 # - [ ] gpt/gemini fast models
@@ -132,64 +132,125 @@ def setup_logging(run_id: str, log_dir: Path) -> logging.Logger:
 
 
 
+def _compute_binary_metrics(results: list[dict], model_id: str) -> dict:
+    """Compute metrics for binary questions."""
+    # Collect predictions and outcomes
+    predictions = []
+    outcomes = []
+    by_template: dict[str, tuple[list[float], list[bool]]] = defaultdict(
+        lambda: ([], [])
+    )
+
+    for qr in results:
+        pred_data = qr.get("predictions", {}).get(model_id, {})
+        prob = pred_data.get("probability")
+
+        if prob is not None:
+            predictions.append(prob)
+            outcomes.append(qr["ground_truth"])
+
+            # Group by template
+            template_id = qr.get("template_id", "unknown")
+            by_template[template_id][0].append(prob)
+            by_template[template_id][1].append(qr["ground_truth"])
+
+    # Compute overall metrics
+    brier = compute_brier_score(predictions, outcomes) if predictions else float('nan')
+    ece = compute_calibration_error(predictions, outcomes) if predictions else float('nan')
+
+    # Compute per-template Brier scores
+    brier_by_template = {}
+    for t, (preds, outs) in sorted(by_template.items()):
+        if preds:
+            brier_by_template[t] = compute_brier_score(preds, outs)
+
+    # Count failures
+    num_failures = sum(
+        1 for qr in results
+        if qr.get("predictions", {}).get(model_id, {}).get("probability") is None
+    )
+
+    return {
+        "brier_score": brier,
+        "brier_by_template": brier_by_template,
+        "ece": ece,
+        "num_predictions": len(predictions),
+        "num_failures": num_failures,
+    }
+
+
+def _compute_continuous_metrics(results: list[dict], model_id: str) -> dict:
+    """Compute metrics for continuous questions."""
+    all_percentiles = []
+    all_true_values = []
+    by_template = defaultdict(lambda: ([], []))
+
+    for qr in results:
+        pred_data = qr.get("predictions", {}).get(model_id, {})
+        percentiles = pred_data.get("percentiles")
+        if percentiles and all(k in percentiles for k in ["p10", "p25", "p50", "p75", "p90"]):
+            all_percentiles.append(percentiles)
+            all_true_values.append(qr["ground_truth"])
+            template_id = qr.get("template_id", "unknown")
+            by_template[template_id][0].append(percentiles)
+            by_template[template_id][1].append(qr["ground_truth"])
+
+    if not all_percentiles:
+        return {
+            "crps": float('nan'),
+            "mae": float('nan'),
+            "crps_by_template": {},
+            "mae_by_template": {},
+            "num_predictions": 0,
+            "num_failures": len(results),
+        }
+
+    crps = compute_aggregate_crps(all_percentiles, all_true_values)
+    mae = compute_aggregate_mae(
+        [p["p50"] for p in all_percentiles],
+        all_true_values
+    )
+
+    crps_by_template = {}
+    mae_by_template = {}
+    for t, (pcts, vals) in sorted(by_template.items()):
+        crps_by_template[t] = compute_aggregate_crps(pcts, vals)
+        mae_by_template[t] = compute_aggregate_mae([p["p50"] for p in pcts], vals)
+
+    return {
+        "crps": crps,
+        "mae": mae,
+        "crps_by_template": crps_by_template,
+        "mae_by_template": mae_by_template,
+        "num_predictions": len(all_percentiles),
+        "num_failures": len(results) - len(all_percentiles),
+    }
+
+
 def compute_metrics(results: list[dict], models: list) -> dict:
     """
     Compute evaluation metrics for each model.
 
-    Returns dict with per-model metrics including:
-    - brier_score: Overall Brier score
-    - brier_by_template: Brier score broken down by template
-    - ece: Expected Calibration Error
-    - num_predictions: Count of successful predictions
-    - num_failures: Count of failed predictions
+    Returns dict with per-model metrics including binary and continuous sections.
     """
     model_metrics = {}
 
     for model in models:
         model_id = model.id
 
-        # Collect predictions and outcomes
-        predictions = []
-        outcomes = []
-        by_template: dict[str, tuple[list[float], list[bool]]] = defaultdict(
-            lambda: ([], [])
-        )
+        # Split results by type
+        binary_results = [r for r in results if r.get("question_type", "binary") == "binary"]
+        continuous_results = [r for r in results if r.get("question_type") == "continuous"]
 
-        for qr in results:
-            pred_data = qr.get("predictions", {}).get(model_id, {})
-            prob = pred_data.get("probability")
+        # Binary metrics (existing logic)
+        binary_metrics = _compute_binary_metrics(binary_results, model_id)
 
-            if prob is not None:
-                predictions.append(prob)
-                outcomes.append(qr["ground_truth"])
-
-                # Group by template
-                template_id = qr.get("template_id", "unknown")
-                by_template[template_id][0].append(prob)
-                by_template[template_id][1].append(qr["ground_truth"])
-
-        # Compute overall metrics
-        brier = compute_brier_score(predictions, outcomes) if predictions else float('nan')
-        ece = compute_calibration_error(predictions, outcomes) if predictions else float('nan')
-
-        # Compute per-template Brier scores
-        brier_by_template = {}
-        for t, (preds, outs) in sorted(by_template.items()):
-            if preds:
-                brier_by_template[t] = compute_brier_score(preds, outs)
-
-        # Count failures
-        num_failures = sum(
-            1 for qr in results
-            if qr.get("predictions", {}).get(model_id, {}).get("probability") is None
-        )
+        # Continuous metrics (new)
+        continuous_metrics = _compute_continuous_metrics(continuous_results, model_id)
 
         model_metrics[model_id] = {
-            "brier_score": brier,
-            "brier_by_template": brier_by_template,
-            "ece": ece,
-            "num_predictions": len(predictions),
-            "num_failures": num_failures,
+            "binary": binary_metrics,
+            "continuous": continuous_metrics,
         }
 
     return model_metrics
@@ -202,31 +263,40 @@ def print_results_summary(model_metrics: dict, base_rate: float, logger: logging
     logger.info("RESULTS SUMMARY")
     logger.info("=" * 70)
 
-    # Sort by Brier score
-    sorted_models = sorted(
-        model_metrics.items(),
-        key=lambda x: x[1]["brier_score"] if not (x[1]["brier_score"] != x[1]["brier_score"]) else float('inf')
-    )
-
-    for model_id, metrics in sorted_models:
+    for model_id, metrics in sorted(model_metrics.items()):
         logger.info(f"\n{model_id}:")
-        logger.info(f"  Brier Score: {metrics['brier_score']:.4f}")
-        logger.info(f"  ECE: {metrics['ece']:.4f}")
-        logger.info(f"  Predictions: {metrics['num_predictions']} (failures: {metrics['num_failures']})")
 
-        if metrics.get('brier_by_template'):
-            # Show all templates, sorted alphabetically
-            logger.info("  By template:")
-            for t, b in sorted(metrics['brier_by_template'].items()):
-                logger.info(f"    {t}: {b:.4f}")
+        # Binary section
+        binary = metrics.get("binary", {})
+        if binary.get("num_predictions", 0) > 0:
+            logger.info(f"  Binary:")
+            logger.info(f"    Brier Score: {binary['brier_score']:.4f}")
+            logger.info(f"    ECE: {binary['ece']:.4f}")
+            logger.info(f"    Predictions: {binary['num_predictions']} (failures: {binary['num_failures']})")
+            if binary.get('brier_by_template'):
+                logger.info("    By template:")
+                for t, b in sorted(binary['brier_by_template'].items()):
+                    logger.info(f"      {t}: {b:.4f}")
 
-    # Reference baselines
-    uninformed_brier = base_rate * (1 - base_rate) + (1 - base_rate) * base_rate**2
-    # Simpler: just use base_rate as constant prediction
-    uninformed_brier = (1 - base_rate) * base_rate**2 + base_rate * (1 - base_rate)**2
+        # Continuous section
+        continuous = metrics.get("continuous", {})
+        if continuous.get("num_predictions", 0) > 0:
+            logger.info(f"  Continuous:")
+            logger.info(f"    CRPS: {continuous['crps']:.2f}")
+            logger.info(f"    MAE: {continuous['mae']:.2f}")
+            logger.info(f"    Predictions: {continuous['num_predictions']} (failures: {continuous['num_failures']})")
+            if continuous.get('crps_by_template'):
+                logger.info("    By template (CRPS / MAE):")
+                for t in sorted(continuous['crps_by_template'].keys()):
+                    c = continuous['crps_by_template'][t]
+                    m = continuous.get('mae_by_template', {}).get(t, float('nan'))
+                    logger.info(f"      {t}: {c:.2f} / {m:.2f}")
 
-    logger.info(f"\nBaseline (always predict {base_rate:.2f}):")
-    logger.info(f"  Brier Score: {uninformed_brier:.4f}")
+    # Reference baselines (binary only)
+    if base_rate > 0:
+        uninformed_brier = (1 - base_rate) * base_rate**2 + base_rate * (1 - base_rate)**2
+        logger.info(f"\nBinary Baseline (always predict {base_rate:.2f}):")
+        logger.info(f"  Brier Score: {uninformed_brier:.4f}")
 
 
 async def main():
@@ -304,6 +374,11 @@ async def main():
         "--update-difficulty", action="store_true",
         help="Recompute and update difficulty scores after evaluation completes"
     )
+    parser.add_argument(
+        "--question-type", type=str, default="all",
+        choices=["all", "binary", "continuous"],
+        help="Filter questions by type (default: all)"
+    )
     args = parser.parse_args()
 
     # Setup run ID and logging
@@ -340,6 +415,11 @@ async def main():
         if not all_questions:
             logger.error(f"No questions found with horizons: {args.horizon}")
             return 1
+
+    # Filter by question type if specified
+    if args.question_type != "all":
+        all_questions = [q for q in all_questions if q.get("question_type", "binary") == args.question_type]
+        logger.info(f"Filtered to {len(all_questions)} {args.question_type} questions")
 
     # Show available template distribution
     full_dist = get_template_distribution(all_questions)
@@ -388,6 +468,19 @@ async def main():
         f"(chunk size={batch_size}) {sampling_note}"
     )
 
+    # Split batches by question type for separate prompting
+    binary_batches = []
+    continuous_batches = []
+    for batch in question_batches:
+        binary_qs = [q for q in batch if q.get("question_type", "binary") == "binary"]
+        continuous_qs = [q for q in batch if q.get("question_type") == "continuous"]
+        if binary_qs:
+            binary_batches.append(binary_qs)
+        if continuous_qs:
+            continuous_batches.append(continuous_qs)
+
+    logger.info(f"Split into {len(binary_batches)} binary batches, {len(continuous_batches)} continuous batches")
+
     # Show sampled distribution
     sampled_dist = get_template_distribution(questions)
     logger.info(f"Sampled template distribution: {sampled_dist}")
@@ -399,23 +492,41 @@ async def main():
         for horizon, templates in ht_dist.items():
             logger.info(f"  {horizon}: {len(templates)} templates, {sum(templates.values())} questions")
 
-    # Calculate base rate
-    true_count = sum(1 for q in questions if q['ground_truth'])
-    base_rate = true_count / len(questions)
-    logger.info(f"Sample base rate: {base_rate:.1%} ({true_count}/{len(questions)} true)")
+    # Calculate base rate (binary questions only)
+    binary_questions = [q for q in questions if q.get("question_type", "binary") == "binary"]
+    true_count = sum(1 for q in binary_questions if q['ground_truth']) if binary_questions else 0
+    base_rate = true_count / len(binary_questions) if binary_questions else 0.5
+    logger.info(f"Sample base rate (binary): {base_rate:.1%} ({true_count}/{len(binary_questions)} true)")
+
+    # Track question type distribution
+    type_dist = defaultdict(int)
+    for q in questions:
+        type_dist[q.get("question_type", "binary")] += 1
+    logger.info(f"Question type distribution: {dict(type_dist)}")
 
     if args.dry_run:
         logger.info("\n[Dry run - not querying models]")
-        logger.info(f"\nSample batches ({len(question_batches)} games):")
-        for batch in question_batches[:3]:
+        logger.info(f"\nSample binary batches ({len(binary_batches)} total):")
+        for batch in binary_batches[:2]:
             game_id = batch[0]["game_id"] if batch else "?"
             logger.info(f"\n  Game: {game_id}")
             for q in batch[:3]:
                 logger.info(f"    - [{q.get('template_id', '?')}] {q['question_text'][:60]}...")
             if len(batch) > 3:
                 logger.info(f"    ... and {len(batch) - 3} more questions")
-        if len(question_batches) > 3:
-            logger.info(f"\n  ... and {len(question_batches) - 3} more game batches")
+        if len(binary_batches) > 2:
+            logger.info(f"\n  ... and {len(binary_batches) - 2} more binary batches")
+
+        logger.info(f"\nSample continuous batches ({len(continuous_batches)} total):")
+        for batch in continuous_batches[:2]:
+            game_id = batch[0]["game_id"] if batch else "?"
+            logger.info(f"\n  Game: {game_id}")
+            for q in batch[:3]:
+                logger.info(f"    - [{q.get('template_id', '?')}] {q['question_text'][:60]}...")
+            if len(batch) > 3:
+                logger.info(f"    ... and {len(batch) - 3} more questions")
+        if len(continuous_batches) > 2:
+            logger.info(f"\n  ... and {len(continuous_batches) - 2} more continuous batches")
         return 0
 
     # Determine which models to use
@@ -441,8 +552,10 @@ async def main():
         "sampling_mode": "horizon_template" if args.questions_per_horizon_template else "template",
         "total_questions": len(questions),
         "base_rate": base_rate,
+        "question_type_distribution": dict(type_dist),
         "template_distribution": sampled_dist,
         "horizon_filter": args.horizon,
+        "question_type_filter": args.question_type,
         "models": [m.id for m in models_to_use],
         "start_time": datetime.now().isoformat() + "Z",
     }
@@ -461,22 +574,48 @@ async def main():
     timeout_str = f", timeout={timeout}s" if timeout else ", no timeout"
     start_time = datetime.now()
 
-    logger.info(
-        f"\nStarting evaluation ({len(question_batches)} game batches, "
-        f"concurrency={args.concurrent_batches}{timeout_str})..."
-    )
-    results = await run_batch_evaluation(
-        question_batches=question_batches,
-        models=models_to_use,
-        rate_limiter=rate_limiter,
-        data_dir=data_dir,
-        checkpoint_file=checkpoint_file,
-        checkpoint_interval=args.checkpoint_interval,
-        metadata=metadata,
-        timeout=timeout,
-        verbose=args.verbose,
-        concurrent_batches=args.concurrent_batches,
-    )
+    # Run binary and continuous evaluations separately
+    binary_results = []
+    continuous_results = []
+
+    if binary_batches:
+        logger.info(
+            f"\nStarting binary evaluation ({len(binary_batches)} game batches, "
+            f"concurrency={args.concurrent_batches}{timeout_str})..."
+        )
+        binary_results = await run_batch_evaluation(
+            question_batches=binary_batches,
+            models=models_to_use,
+            rate_limiter=rate_limiter,
+            data_dir=data_dir,
+            checkpoint_file=checkpoint_file,
+            checkpoint_interval=args.checkpoint_interval,
+            metadata=metadata,
+            timeout=timeout,
+            verbose=args.verbose,
+            concurrent_batches=args.concurrent_batches,
+        )
+
+    if continuous_batches:
+        logger.info(
+            f"\nStarting continuous evaluation ({len(continuous_batches)} game batches, "
+            f"concurrency={args.concurrent_batches}{timeout_str})..."
+        )
+        continuous_results = await run_continuous_batch_evaluation(
+            question_batches=continuous_batches,
+            models=models_to_use,
+            rate_limiter=rate_limiter,
+            data_dir=data_dir,
+            checkpoint_file=checkpoint_file,
+            checkpoint_interval=args.checkpoint_interval,
+            metadata=metadata,
+            timeout=timeout,
+            verbose=args.verbose,
+            concurrent_batches=args.concurrent_batches,
+        )
+
+    # Merge results
+    results = binary_results + continuous_results
 
     end_time = datetime.now()
     duration = (end_time - start_time).total_seconds()
@@ -502,7 +641,7 @@ async def main():
     if args.output:
         output_path = Path(args.output)
     else:
-        output_path = Path(f"data/evaluations/parallel_eval_{args.seed}_{run_id}.json")
+        output_path = Path(f"data/evaluations/runs/parallel_eval_{args.seed}_{run_id}.json")
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     with open(output_path, 'w') as f:
@@ -521,7 +660,7 @@ async def main():
                 update_question_files,
             )
 
-            eval_dir = Path("data/evaluations")
+            eval_dir = Path("data/evaluations/results")
             questions_dir = Path("data/questions")
 
             aggregated = aggregate_evaluations(eval_dir)

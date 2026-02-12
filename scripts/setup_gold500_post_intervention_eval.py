@@ -162,7 +162,7 @@ def create_merged_recording_dir(
 def setup_evaluation_directories():
     base_dir = Path(__file__).parent.parent
 
-    post_intervention_eval_dir = base_dir / "data" / "questions_gold500_post_intervention_eval"
+    post_intervention_eval_dir = base_dir / "data" / "conditional" / "gold500" / "post_intervention"
     questions_dir = base_dir / "data" / "questions"
 
     total = 0
@@ -247,7 +247,7 @@ def setup_evaluation_directories():
     print()
     print("To run evaluation:")
     print(f"  uv run python scripts/evaluate_llm_forecasts_parallel.py \\")
-    print(f"    --data-dir data/questions_gold500_post_intervention_eval \\")
+    print(f"    --data-dir data/conditional/gold500/post_intervention \\")
     print(f"    --models anthropic/claude-opus-4-5-20251101 \\")
     print(f"    --output data/evaluations/gold500_post_intervention_opus45_eval.json")
 

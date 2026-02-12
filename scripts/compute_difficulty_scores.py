@@ -36,8 +36,8 @@ def main():
     parser.add_argument(
         "--eval-dir",
         type=Path,
-        default=Path("data/evaluations"),
-        help="Directory containing evaluation JSON files (default: data/evaluations)",
+        default=Path("data/evaluations/results"),
+        help="Directory containing evaluation JSON files (default: data/evaluations/results)",
     )
     parser.add_argument(
         "--questions-dir",

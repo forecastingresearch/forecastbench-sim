@@ -3,7 +3,7 @@
 Set up the evaluation directories for Gold +500 conditional experiment.
 
 Uses conditional_results.json from gold +500 forks to create:
-1. questions_gold500_eval/ - "If receives +500 gold" framing, intervention answer
+1. conditional/gold500/conditional/ - "If receives +500 gold" framing, intervention answer
 
 Usage:
     python scripts/setup_gold500_conditional_eval.py
@@ -155,7 +155,7 @@ def setup_evaluation_directories():
     base_dir = Path(__file__).parent.parent
 
     # Output directory
-    gold500_eval_dir = base_dir / "data" / "questions_gold500_eval"
+    gold500_eval_dir = base_dir / "data" / "conditional" / "gold500" / "conditional"
 
     # Source directory for baseline questions (for civilizations info and world_report)
     questions_dir = base_dir / "data" / "questions"
@@ -215,7 +215,7 @@ def setup_evaluation_directories():
     print(f"  {gold500_eval_dir}")
     print()
     print("To run evaluation:")
-    print(f"  python scripts/evaluate_llm_forecasts_parallel.py --data-dir data/questions_gold500_eval --models anthropic/claude-opus-4-5-20251101 -n 20 -o data/evaluations/gold500_opus45_eval.json")
+    print(f"  python scripts/evaluate_llm_forecasts_parallel.py --data-dir data/conditional/gold500/conditional --models anthropic/claude-opus-4-5-20251101 -n 20 -o data/evaluations/gold500_opus45_eval.json")
 
 
 if __name__ == "__main__":

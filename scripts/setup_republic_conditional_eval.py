@@ -5,11 +5,11 @@ Set up the five evaluation directories for Republic conditional experiment.
 Uses the same underlying questions (from conditional_results.json) for all five conditions,
 with different framing and appropriate ground truth:
 
-1. questions_baseline_eval/ - Unconditional framing, baseline (control) answer
-2. questions_conditional_eval/ - "If switches to Republic" framing, fork (intervention) answer
-3. questions_conditional_no_eval/ - "If does NOT switch to Republic" framing, baseline (control) answer
-4. questions_given_that_eval/ - "Given that will switch to Republic" framing, fork (intervention) answer
-5. questions_post_intervention_eval/ - Unconditional framing, fork (intervention) answer, post-intervention world report
+1. conditional/republic/baseline/ - Unconditional framing, baseline (control) answer
+2. conditional/republic/conditional/ - "If switches to Republic" framing, fork (intervention) answer
+3. conditional/republic/conditional_no/ - "If does NOT switch to Republic" framing, baseline (control) answer
+4. conditional/republic/given_that/ - "Given that will switch to Republic" framing, fork (intervention) answer
+5. conditional/republic/post_intervention/ - Unconditional framing, fork (intervention) answer, post-intervention world report
 
 Conditions 1-4 share the same pre-intervention world_report per seed.
 Condition 5 uses a merged recording dir (baseline turns 1-59 + fork turn 60 state)
@@ -278,11 +278,11 @@ def setup_evaluation_directories():
     base_dir = Path(__file__).parent.parent
 
     # Output directories
-    baseline_eval_dir = base_dir / "data" / "questions_baseline_eval"
-    conditional_eval_dir = base_dir / "data" / "questions_conditional_eval"
-    conditional_no_eval_dir = base_dir / "data" / "questions_conditional_no_eval"
-    given_that_eval_dir = base_dir / "data" / "questions_given_that_eval"
-    post_intervention_eval_dir = base_dir / "data" / "questions_post_intervention_eval"
+    baseline_eval_dir = base_dir / "data" / "conditional" / "republic" / "baseline"
+    conditional_eval_dir = base_dir / "data" / "conditional" / "republic" / "conditional"
+    conditional_no_eval_dir = base_dir / "data" / "conditional" / "republic" / "conditional_no"
+    given_that_eval_dir = base_dir / "data" / "conditional" / "republic" / "given_that"
+    post_intervention_eval_dir = base_dir / "data" / "conditional" / "republic" / "post_intervention"
 
     # Source directory for baseline questions (for civilizations info and world_report)
     questions_dir = base_dir / "data" / "questions"
@@ -437,19 +437,19 @@ def setup_evaluation_directories():
     print()
     print("To run evaluations:")
     print("  # Baseline")
-    print(f"  python scripts/evaluate_llm_forecasts_parallel.py --data-dir data/questions_baseline_eval --models anthropic/claude-opus-4-5-20251101")
+    print(f"  python scripts/evaluate_llm_forecasts_parallel.py --data-dir data/conditional/republic/baseline --models anthropic/claude-opus-4-5-20251101")
     print()
     print("  # Conditional (Republic intervention)")
-    print(f"  python scripts/evaluate_llm_forecasts_parallel.py --data-dir data/questions_conditional_eval --models anthropic/claude-opus-4-5-20251101")
+    print(f"  python scripts/evaluate_llm_forecasts_parallel.py --data-dir data/conditional/republic/conditional --models anthropic/claude-opus-4-5-20251101")
     print()
     print("  # Null conditional (NOT Republic)")
-    print(f"  python scripts/evaluate_llm_forecasts_parallel.py --data-dir data/questions_conditional_no_eval --models anthropic/claude-opus-4-5-20251101")
+    print(f"  python scripts/evaluate_llm_forecasts_parallel.py --data-dir data/conditional/republic/conditional_no --models anthropic/claude-opus-4-5-20251101")
     print()
     print("  # Given-that conditional (presuppositional framing)")
-    print(f"  python scripts/evaluate_llm_forecasts_parallel.py --data-dir data/questions_given_that_eval --models anthropic/claude-opus-4-5-20251101")
+    print(f"  python scripts/evaluate_llm_forecasts_parallel.py --data-dir data/conditional/republic/given_that --models anthropic/claude-opus-4-5-20251101")
     print()
     print("  # Post-intervention baseline (unconditional + post-intervention world state)")
-    print(f"  python scripts/evaluate_llm_forecasts_parallel.py --data-dir data/questions_post_intervention_eval --models anthropic/claude-opus-4-5-20251101")
+    print(f"  python scripts/evaluate_llm_forecasts_parallel.py --data-dir data/conditional/republic/post_intervention --models anthropic/claude-opus-4-5-20251101")
 
 
 if __name__ == "__main__":
