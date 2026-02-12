@@ -1,6 +1,6 @@
 # CivBench
 
-Forecasting benchmark for LLMs built on Civilization V game simulations. Models read a world state report from a game in progress and answer questions about future game outcomes.
+Forecasting benchmark for LLMs built on FreeCiv game simulations. Models read a world state report from a game in progress and answer questions about future game outcomes.
 
 ## What it tests
 
@@ -39,12 +39,12 @@ Results are saved to `data/evaluations/runs/`.
 
 ```
 Game Execution → Serialization → Question Generation → Conditional Experiments → LLM Evaluation
-(Civ V)          (games/)        (questions/)          (conditional/)           (evaluations/)
+(FreeCiv)          (games/)        (questions/)          (conditional/)           (evaluations/)
 ```
 
 | Stage | Script | Purpose |
 |-------|--------|---------|
-| Game execution | `scripts/run_world.py` | Run a single Civ V simulation |
+| Game execution | `scripts/run_world.py` | Run a single FreeCiv simulation |
 | Game execution | `scripts/run_worlds.py` | Run batch of simulations |
 | Game execution | `scripts/run_fork.py` | Fork a game with an intervention |
 | Serialization | `scripts/generate_data_batch.py` | Serialize game saves to JSON |

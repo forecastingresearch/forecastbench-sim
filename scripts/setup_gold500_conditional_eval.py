@@ -21,6 +21,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 # Gold +500 fork directories for each seed
 GOLD500_FORKS = {
     "seed0": "logs/recordings/seed0forkgoldadd500p0",
+    "seed1": "logs/recordings/seed1forkgoldadd500p0",
     "seed2": "logs/recordings/seed2forkgoldadd500p0",
     "seed3": "logs/recordings/seed3forkgoldadd500p0",
     "seed4": "logs/recordings/seed4forkgoldadd500p0",
@@ -28,6 +29,8 @@ GOLD500_FORKS = {
     "seed6": "logs/recordings/seed6forkgoldadd500p0",
     "seed7": "logs/recordings/seed7forkgoldadd500p0",
     "seed8": "logs/recordings/seed8forkgoldadd500p0",
+    "seed9": "logs/recordings/seed9forkgoldadd500p0",
+    "seed10": "logs/recordings/seed10forkgoldadd500p0",
 }
 
 # Template text for conditional (intervention) questions - Gold +500
@@ -42,6 +45,16 @@ CONDITIONAL_TEXT_TEMPLATES = {
     "tech_discovered": "If {civ} received +500 gold next turn, would {civ} have discovered {tech_name} by turn {resolution_turn}?",
     "wonder_completed": "If the civilization received +500 gold next turn, would {wonder_name} be completed by any civilization by turn {resolution_turn}?",
     "government_at": "If {civ} received +500 gold next turn, would {civ} be in {government_type} at turn {resolution_turn}?",
+}
+
+# Continuous template text for conditional (intervention) questions - Gold +500
+CONDITIONAL_CONTINUOUS_TEXT_TEMPLATES = {
+    "techs_continuous": "If {civ} received +500 gold next turn, how many technologies will {civ} have discovered by turn {resolution_turn}?",
+    "treasury_continuous": "If {civ} received +500 gold next turn, how much gold will {civ} have at turn {resolution_turn}?",
+    "population_continuous": "If {civ} received +500 gold next turn, what will {civ}'s population be at turn {resolution_turn}?",
+    "cities_count_continuous": "If {civ} received +500 gold next turn, how many cities will {civ} have at turn {resolution_turn}?",
+    "territory_continuous": "If {civ} received +500 gold next turn, how many tiles will {civ} control at turn {resolution_turn}?",
+    "scores_continuous": "If {civ} received +500 gold next turn, what will {civ}'s score be at turn {resolution_turn}?",
 }
 
 
@@ -93,6 +106,7 @@ def generate_questions_from_conditional_results(
     checkpoint_turn = cond_data.get("checkpoint_turn", 60)
 
     text_templates = CONDITIONAL_TEXT_TEMPLATES
+    continuous_text_templates = CONDITIONAL_CONTINUOUS_TEXT_TEMPLATES
     answer_key = "answer_intervention"
     template_prefix = "conditional_"
     question_id_suffix = "_intervention"
@@ -114,22 +128,28 @@ def generate_questions_from_conditional_results(
         params = q["target_parameters"]
         resolution_turn = q["resolution_turn"]
 
+        # Determine if continuous
+        is_continuous = template_id.endswith("_continuous")
+
         # Generate question text with appropriate framing
-        question_text = format_question_text(template_id, params, text_templates)
+        templates_to_use = continuous_text_templates if is_continuous else text_templates
+        question_text = format_question_text(template_id, params, templates_to_use)
         horizon = get_horizon(checkpoint_turn, resolution_turn)
 
-        questions.append({
+        question_entry = {
             "question_id": f"{cond_id}{question_id_suffix}",
             "template_id": f"{template_prefix}{template_id}",
             "resolution_turn": resolution_turn,
             "horizon": horizon,
+            "question_type": "continuous" if is_continuous else "binary",
             "parameters": {
                 **params,
                 "checkpoint_turn": checkpoint_turn,
             },
             "question_text": question_text,
-            "resolution": {"answer": answer},
-        })
+            "resolution": {"value_at_resolution": answer} if is_continuous else {"answer": answer},
+        }
+        questions.append(question_entry)
 
     if skipped > 0:
         print(f"      Skipped {skipped} questions with missing {answer_key}")

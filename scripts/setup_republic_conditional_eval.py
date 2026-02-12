@@ -35,6 +35,7 @@ from civrealm.world_reports import generate_txt_report
 # Republic fork directories for each seed
 REPUBLIC_FORKS = {
     "seed0": "logs/recordings/seed0forkgovRepp0v1770146193",
+    "seed1": "logs/recordings/seed1forkgovRepublicp0",
     "seed2": "logs/recordings/seed2forkgovRepublicp0",
     "seed3": "logs/recordings/seed3forkgovRepublicp0",
     "seed4": "logs/recordings/seed4forkgovRepublicp0",
@@ -42,6 +43,8 @@ REPUBLIC_FORKS = {
     "seed6": "logs/recordings/seed6forkgovRepublicp0",
     "seed7": "logs/recordings/seed7forkgovRepublicp0",
     "seed8": "logs/recordings/seed8forkgovRepublicp0",
+    "seed9": "logs/recordings/seed9forkgovRepublicp0",
+    "seed10": "logs/recordings/seed10forkgovRepublicp0",
 }
 
 # Template text for baseline (unconditional) questions
@@ -84,6 +87,46 @@ NULL_CONDITIONAL_TEXT_TEMPLATES = {
     "tech_discovered": "If {civ} does NOT switch to Republic next turn, would {civ} have discovered {tech_name} by turn {resolution_turn}?",
     "wonder_completed": "If no civilization switches to Republic next turn, would {wonder_name} be completed by any civilization by turn {resolution_turn}?",
     "government_at": "If {civ} does NOT switch to Republic next turn, would {civ} be in {government_type} at turn {resolution_turn}?",
+}
+
+# Continuous template text for baseline (unconditional) questions
+BASELINE_CONTINUOUS_TEXT_TEMPLATES = {
+    "techs_continuous": "How many technologies will {civ} have discovered by turn {resolution_turn}?",
+    "treasury_continuous": "How much gold will {civ} have at turn {resolution_turn}?",
+    "population_continuous": "What will {civ}'s population be at turn {resolution_turn}?",
+    "cities_count_continuous": "How many cities will {civ} have at turn {resolution_turn}?",
+    "territory_continuous": "How many tiles will {civ} control at turn {resolution_turn}?",
+    "scores_continuous": "What will {civ}'s score be at turn {resolution_turn}?",
+}
+
+# Continuous template text for conditional (intervention) questions
+CONDITIONAL_CONTINUOUS_TEXT_TEMPLATES = {
+    "techs_continuous": "If {civ} switches to Republic next turn, how many technologies will {civ} have discovered by turn {resolution_turn}?",
+    "treasury_continuous": "If {civ} switches to Republic next turn, how much gold will {civ} have at turn {resolution_turn}?",
+    "population_continuous": "If {civ} switches to Republic next turn, what will {civ}'s population be at turn {resolution_turn}?",
+    "cities_count_continuous": "If {civ} switches to Republic next turn, how many cities will {civ} have at turn {resolution_turn}?",
+    "territory_continuous": "If {civ} switches to Republic next turn, how many tiles will {civ} control at turn {resolution_turn}?",
+    "scores_continuous": "If {civ} switches to Republic next turn, what will {civ}'s score be at turn {resolution_turn}?",
+}
+
+# Continuous template text for null conditional (negated intervention) questions
+NULL_CONDITIONAL_CONTINUOUS_TEXT_TEMPLATES = {
+    "techs_continuous": "If {civ} does NOT switch to Republic next turn, how many technologies will {civ} have discovered by turn {resolution_turn}?",
+    "treasury_continuous": "If {civ} does NOT switch to Republic next turn, how much gold will {civ} have at turn {resolution_turn}?",
+    "population_continuous": "If {civ} does NOT switch to Republic next turn, what will {civ}'s population be at turn {resolution_turn}?",
+    "cities_count_continuous": "If {civ} does NOT switch to Republic next turn, how many cities will {civ} have at turn {resolution_turn}?",
+    "territory_continuous": "If {civ} does NOT switch to Republic next turn, how many tiles will {civ} control at turn {resolution_turn}?",
+    "scores_continuous": "If {civ} does NOT switch to Republic next turn, what will {civ}'s score be at turn {resolution_turn}?",
+}
+
+# Continuous template text for "given that" conditional (presuppositional framing) questions
+GIVEN_THAT_CONTINUOUS_TEXT_TEMPLATES = {
+    "techs_continuous": "Given that {civ} will switch to Republic next turn, how many technologies will {civ} have discovered by turn {resolution_turn}?",
+    "treasury_continuous": "Given that {civ} will switch to Republic next turn, how much gold will {civ} have at turn {resolution_turn}?",
+    "population_continuous": "Given that {civ} will switch to Republic next turn, what will {civ}'s population be at turn {resolution_turn}?",
+    "cities_count_continuous": "Given that {civ} will switch to Republic next turn, how many cities will {civ} have at turn {resolution_turn}?",
+    "territory_continuous": "Given that {civ} will switch to Republic next turn, how many tiles will {civ} control at turn {resolution_turn}?",
+    "scores_continuous": "Given that {civ} will switch to Republic next turn, what will {civ}'s score be at turn {resolution_turn}?",
 }
 
 # Template text for "given that" conditional (presuppositional framing) questions
@@ -153,26 +196,31 @@ def generate_questions_from_conditional_results(
     # Select text templates and answer key based on condition type
     if condition_type == "baseline":
         text_templates = BASELINE_TEXT_TEMPLATES
+        continuous_text_templates = BASELINE_CONTINUOUS_TEXT_TEMPLATES
         answer_key = "answer_control"
         template_prefix = ""
         question_id_suffix = ""
     elif condition_type == "conditional":
         text_templates = CONDITIONAL_TEXT_TEMPLATES
+        continuous_text_templates = CONDITIONAL_CONTINUOUS_TEXT_TEMPLATES
         answer_key = "answer_intervention"
         template_prefix = "conditional_"
         question_id_suffix = "_intervention"
     elif condition_type == "given_that":
         text_templates = GIVEN_THAT_TEXT_TEMPLATES
+        continuous_text_templates = GIVEN_THAT_CONTINUOUS_TEXT_TEMPLATES
         answer_key = "answer_intervention"
         template_prefix = "given_that_"
         question_id_suffix = "_given"
     elif condition_type == "post_intervention":
         text_templates = BASELINE_TEXT_TEMPLATES  # unconditional framing
+        continuous_text_templates = BASELINE_CONTINUOUS_TEXT_TEMPLATES
         answer_key = "answer_intervention"        # fork ground truth
         template_prefix = "post_intervention_"
         question_id_suffix = "_postintervention"
     else:  # null_conditional
         text_templates = NULL_CONDITIONAL_TEXT_TEMPLATES
+        continuous_text_templates = NULL_CONDITIONAL_CONTINUOUS_TEXT_TEMPLATES
         answer_key = "answer_control"
         template_prefix = "null_conditional_"
         question_id_suffix = "_null"
@@ -194,22 +242,28 @@ def generate_questions_from_conditional_results(
         params = q["target_parameters"]
         resolution_turn = q["resolution_turn"]
 
+        # Determine if continuous
+        is_continuous = template_id.endswith("_continuous")
+
         # Generate question text with appropriate framing
-        question_text = format_question_text(template_id, params, text_templates)
+        templates_to_use = continuous_text_templates if is_continuous else text_templates
+        question_text = format_question_text(template_id, params, templates_to_use)
         horizon = get_horizon(checkpoint_turn, resolution_turn)
 
-        questions.append({
+        question_entry = {
             "question_id": f"{cond_id}{question_id_suffix}",
             "template_id": f"{template_prefix}{template_id}",
             "resolution_turn": resolution_turn,
             "horizon": horizon,
+            "question_type": "continuous" if is_continuous else "binary",
             "parameters": {
                 **params,
                 "checkpoint_turn": checkpoint_turn,
             },
             "question_text": question_text,
-            "resolution": {"answer": answer},
-        })
+            "resolution": {"value_at_resolution": answer} if is_continuous else {"answer": answer},
+        }
+        questions.append(question_entry)
 
     if skipped > 0:
         print(f"      Skipped {skipped} questions with missing {answer_key}")
