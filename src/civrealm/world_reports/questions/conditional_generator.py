@@ -18,6 +18,7 @@ from .conditional_schema import (
     ConditionalQuestionBank,
 )
 from .schema import CivilizationInfo
+from .templates import get_template
 
 
 class ConditionalQuestionGenerator:
@@ -39,6 +40,12 @@ class ConditionalQuestionGenerator:
         "tech_discovered",
         "wonder_completed",
         "government_at",
+        "techs_continuous",
+        "treasury_continuous",
+        "population_continuous",
+        "cities_count_continuous",
+        "territory_continuous",
+        "scores_continuous",
     ]
 
     # Default gold amounts for interventions
@@ -447,6 +454,29 @@ class ConditionalQuestionGenerator:
                     resolution_turn=resolution_turn,
                 ))
                 self._question_counter += 1
+
+        elif template_id in [
+            "techs_continuous", "treasury_continuous", "population_continuous",
+            "cities_count_continuous", "territory_continuous", "scores_continuous",
+        ]:
+            # Continuous: one question for the affected civ only
+            template = get_template(template_id)
+            params = {
+                "civ": cond_civ_name,
+                "player_id": cond_player,
+                "metric": template.signal_name,
+                "resolution_turn": resolution_turn,
+                "checkpoint_turn": checkpoint_turn,
+            }
+            questions.append(ConditionalQuestion(
+                conditional_id=f"cond_q{self._question_counter:04d}",
+                condition=condition,
+                target_template_id=template_id,
+                target_parameters=params,
+                checkpoint_turn=checkpoint_turn,
+                resolution_turn=resolution_turn,
+            ))
+            self._question_counter += 1
 
         return questions
 

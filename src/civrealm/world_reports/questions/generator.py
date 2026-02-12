@@ -16,6 +16,7 @@ from .schema import (
 )
 from .templates import (
     ALL_TEMPLATES,
+    CONTINUOUS_TEMPLATES,
     TEMPLATES_BY_ID,
     get_template,
 )
@@ -285,6 +286,87 @@ class QuestionGenerator:
         #         resolution=None,
         #     ))
         #     question_counter += 1
+
+        return QuestionBank(
+            game_id=game_id,
+            snapshot_turn=snapshot_turn,
+            game_max_turn=max_turn,
+            world_report_config=world_report_config,
+            civilizations=civilizations,
+            questions=questions,
+            generated_at=datetime.utcnow().isoformat() + "Z",
+        )
+
+    def generate_continuous_questions(
+        self,
+        game_id: str,
+        game_data: dict[str, Any],
+        snapshot_turn: int,
+        resolution_turns: list[int] | None = None,
+        world_report_config: WorldReportConfig | None = None,
+        continuous_templates: list[QuestionTemplate] | None = None,
+    ) -> QuestionBank:
+        """
+        Generate continuous (single-civ absolute value) questions.
+
+        Each question asks for the numeric value of one metric for one civilization
+        at a future turn. Models output percentile estimates (p10/p25/p50/p75/p90)
+        scored with CRPS, binned Brier, interval score, or median absolute error.
+
+        Args:
+            game_id: Simulation run identifier (e.g., seed)
+            game_data: Output from MetricsCollector.collect_all()
+            snapshot_turn: Turn at which forecasters see data
+            resolution_turns: Specific turns to resolve at; auto-selected if None
+            world_report_config: Custom world report config; auto-generated if None
+            continuous_templates: Templates to use; defaults to CONTINUOUS_TEMPLATES
+
+        Returns:
+            QuestionBank with continuous questions (question_type="continuous")
+        """
+        max_turn = game_data["metadata"]["turn"]
+        if snapshot_turn >= max_turn:
+            raise ValueError(f"snapshot_turn ({snapshot_turn}) must be < max_turn ({max_turn})")
+
+        if resolution_turns is None:
+            resolution_turns = self._auto_select_resolution_turns(snapshot_turn, max_turn)
+
+        resolution_turns = [t for t in resolution_turns if snapshot_turn < t <= max_turn]
+
+        civilizations = self._extract_civilizations(game_data, snapshot_turn)
+
+        if world_report_config is None:
+            world_report_config = self._create_world_report_config(snapshot_turn)
+
+        templates = continuous_templates or CONTINUOUS_TEMPLATES
+
+        questions = []
+        question_counter = 0
+
+        for template in templates:
+            for resolution_turn in resolution_turns:
+                horizon = classify_horizon(snapshot_turn, resolution_turn)
+                for player_id, civ_info in civilizations.items():
+                    params = {
+                        "civ": civ_info.name,
+                        "player_id": player_id,
+                        "metric": template.signal_name,
+                        "resolution_turn": resolution_turn,
+                    }
+
+                    question_text = template.question_template.format(**params)
+
+                    questions.append(QuestionInstance(
+                        question_id=f"cq{question_counter:04d}",
+                        template_id=template.template_id,
+                        resolution_turn=resolution_turn,
+                        horizon=horizon,
+                        parameters=params,
+                        question_text=question_text,
+                        question_type="continuous",
+                        resolution=None,
+                    ))
+                    question_counter += 1
 
         return QuestionBank(
             game_id=game_id,

@@ -100,14 +100,14 @@ class ConditionalResult:
     intervention_outcome: ForkOutcome
     """Results from intervention fork (with condition applied)"""
 
-    answer_control: bool | None
+    answer_control: bool | int | float | None
     """Target question answer in control fork"""
 
-    answer_intervention: bool | None
+    answer_intervention: bool | int | float | None
     """Target question answer in intervention fork"""
 
     conditional_effect: float | None
-    """1.0 if answers differ, 0.0 if same, None if either fork failed"""
+    """For binary: 1.0 if answers differ, 0.0 if same. For continuous: signed difference (intervention - control). None if either fork failed"""
 
     computed_at: str
     """ISO timestamp when result was computed"""

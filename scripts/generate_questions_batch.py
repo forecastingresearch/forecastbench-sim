@@ -26,7 +26,8 @@ from civrealm.world_reports.questions import (
 def process_single_game(args: tuple) -> dict | None:
     """Process a single game file and return resolved question bank as dict.
 
-    Generates both H0 (comprehension) and H1-H7 (forecasting) questions.
+    Generates H0 (comprehension), H1-H7 binary (forecasting), and
+    H1-H7 continuous (single-civ absolute value) questions.
     """
     data_file, snapshot_turn = args
 
@@ -59,7 +60,7 @@ def process_single_game(args: tuple) -> dict | None:
         )
         resolved_h0 = resolver.resolve_batch(h0_bank, game_data)
 
-        # Generate H1-H7 (forecasting) questions
+        # Generate H1-H7 binary (forecasting) questions
         forecast_bank = generator.generate_question_bank(
             game_id=game_id,
             game_data=game_data,
@@ -67,12 +68,25 @@ def process_single_game(args: tuple) -> dict | None:
         )
         resolved_forecast = resolver.resolve_batch(forecast_bank, game_data)
 
-        # Combine questions from both banks
+        # Generate H1-H7 continuous questions
+        continuous_bank = generator.generate_continuous_questions(
+            game_id=game_id,
+            game_data=game_data,
+            snapshot_turn=snapshot_turn,
+        )
+        resolved_continuous = resolver.resolve_batch(continuous_bank, game_data)
+
+        # Combine questions from all banks
         h0_dict = question_bank_to_dict(resolved_h0)
         forecast_dict = question_bank_to_dict(resolved_forecast)
+        continuous_dict = question_bank_to_dict(resolved_continuous)
 
         # Merge questions into forecast_dict (use it as base)
-        all_questions = h0_dict.get('questions', []) + forecast_dict.get('questions', [])
+        all_questions = (
+            h0_dict.get('questions', [])
+            + forecast_dict.get('questions', [])
+            + continuous_dict.get('questions', [])
+        )
 
         # Add game_id to each question's parameters for later retrieval
         for q in all_questions:
@@ -121,26 +135,20 @@ def main():
                 all_banks.append(result)
                 all_questions.extend(result.get('questions', []))
 
-    # Compute statistics
-    true_count = sum(1 for q in all_questions if q.get('resolution', {}).get('answer', False))
-    false_count = len(all_questions) - true_count
+    # Split by question type
+    binary_questions = [q for q in all_questions if q.get('question_type') != 'continuous']
+    continuous_questions = [q for q in all_questions if q.get('question_type') == 'continuous']
 
-    # Count by template and horizon
+    # Compute binary statistics
+    true_count = sum(1 for q in binary_questions if q.get('resolution', {}).get('answer', False))
+    false_count = len(binary_questions) - true_count
+
+    # Count by template and horizon (binary)
     by_template = {}
-    by_horizon = {
-        'H0': {'true': 0, 'false': 0},
-        'H1': {'true': 0, 'false': 0},
-        'H2': {'true': 0, 'false': 0},
-        'H3': {'true': 0, 'false': 0},
-        'H4': {'true': 0, 'false': 0},
-        'H5': {'true': 0, 'false': 0},
-        'H6': {'true': 0, 'false': 0},
-        'H7': {'true': 0, 'false': 0},
-    }
+    by_horizon = {}
 
-    for q in all_questions:
+    for q in binary_questions:
         t = q.get('template_id', 'unknown')
-        # Handle both new format (horizon at top level) and old format (in difficulty)
         h = q.get('horizon')
         if h is None:
             h = q.get('difficulty', {}).get('horizon', 'H1')
@@ -160,17 +168,35 @@ def main():
             by_template[t]['false'] += 1
             by_horizon[h]['false'] += 1
 
+    # Count continuous by template and horizon
+    continuous_by_template = {}
+    continuous_by_horizon = {}
+
+    for q in continuous_questions:
+        t = q.get('template_id', 'unknown')
+        h = q.get('horizon', 'H1')
+
+        if t not in continuous_by_template:
+            continuous_by_template[t] = 0
+        continuous_by_template[t] += 1
+
+        if h not in continuous_by_horizon:
+            continuous_by_horizon[h] = 0
+        continuous_by_horizon[h] += 1
+
     # Print summary
     print("\n" + "=" * 70)
     print("BATCH QUESTION GENERATION SUMMARY")
     print("=" * 70)
     print(f"\nGames processed: {len(all_banks)}")
     print(f"Total questions: {len(all_questions)}")
-    if all_questions:
-        print(f"Answers: {true_count} True ({100*true_count/len(all_questions):.1f}%), {false_count} False")
+    print(f"  Binary: {len(binary_questions)}")
+    print(f"  Continuous: {len(continuous_questions)}")
+    if binary_questions:
+        print(f"Binary answers: {true_count} True ({100*true_count/len(binary_questions):.1f}%), {false_count} False")
 
     print("\n" + "-" * 70)
-    print("BY HORIZON")
+    print("BINARY QUESTIONS BY HORIZON")
     print("-" * 70)
     for h in ['H0', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'H7']:
         total = by_horizon.get(h, {}).get('true', 0) + by_horizon.get(h, {}).get('false', 0)
@@ -179,7 +205,7 @@ def main():
             print(f"  {h}: {total:5d} questions, {rate:5.1f}% True")
 
     print("\n" + "-" * 70)
-    print("BY TEMPLATE")
+    print("BINARY QUESTIONS BY TEMPLATE")
     print("-" * 70)
     print(f"{'Template':<25} {'Total':>8} {'True':>8} {'Rate':>8}")
     print("-" * 70)
@@ -187,13 +213,31 @@ def main():
         rate = 100 * counts['true'] / counts['total'] if counts['total'] > 0 else 0
         print(f"{t:<25} {counts['total']:>8} {counts['true']:>8} {rate:>7.1f}%")
 
+    print("\n" + "-" * 70)
+    print("CONTINUOUS QUESTIONS BY HORIZON")
+    print("-" * 70)
+    for h in ['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'H7']:
+        count = continuous_by_horizon.get(h, 0)
+        if count > 0:
+            print(f"  {h}: {count:5d} questions")
+
+    print("\n" + "-" * 70)
+    print("CONTINUOUS QUESTIONS BY TEMPLATE")
+    print("-" * 70)
+    print(f"{'Template':<25} {'Total':>8}")
+    print("-" * 70)
+    for t, count in sorted(continuous_by_template.items()):
+        print(f"{t:<25} {count:>8}")
+
     # Save combined output
     output_data = {
         'metadata': {
             'num_games': len(all_banks),
             'num_questions': len(all_questions),
+            'num_binary': len(binary_questions),
+            'num_continuous': len(continuous_questions),
             'snapshot_turn': args.snapshot_turn,
-            'true_rate': true_count / len(all_questions) if all_questions else 0,
+            'true_rate': true_count / len(binary_questions) if binary_questions else 0,
         },
         'questions': all_questions,
     }

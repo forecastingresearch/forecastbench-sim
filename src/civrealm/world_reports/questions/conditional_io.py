@@ -269,12 +269,29 @@ def to_question_instances(
         # Compute horizon
         horizon = classify_horizon(cq.checkpoint_turn, cq.resolution_turn)
 
+        # Detect continuous templates
+        is_continuous = cq.target_template_id.endswith("_continuous")
+
         # Intervention question
         if result.intervention_outcome.success and result.answer_intervention is not None:
             intervention_text = _build_conditional_question_text(
                 cond, cq.target_template_id, cq.target_parameters,
                 cq.resolution_turn, is_intervention=True, civ_name=civ_name
             )
+
+            if is_continuous:
+                intervention_resolution = Resolution(
+                    answer=True,
+                    value_at_resolution=result.answer_intervention,
+                    resolution_turn=cq.resolution_turn,
+                    computed_at=result.computed_at,
+                )
+            else:
+                intervention_resolution = Resolution(
+                    answer=result.answer_intervention,
+                    resolution_turn=cq.resolution_turn,
+                    computed_at=result.computed_at,
+                )
 
             instances.append(QuestionInstance(
                 question_id=f"{cq.conditional_id}_intervention",
@@ -283,11 +300,8 @@ def to_question_instances(
                 horizon=horizon,
                 parameters=base_params,
                 question_text=intervention_text,
-                resolution=Resolution(
-                    answer=result.answer_intervention,
-                    resolution_turn=cq.resolution_turn,
-                    computed_at=result.computed_at,
-                ),
+                question_type="continuous" if is_continuous else "binary",
+                resolution=intervention_resolution,
             ))
 
         # Control question
@@ -297,6 +311,20 @@ def to_question_instances(
                 cq.resolution_turn, is_intervention=False, civ_name=civ_name
             )
 
+            if is_continuous:
+                control_resolution = Resolution(
+                    answer=True,
+                    value_at_resolution=result.answer_control,
+                    resolution_turn=cq.resolution_turn,
+                    computed_at=result.computed_at,
+                )
+            else:
+                control_resolution = Resolution(
+                    answer=result.answer_control,
+                    resolution_turn=cq.resolution_turn,
+                    computed_at=result.computed_at,
+                )
+
             instances.append(QuestionInstance(
                 question_id=f"{cq.conditional_id}_control",
                 template_id=f"conditional_{cq.target_template_id}",
@@ -304,11 +332,8 @@ def to_question_instances(
                 horizon=horizon,
                 parameters=base_params,
                 question_text=control_text,
-                resolution=Resolution(
-                    answer=result.answer_control,
-                    resolution_turn=cq.resolution_turn,
-                    computed_at=result.computed_at,
-                ),
+                question_type="continuous" if is_continuous else "binary",
+                resolution=control_resolution,
             ))
 
     return instances
@@ -397,6 +422,18 @@ def _build_target_question(
     elif template_id == "wonder_completed":
         wonder_name = params.get("wonder_name", "a wonder")
         return f"would {civ_a} have completed {wonder_name} by turn {resolution_turn}?"
+    elif template_id == "techs_continuous":
+        return f"how many technologies would {civ_a} have by turn {resolution_turn}?"
+    elif template_id == "treasury_continuous":
+        return f"how much gold would {civ_a} have at turn {resolution_turn}?"
+    elif template_id == "population_continuous":
+        return f"what would {civ_a}'s population be at turn {resolution_turn}?"
+    elif template_id == "cities_count_continuous":
+        return f"how many cities would {civ_a} have at turn {resolution_turn}?"
+    elif template_id == "territory_continuous":
+        return f"how many tiles would {civ_a} control at turn {resolution_turn}?"
+    elif template_id == "scores_continuous":
+        return f"what would {civ_a}'s score be at turn {resolution_turn}?"
     else:
         return f"would the target outcome occur at turn {resolution_turn}?"
 
