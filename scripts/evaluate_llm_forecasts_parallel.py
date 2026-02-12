@@ -563,11 +563,15 @@ async def main():
     # Setup rate limiter
     rate_limiter = ProviderRateLimiter()
 
-    # Determine checkpoint file
+    # Determine checkpoint files (separate for binary and continuous)
     if args.resume:
-        checkpoint_file = Path(args.resume)
+        # If resuming, use the provided checkpoint file as base and create type-specific ones
+        resume_base = Path(args.resume)
+        binary_checkpoint = resume_base.parent / f"{resume_base.stem}_binary.json"
+        continuous_checkpoint = resume_base.parent / f"{resume_base.stem}_continuous.json"
     else:
-        checkpoint_file = log_dir / "checkpoint.json"
+        binary_checkpoint = log_dir / "checkpoint_binary.json"
+        continuous_checkpoint = log_dir / "checkpoint_continuous.json"
 
     # Run evaluation
     timeout = args.timeout if args.timeout > 0 else None
@@ -588,7 +592,7 @@ async def main():
             models=models_to_use,
             rate_limiter=rate_limiter,
             data_dir=data_dir,
-            checkpoint_file=checkpoint_file,
+            checkpoint_file=binary_checkpoint,
             checkpoint_interval=args.checkpoint_interval,
             metadata=metadata,
             timeout=timeout,
@@ -606,7 +610,7 @@ async def main():
             models=models_to_use,
             rate_limiter=rate_limiter,
             data_dir=data_dir,
-            checkpoint_file=checkpoint_file,
+            checkpoint_file=continuous_checkpoint,
             checkpoint_interval=args.checkpoint_interval,
             metadata=metadata,
             timeout=timeout,

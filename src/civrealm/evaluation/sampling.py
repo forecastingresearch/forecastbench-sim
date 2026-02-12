@@ -80,9 +80,20 @@ def _load_from_combined_file(
             continue
 
         resolution = q.get("resolution", {})
-        answer = resolution.get("answer")
-        if answer is None:
-            continue
+
+        # Read question type to determine ground_truth handling
+        question_type = q.get("question_type", "binary")
+
+        # Handle ground_truth based on question type
+        if question_type == "continuous":
+            ground_truth = resolution.get("value")
+            if ground_truth is None:
+                continue
+        else:
+            answer = resolution.get("answer")
+            if answer is None:
+                continue
+            ground_truth = bool(answer)
 
         # Handle both new format (horizon at top level) and old format (in difficulty)
         horizon = q.get("horizon")
@@ -107,10 +118,11 @@ def _load_from_combined_file(
             "question_id": q.get("question_id"),
             "template_id": q.get("template_id"),
             "question_text": q.get("question_text"),
-            "ground_truth": bool(answer),
+            "ground_truth": ground_truth,
             "parameters": q.get("parameters", {}),
             "horizon": horizon,
             "empirical_difficulty": empirical_difficulty,
+            "question_type": question_type,
         })
 
     return questions
@@ -151,9 +163,20 @@ def _load_from_game_directories(
                     continue
 
                 resolution = q.get("resolution", {})
-                answer = resolution.get("answer")
-                if answer is None:
-                    continue
+
+                # Read question type to determine ground_truth handling
+                question_type = q.get("question_type", "binary")
+
+                # Handle ground_truth based on question type
+                if question_type == "continuous":
+                    ground_truth = resolution.get("value")
+                    if ground_truth is None:
+                        continue
+                else:
+                    answer = resolution.get("answer")
+                    if answer is None:
+                        continue
+                    ground_truth = bool(answer)
 
                 # Handle both new format (horizon at top level) and old format (in difficulty)
                 horizon = q.get("horizon")
@@ -169,10 +192,11 @@ def _load_from_game_directories(
                     "question_id": q.get("question_id"),
                     "template_id": q.get("template_id"),
                     "question_text": q.get("question_text"),
-                    "ground_truth": bool(answer),
+                    "ground_truth": ground_truth,
                     "parameters": q.get("parameters", {}),
                     "horizon": horizon,
                     "empirical_difficulty": empirical_difficulty,
+                    "question_type": question_type,
                 })
 
     return questions
