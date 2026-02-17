@@ -31,3 +31,4 @@ questions_s42.json
 reports/
 
 .env
+.worktrees/
