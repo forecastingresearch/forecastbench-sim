@@ -836,6 +836,37 @@ def parse_player_scores(savegame_content: str) -> Dict[int, Dict[str, int]]:
     return player_scores
 
 
+def parse_tile_ownership(savegame_content: str) -> Dict[int, int]:
+    """Parse tile ownership from map section and count tiles per player.
+
+    The [map] section contains owner rows like:
+        owner0000="-,-,-,0,0,1,1,-,-"
+    where '-' means unowned and digits are player IDs.
+
+    Args:
+        savegame_content: Decompressed savegame file content
+
+    Returns:
+        Dict mapping player_id to owned tile count:
+        {0: 225, 1: 275, 2: 180, ...}
+    """
+    tile_counts: Dict[int, int] = {}
+
+    # Find all owner rows: ownerNNNN="values"
+    for match in re.finditer(r'^owner\d+=("?)(.+?)\1\s*$', savegame_content, re.MULTILINE):
+        row_data = match.group(2)
+        for cell in row_data.split(','):
+            cell = cell.strip()
+            if cell and cell != '-':
+                try:
+                    pid = int(cell)
+                    tile_counts[pid] = tile_counts.get(pid, 0) + 1
+                except ValueError:
+                    continue
+
+    return tile_counts
+
+
 def parse_player_states_for_conditional(savegame_content: str) -> Dict[int, dict]:
     """Parse player states in the format expected by conditional fork evaluation.
 
@@ -856,13 +887,16 @@ def parse_player_states_for_conditional(savegame_content: str) -> Dict[int, dict
             0: {
                 'name': 'S100',
                 'nation': 'Egyptian',
-                'score': 0,  # Note: raw score not directly available, use techs/cities/etc
                 'gold': 1409,
                 'is_alive': True,
                 'researching': 'Astronomy',
                 'techs': 22,
                 'cities': 16,
-                'population': 1480,
+                'population': 1480,  # Freeciv population metric (NOT citizen count)
+                'citizen_population': 42,  # Sum of citizen types (matches game-state)
+                'total_score': 87,  # Actual Freeciv score from score section
+                'tile_count': 246,  # Owned tiles from map (matches game-state territory)
+                ...
             },
             ...
         }
@@ -881,6 +915,9 @@ def parse_player_states_for_conditional(savegame_content: str) -> Dict[int, dict
     # Get science/research data
     science_data = parse_player_science(savegame_content)
 
+    # Get tile ownership counts from map
+    tile_ownership = parse_tile_ownership(savegame_content)
+
     # Find player names and alive status from player sections
     player_sections = re.finditer(r'\[player(\d+)\](.*?)(?=\[player\d+\]|\[game\]|\Z)', savegame_content, re.DOTALL)
 
@@ -896,6 +933,16 @@ def parse_player_states_for_conditional(savegame_content: str) -> Dict[int, dict
         alive_match = re.search(r'\nis_alive=(TRUE|FALSE)', player_content)
         is_alive = alive_match.group(1) == 'TRUE' if alive_match else True
 
+        scores = score_data.get(player_id, {})
+
+        # Citizen population = sum of citizen types (matches game-state aggregate_city_metric('size'))
+        citizen_pop = (
+            scores.get('happy', 0) + scores.get('content', 0) +
+            scores.get('unhappy', 0) + scores.get('angry', 0) +
+            scores.get('specialists0', 0) + scores.get('specialists1', 0) +
+            scores.get('specialists2', 0)
+        )
+
         player_states[player_id] = {
             'name': name,
             'nation': nation_data.get(player_id, f"Nation {player_id}"),
@@ -903,12 +950,16 @@ def parse_player_states_for_conditional(savegame_content: str) -> Dict[int, dict
             'is_alive': is_alive,
             'researching': science_data.get(player_id, {}).get('researching'),
             # From score section
-            'techs': score_data.get(player_id, {}).get('techs', 0),
-            'cities': score_data.get(player_id, {}).get('cities', 0),
-            'population': score_data.get(player_id, {}).get('population', 0),
-            'units': score_data.get(player_id, {}).get('units', 0),
-            'wonders': score_data.get(player_id, {}).get('wonders', 0),
-            'landarea': score_data.get(player_id, {}).get('landarea', 0),
+            'techs': scores.get('techs', 0),
+            'cities': scores.get('cities', 0),
+            'population': scores.get('population', 0),  # Freeciv metric (NOT citizen count)
+            'units': scores.get('units', 0),
+            'wonders': scores.get('wonders', 0),
+            'landarea': scores.get('landarea', 0),
+            # Corrected fields for continuous conditional questions
+            'citizen_population': citizen_pop,  # Sum of citizen types = game-state population
+            'total_score': scores.get('total', 0),  # Actual Freeciv score
+            'tile_count': tile_ownership.get(player_id, 0),  # Owned tiles = game-state territory
         }
 
     return player_states

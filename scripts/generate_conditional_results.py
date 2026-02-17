@@ -157,22 +157,18 @@ def build_game_data_from_savegames(
         for pid, state in player_states.items():
             pid_str = str(pid)
             game_data["time_series"]["treasury"][str(turn)][pid_str] = state.get("gold", 0)
-            game_data["time_series"]["population"][str(turn)][pid_str] = state.get("population", 0)
-            game_data["time_series"]["territory_size"][str(turn)][pid_str] = state.get("landarea", 0)
-            # Compute score proxy
-            score = (
-                state.get("techs", 0) * 10 +
-                state.get("cities", 0) * 5 +
-                state.get("population", 0) // 100 +
-                state.get("wonders", 0) * 20
-            )
-            game_data["time_series"]["scores"][str(turn)][pid_str] = score
+            # Population = sum of citizen types (matches game-state aggregate_city_metric('size'))
+            game_data["time_series"]["population"][str(turn)][pid_str] = state.get("citizen_population", 0)
+            # Territory = owned tile count from map (matches game-state calculate_territory_size)
+            game_data["time_series"]["territory_size"][str(turn)][pid_str] = state.get("tile_count", 0)
+            # Score = actual Freeciv score from score section
+            game_data["time_series"]["scores"][str(turn)][pid_str] = state.get("total_score", 0)
             game_data["time_series"]["techs_known"][str(turn)][pid_str] = state.get("techs", 0)
             game_data["time_series"]["cities_count"][str(turn)][pid_str] = state.get("cities", 0)
 
         # Build snapshots for this turn
         game_data["snapshots"][str(turn)] = {
-            "scores": {str(pid): state.get("techs", 0) * 10 + state.get("cities", 0) * 5
+            "scores": {str(pid): state.get("total_score", 0)
                        for pid, state in player_states.items()},
             "tech_count": {str(pid): state.get("techs", 0) for pid, state in player_states.items()},
             "city_count": {str(pid): state.get("cities", 0) for pid, state in player_states.items()},

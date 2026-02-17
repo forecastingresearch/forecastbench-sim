@@ -591,25 +591,20 @@ print("RESULT_JSON:" + json.dumps(output))
             state = player_states.get(player_id, {})
 
             # Map template to player_state field
+            # Uses corrected fields that match game-state units:
+            # - citizen_population: sum of citizen types (not Freeciv population metric)
+            # - tile_count: owned tiles from map (not landarea metric)
+            # - total_score: actual Freeciv score (not proxy formula)
             field_map = {
                 "treasury_continuous": "gold",
                 "techs_continuous": "techs",
-                "population_continuous": "population",
+                "population_continuous": "citizen_population",
                 "cities_count_continuous": "cities",
-                "territory_continuous": "landarea",
-                "scores_continuous": "score",
+                "territory_continuous": "tile_count",
+                "scores_continuous": "total_score",
             }
             field = field_map.get(template_id)
             value = state.get(field)
-
-            # Fallback for scores: compute proxy
-            if value is None and template_id == "scores_continuous":
-                value = (
-                    state.get("techs", 0) * 10 +
-                    state.get("cities", 0) * 5 +
-                    state.get("population", 0) // 100 +
-                    state.get("wonders", 0) * 20
-                )
 
             return value
 
