@@ -242,8 +242,8 @@ async def main():
     )
     parser.add_argument(
         "--questions-per-horizon-template", type=int, default=None,
-        help="Questions to sample per (horizon, template) pair. Overrides --questions-per-template. "
-             "Use 1 for anchor runs (e.g., 13 templates * 8 horizons = up to 104 questions)"
+        help="Questions to sample per (game, horizon, template) pair. Overrides --questions-per-template. "
+             "Use 1 for anchor runs (e.g., templates * horizons * games questions)"
     )
     parser.add_argument(
         "--output", "-o", type=str,
@@ -281,6 +281,10 @@ async def main():
     parser.add_argument(
         "--verbose", "-v", action="store_true",
         help="Verbose logging: print full prompts and responses"
+    )
+    parser.add_argument(
+        "--prompt", type=int, choices=[1, 2, 3, 4, 5, 6], default=1,
+        help="Prompt template version (1=baseline, 2=zero-shot non-market, 3=narrative, 4=metaculus-prize, 5=interview, 6=superforecaster-zero-shot)"
     )
     parser.add_argument(
         "--horizon", type=str, nargs="+",
@@ -355,17 +359,19 @@ async def main():
     full_dist = get_template_distribution(all_questions)
     logger.info(f"Full template distribution: {full_dist}")
 
-    # Stratified sampling - either by (horizon, template) pair or by template only
+    # Stratified sampling - either by (game, horizon, template) pair or by template only
     if args.questions_per_horizon_template is not None:
-        # Fine-grained stratification by (horizon, template) pair
-        logger.info(f"\nSampling {args.questions_per_horizon_template} questions per (horizon, template) pair...")
+        # Fine-grained stratification by (game, horizon, template) pair
+        logger.info(
+            f"\nSampling {args.questions_per_horizon_template} questions per (game, horizon, template) pair..."
+        )
         questions = stratified_sample_by_horizon_template(
             all_questions,
             per_pair=args.questions_per_horizon_template,
             seed=args.seed,
             horizons=args.horizon,  # Use horizon filter if specified
         )
-        sampling_note = f"(horizon-template stratified, seed={args.seed})"
+        sampling_note = f"(horizon-template-game stratified, seed={args.seed})"
     else:
         # Standard stratification by template only
         logger.info(f"\nSampling {args.questions_per_template} questions per template...")
@@ -448,11 +454,12 @@ async def main():
         "seed": args.seed,
         "questions_per_template": args.questions_per_template,
         "questions_per_horizon_template": args.questions_per_horizon_template,
-        "sampling_mode": "horizon_template" if args.questions_per_horizon_template else "template",
+        "sampling_mode": "horizon_template_game" if args.questions_per_horizon_template else "template",
         "total_questions": len(questions),
         "base_rate": base_rate,
         "template_distribution": sampled_dist,
         "horizon_filter": args.horizon,
+        "prompt_version": args.prompt,
         "models": [m.id for m in models_to_use],
         "start_time": datetime.now().isoformat() + "Z",
     }
@@ -473,7 +480,7 @@ async def main():
 
     logger.info(
         f"\nStarting evaluation ({len(question_batches)} game batches, "
-        f"concurrency={args.concurrent_batches}{timeout_str})..."
+        f"concurrency={args.concurrent_batches}, prompt={args.prompt}{timeout_str})..."
     )
     results = await run_batch_evaluation(
         question_batches=question_batches,
@@ -485,6 +492,7 @@ async def main():
         metadata=metadata,
         timeout=timeout,
         verbose=args.verbose,
+        prompt_version=args.prompt,
         concurrent_batches=args.concurrent_batches,
     )
 

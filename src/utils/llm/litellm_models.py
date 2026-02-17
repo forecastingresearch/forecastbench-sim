@@ -186,7 +186,7 @@ class LiteLLMModel:
         self,
         prompt: str,
         temperature: float = 0.0,
-        max_tokens: int = 500,
+        max_tokens: int | None = None,
         reasoning_effort: str = "medium",
     ) -> str:
         """Synchronous call using LiteLLM's completion.
@@ -194,7 +194,8 @@ class LiteLLMModel:
         Args:
             prompt: The prompt text to send to the model
             temperature: Sampling temperature (0.0 = deterministic), ignored for reasoning models
-            max_tokens: Maximum completion tokens (includes reasoning + output for reasoning models)
+            max_tokens: Maximum completion tokens (includes reasoning + output for reasoning models).
+                        If None, do not send max_tokens (provider default behavior).
             reasoning_effort: Effort level for reasoning models (low/medium/high)
 
         Returns:
@@ -203,8 +204,9 @@ class LiteLLMModel:
         kwargs = {
             "model": self._litellm_model_id,
             "messages": [{"role": "user", "content": prompt}],
-            "max_tokens": max_tokens,
         }
+        if max_tokens is not None:
+            kwargs["max_tokens"] = max_tokens
         # Only pass temperature for models that support it
         if self.supports_temperature:
             kwargs["temperature"] = temperature
@@ -221,7 +223,7 @@ class LiteLLMModel:
         self,
         prompt: str,
         temperature: float = 0.0,
-        max_tokens: int = 500,
+        max_tokens: int | None = None,
         reasoning_effort: str = "medium",
     ) -> str:
         """Native async call using LiteLLM's acompletion.
@@ -229,7 +231,8 @@ class LiteLLMModel:
         Args:
             prompt: The prompt text to send to the model
             temperature: Sampling temperature (0.0 = deterministic), ignored for reasoning models
-            max_tokens: Maximum completion tokens (includes reasoning + output for reasoning models)
+            max_tokens: Maximum completion tokens (includes reasoning + output for reasoning models).
+                        If None, do not send max_tokens (provider default behavior).
             reasoning_effort: Effort level for reasoning models (low/medium/high)
 
         Returns:
@@ -238,8 +241,9 @@ class LiteLLMModel:
         kwargs = {
             "model": self._litellm_model_id,
             "messages": [{"role": "user", "content": prompt}],
-            "max_tokens": max_tokens,
         }
+        if max_tokens is not None:
+            kwargs["max_tokens"] = max_tokens
         # Only pass temperature for models that support it
         if self.supports_temperature:
             kwargs["temperature"] = temperature

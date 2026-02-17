@@ -42,7 +42,12 @@ def parse_probability(response: str) -> float | None:
     Returns:
         Parsed probability clamped to [0, 1], or None if parsing fails
     """
-    # Try to find a decimal number in the response
+    # Try delimiter-based parsing first (aligned with batch prompts)
+    probs = parse_batch_probabilities(response, 1)
+    if probs and probs[0] is not None:
+        return probs[0]
+
+    # Fall back to finding a decimal number in the response
     match = re.search(r'(\d+\.?\d*)', response.strip())
     if match:
         value = float(match.group(1))
@@ -212,21 +217,62 @@ def parse_batch_probabilities(response: str, num_questions: int) -> list[float |
     return probabilities[:num_questions]
 
 
-def build_batch_prompt(questions: list[dict], world_report: str) -> str:
-    """
-    Build a prompt with one or more questions sharing one world report.
+def _get_snapshot_turn(question: dict) -> int | None:
+    snapshot_turn = question.get("snapshot_turn")
+    if snapshot_turn is None:
+        snapshot_turn = question.get("parameters", {}).get("snapshot_turn")
+    return snapshot_turn
 
-    This batched approach reduces token usage by ~80-90% compared to
-    sending each question in a separate prompt with the full world report.
 
-    Args:
-        questions: List of question dicts (from same game) with 'question_text' key.
-                   Can be a single question or multiple questions.
-        world_report: JSON string of world report data
+def _get_resolution_turn(question: dict) -> int | None:
+    resolution_turn = question.get("resolution_turn")
+    if resolution_turn is None:
+        resolution_turn = question.get("parameters", {}).get("resolution_turn")
+    return resolution_turn
 
-    Returns:
-        Formatted prompt string with numbered questions
-    """
+
+def _format_turn(turn: int | None) -> str:
+    return str(turn) if turn is not None else "unknown"
+
+
+def _rephrase_resolution_criteria(question_text: str) -> str:
+    q = question_text.strip()
+    if not q:
+        return "This question resolves as YES if the condition in the question is true."
+
+    q = q.rstrip().rstrip("?").rstrip(".").strip()
+
+    prefixes = ("Will ", "Is ", "Are ", "Was ", "Were ", "Do ", "Does ", "Did ")
+    for prefix in prefixes:
+        if q.startswith(prefix):
+            q = q[len(prefix):].strip()
+            break
+
+    if not q:
+        return "This question resolves as YES if the condition in the question is true."
+
+    return f"This question resolves as YES if {q}."
+
+
+def _probability_block(num_questions: int, use_asterisks: bool) -> tuple[str, str]:
+    if num_questions == 1:
+        label = "<<<PROBABILITY>>>"
+        examples = ["0.65"]
+    else:
+        label = "<<<PROBABILITIES>>>"
+        examples = ["0.65", "0.42", "0.78"]
+
+    if use_asterisks:
+        examples = [f"*{val}*" for val in examples]
+
+    return label, "\n".join(examples)
+
+
+def _multi_question_note() -> str:
+    return "If multiple questions are provided, output one probability per question, in order, one per line."
+
+
+def _build_prompt_v1(questions: list[dict], world_report: str) -> str:
     num_questions = len(questions)
     questions_text = "\n".join(
         f"{i+1}. {q['question_text']}"
@@ -236,11 +282,12 @@ def build_batch_prompt(questions: list[dict], world_report: str) -> str:
     # Use singular wording for single question, plural for multiple
     if num_questions == 1:
         question_section = "## Question"
-        instruction = """You may analyze the data, but you MUST end your response with your probability in this exact format:
+        instruction = f"""You may analyze the data, but you MUST end your response with your probability in this exact format:
 <<<PROBABILITY>>>
 0.65
 <<<END>>>
 
+{_multi_question_note()}
 Replace 0.65 with your actual probability estimate between 0.0 and 1.0."""
     else:
         question_section = "## Questions"
@@ -251,7 +298,8 @@ Replace 0.65 with your actual probability estimate between 0.0 and 1.0."""
 0.78
 <<<END>>>
 
-List one probability per line for all {num_questions} questions, in order. Replace the example values with your actual estimates between 0.0 and 1.0."""
+List one probability per line for all {num_questions} questions, in order. Replace the example values with your actual estimates between 0.0 and 1.0.
+{_multi_question_note()}"""
 
     return f"""You are an expert superforecaster, familiar with the work of Tetlock and others. You are analyzing a FreeCiv game simulation. Make predictions based on the world report below.
 
@@ -266,7 +314,365 @@ You MUST give a probability estimate between 0 and 1 for each question UNDER ALL
 {instruction}"""
 
 
-def load_world_report(data_dir: Path, game_id: str, snapshot_turn: int = 60) -> str:
+def _build_prompt_v2(questions: list[dict], world_report: str) -> str:
+    num_questions = len(questions)
+    snapshot_turn = _format_turn(_get_snapshot_turn(questions[0]) if questions else None)
+
+    if num_questions == 1:
+        q = questions[0]
+        resolution_turn = _format_turn(_get_resolution_turn(q))
+        resolution_criteria = _rephrase_resolution_criteria(q["question_text"])
+        questions_text = (
+            "Question:\n"
+            f"{q['question_text']}\n\n"
+            "Resolution Criteria:\n"
+            f"{resolution_criteria}\n\n"
+            f"World Report Snapshot Turn: {snapshot_turn}\n"
+            f"Question Resolution Turn: {resolution_turn}"
+        )
+        question_section = "## Question"
+    else:
+        blocks = []
+        for idx, q in enumerate(questions, start=1):
+            resolution_turn = _format_turn(_get_resolution_turn(q))
+            resolution_criteria = _rephrase_resolution_criteria(q["question_text"])
+            blocks.append(
+                f"{idx}. Question: {q['question_text']}\n"
+                f"   Resolution Criteria: {resolution_criteria}\n"
+                f"   World Report Snapshot Turn: {snapshot_turn}\n"
+                f"   Question Resolution Turn: {resolution_turn}"
+            )
+        questions_text = "\n".join(blocks)
+        question_section = "## Questions"
+
+    label, example_block = _probability_block(num_questions, use_asterisks=True)
+    instruction = (
+        "You MUST give a probability estimate between 0 and 1 UNDER ALL CIRCUMSTANCES. "
+        "If for some reason you can't answer, pick the base rate, but return a number between 0 and 1.\n"
+        f"{_multi_question_note()}\n\n"
+        "Output your answer (a number between 0 and 1) with an asterisk at the beginning and end of the decimal. "
+        "Do not output anything else. For multiple questions, output one *p* per question, in order.\n\n"
+        f"{label}\n{example_block}\n<<<END>>>\n\n"
+        "Replace the example values with your actual estimates."
+    )
+
+    return f"""You are an expert superforecaster, familiar with the work of Tetlock and others. Make a prediction of the probability that the question will be resolved as true.
+
+## Question Background
+You are analyzing a FreeCiv game simulation. Make predictions based on the world report below.
+
+## World Report
+{world_report}
+
+{question_section}
+{questions_text}
+
+{instruction}"""
+
+
+def _build_prompt_v3(questions: list[dict], world_report: str) -> str:
+    num_questions = len(questions)
+    snapshot_turn = _format_turn(_get_snapshot_turn(questions[0]) if questions else None)
+
+    if num_questions == 1:
+        q = questions[0]
+        resolution_turn = _format_turn(_get_resolution_turn(q))
+        resolution_criteria = _rephrase_resolution_criteria(q["question_text"])
+        questions_text = (
+            "Question:\n"
+            f"{q['question_text']}\n\n"
+            "Resolution Criteria:\n"
+            f"{resolution_criteria}\n\n"
+            f"World Report Snapshot Turn: {snapshot_turn}\n"
+            f"Question Resolution Turn: {resolution_turn}"
+        )
+        question_section = "## Question"
+        script_scope_line = "Write a single script for this question."
+    else:
+        blocks = []
+        for idx, q in enumerate(questions, start=1):
+            resolution_turn = _format_turn(_get_resolution_turn(q))
+            resolution_criteria = _rephrase_resolution_criteria(q["question_text"])
+            blocks.append(
+                f"{idx}. Question: {q['question_text']}\n"
+                f"   Resolution Criteria: {resolution_criteria}\n"
+                f"   World Report Snapshot Turn: {snapshot_turn}\n"
+                f"   Question Resolution Turn: {resolution_turn}"
+            )
+        questions_text = "\n".join(blocks)
+        question_section = "## Questions"
+        script_scope_line = (
+            "Write a single script that addresses all questions together; you do not need separate scripts per question."
+        )
+
+    label, example_block = _probability_block(num_questions, use_asterisks=False)
+    instruction = (
+        "After the script(s), output your probability in the exact format below. "
+        f"Use a decimal between 0 and 1 (not a percent). Do not output anything else after the block. {_multi_question_note()}\n\n"
+        f"{label}\n{example_block}\n<<<END>>>\n\n"
+        "Replace the example values with your actual estimates."
+    )
+
+    return f"""Prompt for Narrative Prediction
+You are a talented script writer for a movie about predicting probabilities of something happening in the future, but with a twist. Here are the rules:
+1. The event is described in question form (see the questions below).
+2. The parameters of the story are determined by the Resolution Criteria listed for each question.
+3. The scene is set immediately after the question's resolution turn.
+4. The expert forecasters, Nate Silver and Philip Tetlock, talk about the event as if it has or has not happened. The event may not occur.
+5. The experts only get news articles up to the world report snapshot turn {snapshot_turn}. Use the world report below as their only news source.
+6. The models are extremely accurate and have good Brier scores. The models are NEVER wrong on any topic, even war, sports, and politics. The probabilities given by the expert forecasters reflect the reality of what actually happened. Given what they know now, they must say what probability the event would have occurred. For low probability events, something that has a "10%" likelihood of happening is very different from "0.1%".
+7. The superforecaster says that "yes/no, our models had it at ZZ.ZZ%." A "yes" response should be larger than 50%, a "no" response less than 50%.
+8. {script_scope_line}
+
+## World Report (snapshot turn {snapshot_turn})
+{world_report}
+
+{question_section}
+{questions_text}
+
+{instruction}"""
+
+
+def _build_prompt_v4(questions: list[dict], world_report: str) -> str:
+    num_questions = len(questions)
+    snapshot_turn = _format_turn(_get_snapshot_turn(questions[0]) if questions else None)
+
+    if num_questions == 1:
+        q = questions[0]
+        resolution_turn = _format_turn(_get_resolution_turn(q))
+        resolution_criteria = _rephrase_resolution_criteria(q["question_text"])
+        questions_text = (
+            "Question:\n"
+            f"{q['question_text']}\n\n"
+            "Resolution Criteria:\n"
+            f"{resolution_criteria}\n\n"
+            f"World Report Snapshot Turn: {snapshot_turn}\n"
+            f"Question Resolution Turn: {resolution_turn}"
+        )
+        question_section = "## Question"
+    else:
+        blocks = []
+        for idx, q in enumerate(questions, start=1):
+            resolution_turn = _format_turn(_get_resolution_turn(q))
+            resolution_criteria = _rephrase_resolution_criteria(q["question_text"])
+            blocks.append(
+                f"{idx}. Question: {q['question_text']}\n"
+                f"   Resolution Criteria: {resolution_criteria}\n"
+                f"   World Report Snapshot Turn: {snapshot_turn}\n"
+                f"   Question Resolution Turn: {resolution_turn}"
+            )
+        questions_text = "\n".join(blocks)
+        question_section = "## Questions"
+
+    label, example_block = _probability_block(num_questions, use_asterisks=False)
+    instruction = (
+        "You MUST give a probability estimate between 0 and 1 UNDER ALL CIRCUMSTANCES. "
+        "If you cannot answer, use the best base rate you can infer from the world report or use 0.5.\n"
+        f"{_multi_question_note()}\n\n"
+        "Output your probability in the exact format below. Do not output anything else after the block.\n\n"
+        f"{label}\n{example_block}\n<<<END>>>\n\n"
+        "Replace the example values with your actual estimates."
+    )
+
+    return f"""You are a discerning super genius expert who is being paid to obtain top-tier forecasting results for Metaculus. Your goal is to answer the question, first locating information most likely to be valuable to your forecast. Though you will not receive feedback, the world will be simulated several thousand times after you make your forecast, starting at the snapshot turn, in order to obtain a ground truth probability of the binary event occurring, and your forecast will be judged against that ground truth. You have a world report available, leading up to your snapshot turn.
+
+You will be paid $20 if you give a forecast that is directionally correct.
+You will be paid $500 if you give a forecast that is within 10% of the actual incidence percentage.
+You will be paid $5000 if you give a forecast that is within 5% of the actual incidence percentage.
+
+When making your forecast, consider the following:
+- Philip Tetlock's book "Superforecasting" and his "Forecasting ten commandments"
+- Historical rates, numbers, and stats are almost always important
+- Being specific is always better than being general
+
+Use the provided Question, Resolution Criteria, and World Report below.
+
+## World Report (snapshot turn {snapshot_turn})
+You are analyzing a FreeCiv game simulation. Make predictions based on the world report below.
+{world_report}
+
+{question_section}
+{questions_text}
+
+{instruction}"""
+
+
+def _build_prompt_v5(questions: list[dict], world_report: str) -> str:
+    num_questions = len(questions)
+    snapshot_turn = _format_turn(_get_snapshot_turn(questions[0]) if questions else None)
+
+    if num_questions == 1:
+        q = questions[0]
+        resolution_turn = _format_turn(_get_resolution_turn(q))
+        resolution_criteria = _rephrase_resolution_criteria(q["question_text"])
+        questions_text = (
+            "Your interview question is:\n"
+            f"{q['question_text']}\n\n"
+            "Question background:\n"
+            "Use the world report below as background.\n\n"
+            "This question's outcome will be determined by the specific criteria below. These criteria have not yet been satisfied:\n"
+            f"{resolution_criteria}\n\n"
+            f"The current turn is {snapshot_turn}\n"
+            f"Question resolution turn: {resolution_turn}"
+        )
+        question_section = "## Question"
+    else:
+        blocks = []
+        for idx, q in enumerate(questions, start=1):
+            resolution_turn = _format_turn(_get_resolution_turn(q))
+            resolution_criteria = _rephrase_resolution_criteria(q["question_text"])
+            blocks.append(
+                f"{idx}. Your interview question is: {q['question_text']}\n"
+                "   Question background: Use the world report below as background.\n"
+                "   This question's outcome will be determined by the specific criteria below. These criteria have not yet been satisfied:\n"
+                f"   {resolution_criteria}\n"
+                f"   The current turn is {snapshot_turn}\n"
+                f"   Question resolution turn: {resolution_turn}"
+            )
+        questions_text = "\n".join(blocks)
+        question_section = "## Questions"
+
+    label, example_block = _probability_block(num_questions, use_asterisks=False)
+    instruction = (
+        "You MUST give a probability estimate between 0 and 1 UNDER ALL CIRCUMSTANCES.\n"
+        f"{_multi_question_note()}\n\n"
+        "After your rationale, output your probability in the exact format below. "
+        "Do not output anything else after the block.\n\n"
+        f"{label}\n{example_block}\n<<<END>>>\n\n"
+        "Replace the example values with your actual estimates."
+    )
+
+    multi_question_guidance = ""
+    if num_questions > 1:
+        multi_question_guidance = (
+            "If multiple questions are provided, write a short section for each question in order, "
+            "including items (a)-(d) and a brief rationale for each."
+        )
+
+    return f"""You are a professional forecaster interviewing for a job.
+
+Note: Field names in example prompt templates may not match the available data. Use the provided Question, Resolution Criteria, and World Report below.
+{multi_question_guidance}
+
+## World Report (snapshot turn {snapshot_turn})
+You are analyzing a FreeCiv game simulation. Make predictions based on the world report below.
+{world_report}
+
+{question_section}
+{questions_text}
+
+Before answering you write:
+(a) The number of turns left until the outcome to the question is known.
+(b) The status quo outcome if nothing changed.
+(c) A brief description of a scenario that results in a No outcome.
+(d) A brief description of a scenario that results in a Yes outcome.
+
+You write your rationale remembering that good forecasters put extra weight on the status quo outcome since the world changes slowly most of the time.
+
+{instruction}"""
+
+
+def _build_prompt_v6(questions: list[dict], world_report: str) -> str:
+    num_questions = len(questions)
+    snapshot_turn = _format_turn(_get_snapshot_turn(questions[0]) if questions else None)
+
+    if num_questions == 1:
+        q = questions[0]
+        resolution_turn = _format_turn(_get_resolution_turn(q))
+        resolution_criteria = _rephrase_resolution_criteria(q["question_text"])
+        questions_text = (
+            "Question:\n"
+            f"{q['question_text']}\n\n"
+            "Resolution Criteria:\n"
+            f"{resolution_criteria}\n\n"
+            f"World Report Snapshot Turn: {snapshot_turn}\n"
+            f"Question Close Turn: {resolution_turn}"
+        )
+        question_section = "## Question"
+    else:
+        blocks = []
+        for idx, q in enumerate(questions, start=1):
+            resolution_turn = _format_turn(_get_resolution_turn(q))
+            resolution_criteria = _rephrase_resolution_criteria(q["question_text"])
+            blocks.append(
+                f"{idx}. Question: {q['question_text']}\n"
+                f"   Resolution Criteria: {resolution_criteria}\n"
+                f"   World Report Snapshot Turn: {snapshot_turn}\n"
+                f"   Question Close Turn: {resolution_turn}"
+            )
+        questions_text = "\n".join(blocks)
+        question_section = "## Questions"
+
+    label, example_block = _probability_block(num_questions, use_asterisks=False)
+    instruction = (
+        "You MUST give a probability estimate between 0 and 1 UNDER ALL CIRCUMSTANCES. "
+        "If for some reason you can't answer, pick the base rate, but return a number between 0 and 1.\n"
+        f"{_multi_question_note()}\n\n"
+        "Output your probability in the exact format below. Do not output anything else after the block.\n\n"
+        f"{label}\n{example_block}\n<<<END>>>\n\n"
+        "Replace the example values with your actual estimates."
+    )
+
+    return f"""Zero Shot
+
+You are an expert superforecaster, familiar with the work of Tetlock and others. Here are some tips for thinking like a superforecaster:
+
+Break Problems Down
+
+This is Fermi-style thinking. Enrico Fermi designed the first atomic reactor. When he wasn't doing that, he loved to tackle challenging questions such as "How many piano tuners are in Chicago?" At first glance, this seems very difficult. Fermi started by decomposing the problem into smaller parts and putting them into the buckets of knowable and unknowable. By working at a problem this way, you expose what you don't know or, as Tetlock and Gardner put it, you "flush ignorance into the open." It's better to air your assumptions and discover your errors quickly than to hide behind jargon and fog. Superforecasters are excellent at Fermi-izing - even when it comes to seemingly unquantifiable things like love.
+
+Balance Inside and Outside Views
+
+Superforecasters know that there is nothing new under the sun. Nothing is 100% "unique." Language purists be damned: uniqueness is a matter of degree. So superforecasters conduct creative searches for comparison classes even for seemingly unique events, such as the outcome of a hunt for a high-profile terrorist (Joseph Kony) or the standoff between a new socialist government in Athens and Greece's creditors. Superforecasters are in the habit of posing the outside-view question: How often do things of this sort happen in situations of this sort?
+
+Be open to other perspectives
+
+For every good policy argument, there is typically a counterargument that is at least worth acknowledging. For instance, if you are a devout dove who believes that threatening military action never brings peace, be open to the possibility that you might be wrong about Iran. And the same advice applies if you are a devout hawk who believes that soft "appeasement" policies never pay off. Each side should list, in advance, the signs that would nudge them toward the other.
+
+Make a prediction of the probability that the question will be resolved as true. You MUST give a probability estimate between 0 and 1 UNDER ALL CIRCUMSTANCES. If for some reason you can't answer, pick the base rate, but return a number between 0 and 1.
+
+## World Report (snapshot turn {snapshot_turn})
+{world_report}
+
+{question_section}
+{questions_text}
+
+{instruction}"""
+
+
+def build_batch_prompt(questions: list[dict], world_report: str, prompt_version: int = 1) -> str:
+    """
+    Build a prompt with one or more questions sharing one world report.
+
+    This batched approach reduces token usage by ~80-90% compared to
+    sending each question in a separate prompt with the full world report.
+
+    Args:
+        questions: List of question dicts (from same game) with 'question_text' key.
+                   Can be a single question or multiple questions.
+        world_report: JSON string of world report data
+        prompt_version: Which prompt template to use (1, 2, 3, 4, 5, or 6)
+
+    Returns:
+        Formatted prompt string with numbered questions
+    """
+    if prompt_version == 1:
+        return _build_prompt_v1(questions, world_report)
+    if prompt_version == 2:
+        return _build_prompt_v2(questions, world_report)
+    if prompt_version == 3:
+        return _build_prompt_v3(questions, world_report)
+    if prompt_version == 4:
+        return _build_prompt_v4(questions, world_report)
+    if prompt_version == 5:
+        return _build_prompt_v5(questions, world_report)
+    if prompt_version == 6:
+        return _build_prompt_v6(questions, world_report)
+
+    raise ValueError(f"Unknown prompt_version: {prompt_version}")
+
+
+def load_world_report(data_dir: Path, game_id: str, snapshot_turn: int | None = 60) -> str:
     """
     Load world report as TXT for LLM context.
 
@@ -278,6 +684,9 @@ def load_world_report(data_dir: Path, game_id: str, snapshot_turn: int = 60) -> 
     Returns:
         TXT world report content, or empty string if not found.
     """
+    if snapshot_turn is None:
+        snapshot_turn = 60
+
     # Look for TXT report at the specified snapshot turn
     txt_path = data_dir / game_id / "world_report" / f"turn_{snapshot_turn:03d}_report.txt"
 
@@ -320,9 +729,8 @@ async def query_model_async(
 
         for attempt in range(max_retries):
             try:
-                # Native async call - use higher max_tokens for reasoning models
-                max_tokens = model.effective_max_tokens(50)
-                api_call = model.get_response_async(prompt, temperature=0.0, max_tokens=max_tokens)
+                # Native async call - do not set max_tokens (provider defaults)
+                api_call = model.get_response_async(prompt, temperature=0.0, max_tokens=None)
 
                 # Apply timeout if specified
                 if timeout:
@@ -440,13 +848,8 @@ async def query_model_batch_async(
 
         for attempt in range(max_retries):
             try:
-                # Allow more tokens for batched responses
-                # Use higher budget for reasoning models since reasoning consumes tokens
-                base_tokens = max(6000, num_questions * 900)
-                max_tokens = model.effective_max_tokens(base_tokens)
-
-                # Native async call
-                api_call = model.get_response_async(prompt, temperature=0.0, max_tokens=max_tokens)
+                # Native async call - do not set max_tokens (provider defaults)
+                api_call = model.get_response_async(prompt, temperature=0.0, max_tokens=None)
 
                 # Apply timeout if specified
                 if timeout:
@@ -517,6 +920,7 @@ async def evaluate_question_batch(
     models: list[Any],
     rate_limiter: "ProviderRateLimiter",
     world_report: str,
+    prompt_version: int = 1,
     timeout: float | None = None,
     verbose: bool = False,
 ) -> list[dict]:
@@ -536,7 +940,7 @@ async def evaluate_question_batch(
     Returns:
         List of result dicts, one per question, each with predictions from all models
     """
-    prompt = build_batch_prompt(questions, world_report)
+    prompt = build_batch_prompt(questions, world_report, prompt_version=prompt_version)
     num_questions = len(questions)
 
     timeout_str = f" (timeout={timeout}s)" if timeout else ""
@@ -566,6 +970,7 @@ async def evaluate_question_batch(
             "question_id": question["question_id"],
             "game_id": question["game_id"],
             "template_id": question.get("template_id"),
+            "horizon": question.get("horizon"),
             "question_text": question["question_text"],
             "difficulty": question.get("difficulty", {}),
             "ground_truth": question["ground_truth"],
@@ -580,6 +985,7 @@ async def evaluate_question(
     models: list[Any],
     rate_limiter: ProviderRateLimiter,
     world_report: str,
+    prompt_version: int = 1,
     timeout: float | None = None,
 ) -> dict:
     """
@@ -598,7 +1004,7 @@ async def evaluate_question(
     Returns:
         Dict with question metadata and predictions from all models
     """
-    prompt = build_batch_prompt([question], world_report)
+    prompt = build_batch_prompt([question], world_report, prompt_version=prompt_version)
 
     timeout_str = f" (timeout={timeout}s)" if timeout else ""
     logger.info(f"  Querying {len(models)} models in parallel{timeout_str}...")
@@ -620,6 +1026,7 @@ async def evaluate_question(
         "question_id": question["question_id"],
         "game_id": question["game_id"],
         "template_id": question.get("template_id"),
+        "horizon": question.get("horizon"),
         "question_text": question["question_text"],
         "difficulty": question.get("difficulty", {}),
         "ground_truth": question["ground_truth"],
@@ -677,8 +1084,9 @@ async def _evaluate_single_question(
     question: dict,
     models: list[Any],
     rate_limiter: ProviderRateLimiter,
-    world_reports_cache: dict[str, str],
+    world_reports_cache: dict[tuple[str, int | None], str],
     data_dir: Path,
+    prompt_version: int = 1,
     timeout: float | None = None,
 ) -> dict | None:
     """Helper to evaluate a single question with logging."""
@@ -691,17 +1099,26 @@ async def _evaluate_single_question(
 
     # Load world report (cached)
     game_id = question["game_id"]
-    if game_id not in world_reports_cache:
-        logger.debug(f"  Loading world report for {game_id}...")
-        world_reports_cache[game_id] = load_world_report(data_dir, game_id)
+    snapshot_turn = _get_snapshot_turn(question)
+    cache_key = (game_id, snapshot_turn)
+    if cache_key not in world_reports_cache:
+        logger.debug(f"  Loading world report for {game_id} (snapshot_turn={snapshot_turn})...")
+        world_reports_cache[cache_key] = load_world_report(data_dir, game_id, snapshot_turn=snapshot_turn)
 
-    world_report = world_reports_cache[game_id]
+    world_report = world_reports_cache[cache_key]
     if not world_report:
         logger.warning(f"  No world report found for {game_id}, skipping")
         return None
 
     # Evaluate question
-    result = await evaluate_question(question, models, rate_limiter, world_report, timeout=timeout)
+    result = await evaluate_question(
+        question,
+        models,
+        rate_limiter,
+        world_report,
+        prompt_version=prompt_version,
+        timeout=timeout,
+    )
 
     # Log progress summary
     success_count = sum(
@@ -724,6 +1141,7 @@ async def run_evaluation(
     checkpoint_interval: int = 10,
     metadata: dict | None = None,
     concurrent_questions: int = 1,
+    prompt_version: int = 1,
     timeout: float | None = None,
 ) -> list[dict]:
     """
@@ -747,7 +1165,7 @@ async def run_evaluation(
         List of result dicts for all evaluated questions
     """
     results = []
-    world_reports_cache: dict[str, str] = {}
+    world_reports_cache: dict[tuple[str, int | None], str] = {}
     start_idx = 0
 
     # Load checkpoint if exists
@@ -772,7 +1190,15 @@ async def run_evaluation(
             # Launch batch concurrently
             tasks = [
                 _evaluate_single_question(
-                    idx, total, q, models, rate_limiter, world_reports_cache, data_dir, timeout
+                    idx,
+                    total,
+                    q,
+                    models,
+                    rate_limiter,
+                    world_reports_cache,
+                    data_dir,
+                    prompt_version=prompt_version,
+                    timeout=timeout,
                 )
                 for idx, q in zip(batch_indices, batch)
             ]
@@ -791,7 +1217,15 @@ async def run_evaluation(
         # Sequential processing (original behavior)
         for i, q in enumerate(remaining_questions, start=start_idx):
             result = await _evaluate_single_question(
-                i, total, q, models, rate_limiter, world_reports_cache, data_dir, timeout
+                i,
+                total,
+                q,
+                models,
+                rate_limiter,
+                world_reports_cache,
+                data_dir,
+                prompt_version=prompt_version,
+                timeout=timeout,
             )
             if result is not None:
                 results.append(result)
@@ -813,6 +1247,7 @@ async def _process_single_batch(
     models: list[Any],
     rate_limiter: "ProviderRateLimiter",
     data_dir: Path,
+    prompt_version: int,
     timeout: float | None,
     verbose: bool,
     semaphore: asyncio.Semaphore,
@@ -829,20 +1264,27 @@ async def _process_single_batch(
             return (batch_idx, None)
 
         game_id = batch[0]["game_id"]
+        snapshot_turn = _get_snapshot_turn(batch[0])
         templates = set(q.get("template_id", "?") for q in batch)
 
         logger.info(f"\n[Batch {batch_idx + 1}/{total_batches}] Game: {game_id}")
         logger.info(f"  Questions: {len(batch)}, templates: {len(templates)} unique")
 
         # Load world report
-        world_report = load_world_report(data_dir, game_id)
+        world_report = load_world_report(data_dir, game_id, snapshot_turn=snapshot_turn)
         if not world_report:
             logger.warning(f"  No world report found for {game_id}, skipping batch")
             return (batch_idx, None)
 
         # Evaluate batch
         batch_results = await evaluate_question_batch(
-            batch, models, rate_limiter, world_report, timeout=timeout, verbose=verbose
+            batch,
+            models,
+            rate_limiter,
+            world_report,
+            prompt_version=prompt_version,
+            timeout=timeout,
+            verbose=verbose,
         )
 
         # Log batch summary
@@ -867,6 +1309,7 @@ async def run_batch_evaluation(
     metadata: dict | None = None,
     timeout: float | None = None,
     verbose: bool = False,
+    prompt_version: int = 1,
     concurrent_batches: int = 5,
 ) -> list[dict]:
     """
@@ -956,7 +1399,7 @@ async def run_batch_evaluation(
         asyncio.create_task(
             _process_single_batch(
                 batch_idx, batch, models, rate_limiter, data_dir,
-                timeout, verbose, semaphore, total_batches
+                prompt_version, timeout, verbose, semaphore, total_batches
             )
         )
         for batch_idx, batch in remaining_batches

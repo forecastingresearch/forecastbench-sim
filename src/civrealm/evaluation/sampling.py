@@ -80,6 +80,16 @@ def _load_from_combined_file(
         if answer is None:
             continue
 
+        resolution_turn = q.get("resolution_turn")
+        if resolution_turn is None:
+            resolution_turn = q.get("parameters", {}).get("resolution_turn")
+
+        snapshot_turn = q.get("snapshot_turn")
+        if snapshot_turn is None:
+            snapshot_turn = q.get("parameters", {}).get("snapshot_turn")
+        if snapshot_turn is None:
+            snapshot_turn = data.get("snapshot_turn")
+
         # Handle both new format (horizon at top level) and old format (in difficulty)
         horizon = q.get("horizon")
         if horizon is None:
@@ -105,6 +115,8 @@ def _load_from_combined_file(
             "question_text": q.get("question_text"),
             "ground_truth": bool(answer),
             "parameters": q.get("parameters", {}),
+            "snapshot_turn": snapshot_turn,
+            "resolution_turn": resolution_turn,
             "horizon": horizon,
             "empirical_difficulty": empirical_difficulty,
         })
@@ -138,6 +150,7 @@ def _load_from_game_directories(
                 data = json.load(f)
 
             game_id = data.get("game_id", game_dir.name)
+            snapshot_turn = data.get("snapshot_turn")
 
             for q in data.get("questions", []):
                 if template_filter and q.get("template_id") != template_filter:
@@ -147,6 +160,16 @@ def _load_from_game_directories(
                 answer = resolution.get("answer")
                 if answer is None:
                     continue
+
+                resolution_turn = q.get("resolution_turn")
+                if resolution_turn is None:
+                    resolution_turn = q.get("parameters", {}).get("resolution_turn")
+
+                snapshot_turn_q = q.get("snapshot_turn")
+                if snapshot_turn_q is None:
+                    snapshot_turn_q = q.get("parameters", {}).get("snapshot_turn")
+                if snapshot_turn_q is None:
+                    snapshot_turn_q = snapshot_turn
 
                 # Handle both new format (horizon at top level) and old format (in difficulty)
                 horizon = q.get("horizon")
@@ -164,6 +187,8 @@ def _load_from_game_directories(
                     "question_text": q.get("question_text"),
                     "ground_truth": bool(answer),
                     "parameters": q.get("parameters", {}),
+                    "snapshot_turn": snapshot_turn_q,
+                    "resolution_turn": resolution_turn,
                     "horizon": horizon,
                     "empirical_difficulty": empirical_difficulty,
                 })
@@ -230,59 +255,65 @@ def stratified_sample_by_horizon_template(
     templates: list[str] | None = None,
 ) -> list[dict]:
     """
-    Sample questions with balanced representation across (horizon, template) pairs.
+    Sample questions with balanced representation across (game, horizon, template) pairs.
 
-    Guarantees up to `per_pair` questions from each available (horizon, template)
+    Guarantees up to `per_pair` questions from each available (game_id, horizon, template)
     combination, providing fine-grained control for anchor runs and difficulty
-    calibration. Templates are selected per horizon from what's available.
+    calibration. This ensures each game contributes each (horizon, template) at least
+    once when `per_pair >= 1`.
 
     Args:
         questions: Full list of questions to sample from
-        per_pair: Number of questions to sample from each (horizon, template) pair
+        per_pair: Number of questions to sample from each (game, horizon, template) pair
         seed: Random seed for reproducibility
         horizons: Horizon levels to include (default: all horizons found)
         templates: Template IDs to include (default: all templates found)
 
     Returns:
-        List of sampled questions, balanced across (horizon, template) pairs.
+        List of sampled questions, balanced across (game_id, horizon, template) pairs.
 
     Example:
         >>> questions = load_all_questions(Path("data/questions"))
         >>> sampled = stratified_sample_by_horizon_template(questions, per_pair=1, seed=42)
-        >>> # With 13 templates and 8 horizons, up to 104 questions (1 per pair)
+        >>> # Total questions = (#games * #horizons * #templates) when per_pair=1
     """
     random.seed(seed)
     sampled = []
 
-    # Group questions by (horizon, template_id)
-    by_pair: dict[tuple[str, str], list[dict]] = defaultdict(list)
+    # Group questions by (game_id, horizon, template_id)
+    by_triplet: dict[tuple[str, str, str], list[dict]] = defaultdict(list)
     for q in questions:
+        game_id = q.get("game_id", "unknown")
         horizon = q.get("horizon", "H1")
         template_id = q.get("template_id", "unknown")
-        by_pair[(horizon, template_id)].append(q)
+        by_triplet[(game_id, horizon, template_id)].append(q)
 
-    # Determine which horizons to sample from
-    all_horizons = set(h for h, _ in by_pair.keys())
+    # Determine which games/horizons/templates to sample from
+    all_games = set(g for g, _, _ in by_triplet.keys())
+    all_horizons = set(h for _, h, _ in by_triplet.keys())
+    all_templates = set(t for _, _, t in by_triplet.keys())
     if horizons is None:
         horizons = sorted(all_horizons)
 
-    template_filter = set(templates) if templates is not None else None
+    if templates is None:
+        templates = sorted(all_templates)
 
-    # Sample from each (horizon, template) pair (use all templates available per horizon)
-    for horizon in horizons:
-        templates_for_horizon = sorted(
-            t for (h, t) in by_pair.keys()
-            if h == horizon and (template_filter is None or t in template_filter)
-        )
-        for template_id in templates_for_horizon:
-            pool = by_pair.get((horizon, template_id), [])
-            n = min(per_pair, len(pool))
+    # Sample from each (game, horizon, template) pair (use all templates per horizon)
+    for game_id in sorted(all_games):
+        for horizon in horizons:
+            for template_id in templates:
+                pool = by_triplet.get((game_id, horizon, template_id), [])
+                if not pool:
+                    # If a game lacks a pair, skip (can't sample what doesn't exist)
+                    continue
+                n = min(per_pair, len(pool))
 
-            if n < per_pair and pool:
-                print(f"Warning: Only {len(pool)} questions available for "
-                      f"({horizon}, {template_id}), requested {per_pair}")
+                if n < per_pair:
+                    print(
+                        f"Warning: Only {len(pool)} questions available for "
+                        f"({game_id}, {horizon}, {template_id}), requested {per_pair}"
+                    )
 
-            if pool:
                 sampled.extend(random.sample(pool, n))
 
     return sampled
