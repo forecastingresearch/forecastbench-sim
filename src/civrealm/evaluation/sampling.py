@@ -86,7 +86,10 @@ def _load_from_combined_file(
 
         # Handle ground_truth based on question type
         if question_type == "continuous":
+            # Support both current ("value") and legacy ("value_at_resolution") formats.
             ground_truth = resolution.get("value")
+            if ground_truth is None:
+                ground_truth = resolution.get("value_at_resolution")
             if ground_truth is None:
                 continue
         else:
@@ -169,7 +172,10 @@ def _load_from_game_directories(
 
                 # Handle ground_truth based on question type
                 if question_type == "continuous":
+                    # Support both current ("value") and legacy ("value_at_resolution") formats.
                     ground_truth = resolution.get("value")
+                    if ground_truth is None:
+                        ground_truth = resolution.get("value_at_resolution")
                     if ground_truth is None:
                         continue
                 else:

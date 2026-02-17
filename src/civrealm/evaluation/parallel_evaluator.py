@@ -14,6 +14,14 @@ from .rate_limiter import ProviderRateLimiter
 logger = logging.getLogger("civbench_eval")
 
 
+def _format_duration(seconds: float) -> str:
+    """Format seconds as HH:MM:SS."""
+    total_seconds = max(0, int(round(seconds)))
+    hours, rem = divmod(total_seconds, 3600)
+    minutes, secs = divmod(rem, 60)
+    return f"{hours:02d}:{minutes:02d}:{secs:02d}"
+
+
 @dataclass
 class PredictionResult:
     """Result of a single model prediction."""
@@ -502,9 +510,8 @@ async def query_model_async(
 
         for attempt in range(max_retries):
             try:
-                # Native async call - use higher max_tokens for reasoning models
-                max_tokens = model.effective_max_tokens(50)
-                api_call = model.get_response_async(prompt, temperature=0.0, max_tokens=max_tokens)
+                # Native async call with no explicit max_tokens cap.
+                api_call = model.get_response_async(prompt, temperature=0.0)
 
                 # Apply timeout if specified
                 if timeout:
@@ -632,13 +639,8 @@ async def query_model_batch_async(
 
         for attempt in range(max_retries):
             try:
-                # Allow more tokens for batched responses
-                # Use higher budget for reasoning models since reasoning consumes tokens
-                base_tokens = max(6000, num_questions * 900)
-                max_tokens = model.effective_max_tokens(base_tokens)
-
-                # Native async call
-                api_call = model.get_response_async(prompt, temperature=0.0, max_tokens=max_tokens)
+                # Native async call with no explicit max_tokens cap.
+                api_call = model.get_response_async(prompt, temperature=0.0)
 
                 # Apply timeout if specified
                 if timeout:
@@ -746,13 +748,8 @@ async def query_model_continuous_batch_async(
 
         for attempt in range(max_retries):
             try:
-                # Allow more tokens for continuous responses (percentiles need more output)
-                # Use higher budget for reasoning models since reasoning consumes tokens
-                base_tokens = max(6000, num_questions * 1200)
-                max_tokens = model.effective_max_tokens(base_tokens)
-
-                # Native async call
-                api_call = model.get_response_async(prompt, temperature=0.0, max_tokens=max_tokens)
+                # Native async call with no explicit max_tokens cap.
+                api_call = model.get_response_async(prompt, temperature=0.0)
 
                 # Apply timeout if specified
                 if timeout:
@@ -1385,9 +1382,14 @@ async def run_batch_evaluation(
     ]
 
     # Process as batches complete
+    total_remaining = len(remaining_batches)
+    initial_completed = len(completed_batches)
+    processed_batches = 0
+    progress_start = time.monotonic()
     batches_since_checkpoint = 0
     for coro in asyncio.as_completed(tasks):
         batch_idx, batch_results = await coro
+        processed_batches += 1
 
         if batch_results is not None:
             results_by_batch[batch_idx] = batch_results
@@ -1404,6 +1406,19 @@ async def run_batch_evaluation(
                 save_checkpoint(checkpoint_file, ordered_results, metadata or {}, completed_batches)
                 batches_since_checkpoint = 0
                 logger.info(f"  Checkpoint saved: {len(completed_batches)}/{total_batches} batches")
+
+        elapsed = time.monotonic() - progress_start
+        avg_sec_per_batch = elapsed / processed_batches
+        remaining_to_process = max(0, total_remaining - processed_batches)
+        eta_seconds = avg_sec_per_batch * remaining_to_process
+        overall_processed = initial_completed + processed_batches
+        overall_pct = (overall_processed / total_batches * 100.0) if total_batches else 100.0
+        skipped_suffix = " (last batch skipped)" if batch_results is None else ""
+        logger.info(
+            f"  Progress: {overall_processed}/{total_batches} batches ({overall_pct:.1f}%), "
+            f"elapsed={_format_duration(elapsed)}, eta={_format_duration(eta_seconds)}, "
+            f"avg={avg_sec_per_batch:.1f}s/batch{skipped_suffix}"
+        )
 
     # Final checkpoint
     ordered_results = [
@@ -1522,9 +1537,14 @@ async def run_continuous_batch_evaluation(
     ]
 
     # Process as batches complete
+    total_remaining = len(remaining_batches)
+    initial_completed = len(completed_batches)
+    processed_batches = 0
+    progress_start = time.monotonic()
     batches_since_checkpoint = 0
     for coro in asyncio.as_completed(tasks):
         batch_idx, batch_results = await coro
+        processed_batches += 1
 
         if batch_results is not None:
             results_by_batch[batch_idx] = batch_results
@@ -1541,6 +1561,19 @@ async def run_continuous_batch_evaluation(
                 save_checkpoint(checkpoint_file, ordered_results, metadata or {}, completed_batches)
                 batches_since_checkpoint = 0
                 logger.info(f"  Checkpoint saved: {len(completed_batches)}/{total_batches} batches")
+
+        elapsed = time.monotonic() - progress_start
+        avg_sec_per_batch = elapsed / processed_batches
+        remaining_to_process = max(0, total_remaining - processed_batches)
+        eta_seconds = avg_sec_per_batch * remaining_to_process
+        overall_processed = initial_completed + processed_batches
+        overall_pct = (overall_processed / total_batches * 100.0) if total_batches else 100.0
+        skipped_suffix = " (last batch skipped)" if batch_results is None else ""
+        logger.info(
+            f"  Progress: {overall_processed}/{total_batches} batches ({overall_pct:.1f}%), "
+            f"elapsed={_format_duration(elapsed)}, eta={_format_duration(eta_seconds)}, "
+            f"avg={avg_sec_per_batch:.1f}s/batch{skipped_suffix}"
+        )
 
     # Final checkpoint
     ordered_results = [
