@@ -321,6 +321,10 @@ async def main():
              "Use 1 for anchor runs (e.g., 13 templates * 8 horizons = up to 104 questions)"
     )
     parser.add_argument(
+        "--all", action="store_true",
+        help="Use all filtered questions (no stratified sampling). Overrides sampling flags."
+    )
+    parser.add_argument(
         "--output", "-o", type=str,
         help="Output JSON file path"
     )
@@ -350,8 +354,8 @@ async def main():
         help="Only evaluate models with ForecastBench scores"
     )
     parser.add_argument(
-        "--timeout", type=int, default=180,
-        help="Timeout per model query in seconds (default: 180). Use 0 for no timeout."
+        "--timeout", type=int, default=0,
+        help="Timeout per model query in seconds (default: 0 = no timeout)."
     )
     parser.add_argument(
         "--verbose", "-v", action="store_true",
@@ -425,8 +429,14 @@ async def main():
     full_dist = get_template_distribution(all_questions)
     logger.info(f"Full template distribution: {full_dist}")
 
-    # Stratified sampling - either by (horizon, template) pair or by template only
-    if args.questions_per_horizon_template is not None:
+    # Sampling mode: all filtered questions, or stratified sampling
+    if args.all:
+        logger.info("\nUsing all filtered questions (no stratified sampling)...")
+        if args.questions_per_horizon_template is not None or args.questions_per_template != 10:
+            logger.info("Ignoring --questions-per-template and --questions-per-horizon-template because --all is set.")
+        questions = all_questions
+        sampling_note = "(all filtered questions)"
+    elif args.questions_per_horizon_template is not None:
         # Fine-grained stratification by (horizon, template) pair
         logger.info(f"\nSampling {args.questions_per_horizon_template} questions per (horizon, template) pair...")
         questions = stratified_sample_by_horizon_template(
@@ -547,9 +557,9 @@ async def main():
     metadata = {
         "run_id": run_id,
         "seed": args.seed,
-        "questions_per_template": args.questions_per_template,
-        "questions_per_horizon_template": args.questions_per_horizon_template,
-        "sampling_mode": "horizon_template" if args.questions_per_horizon_template else "template",
+        "questions_per_template": None if args.all else args.questions_per_template,
+        "questions_per_horizon_template": None if args.all else args.questions_per_horizon_template,
+        "sampling_mode": "all" if args.all else ("horizon_template" if args.questions_per_horizon_template else "template"),
         "total_questions": len(questions),
         "base_rate": base_rate,
         "question_type_distribution": dict(type_dist),

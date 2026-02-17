@@ -52,8 +52,17 @@ def load_api_keys_from_gcp(project_id: str | None = None) -> None:
             pass  # Secret doesn't exist or no access
 
 
-# Models that don't support temperature parameter (reasoning models)
+# Models that don't support the temperature parameter.
+# Keep this separate from reasoning-token behavior.
 MODELS_WITHOUT_TEMPERATURE = {
+    "o1", "o1-mini", "o1-preview",
+    "o3", "o3-mini", "o3-pro",
+    "o4-mini",
+    "gpt-5", "gpt-5-mini", "gpt-5-codex",
+}
+
+# Models that typically need a larger token budget for reasoning traces.
+MODELS_WITH_EXTENDED_REASONING = {
     "o1", "o1-mini", "o1-preview",
     "o3", "o3-mini", "o3-pro",
     "o4-mini",
@@ -120,7 +129,7 @@ class LiteLLMModel:
     @property
     def is_reasoning_model(self) -> bool:
         """Check if this is a reasoning model that uses extended thinking."""
-        return _get_base_model_name(self.id) in MODELS_WITHOUT_TEMPERATURE
+        return _get_base_model_name(self.id) in MODELS_WITH_EXTENDED_REASONING
 
     def effective_max_tokens(self, base_tokens: int) -> int:
         """Get effective max_tokens, accounting for reasoning models' token needs.
@@ -142,14 +151,15 @@ class LiteLLMModel:
         self,
         prompt: str,
         temperature: float = 0.0,
-        max_tokens: int = 500,
+        max_tokens: int | None = None,
     ) -> str:
         """Synchronous call using LiteLLM's completion."""
         kwargs = {
             "model": self._litellm_model_id,
             "messages": [{"role": "user", "content": prompt}],
-            "max_tokens": max_tokens,
         }
+        if max_tokens is not None:
+            kwargs["max_tokens"] = max_tokens
         if self.supports_temperature:
             kwargs["temperature"] = temperature
 
@@ -160,14 +170,15 @@ class LiteLLMModel:
         self,
         prompt: str,
         temperature: float = 0.0,
-        max_tokens: int = 500,
+        max_tokens: int | None = None,
     ) -> str:
         """Async call using LiteLLM's acompletion."""
         kwargs = {
             "model": self._litellm_model_id,
             "messages": [{"role": "user", "content": prompt}],
-            "max_tokens": max_tokens,
         }
+        if max_tokens is not None:
+            kwargs["max_tokens"] = max_tokens
         if self.supports_temperature:
             kwargs["temperature"] = temperature
 
