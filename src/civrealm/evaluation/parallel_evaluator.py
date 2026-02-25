@@ -1060,11 +1060,13 @@ async def _evaluate_single_question(
 
     # Load world report (cached)
     game_id = question["game_id"]
-    if game_id not in world_reports_cache:
-        logger.debug(f"  Loading world report for {game_id}...")
-        world_reports_cache[game_id] = load_world_report(data_dir, game_id)
+    snapshot_turn = question.get("parameters", {}).get("snapshot_turn", 60)
+    cache_key = f"{game_id}_{snapshot_turn}"
+    if cache_key not in world_reports_cache:
+        logger.debug(f"  Loading world report for {game_id} (turn {snapshot_turn})...")
+        world_reports_cache[cache_key] = load_world_report(data_dir, game_id, snapshot_turn=snapshot_turn)
 
-    world_report = world_reports_cache[game_id]
+    world_report = world_reports_cache[cache_key]
     if not world_report:
         logger.warning(f"  No world report found for {game_id}, skipping")
         return None
@@ -1204,7 +1206,8 @@ async def _process_single_batch(
         logger.info(f"  Questions: {len(batch)}, templates: {len(templates)} unique")
 
         # Load world report
-        world_report = load_world_report(data_dir, game_id)
+        snapshot_turn = batch[0].get("parameters", {}).get("snapshot_turn", 60)
+        world_report = load_world_report(data_dir, game_id, snapshot_turn=snapshot_turn)
         if not world_report:
             logger.warning(f"  No world report found for {game_id}, skipping batch")
             return (batch_idx, None)
@@ -1254,7 +1257,8 @@ async def _process_single_continuous_batch(
         logger.info(f"  Questions: {len(batch)}, templates: {len(templates)} unique")
 
         # Load world report
-        world_report = load_world_report(data_dir, game_id)
+        snapshot_turn = batch[0].get("parameters", {}).get("snapshot_turn", 60)
+        world_report = load_world_report(data_dir, game_id, snapshot_turn=snapshot_turn)
         if not world_report:
             logger.warning(f"  No world report found for {game_id}, skipping batch")
             return (batch_idx, None)
