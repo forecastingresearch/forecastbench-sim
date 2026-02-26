@@ -57,6 +57,30 @@ CONDITIONAL_TEXT_TEMPLATES = {
     "government_at": "If {civ} received +500 gold next turn, would {civ} be in {government_type} at turn {resolution_turn}?",
 }
 
+# Template text for baseline (unconditional) questions
+BASELINE_TEXT_TEMPLATES = {
+    "treasury_comparative": "Will {civ_a} have a larger treasury than {civ_b} at turn {resolution_turn}?",
+    "score_comparative": "Will {civ_a} have a higher score than {civ_b} at turn {resolution_turn}?",
+    "tech_comparative": "Will {civ_a} have more technologies than {civ_b} at turn {resolution_turn}?",
+    "population_comparative": "Will {civ_a} have a larger total population than {civ_b} at turn {resolution_turn}?",
+    "city_count_comparative": "Will {civ_a} have more cities than {civ_b} at turn {resolution_turn}?",
+    "territory_comparative": "Will {civ_a} control more tiles than {civ_b} at turn {resolution_turn}?",
+    "score_rank_1": "Will {civ} be ranked #1 at turn {resolution_turn}?",
+    "tech_discovered": "Will {civ} have discovered {tech_name} by turn {resolution_turn}?",
+    "wonder_completed": "Will {wonder_name} be completed by any civilization by turn {resolution_turn}?",
+    "government_at": "Will {civ} be in {government_type} at turn {resolution_turn}?",
+}
+
+# Continuous baseline templates
+BASELINE_CONTINUOUS_TEXT_TEMPLATES = {
+    "techs_continuous": "How many technologies will {civ} have discovered by turn {resolution_turn}?",
+    "treasury_continuous": "How much gold will {civ} have at turn {resolution_turn}?",
+    "population_continuous": "What will {civ}'s population be at turn {resolution_turn}?",
+    "cities_count_continuous": "How many cities will {civ} have at turn {resolution_turn}?",
+    "territory_continuous": "How many tiles will {civ} control at turn {resolution_turn}?",
+    "scores_continuous": "What will {civ}'s score be at turn {resolution_turn}?",
+}
+
 # Continuous template text for conditional (intervention) questions - Gold +500
 CONDITIONAL_CONTINUOUS_TEXT_TEMPLATES = {
     "techs_continuous": "If {civ} received +500 gold next turn, how many technologies will {civ} have discovered by turn {resolution_turn}?",
@@ -97,14 +121,17 @@ def generate_questions_from_conditional_results(
     conditional_results_path: Path,
     game_id: str,
     civilizations: dict,
+    condition_type: str = "conditional",  # "baseline" or "conditional"
 ) -> dict:
     """
-    Generate conditional questions from conditional_results.json.
+    Generate questions from conditional_results.json.
 
     Args:
         conditional_results_path: Path to conditional_results.json
         game_id: Game identifier
         civilizations: Civilization info from baseline questions
+        condition_type: "baseline" for unconditional framing + control answer,
+                       "conditional" for intervention framing + intervention answer
 
     Returns:
         Question bank dict ready for evaluation
@@ -115,11 +142,18 @@ def generate_questions_from_conditional_results(
     results = cond_data.get("results", {})
     checkpoint_turn = cond_data.get("checkpoint_turn", 60)
 
-    text_templates = CONDITIONAL_TEXT_TEMPLATES
-    continuous_text_templates = CONDITIONAL_CONTINUOUS_TEXT_TEMPLATES
-    answer_key = "answer_intervention"
-    template_prefix = "conditional_"
-    question_id_suffix = "_intervention"
+    if condition_type == "baseline":
+        text_templates = BASELINE_TEXT_TEMPLATES
+        continuous_text_templates = BASELINE_CONTINUOUS_TEXT_TEMPLATES
+        answer_key = "answer_control"
+        template_prefix = ""
+        question_id_suffix = "_control"
+    else:
+        text_templates = CONDITIONAL_TEXT_TEMPLATES
+        continuous_text_templates = CONDITIONAL_CONTINUOUS_TEXT_TEMPLATES
+        answer_key = "answer_intervention"
+        template_prefix = "conditional_"
+        question_id_suffix = "_intervention"
 
     questions = []
     skipped = 0
@@ -184,13 +218,15 @@ def setup_evaluation_directories():
     """Set up Gold +500 evaluation directory."""
     base_dir = Path(__file__).parent.parent
 
-    # Output directory
-    gold500_eval_dir = base_dir / "data" / "conditional" / "gold500" / "conditional"
+    # Output directories
+    gold500_conditional_dir = base_dir / "data" / "conditional" / "gold500" / "conditional"
+    gold500_baseline_dir = base_dir / "data" / "conditional" / "gold500" / "baseline"
 
     # Source directory for baseline questions (for civilizations info and world_report)
     questions_dir = base_dir / "data" / "questions"
 
-    total_questions = 0
+    total_conditional = 0
+    total_baseline = 0
 
     print("Setting up evaluation directories for Gold +500 conditional experiment...")
     print()
@@ -220,32 +256,49 @@ def setup_evaluation_directories():
             baseline_data = json.load(f)
         civilizations = baseline_data.get("civilizations", {})
 
-        # Generate conditional questions (gold +500 intervention framing, intervention answer)
-        gold500_seed_dir = gold500_eval_dir / seed
+        # 1. Generate baseline questions (unconditional framing, control answer)
+        baseline_seed_dir = gold500_baseline_dir / seed
+        baseline_seed_dir.mkdir(parents=True, exist_ok=True)
+        baseline_questions = generate_questions_from_conditional_results(
+            conditional_results_path, seed, civilizations, "baseline"
+        )
+        with open(baseline_seed_dir / "questions.json", "w") as f:
+            json.dump(baseline_questions, f, indent=2)
+        if (baseline_seed_dir / "world_report").exists():
+            shutil.rmtree(baseline_seed_dir / "world_report")
+        shutil.copytree(world_report_dir, baseline_seed_dir / "world_report")
+        n_baseline = len(baseline_questions.get("questions", []))
+        total_baseline += n_baseline
+
+        # 2. Generate conditional questions (gold +500 intervention framing, intervention answer)
+        gold500_seed_dir = gold500_conditional_dir / seed
         gold500_seed_dir.mkdir(parents=True, exist_ok=True)
         gold500_questions = generate_questions_from_conditional_results(
-            conditional_results_path, seed, civilizations
+            conditional_results_path, seed, civilizations, "conditional"
         )
         with open(gold500_seed_dir / "conditional_questions.json", "w") as f:
             json.dump(gold500_questions, f, indent=2)
         if (gold500_seed_dir / "world_report").exists():
             shutil.rmtree(gold500_seed_dir / "world_report")
         shutil.copytree(world_report_dir, gold500_seed_dir / "world_report")
-        n_questions = len(gold500_questions.get("questions", []))
-        total_questions += n_questions
+        n_conditional = len(gold500_questions.get("questions", []))
+        total_conditional += n_conditional
 
-        print(f"    Questions: {n_questions}")
+        print(f"    Baseline: {n_baseline}, Conditional: {n_conditional}")
 
     print()
     print("=" * 60)
     print("Summary:")
-    print(f"  Total Gold +500 questions: {total_questions}")
+    print(f"  Baseline questions:    {total_baseline}")
+    print(f"  Conditional questions: {total_conditional}")
     print()
-    print("Evaluation directory created:")
-    print(f"  {gold500_eval_dir}")
+    print("Evaluation directories created:")
+    print(f"  {gold500_baseline_dir}")
+    print(f"  {gold500_conditional_dir}")
     print()
-    print("To run evaluation:")
-    print(f"  python scripts/evaluate_llm_forecasts_parallel.py --data-dir data/conditional/gold500/conditional --models anthropic/claude-opus-4-5-20251101 -n 20 -o data/evaluations/gold500_opus45_eval.json")
+    print("To run evaluations:")
+    print(f"  python scripts/evaluate_llm_forecasts_parallel.py --data-dir data/conditional/gold500/baseline --models anthropic/claude-opus-4-5-20251101")
+    print(f"  python scripts/evaluate_llm_forecasts_parallel.py --data-dir data/conditional/gold500/conditional --models anthropic/claude-opus-4-5-20251101")
 
 
 if __name__ == "__main__":
