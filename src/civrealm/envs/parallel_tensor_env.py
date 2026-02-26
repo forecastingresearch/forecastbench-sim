@@ -2,7 +2,10 @@ import copy
 from collections import deque
 import time
 
-import ray
+try:
+    import ray
+except ImportError:
+    ray = None
 
 from civrealm.configs import fc_args
 from civrealm.freeciv.utils.freeciv_logging import fc_logger

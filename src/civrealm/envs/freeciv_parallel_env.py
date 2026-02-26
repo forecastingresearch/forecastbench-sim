@@ -16,10 +16,13 @@
 
 from civrealm.freeciv.utils.freeciv_logging import fc_logger
 import gymnasium
-import ray
 import os
-# Disable log deduplication of Ray. This ensures the print messages from all actors can be shown.
-os.environ['RAY_DEDUP_LOGS'] = '0'
+try:
+    import ray
+    # Disable log deduplication of Ray. This ensures the print messages from all actors can be shown.
+    os.environ['RAY_DEDUP_LOGS'] = '0'
+except ImportError:
+    ray = None
 
 
 @ray.remote
