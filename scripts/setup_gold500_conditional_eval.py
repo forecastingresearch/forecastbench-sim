@@ -31,6 +31,16 @@ GOLD500_FORKS = {
     "seed8": "logs/recordings/seed8forkgoldadd500p0",
     "seed9": "logs/recordings/seed9forkgoldadd500p0",
     "seed10": "logs/recordings/seed10forkgoldadd500p0",
+    "seed11": "logs/recordings/seed11forkgoldadd500p0",
+    "seed12": "logs/recordings/seed12forkgoldadd500p0",
+    "seed13": "logs/recordings/seed13forkgoldadd500p0",
+    "seed14": "logs/recordings/seed14forkgoldadd500p0",
+    "seed15": "logs/recordings/seed15forkgoldadd500p0",
+    "seed16": "logs/recordings/seed16forkgoldadd500p0",
+    "seed17": "logs/recordings/seed17forkgoldadd500p0",
+    "seed18": "logs/recordings/seed18forkgoldadd500p0",
+    "seed19": "logs/recordings/seed19forkgoldadd500p0",
+    "seed20": "logs/recordings/seed20forkgoldadd500p0",
 }
 
 # Template text for conditional (intervention) questions - Gold +500

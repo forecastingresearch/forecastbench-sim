@@ -39,6 +39,16 @@ MAPMAKING_FORKS = {
     "seed8": "logs/recordings/seed8forktech45p0",
     "seed9": "logs/recordings/seed9forktech45p0",
     "seed10": "logs/recordings/seed10forktech45p0",
+    "seed11": "logs/recordings/seed11forktech45p0",
+    "seed12": "logs/recordings/seed12forktech45p0",
+    "seed13": "logs/recordings/seed13forktech45p0",
+    "seed14": "logs/recordings/seed14forktech45p0",
+    "seed15": "logs/recordings/seed15forktech45p0",
+    "seed16": "logs/recordings/seed16forktech45p0",
+    "seed17": "logs/recordings/seed17forktech45p0",
+    "seed18": "logs/recordings/seed18forktech45p0",
+    "seed19": "logs/recordings/seed19forktech45p0",
+    "seed20": "logs/recordings/seed20forktech45p0",
 }
 
 # Template text for baseline (unconditional) questions

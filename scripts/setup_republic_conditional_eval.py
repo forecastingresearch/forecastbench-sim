@@ -45,6 +45,16 @@ REPUBLIC_FORKS = {
     "seed8": "logs/recordings/seed8forkgovRepublicp0",
     "seed9": "logs/recordings/seed9forkgovRepublicp0",
     "seed10": "logs/recordings/seed10forkgovRepublicp0",
+    "seed11": "logs/recordings/seed11forkgovRepublicp0",
+    "seed12": "logs/recordings/seed12forkgovRepublicp0",
+    "seed13": "logs/recordings/seed13forkgovRepublicp0",
+    "seed14": "logs/recordings/seed14forkgovRepublicp0",
+    "seed15": "logs/recordings/seed15forkgovRepublicp0",
+    "seed16": "logs/recordings/seed16forkgovRepublicp0",
+    "seed17": "logs/recordings/seed17forkgovRepublicp0",
+    "seed18": "logs/recordings/seed18forkgovRepublicp0",
+    "seed19": "logs/recordings/seed19forkgovRepublicp0",
+    "seed20": "logs/recordings/seed20forkgovRepublicp0",
 }
 
 # Template text for baseline (unconditional) questions
