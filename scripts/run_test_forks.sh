@@ -53,6 +53,12 @@ run_single_fork() {
         --end-turn $END_TURN \
         --game-data "data/games/seed${SEED}_data.json" 2>&1 | tail -5
 
+    # Clean up large state/action JSONs to save disk
+    find "$FORK_DIR" -maxdepth 1 -name 'turn_*_state.json' -delete 2>/dev/null
+    find "$FORK_DIR" -maxdepth 1 -name 'turn_*_available_action.json' -delete 2>/dev/null
+    # Remove savegames (conditional_results.json has everything we need)
+    rm -rf "$FORK_DIR/savegames" 2>/dev/null
+
     echo "[seed${SEED}/${FORK_NAME}] Done"
 }
 
