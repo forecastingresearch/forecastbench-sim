@@ -126,7 +126,7 @@ echo
 # Stage 2: N=2 forks (Republic + Gold) for seeds 0-20
 # ============================================================
 log "=== STAGE 2: N=2 forks (Republic + Gold+500) for seeds 0-20 ==="
-run_batch 0 20 "government:0:Republic gold_add:0:500" "govRepublicgoldadd500p0" "government:0:Republic"
+run_batch 0 20 "government:0:Republic gold_add:0:500" "RepGold500p0" "government:0:Republic"
 log "=== STAGE 2 COMPLETE ==="
 echo
 
@@ -134,7 +134,7 @@ echo
 # Stage 3: N=3 forks (Republic + Gold + Map Making) for seeds 0-20
 # ============================================================
 log "=== STAGE 3: N=3 forks (Republic + Gold+500 + Map Making) for seeds 0-20 ==="
-run_batch 0 20 "government:0:Republic gold_add:0:500 tech:0:45" "govRepublicgoldadd500tech45p0" "government:0:Republic"
+run_batch 0 20 "government:0:Republic gold_add:0:500 tech:0:45" "RepGold500MM45p0" "government:0:Republic"
 log "=== STAGE 3 COMPLETE ==="
 echo
 
@@ -159,14 +159,14 @@ done
 echo
 log "N=2 forks (Republic + Gold, seeds 0-20):"
 for SEED in $(seq 0 20); do
-    CR="logs/recordings/seed${SEED}forkgovRepublicgoldadd500p0/conditional_results.json"
+    CR="logs/recordings/seed${SEED}forkRepGold500p0/conditional_results.json"
     printf "  seed%-2d: %s\n" $SEED $([ -f "$CR" ] && echo "✓" || echo "✗")
 done
 
 echo
 log "N=3 forks (Republic + Gold + MapMaking, seeds 0-20):"
 for SEED in $(seq 0 20); do
-    CR="logs/recordings/seed${SEED}forkgovRepublicgoldadd500tech45p0/conditional_results.json"
+    CR="logs/recordings/seed${SEED}forkRepGold500MM45p0/conditional_results.json"
     printf "  seed%-2d: %s\n" $SEED $([ -f "$CR" ] && echo "✓" || echo "✗")
 done
 
