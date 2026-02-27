@@ -31,12 +31,12 @@ ALL_SEEDS = [f"seed{i}" for i in range(21)]
 # === Fork directories ===
 
 N2_FORKS = {
-    f"seed{i}": f"logs/recordings/seed{i}forkgovRepublic_goldadd500_p0"
+    f"seed{i}": f"logs/recordings/seed{i}forkgovRepublicgoldadd500p0"
     for i in range(21)
 }
 
 N3_FORKS = {
-    f"seed{i}": f"logs/recordings/seed{i}forkgovRepublic_goldadd500_tech45_p0"
+    f"seed{i}": f"logs/recordings/seed{i}forkgovRepublicgoldadd500tech45p0"
     for i in range(21)
 }
 
