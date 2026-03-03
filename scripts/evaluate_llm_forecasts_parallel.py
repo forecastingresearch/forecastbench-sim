@@ -236,7 +236,7 @@ def compute_metrics(results: list[dict], models: list) -> dict:
     model_metrics = {}
 
     for model in models:
-        model_id = model.id
+        model_id = model.id if hasattr(model, "id") else str(model)
 
         # Split results by type
         binary_results = [r for r in results if r.get("question_type", "binary") == "binary"]
@@ -635,8 +635,14 @@ async def main():
     duration = (end_time - start_time).total_seconds()
     logger.info(f"\nEvaluation completed in {duration:.1f} seconds")
 
-    # Compute metrics
-    model_metrics = compute_metrics(results, models_to_use)
+    # Compute metrics for all model IDs present in results. This keeps output
+    # consistent when resuming from checkpoint with a subset of models.
+    model_ids_in_results = sorted({
+        model_id
+        for row in results
+        for model_id in row.get("predictions", {}).keys()
+    })
+    model_metrics = compute_metrics(results, model_ids_in_results)
 
     # Print summary
     print_results_summary(model_metrics, base_rate, logger)

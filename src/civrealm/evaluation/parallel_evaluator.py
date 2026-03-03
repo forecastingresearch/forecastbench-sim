@@ -1040,6 +1040,73 @@ def load_checkpoint(checkpoint_file: Path) -> tuple[list[dict], dict, set[int] |
     )
 
 
+def _has_valid_binary_prediction(pred: dict[str, Any] | None) -> bool:
+    """Return True when a prediction dict has a usable binary probability."""
+    if not pred or pred.get("error") is not None:
+        return False
+    return pred.get("probability") is not None
+
+
+def _has_valid_continuous_prediction(pred: dict[str, Any] | None) -> bool:
+    """Return True when a prediction dict has all required continuous percentiles."""
+    if not pred or pred.get("error") is not None:
+        return False
+
+    percentiles = pred.get("percentiles")
+    if not isinstance(percentiles, dict):
+        return False
+
+    required = ("p10", "p25", "p50", "p75", "p90")
+    return all(percentiles.get(k) is not None for k in required)
+
+
+def _batch_has_all_model_predictions(
+    batch_results: list[dict] | None,
+    model_ids: set[str],
+    is_continuous: bool,
+) -> bool:
+    """
+    Check whether every question in a checkpointed batch has valid predictions
+    for all currently requested models.
+    """
+    if not batch_results:
+        return False
+
+    validator = _has_valid_continuous_prediction if is_continuous else _has_valid_binary_prediction
+    for question_result in batch_results:
+        predictions = question_result.get("predictions", {})
+        for model_id in model_ids:
+            if not validator(predictions.get(model_id)):
+                return False
+    return True
+
+
+def _merge_batch_predictions(
+    previous_batch: list[dict] | None,
+    new_batch: list[dict],
+) -> list[dict]:
+    """
+    Merge new per-model predictions into existing batch results.
+
+    This preserves predictions for models that were not re-run while replacing
+    predictions for models included in the current run.
+    """
+    if not previous_batch or len(previous_batch) != len(new_batch):
+        return new_batch
+
+    merged_batch: list[dict] = []
+    for old_row, new_row in zip(previous_batch, new_batch):
+        merged_row = dict(old_row)
+        merged_row.update({k: v for k, v in new_row.items() if k != "predictions"})
+
+        merged_predictions = dict(old_row.get("predictions", {}))
+        merged_predictions.update(new_row.get("predictions", {}))
+        merged_row["predictions"] = merged_predictions
+        merged_batch.append(merged_row)
+
+    return merged_batch
+
+
 async def _evaluate_single_question(
     idx: int,
     total: int,
@@ -1313,6 +1380,7 @@ async def run_batch_evaluation(
     # Track results by batch index for ordering, and completed batch indices
     results_by_batch: dict[int, list[dict]] = {}
     completed_batches: set[int] = set()
+    stale_checkpoint_batches: dict[int, list[dict]] = {}
 
     # Load checkpoint if exists
     if checkpoint_file:
@@ -1349,6 +1417,31 @@ async def run_batch_evaluation(
                         break
                 logger.info(
                     f"Resuming from legacy checkpoint: {len(completed_batches)} batches completed"
+                )
+
+            # Re-open batches that are marked completed but still contain
+            # missing/failed predictions for the currently requested models.
+            model_ids = {m.id for m in models}
+            reopened_batches: list[int] = []
+            for batch_idx in sorted(completed_batches):
+                cached_batch = results_by_batch.get(batch_idx)
+                expected_batch_size = len(question_batches[batch_idx])
+                if not cached_batch or len(cached_batch) != expected_batch_size:
+                    reopened_batches.append(batch_idx)
+                    continue
+                if not _batch_has_all_model_predictions(cached_batch, model_ids, is_continuous=False):
+                    reopened_batches.append(batch_idx)
+
+            if reopened_batches:
+                for batch_idx in reopened_batches:
+                    completed_batches.discard(batch_idx)
+                    stale = results_by_batch.pop(batch_idx, None)
+                    if stale:
+                        stale_checkpoint_batches[batch_idx] = stale
+                logger.info(
+                    "Reopening %d checkpointed binary batches with missing/failed "
+                    "predictions for current model set",
+                    len(reopened_batches),
                 )
 
     total_batches = len(question_batches)
@@ -1392,6 +1485,13 @@ async def run_batch_evaluation(
         processed_batches += 1
 
         if batch_results is not None:
+            # If this batch was reopened from checkpoint, preserve predictions
+            # from models that were not part of the current run.
+            if batch_idx in stale_checkpoint_batches:
+                batch_results = _merge_batch_predictions(
+                    stale_checkpoint_batches[batch_idx],
+                    batch_results,
+                )
             results_by_batch[batch_idx] = batch_results
             completed_batches.add(batch_idx)
             batches_since_checkpoint += 1
@@ -1468,6 +1568,7 @@ async def run_continuous_batch_evaluation(
     # Track results by batch index for ordering, and completed batch indices
     results_by_batch: dict[int, list[dict]] = {}
     completed_batches: set[int] = set()
+    stale_checkpoint_batches: dict[int, list[dict]] = {}
 
     # Load checkpoint if exists
     if checkpoint_file:
@@ -1504,6 +1605,31 @@ async def run_continuous_batch_evaluation(
                         break
                 logger.info(
                     f"Resuming from legacy checkpoint: {len(completed_batches)} batches completed"
+                )
+
+            # Re-open batches that are marked completed but still contain
+            # missing/failed predictions for the currently requested models.
+            model_ids = {m.id for m in models}
+            reopened_batches: list[int] = []
+            for batch_idx in sorted(completed_batches):
+                cached_batch = results_by_batch.get(batch_idx)
+                expected_batch_size = len(question_batches[batch_idx])
+                if not cached_batch or len(cached_batch) != expected_batch_size:
+                    reopened_batches.append(batch_idx)
+                    continue
+                if not _batch_has_all_model_predictions(cached_batch, model_ids, is_continuous=True):
+                    reopened_batches.append(batch_idx)
+
+            if reopened_batches:
+                for batch_idx in reopened_batches:
+                    completed_batches.discard(batch_idx)
+                    stale = results_by_batch.pop(batch_idx, None)
+                    if stale:
+                        stale_checkpoint_batches[batch_idx] = stale
+                logger.info(
+                    "Reopening %d checkpointed continuous batches with missing/failed "
+                    "predictions for current model set",
+                    len(reopened_batches),
                 )
 
     total_batches = len(question_batches)
@@ -1547,6 +1673,13 @@ async def run_continuous_batch_evaluation(
         processed_batches += 1
 
         if batch_results is not None:
+            # If this batch was reopened from checkpoint, preserve predictions
+            # from models that were not part of the current run.
+            if batch_idx in stale_checkpoint_batches:
+                batch_results = _merge_batch_predictions(
+                    stale_checkpoint_batches[batch_idx],
+                    batch_results,
+                )
             results_by_batch[batch_idx] = batch_results
             completed_batches.add(batch_idx)
             batches_since_checkpoint += 1
