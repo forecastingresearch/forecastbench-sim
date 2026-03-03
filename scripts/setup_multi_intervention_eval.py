@@ -1,17 +1,25 @@
 #!/usr/bin/env python3
 """
+DEPRECATED: Use scripts/regenerate_compound_eval.py instead.
+
+This script has two bugs that produce incorrect eval data:
+1. It inherits question IDs from conditional_results.json, which were generated
+   with non-deterministic government ordering (set iteration in conditional_generator.py).
+2. It only covers H1-H3 horizons because fork runs used END_TURN=150.
+
+regenerate_compound_eval.py fixes both by re-keying N=2/N=3 answers to match
+N=1 question IDs (matched by full parameter tuples).
+
+Original description:
 Set up evaluation directories for Multi-Intervention Scaling experiment.
 
 Creates evaluation data for two compound-intervention conditions:
 1. N=2: Republic + Gold+500
-2. N=3: Republic + Gold+500 + Map Making
+2. N=3: Republic + Gold+500 + Navigation
 
 For each condition, creates:
 - baseline/   — Unconditional framing, control (baseline) answer
 - conditional/ — Compound conditional framing, intervention answer
-
-Also sets up N=1 forks for seeds 0-10 (republic, gold500, mapmaking) if those
-fork results exist but haven't been set up as eval directories yet.
 
 Usage:
     python scripts/setup_multi_intervention_eval.py
@@ -36,7 +44,7 @@ N2_FORKS = {
 }
 
 N3_FORKS = {
-    f"seed{i}": f"logs/recordings/seed{i}forkRepGold500MM45p0"
+    f"seed{i}": f"logs/recordings/seed{i}forkRepGold500Nav56p0"
     for i in range(21)
 }
 
@@ -88,27 +96,27 @@ N2_CONDITIONAL_CONTINUOUS_TEXT_TEMPLATES = {
     "scores_continuous": "If {civ} adopts Republic AND receives +500 gold next turn, what will {civ}'s score be at turn {resolution_turn}?",
 }
 
-# N=3: Republic + Gold+500 + Map Making
+# N=3: Republic + Gold+500 + Navigation
 N3_CONDITIONAL_TEXT_TEMPLATES = {
-    "treasury_comparative": "If {civ_a} adopts Republic, receives +500 gold, AND discovers Map Making next turn, would {civ_a} have a larger treasury than {civ_b} at turn {resolution_turn}?",
-    "score_comparative": "If {civ_a} adopts Republic, receives +500 gold, AND discovers Map Making next turn, would {civ_a} have a higher score than {civ_b} at turn {resolution_turn}?",
-    "tech_comparative": "If {civ_a} adopts Republic, receives +500 gold, AND discovers Map Making next turn, would {civ_a} have more technologies than {civ_b} at turn {resolution_turn}?",
-    "population_comparative": "If {civ_a} adopts Republic, receives +500 gold, AND discovers Map Making next turn, would {civ_a} have a larger total population than {civ_b} at turn {resolution_turn}?",
-    "city_count_comparative": "If {civ_a} adopts Republic, receives +500 gold, AND discovers Map Making next turn, would {civ_a} have more cities than {civ_b} at turn {resolution_turn}?",
-    "territory_comparative": "If {civ_a} adopts Republic, receives +500 gold, AND discovers Map Making next turn, would {civ_a} control more tiles than {civ_b} at turn {resolution_turn}?",
-    "score_rank_1": "If {civ} adopts Republic, receives +500 gold, AND discovers Map Making next turn, would {civ} be ranked #1 at turn {resolution_turn}?",
-    "tech_discovered": "If {civ} adopts Republic, receives +500 gold, AND discovers Map Making next turn, would {civ} have discovered {tech_name} by turn {resolution_turn}?",
-    "wonder_completed": "If the civilization adopts Republic, receives +500 gold, AND discovers Map Making next turn, would {wonder_name} be completed by any civilization by turn {resolution_turn}?",
-    "government_at": "If {civ} adopts Republic, receives +500 gold, AND discovers Map Making next turn, would {civ} be in {government_type} at turn {resolution_turn}?",
+    "treasury_comparative": "If {civ_a} adopts Republic, receives +500 gold, AND discovers Navigation next turn, would {civ_a} have a larger treasury than {civ_b} at turn {resolution_turn}?",
+    "score_comparative": "If {civ_a} adopts Republic, receives +500 gold, AND discovers Navigation next turn, would {civ_a} have a higher score than {civ_b} at turn {resolution_turn}?",
+    "tech_comparative": "If {civ_a} adopts Republic, receives +500 gold, AND discovers Navigation next turn, would {civ_a} have more technologies than {civ_b} at turn {resolution_turn}?",
+    "population_comparative": "If {civ_a} adopts Republic, receives +500 gold, AND discovers Navigation next turn, would {civ_a} have a larger total population than {civ_b} at turn {resolution_turn}?",
+    "city_count_comparative": "If {civ_a} adopts Republic, receives +500 gold, AND discovers Navigation next turn, would {civ_a} have more cities than {civ_b} at turn {resolution_turn}?",
+    "territory_comparative": "If {civ_a} adopts Republic, receives +500 gold, AND discovers Navigation next turn, would {civ_a} control more tiles than {civ_b} at turn {resolution_turn}?",
+    "score_rank_1": "If {civ} adopts Republic, receives +500 gold, AND discovers Navigation next turn, would {civ} be ranked #1 at turn {resolution_turn}?",
+    "tech_discovered": "If {civ} adopts Republic, receives +500 gold, AND discovers Navigation next turn, would {civ} have discovered {tech_name} by turn {resolution_turn}?",
+    "wonder_completed": "If the civilization adopts Republic, receives +500 gold, AND discovers Navigation next turn, would {wonder_name} be completed by any civilization by turn {resolution_turn}?",
+    "government_at": "If {civ} adopts Republic, receives +500 gold, AND discovers Navigation next turn, would {civ} be in {government_type} at turn {resolution_turn}?",
 }
 
 N3_CONDITIONAL_CONTINUOUS_TEXT_TEMPLATES = {
-    "techs_continuous": "If {civ} adopts Republic, receives +500 gold, AND discovers Map Making next turn, how many technologies will {civ} have discovered by turn {resolution_turn}?",
-    "treasury_continuous": "If {civ} adopts Republic, receives +500 gold, AND discovers Map Making next turn, how much gold will {civ} have at turn {resolution_turn}?",
-    "population_continuous": "If {civ} adopts Republic, receives +500 gold, AND discovers Map Making next turn, what will {civ}'s population be at turn {resolution_turn}?",
-    "cities_count_continuous": "If {civ} adopts Republic, receives +500 gold, AND discovers Map Making next turn, how many cities will {civ} have at turn {resolution_turn}?",
-    "territory_continuous": "If {civ} adopts Republic, receives +500 gold, AND discovers Map Making next turn, how many tiles will {civ} control at turn {resolution_turn}?",
-    "scores_continuous": "If {civ} adopts Republic, receives +500 gold, AND discovers Map Making next turn, what will {civ}'s score be at turn {resolution_turn}?",
+    "techs_continuous": "If {civ} adopts Republic, receives +500 gold, AND discovers Navigation next turn, how many technologies will {civ} have discovered by turn {resolution_turn}?",
+    "treasury_continuous": "If {civ} adopts Republic, receives +500 gold, AND discovers Navigation next turn, how much gold will {civ} have at turn {resolution_turn}?",
+    "population_continuous": "If {civ} adopts Republic, receives +500 gold, AND discovers Navigation next turn, what will {civ}'s population be at turn {resolution_turn}?",
+    "cities_count_continuous": "If {civ} adopts Republic, receives +500 gold, AND discovers Navigation next turn, how many cities will {civ} have at turn {resolution_turn}?",
+    "territory_continuous": "If {civ} adopts Republic, receives +500 gold, AND discovers Navigation next turn, how many tiles will {civ} control at turn {resolution_turn}?",
+    "scores_continuous": "If {civ} adopts Republic, receives +500 gold, AND discovers Navigation next turn, what will {civ}'s score be at turn {resolution_turn}?",
 }
 
 
@@ -371,13 +379,13 @@ def main():
     print(f"  N=2 Conditional: {n2_conditional} questions")
     print()
 
-    # === N=3: Republic + Gold+500 + Map Making ===
+    # === N=3: Republic + Gold+500 + Navigation ===
     print("=" * 60)
-    print("N=3: Republic + Gold+500 + Map Making")
+    print("N=3: Republic + Gold+500 + Navigation")
     print("=" * 60)
     print()
     n3_baseline, n3_conditional = setup_condition(
-        condition_name="republic_gold500_mapmaking",
+        condition_name="republic_gold500_navigation",
         fork_dirs=N3_FORKS,
         conditional_text_templates=N3_CONDITIONAL_TEXT_TEMPLATES,
         conditional_continuous_text_templates=N3_CONDITIONAL_CONTINUOUS_TEXT_TEMPLATES,
@@ -387,9 +395,9 @@ def main():
             "interventions": [
                 {"type": "government", "value": "Republic"},
                 {"type": "gold_add", "value": 500},
-                {"type": "tech", "value": 45, "name": "Map Making"},
+                {"type": "tech", "value": 56, "name": "Navigation"},
             ],
-            "description": "Republic + 500 gold + Map Making",
+            "description": "Republic + 500 gold + Navigation",
             "source": "conditional_results.json",
         },
         base_dir=base_dir,
@@ -404,18 +412,18 @@ def main():
     print("SUMMARY")
     print("=" * 60)
     print(f"  N=2 (Republic + Gold):              {n2_baseline} baseline, {n2_conditional} conditional")
-    print(f"  N=3 (Republic + Gold + Map Making):  {n3_baseline} baseline, {n3_conditional} conditional")
+    print(f"  N=3 (Republic + Gold + Navigation):  {n3_baseline} baseline, {n3_conditional} conditional")
     print(f"  Total:                               {n2_baseline + n3_baseline} baseline, {n2_conditional + n3_conditional} conditional")
     print()
     print("Evaluation directories:")
     print(f"  data/conditional/republic_gold500/baseline/")
     print(f"  data/conditional/republic_gold500/conditional/")
-    print(f"  data/conditional/republic_gold500_mapmaking/baseline/")
-    print(f"  data/conditional/republic_gold500_mapmaking/conditional/")
+    print(f"  data/conditional/republic_gold500_navigation/baseline/")
+    print(f"  data/conditional/republic_gold500_navigation/conditional/")
     print()
     print("To run evaluations:")
     print("  python scripts/evaluate_llm_forecasts_parallel.py --data-dir data/conditional/republic_gold500/conditional --models ...")
-    print("  python scripts/evaluate_llm_forecasts_parallel.py --data-dir data/conditional/republic_gold500_mapmaking/conditional --models ...")
+    print("  python scripts/evaluate_llm_forecasts_parallel.py --data-dir data/conditional/republic_gold500_navigation/conditional --models ...")
 
 
 if __name__ == "__main__":

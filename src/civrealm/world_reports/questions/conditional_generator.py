@@ -247,7 +247,7 @@ class ConditionalQuestionGenerator:
                 if gov_to:
                     gov_types.add(gov_to)
 
-        return list(gov_types)
+        return sorted(gov_types)
 
     def _auto_select_resolution_turns(self, checkpoint_turn: int, max_turn: int) -> list[int]:
         """

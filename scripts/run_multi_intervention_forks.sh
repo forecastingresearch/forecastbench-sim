@@ -2,9 +2,9 @@
 # Run multi-intervention forks for the N-Intervention Scaling experiment.
 #
 # Generates compound-intervention forks on all 21 seeds (0-20):
-#   - N=1 forks for seeds 0-10 (Republic, Gold+500, Map Making) — these don't exist yet
+#   - N=1 forks for seeds 0-10 (Republic, Gold+500, Navigation) — these don't exist yet
 #   - N=2 forks for seeds 0-20 (Republic + Gold+500)
-#   - N=3 forks for seeds 0-20 (Republic + Gold+500 + Map Making)
+#   - N=3 forks for seeds 0-20 (Republic + Gold+500 + Navigation)
 #
 # Each fork: checkpoint T60, end T150, resolution turns 90/120/150 (H1/H2/H3).
 #
@@ -22,7 +22,7 @@ set -e
 cd "$(dirname "$0")/.."  # cd to project root
 
 CHECKPOINT=60
-END_TURN=150
+END_TURN=270
 PARALLEL=5  # concurrent forks
 
 log() {
@@ -117,8 +117,8 @@ run_batch 0 10 "gold_add:0:500" "goldadd500p0" "gold_add:0:500"
 log "--- Stage 1b COMPLETE ---"
 echo
 
-log "--- Stage 1c: Map Making forks (seeds 0-10) ---"
-run_batch 0 10 "tech:0:45" "tech45p0" "tech:0:45"
+log "--- Stage 1c: Navigation forks (seeds 0-10) ---"
+run_batch 0 10 "tech:0:56" "tech56p0" "tech:0:56"
 log "--- Stage 1c COMPLETE ---"
 echo
 
@@ -131,10 +131,10 @@ log "=== STAGE 2 COMPLETE ==="
 echo
 
 # ============================================================
-# Stage 3: N=3 forks (Republic + Gold + Map Making) for seeds 0-20
+# Stage 3: N=3 forks (Republic + Gold + Navigation) for seeds 0-20
 # ============================================================
-log "=== STAGE 3: N=3 forks (Republic + Gold+500 + Map Making) for seeds 0-20 ==="
-run_batch 0 20 "government:0:Republic gold_add:0:500 tech:0:45" "RepGold500MM45p0" "government:0:Republic"
+log "=== STAGE 3: N=3 forks (Republic + Gold+500 + Navigation) for seeds 0-20 ==="
+run_batch 0 20 "government:0:Republic gold_add:0:500 tech:0:56" "RepGold500Nav56p0" "government:0:Republic"
 log "=== STAGE 3 COMPLETE ==="
 echo
 
@@ -148,12 +148,12 @@ log "N=1 forks (seeds 0-10):"
 for SEED in $(seq 0 10); do
     REPUBLIC="logs/recordings/seed${SEED}forkgovRepublicp0/conditional_results.json"
     GOLD="logs/recordings/seed${SEED}forkgoldadd500p0/conditional_results.json"
-    MAPMAKING="logs/recordings/seed${SEED}forktech45p0/conditional_results.json"
-    printf "  seed%-2d: Republic=%s  Gold=%s  MapMaking=%s\n" \
+    NAVIGATION="logs/recordings/seed${SEED}forktech56p0/conditional_results.json"
+    printf "  seed%-2d: Republic=%s  Gold=%s  Navigation=%s\n" \
         $SEED \
         $([ -f "$REPUBLIC" ] && echo "✓" || echo "✗") \
         $([ -f "$GOLD" ] && echo "✓" || echo "✗") \
-        $([ -f "$MAPMAKING" ] && echo "✓" || echo "✗")
+        $([ -f "$NAVIGATION" ] && echo "✓" || echo "✗")
 done
 
 echo
@@ -164,9 +164,9 @@ for SEED in $(seq 0 20); do
 done
 
 echo
-log "N=3 forks (Republic + Gold + MapMaking, seeds 0-20):"
+log "N=3 forks (Republic + Gold + Navigation, seeds 0-20):"
 for SEED in $(seq 0 20); do
-    CR="logs/recordings/seed${SEED}forkRepGold500MM45p0/conditional_results.json"
+    CR="logs/recordings/seed${SEED}forkRepGold500Nav56p0/conditional_results.json"
     printf "  seed%-2d: %s\n" $SEED $([ -f "$CR" ] && echo "✓" || echo "✗")
 done
 

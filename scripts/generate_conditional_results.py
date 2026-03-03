@@ -33,6 +33,9 @@ parser.add_argument("--checkpoint-turn", type=int, default=60, help="Turn the fo
 parser.add_argument("--end-turn", type=int, required=True, help="Turn to evaluate at")
 parser.add_argument("--game-data", type=str, required=True, help="Path to baseline game data JSON (required)")
 parser.add_argument("--output", type=str, default=None, help="Output directory (default: fork-dir)")
+parser.add_argument("--questions-from", type=str, default=None,
+                    help="Load question definitions from an existing questions.json instead of generating independently. "
+                         "Resolves those questions against the fork game state.")
 parser.add_argument("--verbose", "-v", action="store_true", help="Print detailed progress")
 args = parser.parse_args()
 
@@ -48,6 +51,8 @@ from civrealm.world_reports.utils.savegame_parser import (
     parse_city_wonders,
 )
 from civrealm.world_reports.questions import (
+    ConditionalQuestion,
+    ConditionalQuestionBank,
     ConditionalQuestionGenerator,
     ConditionalResult,
     ForkOutcome,
@@ -253,8 +258,8 @@ def main():
     # Infer game_id from baseline directory
     game_id = baseline_dir.name
 
-    # Calculate resolution turns (H1=+30, H2=+60, H3=+90 from checkpoint)
-    horizons = [30, 60, 90]
+    # Calculate resolution turns (H1-H6 from checkpoint)
+    horizons = [30, 60, 90, 120, 150, 180]
     resolution_turns = [args.checkpoint_turn + h for h in horizons if args.checkpoint_turn + h <= args.end_turn]
     print(f"  Resolution turns: {resolution_turns}")
 
@@ -283,19 +288,57 @@ def main():
         civ_name=civ_name,
     )
 
-    # Generate conditional questions
-    print(f"\nGenerating conditional questions...")
-    generator = ConditionalQuestionGenerator()
+    # Generate or load conditional questions
+    if args.questions_from:
+        # Load question definitions from existing questions.json
+        questions_from_path = Path(args.questions_from)
+        if not questions_from_path.exists():
+            print(f"Error: --questions-from file not found: {questions_from_path}")
+            return 1
 
-    cond_bank = generator.generate_conditional_bank(
-        game_id=game_id,
-        game_data=game_data,
-        checkpoint_turn=args.checkpoint_turn,
-        end_turn=args.end_turn,
-        resolution_turns=valid_turns,
-        conditions=[condition],
-        target_templates=None,  # Use all templates from CONDITION_TARGET_MAP
-    )
+        print(f"\nLoading questions from {questions_from_path}...")
+        with open(questions_from_path) as f:
+            source_bank = json.load(f)
+
+        # Convert source questions to ConditionalQuestion objects
+        source_questions = source_bank.get("questions", [])
+        cond_questions = []
+        for sq in source_questions:
+            res_turn = sq["resolution_turn"]
+            if res_turn not in valid_turns:
+                continue
+            cond_questions.append(ConditionalQuestion(
+                conditional_id=sq["question_id"],
+                condition=condition,
+                target_template_id=sq["template_id"],
+                target_parameters=sq["parameters"],
+                checkpoint_turn=args.checkpoint_turn,
+                resolution_turn=res_turn,
+            ))
+
+        cond_bank = ConditionalQuestionBank(
+            game_id=game_id,
+            checkpoint_turn=args.checkpoint_turn,
+            end_turn=args.end_turn,
+            conditions=[condition],
+            questions=cond_questions,
+            results={},
+            generated_at=datetime.now().isoformat() + "Z",
+        )
+        print(f"  Loaded {len(cond_questions)} questions (filtered to valid turns)")
+    else:
+        print(f"\nGenerating conditional questions...")
+        generator = ConditionalQuestionGenerator()
+
+        cond_bank = generator.generate_conditional_bank(
+            game_id=game_id,
+            game_data=game_data,
+            checkpoint_turn=args.checkpoint_turn,
+            end_turn=args.end_turn,
+            resolution_turns=valid_turns,
+            conditions=[condition],
+            target_templates=None,  # Use all templates from CONDITION_TARGET_MAP
+        )
 
     print(f"  Generated {len(cond_bank.questions)} conditional questions")
     print(f"  Resolution turns: {sorted(set(q.resolution_turn for q in cond_bank.questions))}")
