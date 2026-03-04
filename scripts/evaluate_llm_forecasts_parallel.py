@@ -45,8 +45,14 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 from civrealm.evaluation.models import get_models, load_api_keys_from_gcp
 
-# Load API keys from GCP Secret Manager (uses GOOGLE_CLOUD_PROJECT from .env)
-load_api_keys_from_gcp()
+# Load API keys from GCP Secret Manager (uses GOOGLE_CLOUD_PROJECT from .env).
+# This is optional so local/self-hosted inference can run without GCP credentials.
+if os.environ.get("CIVBENCH_SKIP_GCP_SECRETS", "0") != "1":
+    try:
+        load_api_keys_from_gcp()
+    except Exception as e:
+        print(f"Warning: could not load API keys from GCP Secret Manager: {e}")
+        print("Proceeding with keys/endpoints from environment.")
 from civrealm.evaluation.sampling import (
     load_all_questions,
     stratified_sample_batched,

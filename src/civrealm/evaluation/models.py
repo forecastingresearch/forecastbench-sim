@@ -158,6 +158,14 @@ class LiteLLMModel:
             "model": self._litellm_model_id,
             "messages": [{"role": "user", "content": prompt}],
         }
+        # Support local OpenAI-compatible endpoints (e.g., vLLM) via env vars.
+        if self.provider_cls == "OpenAIProvider":
+            api_base = os.environ.get("OPENAI_API_BASE")
+            if api_base:
+                kwargs["api_base"] = api_base
+            api_key = os.environ.get("OPENAI_API_KEY")
+            if api_key:
+                kwargs["api_key"] = api_key
         if max_tokens is not None:
             kwargs["max_tokens"] = max_tokens
         if self.supports_temperature:
@@ -177,6 +185,14 @@ class LiteLLMModel:
             "model": self._litellm_model_id,
             "messages": [{"role": "user", "content": prompt}],
         }
+        # Support local OpenAI-compatible endpoints (e.g., vLLM) via env vars.
+        if self.provider_cls == "OpenAIProvider":
+            api_base = os.environ.get("OPENAI_API_BASE")
+            if api_base:
+                kwargs["api_base"] = api_base
+            api_key = os.environ.get("OPENAI_API_KEY")
+            if api_key:
+                kwargs["api_key"] = api_key
         if max_tokens is not None:
             kwargs["max_tokens"] = max_tokens
         if self.supports_temperature:

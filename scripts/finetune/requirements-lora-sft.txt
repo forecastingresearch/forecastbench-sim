@@ -1,0 +1,14 @@
+# Finetuning-specific dependencies for the LoRA/QLoRA pipeline.
+# Install these in a separate cloud-GPU environment.
+
+accelerate>=1.11.0,<1.12
+bitsandbytes>=0.48.1,<0.49
+datasets>=4.4.0,<4.5
+peft>=0.17.0,<0.18
+scipy>=1.12.0,<2.0
+sentencepiece>=0.2.0,<0.3
+transformers>=4.57.1,<4.58
+trl>=0.23.1,<0.24
+
+# Optional but strongly recommended for faster kernels on A100.
+# flash-attn>=2.8.0.post2
