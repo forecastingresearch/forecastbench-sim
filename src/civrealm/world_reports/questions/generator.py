@@ -926,7 +926,7 @@ class QuestionGenerator:
             params = {
                 "wonder_name": wonder_name,
                 "wonder_id": wonder_id,
-                "snapshot_turn": 0,
+                "snapshot_turn": snapshot_turn,
                 "resolution_turn": snapshot_turn,
             }
 

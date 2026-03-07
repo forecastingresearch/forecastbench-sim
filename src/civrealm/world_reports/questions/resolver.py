@@ -286,6 +286,10 @@ class QuestionResolver:
 
         # Filter events in time window
         start_turn = params.get("snapshot_turn", snapshot_turn)
+        # H0 wonder questions ask whether completion happened by snapshot turn.
+        # Keep this semantics even when question params use snapshot_turn=60.
+        if question.template_id == "h0_wonder_completed":
+            start_turn = 0
         events_in_window = [
             e for e in events
             if start_turn < e.get("turn", 0) <= resolution_turn
