@@ -15,6 +15,7 @@ Usage:
 
 import os
 from dataclasses import dataclass
+from typing import Any
 
 from litellm import acompletion, completion
 
@@ -198,6 +199,7 @@ class LiteLLMModel:
         temperature: float = 0.0,
         max_tokens: int | None = None,
         reasoning_effort: str = "medium",
+        metadata: dict[str, Any] | None = None,
     ) -> str:
         """Synchronous call using LiteLLM's completion.
 
@@ -220,6 +222,8 @@ class LiteLLMModel:
         # Only pass temperature for models that support it
         if self.supports_temperature:
             kwargs["temperature"] = temperature
+        if metadata is not None:
+            kwargs["metadata"] = metadata
 
         # Add reasoning_effort for reasoning models
         effort = _get_reasoning_effort(self.id, reasoning_effort)
@@ -235,6 +239,7 @@ class LiteLLMModel:
         temperature: float = 0.0,
         max_tokens: int | None = None,
         reasoning_effort: str = "medium",
+        metadata: dict[str, Any] | None = None,
     ) -> str:
         """Native async call using LiteLLM's acompletion.
 
@@ -257,6 +262,8 @@ class LiteLLMModel:
         # Only pass temperature for models that support it
         if self.supports_temperature:
             kwargs["temperature"] = temperature
+        if metadata is not None:
+            kwargs["metadata"] = metadata
 
         # Add reasoning_effort for reasoning models
         effort = _get_reasoning_effort(self.id, reasoning_effort)

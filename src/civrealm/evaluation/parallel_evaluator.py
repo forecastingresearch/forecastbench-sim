@@ -511,7 +511,18 @@ async def query_model_async(
         for attempt in range(max_retries):
             try:
                 # Native async call with no explicit max_tokens cap.
-                api_call = model.get_response_async(prompt, temperature=0.0)
+                request_metadata = {
+                    "prompt_type": "binary_single",
+                    "num_questions": 1,
+                }
+                try:
+                    api_call = model.get_response_async(
+                        prompt,
+                        temperature=0.0,
+                        metadata=request_metadata,
+                    )
+                except TypeError:
+                    api_call = model.get_response_async(prompt, temperature=0.0)
 
                 # Apply timeout if specified
                 if timeout:
@@ -640,7 +651,18 @@ async def query_model_batch_async(
         for attempt in range(max_retries):
             try:
                 # Native async call with no explicit max_tokens cap.
-                api_call = model.get_response_async(prompt, temperature=0.0)
+                request_metadata = {
+                    "prompt_type": "binary_batch",
+                    "num_questions": num_questions,
+                }
+                try:
+                    api_call = model.get_response_async(
+                        prompt,
+                        temperature=0.0,
+                        metadata=request_metadata,
+                    )
+                except TypeError:
+                    api_call = model.get_response_async(prompt, temperature=0.0)
 
                 # Apply timeout if specified
                 if timeout:
@@ -749,7 +771,18 @@ async def query_model_continuous_batch_async(
         for attempt in range(max_retries):
             try:
                 # Native async call with no explicit max_tokens cap.
-                api_call = model.get_response_async(prompt, temperature=0.0)
+                request_metadata = {
+                    "prompt_type": "continuous_batch",
+                    "num_questions": num_questions,
+                }
+                try:
+                    api_call = model.get_response_async(
+                        prompt,
+                        temperature=0.0,
+                        metadata=request_metadata,
+                    )
+                except TypeError:
+                    api_call = model.get_response_async(prompt, temperature=0.0)
 
                 # Apply timeout if specified
                 if timeout:

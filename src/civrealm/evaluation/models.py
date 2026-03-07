@@ -14,6 +14,7 @@ Keys can be loaded from GCP Secret Manager using load_api_keys_from_gcp().
 
 import os
 from dataclasses import dataclass
+from typing import Any
 
 from litellm import acompletion, completion
 
@@ -162,6 +163,7 @@ class LiteLLMModel:
         prompt: str,
         temperature: float = 0.0,
         max_tokens: int | None = None,
+        metadata: dict[str, Any] | None = None,
     ) -> str:
         """Synchronous call using LiteLLM's completion."""
         kwargs = {
@@ -172,6 +174,8 @@ class LiteLLMModel:
             kwargs["max_tokens"] = max_tokens
         if self.supports_temperature:
             kwargs["temperature"] = temperature
+        if metadata is not None:
+            kwargs["metadata"] = metadata
 
         response = completion(**kwargs)
         return response.choices[0].message.content
@@ -181,6 +185,7 @@ class LiteLLMModel:
         prompt: str,
         temperature: float = 0.0,
         max_tokens: int | None = None,
+        metadata: dict[str, Any] | None = None,
     ) -> str:
         """Async call using LiteLLM's acompletion."""
         kwargs = {
@@ -191,6 +196,8 @@ class LiteLLMModel:
             kwargs["max_tokens"] = max_tokens
         if self.supports_temperature:
             kwargs["temperature"] = temperature
+        if metadata is not None:
+            kwargs["metadata"] = metadata
 
         response = await acompletion(**kwargs)
         return response.choices[0].message.content

@@ -27,6 +27,7 @@ Requirements:
 
 import argparse
 import asyncio
+import atexit
 import json
 import logging
 import os
@@ -56,6 +57,7 @@ from civrealm.evaluation.sampling import (
 )
 from civrealm.evaluation.rate_limiter import ProviderRateLimiter
 from civrealm.evaluation.parallel_evaluator import run_batch_evaluation, run_continuous_batch_evaluation
+from civrealm.evaluation.spend_tracker import install_spend_tracker, uninstall_spend_tracker
 from civrealm.metrics import compute_brier_score, compute_calibration_error, compute_crps, compute_aggregate_crps, compute_aggregate_mae
 
 # - [X] claude forecastbench models
@@ -392,6 +394,33 @@ async def main():
 
     logger.info(f"CivBench Parallel Evaluation - Run {run_id}")
     logger.info(f"Log directory: {log_dir}")
+    spend_tracker = install_spend_tracker(run_id=run_id, log_dir=log_dir)
+    logger.info(f"Spend tracking enabled: {spend_tracker.events_file}")
+    spend_tracker_finished = False
+
+    def _finalize_spend_tracking() -> None:
+        nonlocal spend_tracker_finished
+        if spend_tracker_finished:
+            return
+        summary = spend_tracker.finalize()
+        uninstall_spend_tracker(spend_tracker)
+        spend_tracker_finished = True
+        logger.info(
+            "Spend summary: total_cost_usd=%.6f success_calls=%d failure_calls=%d "
+            "reasoning_missing=%d reasoning_zero=%d",
+            summary["cost_total_usd"],
+            summary["success_calls"],
+            summary["failure_calls"],
+            summary["reasoning_tokens_missing_calls"],
+            summary["reasoning_tokens_zero_calls"],
+        )
+        logger.info(f"Spend summary file: {spend_tracker.summary_file}")
+
+    atexit.register(_finalize_spend_tracking)
+
+    def _finish(exit_code: int) -> int:
+        _finalize_spend_tracking()
+        return exit_code
 
     # Load all questions (with optional difficulty filtering)
     data_dir = Path(args.data_dir)
@@ -408,7 +437,7 @@ async def main():
 
     if not all_questions:
         logger.error("No questions found")
-        return 1
+        return _finish(1)
 
     # Filter by horizon if specified
     if args.horizon:
@@ -418,7 +447,7 @@ async def main():
 
         if not all_questions:
             logger.error(f"No questions found with horizons: {args.horizon}")
-            return 1
+            return _finish(1)
 
     # Filter by question type if specified
     if args.question_type != "all":
@@ -460,7 +489,7 @@ async def main():
 
     if not questions:
         logger.error("No questions sampled; check filters and sampling settings.")
-        return 1
+        return _finish(1)
 
     # Group by game for batching, then chunk each game into fixed-size batches
     batch_size = 20
@@ -537,7 +566,7 @@ async def main():
                 logger.info(f"    ... and {len(batch) - 3} more questions")
         if len(continuous_batches) > 2:
             logger.info(f"\n  ... and {len(continuous_batches) - 2} more continuous batches")
-        return 0
+        return _finish(0)
 
     # Determine which models to use
     if args.models:
@@ -686,7 +715,7 @@ async def main():
         except Exception as e:
             logger.warning(f"Failed to update difficulty scores: {e}")
 
-    return 0
+    return _finish(0)
 
 
 if __name__ == '__main__':
