@@ -61,6 +61,13 @@ MODELS_WITHOUT_TEMPERATURE = {
     "gpt-5", "gpt-5-mini", "gpt-5-codex",
 }
 
+# Models where we intentionally omit temperature for stability.
+# These models may support temperature, but passing it can degrade reliability
+# in our current request path.
+MODELS_OMIT_TEMPERATURE = {
+    "gemini-2.5-flash",
+}
+
 # Models that typically need a larger token budget for reasoning traces.
 MODELS_WITH_EXTENDED_REASONING = {
     "o1", "o1-mini", "o1-preview",
@@ -93,7 +100,10 @@ def _get_base_model_name(model_id: str) -> str:
 
 def _supports_temperature(model_id: str) -> bool:
     """Check if a model supports the temperature parameter."""
-    return _get_base_model_name(model_id) not in MODELS_WITHOUT_TEMPERATURE
+    base = _get_base_model_name(model_id)
+    if base in MODELS_OMIT_TEMPERATURE:
+        return False
+    return base not in MODELS_WITHOUT_TEMPERATURE
 
 
 @dataclass

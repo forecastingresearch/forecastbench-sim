@@ -32,6 +32,13 @@ MODELS_WITHOUT_TEMPERATURE = {
     "gpt-5.2", "gpt-5.2-pro", "gpt-5.2-codex",
 }
 
+# Models where we intentionally omit temperature for stability.
+# These models may support temperature, but passing it can degrade reliability
+# in our current request path.
+MODELS_OMIT_TEMPERATURE = {
+    "gemini-2.5-flash",
+}
+
 # O-series models: support reasoning_effort low/medium/high
 O_SERIES_MODELS = {
     "o1", "o1-mini", "o1-preview",
@@ -77,7 +84,10 @@ def _get_base_model_name(model_id: str) -> str:
 
 def _supports_temperature(model_id: str) -> bool:
     """Check if a model supports the temperature parameter."""
-    return _get_base_model_name(model_id) not in MODELS_WITHOUT_TEMPERATURE
+    base = _get_base_model_name(model_id)
+    if base in MODELS_OMIT_TEMPERATURE:
+        return False
+    return base not in MODELS_WITHOUT_TEMPERATURE
 
 
 def _get_reasoning_effort(model_id: str, requested_effort: str = "medium") -> str | None:
@@ -186,7 +196,7 @@ class LiteLLMModel:
         self,
         prompt: str,
         temperature: float = 0.0,
-        max_tokens: int = 500,
+        max_tokens: int | None = None,
         reasoning_effort: str = "medium",
     ) -> str:
         """Synchronous call using LiteLLM's completion.
@@ -194,7 +204,8 @@ class LiteLLMModel:
         Args:
             prompt: The prompt text to send to the model
             temperature: Sampling temperature (0.0 = deterministic), ignored for reasoning models
-            max_tokens: Maximum completion tokens (includes reasoning + output for reasoning models)
+            max_tokens: Maximum completion tokens (includes reasoning + output for reasoning models).
+                If None, no explicit cap is sent.
             reasoning_effort: Effort level for reasoning models (low/medium/high)
 
         Returns:
@@ -203,8 +214,9 @@ class LiteLLMModel:
         kwargs = {
             "model": self._litellm_model_id,
             "messages": [{"role": "user", "content": prompt}],
-            "max_tokens": max_tokens,
         }
+        if max_tokens is not None:
+            kwargs["max_tokens"] = max_tokens
         # Only pass temperature for models that support it
         if self.supports_temperature:
             kwargs["temperature"] = temperature
@@ -221,7 +233,7 @@ class LiteLLMModel:
         self,
         prompt: str,
         temperature: float = 0.0,
-        max_tokens: int = 500,
+        max_tokens: int | None = None,
         reasoning_effort: str = "medium",
     ) -> str:
         """Native async call using LiteLLM's acompletion.
@@ -229,7 +241,8 @@ class LiteLLMModel:
         Args:
             prompt: The prompt text to send to the model
             temperature: Sampling temperature (0.0 = deterministic), ignored for reasoning models
-            max_tokens: Maximum completion tokens (includes reasoning + output for reasoning models)
+            max_tokens: Maximum completion tokens (includes reasoning + output for reasoning models).
+                If None, no explicit cap is sent.
             reasoning_effort: Effort level for reasoning models (low/medium/high)
 
         Returns:
@@ -238,8 +251,9 @@ class LiteLLMModel:
         kwargs = {
             "model": self._litellm_model_id,
             "messages": [{"role": "user", "content": prompt}],
-            "max_tokens": max_tokens,
         }
+        if max_tokens is not None:
+            kwargs["max_tokens"] = max_tokens
         # Only pass temperature for models that support it
         if self.supports_temperature:
             kwargs["temperature"] = temperature
