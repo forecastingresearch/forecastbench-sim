@@ -1,0 +1,370 @@
+You are an expert superforecaster, familiar with the work of Tetlock and others. You are analyzing a FreeCiv game simulation. Make predictions based on the world report below.
+
+You MUST provide percentile estimates for each question UNDER ALL CIRCUMSTANCES. If for some reason you can't answer, provide reasonable mid-range estimates, but always return numeric percentile values.
+
+## World Report
+WORLD REPORT TXT v1
+Game ID: seed1
+Snapshot turn: 60
+Turns analyzed: 1..60
+Map size: 78x52
+
+CIVILIZATIONS
+ID | Name      | Adjective | Nation ID
+---+-----------+-----------+----------
+0  | Dacian    | Dacian    | 137      
+1  | Assyrian  | Assyrian  | 34       
+2  | Thracian  | Thracian  | 493      
+3  | Burgundic | Burgundic | 76       
+4  | Miao      | Miao      | 321      
+5  | Pirate    | Pirate    | 559      
+6  | Barbarian | Barbarian | 558      
+7  | Cantonese | Cantonese | 87       
+8  | Macedon   | Macedon   | 294      
+9  | Israelite | Israelite | 236      
+10 | Scythian  | Scythian  | 435      
+
+CURRENT STATE (TURN 60)
+ID | Name      | Score | Rank | Government | Treasury | Population | Techs | Wonders | Cities | Territory | Units | Military | Science | Trade | Food  | Shields
+---+-----------+-------+------+------------+----------+------------+-------+---------+--------+-----------+-------+----------+---------+-------+-------+--------
+0  | Dacian    | 41    | NA   | Despotism  | 275.0    | 20.0       | 11    | 1       | 14     | 147       | 7     | 3        | 60      | 20.0  | 40.0  | 38.0   
+1  | Assyrian  | -1    | NA   | Anarchy    | 0.0      | 0.0        | 8     | 0       | 0      | 0         | 0     | 0        | 60      | 27.0  | 54.0  | 33.0   
+2  | Thracian  | 47    | NA   | Despotism  | 408.0    | 0.0        | 9     | 0       | 0      | 0         | 0     | 0        | 60      | 44.0  | 88.0  | 53.0   
+3  | Burgundic | 27    | NA   | Despotism  | 673.0    | 0.0        | 9     | 0       | 0      | 0         | 0     | 0        | 60      | 37.0  | 74.0  | 24.0   
+4  | Miao      | 36    | NA   | Despotism  | 207.0    | 6.0        | 9     | 0       | 4      | 49        | 0     | 0        | 60      | 51.0  | 102.0 | 33.0   
+5  | Pirate    | NA    | NA   | NA         | None     | None       | None  | None    | None   | None      | None  | None     | None    | None  | None  | None   
+6  | Barbarian | NA    | NA   | NA         | None     | None       | None  | None    | None   | None      | None  | None     | None    | None  | None  | None   
+7  | Cantonese | NA    | NA   | NA         | None     | None       | None  | None    | None   | None      | None  | None     | None    | None  | None  | None   
+8  | Macedon   | NA    | NA   | NA         | None     | None       | None  | None    | None   | None      | None  | None     | None    | None  | None  | None   
+9  | Israelite | NA    | NA   | NA         | None     | None       | None  | None    | None   | None      | None  | None     | None    | None  | None  | None   
+10 | Scythian  | NA    | NA   | NA         | None     | None       | None  | None    | None   | None      | None  | None     | None    | None  | None  | None   
+
+GOVERNMENT TIMELINE (derived from recordings)
+Each entry is a change point (turn number -> new government); the first entry is the first observed government.
+0 Dacian: 1 Despotism
+1 Assyrian: 1 Anarchy
+2 Thracian: 1 Anarchy; 40 Despotism
+3 Burgundic: 1 Anarchy; 13 Despotism
+4 Miao: 1 Anarchy; 21 Despotism
+5 Pirate: NA (no changes observed)
+6 Barbarian: NA (no changes observed)
+7 Cantonese: NA (no changes observed)
+8 Macedon: NA (no changes observed)
+9 Israelite: NA (no changes observed)
+10 Scythian: NA (no changes observed)
+
+TREASURY (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Dacian: 50.0, 57.0, 117.0, 154.0, 170.0, 188.0, 208.0, 213.0, 220.0, 229.0, 233.0, 251.0, 275.0
+1 Assyrian: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+2 Thracian: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 152.0, 227.0, 249.0, 276.0, 408.0
+3 Burgundic: 0.0, 0.0, 0.0, 378.0, 441.0, 459.0, 480.0, 505.0, 537.0, 572.0, 606.0, 640.0, 673.0
+4 Miao: 0.0, 0.0, 0.0, 0.0, 0.0, 108.0, 119.0, 130.0, 142.0, 156.0, 171.0, 186.0, 207.0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Cantonese: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Macedon: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Israelite: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+10 Scythian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+POPULATION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Dacian: 0.0, 2.0, 2.0, 3.0, 3.0, 6.0, 7.0, 8.0, 12.0, 9.0, 14.0, 16.0, 20.0
+1 Assyrian: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+2 Thracian: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+3 Burgundic: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+4 Miao: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 6.0, 6.0, 6.0, 6.0, 6.0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Cantonese: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Macedon: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Israelite: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+10 Scythian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+TECHS KNOWN (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Dacian: 1, 1, 1, 2, 2, 3, 4, 5, 7, 7, 8, 10, 11
+1 Assyrian: 1, 1, 1, 1, 2, 3, 4, 4, 4, 5, 6, 8, 8
+2 Thracian: 1, 1, 1, 2, 3, 3, 4, 5, 6, 7, 8, 9, 9
+3 Burgundic: 1, 1, 1, 2, 2, 3, 4, 5, 5, 7, 8, 8, 9
+4 Miao: 1, 1, 1, 2, 2, 3, 4, 5, 5, 6, 7, 9, 9
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Cantonese: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Macedon: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Israelite: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+10 Scythian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+WONDERS DISCOVERED (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Dacian: 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+1 Assyrian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+2 Thracian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+3 Burgundic: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+4 Miao: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Cantonese: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Macedon: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Israelite: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+10 Scythian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+CITIES COUNT (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Dacian: 0, 2, 2, 2, 3, 4, 5, 6, 6, 6, 11, 12, 14
+1 Assyrian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+2 Thracian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+3 Burgundic: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+4 Miao: 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 4
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Cantonese: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Macedon: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Israelite: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+10 Scythian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+TERRITORY SIZE (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Dacian: 0, 35, 39, 41, 51, 57, 81, 89, 93, 99, 128, 134, 147
+1 Assyrian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+2 Thracian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+3 Burgundic: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+4 Miao: 0, 0, 0, 0, 0, 0, 0, 0, 49, 49, 49, 49, 49
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Cantonese: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Macedon: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Israelite: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+10 Scythian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+SCIENCE (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Dacian: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+1 Assyrian: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+2 Thracian: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+3 Burgundic: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+4 Miao: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Cantonese: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Macedon: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Israelite: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+10 Scythian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+TRADE PRODUCTION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Dacian: 0.0, 2.0, 2.0, 3.0, 3.0, 6.0, 7.0, 8.0, 12.0, 9.0, 14.0, 16.0, 20.0
+1 Assyrian: 0.0, 5.0, 5.0, 7.0, 7.0, 9.0, 13.0, 13.0, 14.0, 19.0, 20.0, 24.0, 27.0
+2 Thracian: 0.0, 6.0, 7.0, 8.0, 9.0, 10.0, 14.0, 21.0, 24.0, 33.0, 32.0, 37.0, 44.0
+3 Burgundic: 0.0, 11.0, 14.0, 16.0, 20.0, 17.0, 22.0, 19.0, 21.0, 22.0, 32.0, 32.0, 37.0
+4 Miao: 0.0, 14.0, 14.0, 19.0, 16.0, 21.0, 19.0, 24.0, 32.0, 30.0, 44.0, 47.0, 51.0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Cantonese: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Macedon: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Israelite: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+10 Scythian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+FOOD PRODUCTION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Dacian: 0.0, 4.0, 4.0, 6.0, 6.0, 12.0, 14.0, 16.0, 24.0, 18.0, 28.0, 32.0, 40.0
+1 Assyrian: 0.0, 10.0, 10.0, 14.0, 14.0, 18.0, 26.0, 26.0, 28.0, 38.0, 40.0, 48.0, 54.0
+2 Thracian: 0.0, 12.0, 14.0, 16.0, 18.0, 20.0, 28.0, 42.0, 48.0, 66.0, 64.0, 74.0, 88.0
+3 Burgundic: 0.0, 22.0, 28.0, 32.0, 40.0, 34.0, 44.0, 38.0, 42.0, 44.0, 64.0, 64.0, 74.0
+4 Miao: 0.0, 28.0, 28.0, 38.0, 32.0, 42.0, 38.0, 48.0, 64.0, 60.0, 88.0, 94.0, 102.0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Cantonese: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Macedon: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Israelite: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+10 Scythian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+SHIELD PRODUCTION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Dacian: 0.0, 5.0, 5.0, 6.0, 8.0, 12.0, 14.0, 17.0, 29.0, 21.0, 28.0, 27.0, 38.0
+1 Assyrian: 0.0, 3.0, 3.0, 9.0, 7.0, 9.0, 17.0, 20.0, 15.0, 23.0, 23.0, 30.0, 33.0
+2 Thracian: 0.0, 2.0, 8.0, 8.0, 14.0, 15.0, 24.0, 20.0, 25.0, 35.0, 34.0, 38.0, 53.0
+3 Burgundic: 0.0, 3.0, 3.0, 7.0, 7.0, 9.0, 13.0, 16.0, 16.0, 16.0, 16.0, 17.0, 24.0
+4 Miao: 0.0, 6.0, 6.0, 8.0, 10.0, 13.0, 15.0, 15.0, 16.0, 20.0, 23.0, 30.0, 33.0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Cantonese: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Macedon: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Israelite: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+10 Scythian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+UNITS COUNT (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Dacian: 5, 3, 3, 4, 4, 4, 4, 4, 6, 9, 5, 7, 7
+1 Assyrian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+2 Thracian: 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0
+3 Burgundic: 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0
+4 Miao: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Cantonese: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Macedon: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Israelite: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+10 Scythian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+MILITARY UNITS COUNT (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Dacian: 0, 0, 0, 0, 0, 0, 0, 1, 3, 3, 3, 3, 3
+1 Assyrian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+2 Thracian: 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0
+3 Burgundic: 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0
+4 Miao: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Cantonese: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Macedon: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Israelite: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+10 Scythian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+SCORES (derived from recordings)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Dacian: 0, 2, 2, 5, 5, 10, 13, 16, 24, 22, 29, 35, 41
+1 Assyrian: -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+2 Thracian: -1, -1, -1, -1, -1, -1, -1, -1, 21, 28, 31, 38, 47
+3 Burgundic: -1, -1, -1, 6, 4, 9, 10, 15, 17, 22, 25, 25, 27
+4 Miao: -1, -1, -1, -1, -1, 9, 13, 16, 16, 20, 25, 32, 36
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Cantonese: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Macedon: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Israelite: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+10 Scythian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+RANKINGS (derived from scores)
+Turn 1: 1=Dacian(0), 2=Assyrian(-1), 3=Thracian(-1), 4=Burgundic(-1), 5=Miao(-1)
+Turn 5: 1=Dacian(2), 2=Assyrian(-1), 3=Thracian(-1), 4=Burgundic(-1), 5=Miao(-1)
+Turn 10: 1=Dacian(2), 2=Assyrian(-1), 3=Thracian(-1), 4=Burgundic(-1), 5=Miao(-1)
+Turn 15: 1=Burgundic(6), 2=Dacian(5), 3=Assyrian(-1), 4=Thracian(-1), 5=Miao(-1)
+Turn 20: 1=Dacian(5), 2=Burgundic(4), 3=Assyrian(-1), 4=Thracian(-1), 5=Miao(-1)
+Turn 25: 1=Dacian(10), 2=Burgundic(9), 3=Miao(9), 4=Assyrian(-1), 5=Thracian(-1)
+Turn 30: 1=Dacian(13), 2=Miao(13), 3=Burgundic(10), 4=Assyrian(-1), 5=Thracian(-1)
+Turn 35: 1=Dacian(16), 2=Miao(16), 3=Burgundic(15), 4=Assyrian(-1), 5=Thracian(-1)
+Turn 40: 1=Dacian(24), 2=Thracian(21), 3=Burgundic(17), 4=Miao(16), 5=Assyrian(-1)
+Turn 45: 1=Thracian(28), 2=Dacian(22), 3=Burgundic(22), 4=Miao(20), 5=Assyrian(-1)
+Turn 50: 1=Thracian(31), 2=Dacian(29), 3=Burgundic(25), 4=Miao(25), 5=Assyrian(-1)
+Turn 55: 1=Thracian(38), 2=Dacian(35), 3=Miao(32), 4=Burgundic(25), 5=Assyrian(-1)
+Turn 60: 1=Thracian(47), 2=Dacian(41), 3=Miao(36), 4=Burgundic(27), 5=Assyrian(-1)
+
+EVENT TYPES (exhaustive)
+city_founded, city_conquered, city_destroyed, government_change, diplomatic_change, tech_discovered, wonder_completed
+If a type does not appear in EVENTS, it did not occur in the analyzed turns.
+
+EVENTS (chronological)
+Turn | Type | Civ | Description | Metadata
+--------------------------------------------------------------------------------
+1 | tech_discovered | Dacian | Dacian discovered Tech #0 | tech_id=0, tech_name=Tech #0
+1 | tech_discovered | Assyrian | Assyrian discovered Tech #0 | tech_id=0, tech_name=Tech #0
+1 | tech_discovered | Thracian | Thracian discovered Tech #0 | tech_id=0, tech_name=Tech #0
+1 | tech_discovered | Burgundic | Burgundic discovered Tech #0 | tech_id=0, tech_name=Tech #0
+1 | tech_discovered | Miao | Miao discovered Tech #0 | tech_id=0, tech_name=Tech #0
+2 | city_founded | Dacian | Sarmizegetusa founded by Dacian | city_id=126, city_name=Sarmizegetusa
+2 | wonder_completed | Dacian | Dacian completed Palace in Sarmizegetusa | wonder_id=21, wonder_name=Palace, city_name=Sarmizegetusa
+2 | wonder_completed | Assyrian | Assyrian completed Palace in Ashur | wonder_id=21, wonder_name=Palace, city_name=Ashur
+2 | wonder_completed | Thracian | Thracian completed Palace in Oescus | wonder_id=21, wonder_name=Palace, city_name=Oescus
+3 | city_founded | Dacian | Argedava founded by Dacian | city_id=129, city_name=Argedava
+3 | wonder_completed | Burgundic | Burgundic completed Palace in Borbetomagus | wonder_id=21, wonder_name=Palace, city_name=Borbetomagus
+3 | wonder_completed | Miao | Miao completed Palace in Wuling | wonder_id=21, wonder_name=Palace, city_name=Wuling
+12 | tech_discovered | Burgundic | Burgundic discovered Masonry | tech_id=46, tech_name=Masonry
+13 | government_change | Burgundic | Burgundic changed government from Anarchy to Despotism | from=Anarchy, to=Despotism
+13 | tech_discovered | Dacian | Dacian discovered Masonry | tech_id=46, tech_name=Masonry
+14 | tech_discovered | Thracian | Thracian discovered Masonry | tech_id=46, tech_name=Masonry
+15 | tech_discovered | Miao | Miao discovered Masonry | tech_id=46, tech_name=Masonry
+16 | city_founded | Dacian | Marcodava founded by Dacian | city_id=141, city_name=Marcodava
+16 | tech_discovered | Assyrian | Assyrian discovered Masonry | tech_id=46, tech_name=Masonry
+20 | tech_discovered | Thracian | Thracian discovered Ceremonial Burial | tech_id=10, tech_name=Ceremonial Burial
+21 | city_founded | Dacian | Desudaba founded by Dacian | city_id=149, city_name=Desudaba
+21 | government_change | Miao | Miao changed government from Anarchy to Despotism | from=Anarchy, to=Despotism
+21 | tech_discovered | Burgundic | Burgundic discovered Alphabet | tech_id=2, tech_name=Alphabet
+22 | tech_discovered | Dacian | Dacian discovered Horseback Riding | tech_id=35, tech_name=Horseback Riding
+22 | tech_discovered | Miao | Miao discovered Horseback Riding | tech_id=35, tech_name=Horseback Riding
+24 | tech_discovered | Assyrian | Assyrian discovered Horseback Riding | tech_id=35, tech_name=Horseback Riding
+26 | tech_discovered | Thracian | Thracian discovered Alphabet | tech_id=2, tech_name=Alphabet
+28 | tech_discovered | Dacian | Dacian discovered Pottery | tech_id=63, tech_name=Pottery
+29 | city_founded | Dacian | Capidava founded by Dacian | city_id=164, city_name=Capidava
+29 | tech_discovered | Assyrian | Assyrian discovered Alphabet | tech_id=2, tech_name=Alphabet
+29 | tech_discovered | Miao | Miao discovered Alphabet | tech_id=2, tech_name=Alphabet
+30 | tech_discovered | Burgundic | Burgundic discovered Code of Laws | tech_id=13, tech_name=Code of Laws
+31 | city_founded | Dacian | Carsidava founded by Dacian | city_id=171, city_name=Carsidava
+31 | tech_discovered | Thracian | Thracian discovered Pottery | tech_id=63, tech_name=Pottery
+32 | tech_discovered | Dacian | Dacian discovered Alphabet | tech_id=2, tech_name=Alphabet
+33 | tech_discovered | Miao | Miao discovered Warrior Code | tech_id=86, tech_name=Warrior Code
+35 | tech_discovered | Burgundic | Burgundic discovered Pottery | tech_id=63, tech_name=Pottery
+36 | tech_discovered | Dacian | Dacian discovered Warrior Code | tech_id=86, tech_name=Warrior Code
+38 | city_founded | Miao | Wuling founded by Miao | city_id=133, city_name=Wuling
+38 | city_founded | Miao | Miao founded by Miao | city_id=142, city_name=Miao
+38 | tech_discovered | Thracian | Thracian discovered Code of Laws | tech_id=13, tech_name=Code of Laws
+39 | city_founded | Miao | Da Miao founded by Miao | city_id=134, city_name=Da Miao
+39 | tech_discovered | Dacian | Dacian discovered Bronze Working | tech_id=9, tech_name=Bronze Working
+40 | city_founded | Miao | Yueliang founded by Miao | city_id=158, city_name=Yueliang
+40 | government_change | Thracian | Thracian changed government from Anarchy to Despotism | from=Anarchy, to=Despotism
+41 | tech_discovered | Burgundic | Burgundic discovered Map Making | tech_id=45, tech_name=Map Making
+43 | tech_discovered | Assyrian | Assyrian discovered Mathematics | tech_id=48, tech_name=Mathematics
+43 | tech_discovered | Thracian | Thracian discovered Writing | tech_id=87, tech_name=Writing
+44 | tech_discovered | Miao | Miao discovered Writing | tech_id=87, tech_name=Writing
+45 | tech_discovered | Burgundic | Burgundic discovered Horseback Riding | tech_id=35, tech_name=Horseback Riding
+46 | city_founded | Dacian | Petrodava founded by Dacian | city_id=209, city_name=Petrodava
+46 | tech_discovered | Thracian | Thracian discovered Warrior Code | tech_id=86, tech_name=Warrior Code
+47 | city_founded | Dacian | Malva founded by Dacian | city_id=217, city_name=Malva
+47 | city_founded | Dacian | Drobeta founded by Dacian | city_id=216, city_name=Drobeta
+47 | tech_discovered | Dacian | Dacian discovered Writing | tech_id=87, tech_name=Writing
+47 | tech_discovered | Burgundic | Burgundic discovered Writing | tech_id=87, tech_name=Writing
+47 | tech_discovered | Miao | Miao discovered Bronze Working | tech_id=9, tech_name=Bronze Working
+48 | city_founded | Dacian | Napoca founded by Dacian | city_id=219, city_name=Napoca
+49 | tech_discovered | Assyrian | Assyrian discovered Code of Laws | tech_id=13, tech_name=Code of Laws
+50 | city_founded | Dacian | Polonda founded by Dacian | city_id=228, city_name=Polonda
+51 | tech_discovered | Dacian | Dacian discovered Code of Laws | tech_id=13, tech_name=Code of Laws
+53 | tech_discovered | Miao | Miao discovered Code of Laws | tech_id=13, tech_name=Code of Laws
+54 | tech_discovered | Assyrian | Assyrian discovered Writing | tech_id=87, tech_name=Writing
+54 | tech_discovered | Thracian | Thracian discovered Literacy | tech_id=42, tech_name=Literacy
+55 | city_founded | Dacian | Potaissa founded by Dacian | city_id=243, city_name=Potaissa
+55 | tech_discovered | Dacian | Dacian discovered Map Making | tech_id=45, tech_name=Map Making
+55 | tech_discovered | Assyrian | Assyrian discovered Literacy | tech_id=42, tech_name=Literacy
+55 | tech_discovered | Miao | Miao discovered Ceremonial Burial | tech_id=10, tech_name=Ceremonial Burial
+58 | city_founded | Dacian | Buteridava founded by Dacian | city_id=255, city_name=Buteridava
+58 | city_founded | Dacian | Genucla founded by Dacian | city_id=256, city_name=Genucla
+58 | tech_discovered | Burgundic | Burgundic discovered Literacy | tech_id=42, tech_name=Literacy
+59 | tech_discovered | Dacian | Dacian discovered Currency | tech_id=20, tech_name=Currency
+60 | wonder_completed | Thracian | Thracian completed Great Wall in Oescus | wonder_id=47, wonder_name=Great Wall, city_name=Oescus
+
+TERRITORY MAPS (PNG)
+Turn 10: data/questions/seed1/world_report/turn_060_territory_maps/territory_turn_010.png
+Turn 20: data/questions/seed1/world_report/turn_060_territory_maps/territory_turn_020.png
+Turn 30: data/questions/seed1/world_report/turn_060_territory_maps/territory_turn_030.png
+Turn 40: data/questions/seed1/world_report/turn_060_territory_maps/territory_turn_040.png
+Turn 50: data/questions/seed1/world_report/turn_060_territory_maps/territory_turn_050.png
+Turn 60: data/questions/seed1/world_report/turn_060_territory_maps/territory_turn_060.png
+
+## Questions
+1. How many cities does Assyrian have at turn 60?
+2. How many technologies has Assyrian discovered by turn 60?
+3. How much gold does Assyrian have at turn 60?
+4. How many cities does Burgundic have at turn 60?
+5. How many technologies has Burgundic discovered by turn 60?
+6. How much gold does Burgundic have at turn 60?
+7. How many cities does Dacian have at turn 60?
+8. How many technologies has Dacian discovered by turn 60?
+9. How much gold does Dacian have at turn 60?
+10. How many cities does Miao have at turn 60?
+11. How many technologies has Miao discovered by turn 60?
+12. How much gold does Miao have at turn 60?
+13. How many cities does Thracian have at turn 60?
+14. How many technologies has Thracian discovered by turn 60?
+15. How much gold does Thracian have at turn 60?
+
+You may analyze the data, but you MUST end your response with percentile estimates in this exact format:
+<<<PERCENTILES>>>
+Q1: p10=5, p25=10, p50=15, p75=20, p90=25
+Q2: p10=100, p25=200, p50=300, p75=400, p90=500
+<<<END>>>
+
+For each question, provide one line with percentile estimates for all 15 questions, in order.
+- p10 means you estimate there's a 10% chance the true value is below this number
+- p25 means you estimate there's a 25% chance the true value is below this number
+- p50 (median) means you estimate there's a 50% chance the true value is below this number
+- p75 means you estimate there's a 75% chance the true value is below this number
+- p90 means you estimate there's a 90% chance the true value is below this number

@@ -1,0 +1,315 @@
+You are an expert superforecaster, familiar with the work of Tetlock and others. You are analyzing a FreeCiv game simulation. Make predictions based on the world report below.
+
+You MUST provide percentile estimates for each question UNDER ALL CIRCUMSTANCES. If for some reason you can't answer, provide reasonable mid-range estimates, but always return numeric percentile values.
+
+## World Report
+WORLD REPORT TXT v1
+Game ID: seed6
+Snapshot turn: 60
+Turns analyzed: 1..60
+Map size: 78x52
+
+CIVILIZATIONS
+ID | Name            | Adjective       | Nation ID
+---+-----------------+-----------------+----------
+0  | Californian     | Californian     | 82       
+1  | Icelandic       | Icelandic       | 224      
+2  | Italian         | Italian         | 237      
+3  | Badian          | Badian          | 43       
+4  | Cuban           | Cuban           | 130      
+5  | Pirate          | Pirate          | 559      
+6  | Wuerttembergian | Wuerttembergian | 545      
+7  | Piedmontese     | Piedmontese     | 391      
+
+CURRENT STATE (TURN 60)
+ID | Name            | Score | Rank | Government | Treasury | Population | Techs | Wonders | Cities | Territory | Units | Military | Science | Trade | Food  | Shields
+---+-----------------+-------+------+------------+----------+------------+-------+---------+--------+-----------+-------+----------+---------+-------+-------+--------
+0  | Californian     | 39    | NA   | Despotism  | 402.0    | 24.0       | 8     | 1       | 16     | 188       | 4     | 0        | 60      | 24.0  | 48.0  | 44.0   
+1  | Icelandic       | -1    | NA   | Anarchy    | 0.0      | 0.0        | 9     | 0       | 0      | 0         | 0     | 0        | 60      | 30.0  | 60.0  | 44.0   
+2  | Italian         | -1    | NA   | Anarchy    | 0.0      | 0.0        | 8     | 0       | 0      | 0         | 0     | 0        | 60      | 28.0  | 56.0  | 34.0   
+3  | Badian          | -1    | NA   | Anarchy    | 0.0      | 0.0        | 10    | 0       | 0      | 0         | 0     | 0        | 60      | 66.0  | 132.0 | 54.0   
+4  | Cuban           | 28    | NA   | Despotism  | 459.0    | 0.0        | 7     | 0       | 0      | 0         | 0     | 0        | 60      | 40.0  | 80.0  | 26.0   
+5  | Pirate          | NA    | NA   | NA         | None     | None       | None  | None    | None   | None      | None  | None     | None    | None  | None  | None   
+6  | Wuerttembergian | NA    | NA   | NA         | None     | None       | None  | None    | None   | None      | None  | None     | None    | None  | None  | None   
+7  | Piedmontese     | NA    | NA   | NA         | None     | None       | None  | None    | None   | None      | None  | None     | None    | None  | None  | None   
+
+GOVERNMENT TIMELINE (derived from recordings)
+Each entry is a change point (turn number -> new government); the first entry is the first observed government.
+0 Californian: 1 Despotism
+1 Icelandic: 1 Anarchy
+2 Italian: 1 Anarchy; 16 Despotism; 36 Anarchy
+3 Badian: 1 Anarchy
+4 Cuban: 1 Anarchy; 52 Despotism
+5 Pirate: NA (no changes observed)
+6 Wuerttembergian: NA (no changes observed)
+7 Piedmontese: NA (no changes observed)
+
+TREASURY (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Californian: 50.0, 53.0, 58.0, 65.0, 75.0, 92.0, 113.0, 138.0, 217.0, 247.0, 285.0, 355.0, 402.0
+1 Icelandic: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+2 Italian: 0.0, 0.0, 0.0, 0.0, 111.0, 120.0, 134.0, 155.0, 0.0, 0.0, 0.0, 0.0, 0.0
+3 Badian: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+4 Cuban: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 428.0, 459.0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Wuerttembergian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Piedmontese: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+POPULATION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Californian: 0.0, 2.0, 2.0, 3.0, 4.0, 5.0, 7.0, 6.0, 11.0, 12.0, 16.0, 20.0, 24.0
+1 Icelandic: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+2 Italian: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+3 Badian: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+4 Cuban: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Wuerttembergian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Piedmontese: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+TECHS KNOWN (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Californian: 1, 1, 1, 1, 2, 3, 4, 4, 5, 6, 7, 7, 8
+1 Icelandic: 1, 1, 1, 1, 2, 2, 3, 4, 6, 6, 8, 8, 9
+2 Italian: 1, 1, 1, 1, 2, 2, 3, 4, 5, 5, 6, 8, 8
+3 Badian: 1, 1, 1, 2, 2, 3, 4, 5, 6, 7, 8, 9, 10
+4 Cuban: 1, 1, 1, 1, 2, 2, 3, 3, 5, 5, 6, 6, 7
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Wuerttembergian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Piedmontese: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+WONDERS DISCOVERED (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Californian: 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+1 Icelandic: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+2 Italian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+3 Badian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+4 Cuban: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Wuerttembergian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Piedmontese: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+CITIES COUNT (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Californian: 0, 2, 2, 2, 4, 4, 5, 6, 8, 9, 11, 13, 16
+1 Icelandic: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+2 Italian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+3 Badian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+4 Cuban: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Wuerttembergian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Piedmontese: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+TERRITORY SIZE (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Californian: 0, 34, 34, 37, 62, 68, 82, 94, 118, 129, 149, 166, 188
+1 Icelandic: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+2 Italian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+3 Badian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+4 Cuban: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Wuerttembergian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Piedmontese: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+SCIENCE (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Californian: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+1 Icelandic: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+2 Italian: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+3 Badian: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+4 Cuban: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Wuerttembergian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Piedmontese: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+TRADE PRODUCTION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Californian: 0.0, 2.0, 2.0, 3.0, 4.0, 5.0, 7.0, 6.0, 11.0, 12.0, 16.0, 20.0, 24.0
+1 Icelandic: 0.0, 5.0, 5.0, 7.0, 7.0, 10.0, 11.0, 15.0, 18.0, 19.0, 23.0, 25.0, 30.0
+2 Italian: 0.0, 8.0, 10.0, 13.0, 10.0, 12.0, 11.0, 12.0, 15.0, 18.0, 21.0, 21.0, 28.0
+3 Badian: 0.0, 11.0, 14.0, 13.0, 16.0, 18.0, 21.0, 26.0, 27.0, 31.0, 38.0, 42.0, 66.0
+4 Cuban: 0.0, 14.0, 14.0, 15.0, 15.0, 17.0, 19.0, 22.0, 25.0, 28.0, 26.0, 33.0, 40.0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Wuerttembergian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Piedmontese: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+FOOD PRODUCTION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Californian: 0.0, 4.0, 4.0, 6.0, 8.0, 10.0, 14.0, 12.0, 22.0, 24.0, 32.0, 40.0, 48.0
+1 Icelandic: 0.0, 10.0, 10.0, 14.0, 14.0, 20.0, 22.0, 30.0, 36.0, 38.0, 46.0, 50.0, 60.0
+2 Italian: 0.0, 16.0, 20.0, 26.0, 20.0, 24.0, 22.0, 24.0, 30.0, 36.0, 42.0, 42.0, 56.0
+3 Badian: 0.0, 22.0, 28.0, 26.0, 32.0, 36.0, 42.0, 52.0, 54.0, 62.0, 76.0, 84.0, 132.0
+4 Cuban: 0.0, 28.0, 28.0, 30.0, 30.0, 34.0, 38.0, 44.0, 50.0, 56.0, 52.0, 66.0, 80.0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Wuerttembergian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Piedmontese: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+SHIELD PRODUCTION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Californian: 0.0, 6.0, 6.0, 8.0, 10.0, 14.0, 15.0, 14.0, 26.0, 24.0, 35.0, 38.0, 44.0
+1 Icelandic: 0.0, 8.0, 8.0, 11.0, 13.0, 15.0, 21.0, 21.0, 22.0, 27.0, 34.0, 36.0, 44.0
+2 Italian: 0.0, 5.0, 5.0, 5.0, 6.0, 10.0, 11.0, 10.0, 9.0, 13.0, 21.0, 30.0, 34.0
+3 Badian: 0.0, 6.0, 6.0, 13.0, 14.0, 22.0, 22.0, 26.0, 31.0, 36.0, 45.0, 56.0, 54.0
+4 Cuban: 0.0, 3.0, 3.0, 5.0, 4.0, 5.0, 10.0, 9.0, 12.0, 12.0, 19.0, 19.0, 26.0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Wuerttembergian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Piedmontese: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+UNITS COUNT (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Californian: 5, 2, 2, 3, 2, 2, 3, 4, 4, 3, 5, 4, 4
+1 Icelandic: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+2 Italian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+3 Badian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+4 Cuban: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Wuerttembergian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Piedmontese: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+MILITARY UNITS COUNT (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Californian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+1 Icelandic: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+2 Italian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+3 Badian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+4 Cuban: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Wuerttembergian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Piedmontese: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+SCORES (derived from recordings)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Californian: 0, 2, 2, 3, 6, 9, 13, 12, 19, 22, 29, 33, 39
+1 Icelandic: -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+2 Italian: -1, -1, -1, -1, 6, 6, 11, 14, -1, -1, -1, -1, -1
+3 Badian: -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+4 Cuban: -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 27, 28
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Wuerttembergian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Piedmontese: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+RANKINGS (derived from scores)
+Turn 1: 1=Californian(0), 2=Icelandic(-1), 3=Italian(-1), 4=Badian(-1), 5=Cuban(-1)
+Turn 5: 1=Californian(2), 2=Icelandic(-1), 3=Italian(-1), 4=Badian(-1), 5=Cuban(-1)
+Turn 10: 1=Californian(2), 2=Icelandic(-1), 3=Italian(-1), 4=Badian(-1), 5=Cuban(-1)
+Turn 15: 1=Californian(3), 2=Icelandic(-1), 3=Italian(-1), 4=Badian(-1), 5=Cuban(-1)
+Turn 20: 1=Californian(6), 2=Italian(6), 3=Icelandic(-1), 4=Badian(-1), 5=Cuban(-1)
+Turn 25: 1=Californian(9), 2=Italian(6), 3=Icelandic(-1), 4=Badian(-1), 5=Cuban(-1)
+Turn 30: 1=Californian(13), 2=Italian(11), 3=Icelandic(-1), 4=Badian(-1), 5=Cuban(-1)
+Turn 35: 1=Italian(14), 2=Californian(12), 3=Icelandic(-1), 4=Badian(-1), 5=Cuban(-1)
+Turn 40: 1=Californian(19), 2=Icelandic(-1), 3=Italian(-1), 4=Badian(-1), 5=Cuban(-1)
+Turn 45: 1=Californian(22), 2=Icelandic(-1), 3=Italian(-1), 4=Badian(-1), 5=Cuban(-1)
+Turn 50: 1=Californian(29), 2=Icelandic(-1), 3=Italian(-1), 4=Badian(-1), 5=Cuban(-1)
+Turn 55: 1=Californian(33), 2=Cuban(27), 3=Icelandic(-1), 4=Italian(-1), 5=Badian(-1)
+Turn 60: 1=Californian(39), 2=Cuban(28), 3=Icelandic(-1), 4=Italian(-1), 5=Badian(-1)
+
+EVENT TYPES (exhaustive)
+city_founded, city_conquered, city_destroyed, government_change, diplomatic_change, tech_discovered, wonder_completed
+If a type does not appear in EVENTS, it did not occur in the analyzed turns.
+
+EVENTS (chronological)
+Turn | Type | Civ | Description | Metadata
+--------------------------------------------------------------------------------
+1 | tech_discovered | Californian | Californian discovered Tech #0 | tech_id=0, tech_name=Tech #0
+1 | tech_discovered | Icelandic | Icelandic discovered Tech #0 | tech_id=0, tech_name=Tech #0
+1 | tech_discovered | Italian | Italian discovered Tech #0 | tech_id=0, tech_name=Tech #0
+1 | tech_discovered | Badian | Badian discovered Tech #0 | tech_id=0, tech_name=Tech #0
+1 | tech_discovered | Cuban | Cuban discovered Tech #0 | tech_id=0, tech_name=Tech #0
+2 | wonder_completed | Badian | Badian completed Palace in Baden | wonder_id=21, wonder_name=Palace, city_name=Baden
+3 | city_founded | Californian | Sacramento founded by Californian | city_id=127, city_name=Sacramento
+3 | wonder_completed | Californian | Californian completed Palace in Sacramento | wonder_id=21, wonder_name=Palace, city_name=Sacramento
+3 | wonder_completed | Icelandic | Icelandic completed Palace in Akureyri | wonder_id=21, wonder_name=Palace, city_name=Akureyri
+3 | wonder_completed | Italian | Italian completed Palace in Roma | wonder_id=21, wonder_name=Palace, city_name=Roma
+3 | wonder_completed | Cuban | Cuban completed Palace in La Habana | wonder_id=21, wonder_name=Palace, city_name=La Habana
+5 | city_founded | Californian | Fresno founded by Californian | city_id=133, city_name=Fresno
+14 | tech_discovered | Badian | Badian discovered Masonry | tech_id=46, tech_name=Masonry
+16 | government_change | Italian | Italian changed government from Anarchy to Despotism | from=Anarchy, to=Despotism
+16 | tech_discovered | Icelandic | Icelandic discovered Masonry | tech_id=46, tech_name=Masonry
+17 | city_founded | Californian | Bakersfield founded by Californian | city_id=145, city_name=Bakersfield
+17 | tech_discovered | Californian | Californian discovered Masonry | tech_id=46, tech_name=Masonry
+17 | tech_discovered | Cuban | Cuban discovered Masonry | tech_id=46, tech_name=Masonry
+19 | city_founded | Californian | Los Angeles founded by Californian | city_id=149, city_name=Los Angeles
+19 | tech_discovered | Italian | Italian discovered Masonry | tech_id=46, tech_name=Masonry
+21 | tech_discovered | Badian | Badian discovered Alphabet | tech_id=2, tech_name=Alphabet
+24 | tech_discovered | Californian | Californian discovered Bronze Working | tech_id=9, tech_name=Bronze Working
+26 | tech_discovered | Icelandic | Icelandic discovered Horseback Riding | tech_id=35, tech_name=Horseback Riding
+26 | tech_discovered | Badian | Badian discovered Pottery | tech_id=63, tech_name=Pottery
+26 | tech_discovered | Cuban | Cuban discovered Alphabet | tech_id=2, tech_name=Alphabet
+30 | city_founded | Californian | Sonoma founded by Californian | city_id=168, city_name=Sonoma
+30 | tech_discovered | Californian | Californian discovered Alphabet | tech_id=2, tech_name=Alphabet
+30 | tech_discovered | Italian | Italian discovered Horseback Riding | tech_id=35, tech_name=Horseback Riding
+31 | city_founded | Californian | Oakland founded by Californian | city_id=170, city_name=Oakland
+32 | tech_discovered | Icelandic | Icelandic discovered Warrior Code | tech_id=86, tech_name=Warrior Code
+33 | tech_discovered | Badian | Badian discovered Code of Laws | tech_id=13, tech_name=Code of Laws
+34 | tech_discovered | Italian | Italian discovered Alphabet | tech_id=2, tech_name=Alphabet
+36 | government_change | Italian | Italian changed government from Despotism to Anarchy | from=Despotism, to=Anarchy
+36 | tech_discovered | Badian | Badian discovered Horseback Riding | tech_id=35, tech_name=Horseback Riding
+36 | tech_discovered | Cuban | Cuban discovered Code of Laws | tech_id=13, tech_name=Code of Laws
+37 | city_founded | Californian | San Francisco founded by Californian | city_id=184, city_name=San Francisco
+37 | city_founded | Californian | San Jose founded by Californian | city_id=183, city_name=San Jose
+37 | tech_discovered | Icelandic | Icelandic discovered Alphabet | tech_id=2, tech_name=Alphabet
+38 | tech_discovered | Californian | Californian discovered Code of Laws | tech_id=13, tech_name=Code of Laws
+40 | tech_discovered | Icelandic | Icelandic discovered Pottery | tech_id=63, tech_name=Pottery
+40 | tech_discovered | Italian | Italian discovered Pottery | tech_id=63, tech_name=Pottery
+40 | tech_discovered | Cuban | Cuban discovered Pottery | tech_id=63, tech_name=Pottery
+41 | tech_discovered | Californian | Californian discovered Pottery | tech_id=63, tech_name=Pottery
+41 | tech_discovered | Badian | Badian discovered Writing | tech_id=87, tech_name=Writing
+42 | city_founded | Californian | Long Beach founded by Californian | city_id=200, city_name=Long Beach
+46 | city_founded | Californian | San Diego founded by Californian | city_id=213, city_name=San Diego
+46 | tech_discovered | Icelandic | Icelandic discovered Code of Laws | tech_id=13, tech_name=Code of Laws
+46 | tech_discovered | Italian | Italian discovered Code of Laws | tech_id=13, tech_name=Code of Laws
+47 | tech_discovered | Californian | Californian discovered Currency | tech_id=20, tech_name=Currency
+47 | tech_discovered | Cuban | Cuban discovered Writing | tech_id=87, tech_name=Writing
+49 | city_founded | Californian | Anaheim founded by Californian | city_id=227, city_name=Anaheim
+49 | tech_discovered | Badian | Badian discovered Literacy | tech_id=42, tech_name=Literacy
+50 | tech_discovered | Icelandic | Icelandic discovered Writing | tech_id=87, tech_name=Writing
+51 | city_founded | Californian | Stockton founded by Californian | city_id=233, city_name=Stockton
+51 | tech_discovered | Badian | Badian discovered Ceremonial Burial | tech_id=10, tech_name=Ceremonial Burial
+52 | government_change | Cuban | Cuban changed government from Anarchy to Despotism | from=Anarchy, to=Despotism
+52 | tech_discovered | Italian | Italian discovered Writing | tech_id=87, tech_name=Writing
+53 | city_founded | Californian | Santa Ana founded by Californian | city_id=239, city_name=Santa Ana
+55 | tech_discovered | Italian | Italian discovered Warrior Code | tech_id=86, tech_name=Warrior Code
+56 | city_founded | Californian | Berkeley founded by Californian | city_id=247, city_name=Berkeley
+56 | tech_discovered | Californian | Californian discovered Construction | tech_id=19, tech_name=Construction
+57 | tech_discovered | Cuban | Cuban discovered Literacy | tech_id=42, tech_name=Literacy
+58 | tech_discovered | Icelandic | Icelandic discovered Literacy | tech_id=42, tech_name=Literacy
+59 | tech_discovered | Badian | Badian discovered The Republic | tech_id=80, tech_name=The Republic
+60 | city_founded | Californian | Riverside founded by Californian | city_id=268, city_name=Riverside
+60 | city_founded | Californian | Fremont founded by Californian | city_id=269, city_name=Fremont
+
+TERRITORY MAPS (PNG)
+Turn 10: data/questions/seed6/world_report/turn_060_territory_maps/territory_turn_010.png
+Turn 20: data/questions/seed6/world_report/turn_060_territory_maps/territory_turn_020.png
+Turn 30: data/questions/seed6/world_report/turn_060_territory_maps/territory_turn_030.png
+Turn 40: data/questions/seed6/world_report/turn_060_territory_maps/territory_turn_040.png
+Turn 50: data/questions/seed6/world_report/turn_060_territory_maps/territory_turn_050.png
+Turn 60: data/questions/seed6/world_report/turn_060_territory_maps/territory_turn_060.png
+
+## Questions
+1. How many cities does Badian have at turn 60?
+2. How many technologies has Badian discovered by turn 60?
+3. How much gold does Badian have at turn 60?
+4. How many cities does Californian have at turn 60?
+5. How many technologies has Californian discovered by turn 60?
+6. How much gold does Californian have at turn 60?
+7. How many cities does Cuban have at turn 60?
+8. How many technologies has Cuban discovered by turn 60?
+9. How much gold does Cuban have at turn 60?
+10. How many cities does Icelandic have at turn 60?
+11. How many technologies has Icelandic discovered by turn 60?
+12. How much gold does Icelandic have at turn 60?
+13. How many cities does Italian have at turn 60?
+14. How many technologies has Italian discovered by turn 60?
+15. How much gold does Italian have at turn 60?
+
+You may analyze the data, but you MUST end your response with percentile estimates in this exact format:
+<<<PERCENTILES>>>
+Q1: p10=5, p25=10, p50=15, p75=20, p90=25
+Q2: p10=100, p25=200, p50=300, p75=400, p90=500
+<<<END>>>
+
+For each question, provide one line with percentile estimates for all 15 questions, in order.
+- p10 means you estimate there's a 10% chance the true value is below this number
+- p25 means you estimate there's a 25% chance the true value is below this number
+- p50 (median) means you estimate there's a 50% chance the true value is below this number
+- p75 means you estimate there's a 75% chance the true value is below this number
+- p90 means you estimate there's a 90% chance the true value is below this number

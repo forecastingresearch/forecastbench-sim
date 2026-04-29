@@ -1,0 +1,45 @@
+01:01:24 [INFO] Prepared 165 H0 continuous questions across 11 worlds for 30 models
+01:01:28 [INFO] World seed0: evaluating 15 questions with 30 models
+01:06:28 [INFO] World seed1: evaluating 15 questions with 30 models
+01:08:56 [INFO] Prepared 165 H0 continuous questions across 11 worlds for 30 models
+01:08:58 [INFO] World seed0: evaluating 15 questions with 30 models
+01:08:58 [INFO] World seed1: evaluating 15 questions with 30 models
+01:08:58 [INFO] World seed10: evaluating 15 questions with 30 models
+01:08:58 [INFO] World seed2: evaluating 15 questions with 30 models
+01:11:28 [INFO] World seed10: evaluating 15 questions with 30 models
+01:13:58 [INFO] World seed3: evaluating 15 questions with 30 models
+01:15:24 [INFO] Prepared 165 H0 continuous questions across 11 worlds for 30 models
+01:15:26 [INFO] World seed0: evaluating 15 questions with 30 models
+01:15:26 [INFO] World seed1: evaluating 15 questions with 30 models
+01:15:26 [INFO] World seed10: evaluating 15 questions with 30 models
+01:15:26 [INFO] World seed2: evaluating 15 questions with 30 models
+01:15:26 [INFO] World seed3: evaluating 15 questions with 30 models
+01:15:26 [INFO] World seed4: evaluating 15 questions with 30 models
+01:16:28 [INFO] World seed2: evaluating 15 questions with 30 models
+01:17:43 [INFO] World seed3: evaluating 15 questions with 30 models
+01:19:51 [INFO] Prepared 165 H0 continuous questions across 11 worlds for 28 models
+01:19:51 [INFO] Dry run complete; no model APIs called
+01:20:52 [INFO] Prepared 165 H0 continuous questions across 11 worlds for 28 models
+01:20:54 [INFO] World seed0: evaluating 15 questions with 28 models
+01:20:54 [INFO] World seed1: evaluating 15 questions with 28 models
+01:20:54 [INFO] World seed10: evaluating 15 questions with 28 models
+01:20:54 [INFO] World seed2: evaluating 15 questions with 28 models
+01:20:54 [INFO] World seed3: evaluating 15 questions with 28 models
+01:20:54 [INFO] World seed4: evaluating 15 questions with 28 models
+01:21:23 [INFO] Prepared 165 H0 continuous questions across 11 worlds for 28 models
+01:21:25 [INFO] World seed0: evaluating 15 questions with 28 models
+01:21:25 [INFO] World seed1: evaluating 15 questions with 28 models
+01:21:25 [INFO] World seed10: evaluating 15 questions with 28 models
+01:24:01 [INFO] Prepared 165 H0 continuous questions across 11 worlds for 27 models
+01:24:03 [INFO] World seed0: evaluating 15 questions with 27 models
+01:24:03 [INFO] World seed1: evaluating 15 questions with 27 models
+01:24:03 [INFO] World seed10: evaluating 15 questions with 27 models
+01:24:03 [INFO] World seed2: evaluating 15 questions with 27 models
+01:24:03 [INFO] World seed3: evaluating 15 questions with 27 models
+01:24:03 [INFO] World seed4: evaluating 15 questions with 27 models
+01:30:31 [INFO] World seed5: evaluating 15 questions with 27 models
+01:31:34 [INFO] World seed6: evaluating 15 questions with 27 models
+01:36:21 [INFO] World seed7: evaluating 15 questions with 27 models
+01:39:18 [INFO] World seed8: evaluating 15 questions with 27 models
+01:40:30 [INFO] World seed9: evaluating 15 questions with 27 models
+01:51:41 [INFO] Wrote H0 results to data/human_baseline/aggregate_model_comparison/h0_continuous_eval

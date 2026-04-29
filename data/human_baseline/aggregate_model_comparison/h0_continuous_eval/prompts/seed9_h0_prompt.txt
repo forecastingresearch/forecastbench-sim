@@ -1,0 +1,333 @@
+You are an expert superforecaster, familiar with the work of Tetlock and others. You are analyzing a FreeCiv game simulation. Make predictions based on the world report below.
+
+You MUST provide percentile estimates for each question UNDER ALL CIRCUMSTANCES. If for some reason you can't answer, provide reasonable mid-range estimates, but always return numeric percentile values.
+
+## World Report
+WORLD REPORT TXT v1
+Game ID: seed9
+Snapshot turn: 60
+Turns analyzed: 1..60
+Map size: 78x52
+
+CIVILIZATIONS
+ID | Name         | Adjective    | Nation ID
+---+--------------+--------------+----------
+0  | Sumerian     | Sumerian     | 474      
+1  | Samnite      | Samnite      | 422      
+2  | Visigothic   | Visigothic   | 533      
+3  | Numidian     | Numidian     | 361      
+4  | Inuit        | Inuit        | 230      
+5  | Pirate       | Pirate       | 559      
+6  | Greenlander  | Greenlander  | 196      
+7  | Barbarian    | Barbarian    | 558      
+8  | Carthaginian | Carthaginian | 90       
+
+CURRENT STATE (TURN 60)
+ID | Name         | Score | Rank | Government | Treasury | Population | Techs | Wonders | Cities | Territory | Units | Military | Science | Trade | Food  | Shields
+---+--------------+-------+------+------------+----------+------------+-------+---------+--------+-----------+-------+----------+---------+-------+-------+--------
+0  | Sumerian     | 33    | NA   | Despotism  | 471.0    | 20.0       | 7     | 1       | 11     | 119       | 6     | 1        | 60      | 20.0  | 40.0  | 30.0   
+1  | Samnite      | -1    | NA   | Anarchy    | 0.0      | 1.0        | 12    | 0       | 1      | 26        | 0     | 0        | 60      | 31.0  | 62.0  | 41.0   
+2  | Visigothic   | -1    | NA   | Anarchy    | 0.0      | 0.0        | 9     | 0       | 0      | 0         | 0     | 0        | 60      | 30.0  | 60.0  | 37.0   
+3  | Numidian     | -1    | NA   | Anarchy    | 0.0      | 0.0        | 11    | 0       | 0      | 0         | 0     | 0        | 60      | 54.0  | 108.0 | 53.0   
+4  | Inuit        | -1    | NA   | Anarchy    | 0.0      | 2.0        | 7     | 0       | 1      | 16        | 0     | 0        | 60      | 45.0  | 90.0  | 34.0   
+5  | Pirate       | NA    | NA   | NA         | None     | None       | None  | None    | None   | None      | None  | None     | None    | None  | None  | None   
+6  | Greenlander  | NA    | NA   | NA         | None     | None       | None  | None    | None   | None      | None  | None     | None    | None  | None  | None   
+7  | Barbarian    | NA    | NA   | NA         | None     | None       | None  | None    | None   | None      | None  | None     | None    | None  | None  | None   
+8  | Carthaginian | NA    | NA   | NA         | None     | None       | None  | None    | None   | None      | None  | None     | None    | None  | None  | None   
+
+GOVERNMENT TIMELINE (derived from recordings)
+Each entry is a change point (turn number -> new government); the first entry is the first observed government.
+0 Sumerian: 1 Despotism
+1 Samnite: 1 Anarchy; 24 Despotism; 45 Anarchy
+2 Visigothic: 1 Anarchy
+3 Numidian: 1 Anarchy
+4 Inuit: 1 Anarchy; 30 Despotism; 53 Anarchy
+5 Pirate: NA (no changes observed)
+6 Greenlander: NA (no changes observed)
+7 Barbarian: NA (no changes observed)
+8 Carthaginian: NA (no changes observed)
+
+TREASURY (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Sumerian: 50.0, 55.0, 65.0, 77.0, 90.0, 107.0, 277.0, 297.0, 318.0, 338.0, 363.0, 391.0, 471.0
+1 Samnite: 0.0, 0.0, 0.0, 0.0, 0.0, 92.0, 111.0, 136.0, 206.0, 0.0, 0.0, 0.0, 0.0
+2 Visigothic: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+3 Numidian: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+4 Inuit: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 110.0, 135.0, 161.0, 182.0, 214.0, 0.0, 0.0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Greenlander: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Carthaginian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+POPULATION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Sumerian: 0.0, 2.0, 2.0, 3.0, 3.0, 5.0, 7.0, 7.0, 11.0, 11.0, 12.0, 17.0, 20.0
+1 Samnite: 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0
+2 Visigothic: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+3 Numidian: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+4 Inuit: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Greenlander: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Carthaginian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+TECHS KNOWN (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Sumerian: 1, 1, 1, 3, 3, 4, 4, 5, 6, 6, 6, 7, 7
+1 Samnite: 1, 1, 1, 2, 2, 2, 3, 5, 6, 7, 9, 10, 12
+2 Visigothic: 1, 1, 1, 1, 2, 2, 3, 4, 5, 7, 8, 8, 9
+3 Numidian: 1, 1, 1, 1, 1, 2, 3, 5, 6, 7, 9, 9, 11
+4 Inuit: 1, 1, 1, 2, 3, 4, 4, 5, 5, 6, 6, 7, 7
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Greenlander: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Carthaginian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+WONDERS DISCOVERED (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Sumerian: 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+1 Samnite: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+2 Visigothic: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+3 Numidian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+4 Inuit: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Greenlander: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Carthaginian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+CITIES COUNT (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Sumerian: 0, 2, 2, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+1 Samnite: 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1
+2 Visigothic: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+3 Numidian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+4 Inuit: 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Greenlander: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Carthaginian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+TERRITORY SIZE (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Sumerian: 0, 23, 25, 25, 32, 48, 55, 59, 61, 70, 89, 102, 119
+1 Samnite: 0, 0, 0, 0, 0, 13, 15, 15, 15, 15, 15, 25, 26
+2 Visigothic: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+3 Numidian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+4 Inuit: 0, 0, 0, 0, 0, 0, 9, 16, 16, 16, 16, 16, 16
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Greenlander: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Carthaginian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+SCIENCE (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Sumerian: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+1 Samnite: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+2 Visigothic: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+3 Numidian: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+4 Inuit: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Greenlander: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Carthaginian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+TRADE PRODUCTION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Sumerian: 0.0, 2.0, 2.0, 3.0, 3.0, 5.0, 7.0, 7.0, 11.0, 11.0, 12.0, 17.0, 20.0
+1 Samnite: 0.0, 5.0, 5.0, 7.0, 8.0, 10.0, 12.0, 13.0, 18.0, 21.0, 24.0, 26.0, 31.0
+2 Visigothic: 0.0, 8.0, 8.0, 12.0, 10.0, 11.0, 14.0, 13.0, 19.0, 19.0, 24.0, 28.0, 30.0
+3 Numidian: 0.0, 11.0, 11.0, 17.0, 13.0, 18.0, 17.0, 22.0, 25.0, 29.0, 37.0, 37.0, 54.0
+4 Inuit: 0.0, 14.0, 14.0, 15.0, 16.0, 18.0, 26.0, 28.0, 33.0, 40.0, 37.0, 46.0, 45.0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Greenlander: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Carthaginian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+FOOD PRODUCTION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Sumerian: 0.0, 4.0, 4.0, 6.0, 6.0, 10.0, 14.0, 14.0, 22.0, 22.0, 24.0, 34.0, 40.0
+1 Samnite: 0.0, 10.0, 10.0, 14.0, 16.0, 20.0, 24.0, 26.0, 36.0, 42.0, 48.0, 52.0, 62.0
+2 Visigothic: 0.0, 16.0, 16.0, 24.0, 20.0, 22.0, 28.0, 26.0, 38.0, 38.0, 48.0, 56.0, 60.0
+3 Numidian: 0.0, 22.0, 22.0, 34.0, 26.0, 36.0, 34.0, 44.0, 50.0, 58.0, 74.0, 74.0, 108.0
+4 Inuit: 0.0, 28.0, 28.0, 30.0, 32.0, 36.0, 52.0, 56.0, 66.0, 80.0, 74.0, 92.0, 90.0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Greenlander: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Carthaginian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+SHIELD PRODUCTION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Sumerian: 0.0, 5.0, 5.0, 7.0, 8.0, 8.0, 14.0, 15.0, 19.0, 19.0, 22.0, 26.0, 30.0
+1 Samnite: 0.0, 6.0, 6.0, 7.0, 10.0, 16.0, 14.0, 20.0, 24.0, 24.0, 30.0, 34.0, 41.0
+2 Visigothic: 0.0, 6.0, 6.0, 8.0, 11.0, 16.0, 12.0, 19.0, 28.0, 30.0, 25.0, 38.0, 37.0
+3 Numidian: 0.0, 9.0, 9.0, 9.0, 13.0, 13.0, 18.0, 22.0, 26.0, 28.0, 34.0, 46.0, 53.0
+4 Inuit: 0.0, 10.0, 10.0, 7.0, 9.0, 9.0, 11.0, 21.0, 18.0, 24.0, 24.0, 31.0, 34.0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Greenlander: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Carthaginian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+UNITS COUNT (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Sumerian: 5, 3, 3, 4, 4, 4, 4, 5, 5, 5, 6, 6, 6
+1 Samnite: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+2 Visigothic: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+3 Numidian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+4 Inuit: 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Greenlander: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Carthaginian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+MILITARY UNITS COUNT (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Sumerian: 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1
+1 Samnite: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+2 Visigothic: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+3 Numidian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+4 Inuit: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Greenlander: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Carthaginian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+SCORES (derived from recordings)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Sumerian: 0, 2, 2, 7, 7, 11, 13, 15, 21, 21, 22, 30, 33
+1 Samnite: -1, -1, -1, -1, -1, 7, 13, 17, 24, -1, -1, -1, -1
+2 Visigothic: -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+3 Numidian: -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+4 Inuit: -1, -1, -1, -1, -1, -1, 12, 16, 17, 22, 24, -1, -1
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Greenlander: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Carthaginian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+RANKINGS (derived from scores)
+Turn 1: 1=Sumerian(0), 2=Samnite(-1), 3=Visigothic(-1), 4=Numidian(-1), 5=Inuit(-1)
+Turn 5: 1=Sumerian(2), 2=Samnite(-1), 3=Visigothic(-1), 4=Numidian(-1), 5=Inuit(-1)
+Turn 10: 1=Sumerian(2), 2=Samnite(-1), 3=Visigothic(-1), 4=Numidian(-1), 5=Inuit(-1)
+Turn 15: 1=Sumerian(7), 2=Samnite(-1), 3=Visigothic(-1), 4=Numidian(-1), 5=Inuit(-1)
+Turn 20: 1=Sumerian(7), 2=Samnite(-1), 3=Visigothic(-1), 4=Numidian(-1), 5=Inuit(-1)
+Turn 25: 1=Sumerian(11), 2=Samnite(7), 3=Visigothic(-1), 4=Numidian(-1), 5=Inuit(-1)
+Turn 30: 1=Sumerian(13), 2=Samnite(13), 3=Inuit(12), 4=Visigothic(-1), 5=Numidian(-1)
+Turn 35: 1=Samnite(17), 2=Inuit(16), 3=Sumerian(15), 4=Visigothic(-1), 5=Numidian(-1)
+Turn 40: 1=Samnite(24), 2=Sumerian(21), 3=Inuit(17), 4=Visigothic(-1), 5=Numidian(-1)
+Turn 45: 1=Inuit(22), 2=Sumerian(21), 3=Samnite(-1), 4=Visigothic(-1), 5=Numidian(-1)
+Turn 50: 1=Inuit(24), 2=Sumerian(22), 3=Samnite(-1), 4=Visigothic(-1), 5=Numidian(-1)
+Turn 55: 1=Sumerian(30), 2=Samnite(-1), 3=Visigothic(-1), 4=Numidian(-1), 5=Inuit(-1)
+Turn 60: 1=Sumerian(33), 2=Samnite(-1), 3=Visigothic(-1), 4=Numidian(-1), 5=Inuit(-1)
+
+EVENT TYPES (exhaustive)
+city_founded, city_conquered, city_destroyed, government_change, diplomatic_change, tech_discovered, wonder_completed
+If a type does not appear in EVENTS, it did not occur in the analyzed turns.
+
+EVENTS (chronological)
+Turn | Type | Civ | Description | Metadata
+--------------------------------------------------------------------------------
+1 | tech_discovered | Sumerian | Sumerian discovered Tech #0 | tech_id=0, tech_name=Tech #0
+1 | tech_discovered | Samnite | Samnite discovered Tech #0 | tech_id=0, tech_name=Tech #0
+1 | tech_discovered | Visigothic | Visigothic discovered Tech #0 | tech_id=0, tech_name=Tech #0
+1 | tech_discovered | Numidian | Numidian discovered Tech #0 | tech_id=0, tech_name=Tech #0
+1 | tech_discovered | Inuit | Inuit discovered Tech #0 | tech_id=0, tech_name=Tech #0
+2 | wonder_completed | Samnite | Samnite completed Palace in Beneventum | wonder_id=21, wonder_name=Palace, city_name=Beneventum
+2 | wonder_completed | Visigothic | Visigothic completed Palace in Tolosa | wonder_id=21, wonder_name=Palace, city_name=Tolosa
+2 | wonder_completed | Numidian | Numidian completed Palace in Cirta | wonder_id=21, wonder_name=Palace, city_name=Cirta
+2 | wonder_completed | Inuit | Inuit completed Palace in Iqaluit | wonder_id=21, wonder_name=Palace, city_name=Iqaluit
+3 | city_founded | Sumerian | Unug founded by Sumerian | city_id=130, city_name=Unug
+3 | wonder_completed | Sumerian | Sumerian completed Palace in Unug | wonder_id=21, wonder_name=Palace, city_name=Unug
+4 | city_founded | Sumerian | Sirpurla founded by Sumerian | city_id=132, city_name=Sirpurla
+13 | tech_discovered | Sumerian | Sumerian discovered Masonry | tech_id=46, tech_name=Masonry
+14 | tech_discovered | Inuit | Inuit discovered Masonry | tech_id=46, tech_name=Masonry
+15 | tech_discovered | Sumerian | Sumerian discovered Alphabet | tech_id=2, tech_name=Alphabet
+15 | tech_discovered | Samnite | Samnite discovered Masonry | tech_id=46, tech_name=Masonry
+16 | tech_discovered | Inuit | Inuit discovered Alphabet | tech_id=2, tech_name=Alphabet
+18 | city_founded | Sumerian | Eridug founded by Sumerian | city_id=149, city_name=Eridug
+20 | tech_discovered | Visigothic | Visigothic discovered Masonry | tech_id=46, tech_name=Masonry
+21 | tech_discovered | Numidian | Numidian discovered Masonry | tech_id=46, tech_name=Masonry
+23 | tech_discovered | Sumerian | Sumerian discovered Pottery | tech_id=63, tech_name=Pottery
+24 | city_founded | Samnite | Abellinum founded by Samnite | city_id=151, city_name=Abellinum
+24 | government_change | Samnite | Samnite changed government from Anarchy to Despotism | from=Anarchy, to=Despotism
+25 | city_founded | Sumerian | Urim founded by Sumerian | city_id=157, city_name=Urim
+25 | tech_discovered | Inuit | Inuit discovered Pottery | tech_id=63, tech_name=Pottery
+26 | tech_discovered | Samnite | Samnite discovered Warrior Code | tech_id=86, tech_name=Warrior Code
+27 | tech_discovered | Visigothic | Visigothic discovered Alphabet | tech_id=2, tech_name=Alphabet
+27 | tech_discovered | Numidian | Numidian discovered Bronze Working | tech_id=9, tech_name=Bronze Working
+30 | city_founded | Sumerian | Kish founded by Sumerian | city_id=168, city_name=Kish
+30 | government_change | Inuit | Inuit changed government from Anarchy to Despotism | from=Anarchy, to=Despotism
+31 | city_founded | Inuit | Arviat founded by Inuit | city_id=152, city_name=Arviat
+31 | tech_discovered | Samnite | Samnite discovered Pottery | tech_id=63, tech_name=Pottery
+32 | tech_discovered | Sumerian | Sumerian discovered Code of Laws | tech_id=13, tech_name=Code of Laws
+32 | tech_discovered | Numidian | Numidian discovered Pottery | tech_id=63, tech_name=Pottery
+34 | city_founded | Sumerian | Larsa founded by Sumerian | city_id=180, city_name=Larsa
+34 | tech_discovered | Inuit | Inuit discovered Code of Laws | tech_id=13, tech_name=Code of Laws
+35 | tech_discovered | Samnite | Samnite discovered Horseback Riding | tech_id=35, tech_name=Horseback Riding
+35 | tech_discovered | Visigothic | Visigothic discovered Code of Laws | tech_id=13, tech_name=Code of Laws
+35 | tech_discovered | Numidian | Numidian discovered Ceremonial Burial | tech_id=10, tech_name=Ceremonial Burial
+37 | city_founded | Sumerian | Umma founded by Sumerian | city_id=189, city_name=Umma
+38 | tech_discovered | Samnite | Samnite discovered Alphabet | tech_id=2, tech_name=Alphabet
+38 | tech_discovered | Numidian | Numidian discovered Currency | tech_id=20, tech_name=Currency
+39 | tech_discovered | Visigothic | Visigothic discovered Pottery | tech_id=63, tech_name=Pottery
+40 | tech_discovered | Sumerian | Sumerian discovered Writing | tech_id=87, tech_name=Writing
+41 | tech_discovered | Samnite | Samnite discovered The Wheel | tech_id=81, tech_name=The Wheel
+41 | tech_discovered | Numidian | Numidian discovered Alphabet | tech_id=2, tech_name=Alphabet
+42 | city_founded | Sumerian | Nibru founded by Sumerian | city_id=200, city_name=Nibru
+42 | tech_discovered | Inuit | Inuit discovered Writing | tech_id=87, tech_name=Writing
+43 | tech_discovered | Visigothic | Visigothic discovered Warrior Code | tech_id=86, tech_name=Warrior Code
+45 | government_change | Samnite | Samnite changed government from Despotism to Anarchy | from=Despotism, to=Anarchy
+45 | tech_discovered | Visigothic | Visigothic discovered Horseback Riding | tech_id=35, tech_name=Horseback Riding
+46 | tech_discovered | Samnite | Samnite discovered Mathematics | tech_id=48, tech_name=Mathematics
+46 | tech_discovered | Numidian | Numidian discovered Code of Laws | tech_id=13, tech_name=Code of Laws
+47 | city_founded | Sumerian | Adab founded by Sumerian | city_id=218, city_name=Adab
+49 | tech_discovered | Numidian | Numidian discovered Mysticism | tech_id=55, tech_name=Mysticism
+50 | tech_discovered | Samnite | Samnite discovered Code of Laws | tech_id=13, tech_name=Code of Laws
+50 | tech_discovered | Visigothic | Visigothic discovered Writing | tech_id=87, tech_name=Writing
+51 | city_founded | Sumerian | Hit founded by Sumerian | city_id=236, city_name=Hit
+51 | tech_discovered | Sumerian | Sumerian discovered Literacy | tech_id=42, tech_name=Literacy
+53 | government_change | Inuit | Inuit changed government from Despotism to Anarchy | from=Despotism, to=Anarchy
+53 | tech_discovered | Inuit | Inuit discovered Literacy | tech_id=42, tech_name=Literacy
+54 | tech_discovered | Samnite | Samnite discovered Map Making | tech_id=45, tech_name=Map Making
+56 | tech_discovered | Samnite | Samnite discovered Bronze Working | tech_id=9, tech_name=Bronze Working
+58 | city_founded | Sumerian | Agade founded by Sumerian | city_id=264, city_name=Agade
+58 | tech_discovered | Visigothic | Visigothic discovered Literacy | tech_id=42, tech_name=Literacy
+58 | tech_discovered | Numidian | Numidian discovered Trade | tech_id=84, tech_name=Trade
+59 | tech_discovered | Numidian | Numidian discovered Horseback Riding | tech_id=35, tech_name=Horseback Riding
+60 | tech_discovered | Samnite | Samnite discovered Writing | tech_id=87, tech_name=Writing
+
+TERRITORY MAPS (PNG)
+Turn 10: data/questions/seed9/world_report/turn_060_territory_maps/territory_turn_010.png
+Turn 20: data/questions/seed9/world_report/turn_060_territory_maps/territory_turn_020.png
+Turn 30: data/questions/seed9/world_report/turn_060_territory_maps/territory_turn_030.png
+Turn 40: data/questions/seed9/world_report/turn_060_territory_maps/territory_turn_040.png
+Turn 50: data/questions/seed9/world_report/turn_060_territory_maps/territory_turn_050.png
+Turn 60: data/questions/seed9/world_report/turn_060_territory_maps/territory_turn_060.png
+
+## Questions
+1. How many cities does Inuit have at turn 60?
+2. How many technologies has Inuit discovered by turn 60?
+3. How much gold does Inuit have at turn 60?
+4. How many cities does Numidian have at turn 60?
+5. How many technologies has Numidian discovered by turn 60?
+6. How much gold does Numidian have at turn 60?
+7. How many cities does Samnite have at turn 60?
+8. How many technologies has Samnite discovered by turn 60?
+9. How much gold does Samnite have at turn 60?
+10. How many cities does Sumerian have at turn 60?
+11. How many technologies has Sumerian discovered by turn 60?
+12. How much gold does Sumerian have at turn 60?
+13. How many cities does Visigothic have at turn 60?
+14. How many technologies has Visigothic discovered by turn 60?
+15. How much gold does Visigothic have at turn 60?
+
+You may analyze the data, but you MUST end your response with percentile estimates in this exact format:
+<<<PERCENTILES>>>
+Q1: p10=5, p25=10, p50=15, p75=20, p90=25
+Q2: p10=100, p25=200, p50=300, p75=400, p90=500
+<<<END>>>
+
+For each question, provide one line with percentile estimates for all 15 questions, in order.
+- p10 means you estimate there's a 10% chance the true value is below this number
+- p25 means you estimate there's a 25% chance the true value is below this number
+- p50 (median) means you estimate there's a 50% chance the true value is below this number
+- p75 means you estimate there's a 75% chance the true value is below this number
+- p90 means you estimate there's a 90% chance the true value is below this number

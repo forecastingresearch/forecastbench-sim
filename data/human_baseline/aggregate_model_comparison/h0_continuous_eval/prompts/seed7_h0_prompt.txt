@@ -1,0 +1,326 @@
+You are an expert superforecaster, familiar with the work of Tetlock and others. You are analyzing a FreeCiv game simulation. Make predictions based on the world report below.
+
+You MUST provide percentile estimates for each question UNDER ALL CIRCUMSTANCES. If for some reason you can't answer, provide reasonable mid-range estimates, but always return numeric percentile values.
+
+## World Report
+WORLD REPORT TXT v1
+Game ID: seed7
+Snapshot turn: 60
+Turns analyzed: 1..60
+Map size: 78x52
+
+CIVILIZATIONS
+ID | Name       | Adjective  | Nation ID
+---+------------+------------+----------
+0  | Monegasque | Monegasque | 331      
+1  | Swedish    | Swedish    | 478      
+2  | Uyghur     | Uyghur     | 518      
+3  | Finnish    | Finnish    | 166      
+4  | Venetian   | Venetian   | 526      
+5  | Pirate     | Pirate     | 559      
+6  | Barbarian  | Barbarian  | 558      
+7  | Italian    | Italian    | 237      
+
+CURRENT STATE (TURN 60)
+ID | Name       | Score | Rank | Government | Treasury | Population | Techs | Wonders | Cities | Territory | Units | Military | Science | Trade | Food | Shields
+---+------------+-------+------+------------+----------+------------+-------+---------+--------+-----------+-------+----------+---------+-------+------+--------
+0  | Monegasque | 46    | NA   | Despotism  | 250.0    | 27.0       | 10    | 1       | 21     | 226       | 3     | 0        | 60      | 27.0  | 54.0 | 56.0   
+1  | Swedish    | 40    | NA   | Despotism  | 258.0    | 0.0        | 9     | 0       | 0      | 0         | 0     | 0        | 60      | 31.0  | 62.0 | 36.0   
+2  | Uyghur     | -1    | NA   | Anarchy    | 0.0      | 0.0        | 6     | 0       | 0      | 0         | 0     | 0        | 60      | 29.0  | 58.0 | 31.0   
+3  | Finnish    | 39    | NA   | Despotism  | 280.0    | 13.0       | 9     | 0       | 8      | 98        | 0     | 0        | 60      | 37.0  | 74.0 | 42.0   
+4  | Venetian   | -1    | NA   | Anarchy    | 0.0      | 0.0        | 7     | 0       | 0      | 0         | 0     | 0        | 60      | 38.0  | 76.0 | 32.0   
+5  | Pirate     | NA    | NA   | NA         | None     | None       | None  | None    | None   | None      | None  | None     | None    | None  | None | None   
+6  | Barbarian  | NA    | NA   | NA         | None     | None       | None  | None    | None   | None      | None  | None     | None    | None  | None | None   
+7  | Italian    | NA    | NA   | NA         | None     | None       | None  | None    | None   | None      | None  | None     | None    | None  | None | None   
+
+GOVERNMENT TIMELINE (derived from recordings)
+Each entry is a change point (turn number -> new government); the first entry is the first observed government.
+0 Monegasque: 1 Despotism
+1 Swedish: 1 Anarchy; 36 Despotism
+2 Uyghur: 1 Anarchy
+3 Finnish: 1 Anarchy; 26 Despotism
+4 Venetian: 1 Anarchy
+5 Pirate: NA (no changes observed)
+6 Barbarian: NA (no changes observed)
+7 Italian: NA (no changes observed)
+
+TREASURY (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Monegasque: 50.0, 50.0, 100.0, 100.0, 105.0, 110.0, 117.0, 129.0, 147.0, 164.0, 187.0, 220.0, 250.0
+1 Swedish: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 201.0, 205.0, 216.0, 233.0, 258.0
+2 Uyghur: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+3 Finnish: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 152.0, 158.0, 174.0, 192.0, 219.0, 251.0, 280.0
+4 Venetian: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Italian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+POPULATION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Monegasque: 0.0, 2.0, 2.0, 2.0, 4.0, 6.0, 7.0, 9.0, 10.0, 15.0, 16.0, 20.0, 27.0
+1 Swedish: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+2 Uyghur: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+3 Finnish: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 4.0, 7.0, 10.0, 13.0
+4 Venetian: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Italian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+TECHS KNOWN (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Monegasque: 1, 1, 1, 1, 2, 4, 5, 6, 7, 8, 9, 10, 10
+1 Swedish: 1, 1, 1, 2, 3, 3, 5, 6, 7, 7, 8, 9, 9
+2 Uyghur: 1, 2, 3, 3, 3, 4, 4, 5, 5, 5, 5, 6, 6
+3 Finnish: 1, 1, 1, 1, 2, 3, 3, 4, 5, 6, 7, 7, 9
+4 Venetian: 1, 1, 1, 1, 2, 3, 4, 4, 5, 5, 6, 7, 7
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Italian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+WONDERS DISCOVERED (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Monegasque: 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+1 Swedish: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+2 Uyghur: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+3 Finnish: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+4 Venetian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Italian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+CITIES COUNT (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Monegasque: 0, 2, 2, 2, 4, 4, 5, 7, 8, 11, 11, 15, 21
+1 Swedish: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+2 Uyghur: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+3 Finnish: 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 4, 6, 8
+4 Venetian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Italian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+TERRITORY SIZE (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Monegasque: 0, 42, 49, 60, 76, 76, 91, 99, 110, 138, 149, 190, 226
+1 Swedish: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+2 Uyghur: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+3 Finnish: 0, 0, 0, 0, 0, 0, 0, 0, 3, 36, 60, 90, 98
+4 Venetian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Italian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+SCIENCE (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Monegasque: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+1 Swedish: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+2 Uyghur: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+3 Finnish: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+4 Venetian: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Italian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+TRADE PRODUCTION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Monegasque: 0.0, 2.0, 2.0, 2.0, 4.0, 6.0, 7.0, 9.0, 10.0, 15.0, 16.0, 20.0, 27.0
+1 Swedish: 0.0, 5.0, 5.0, 7.0, 8.0, 10.0, 11.0, 15.0, 18.0, 20.0, 21.0, 23.0, 31.0
+2 Uyghur: 0.0, 8.0, 8.0, 11.0, 11.0, 12.0, 13.0, 14.0, 20.0, 19.0, 24.0, 26.0, 29.0
+3 Finnish: 0.0, 11.0, 11.0, 17.0, 13.0, 17.0, 17.0, 21.0, 21.0, 29.0, 30.0, 34.0, 37.0
+4 Venetian: 0.0, 14.0, 14.0, 19.0, 16.0, 21.0, 22.0, 21.0, 26.0, 25.0, 27.0, 40.0, 38.0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Italian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+FOOD PRODUCTION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Monegasque: 0.0, 4.0, 4.0, 4.0, 8.0, 12.0, 14.0, 18.0, 20.0, 30.0, 32.0, 40.0, 54.0
+1 Swedish: 0.0, 10.0, 10.0, 14.0, 16.0, 20.0, 22.0, 30.0, 36.0, 40.0, 42.0, 46.0, 62.0
+2 Uyghur: 0.0, 16.0, 16.0, 22.0, 22.0, 24.0, 26.0, 28.0, 40.0, 38.0, 48.0, 52.0, 58.0
+3 Finnish: 0.0, 22.0, 22.0, 34.0, 26.0, 34.0, 34.0, 42.0, 42.0, 58.0, 60.0, 68.0, 74.0
+4 Venetian: 0.0, 28.0, 28.0, 38.0, 32.0, 42.0, 44.0, 42.0, 52.0, 50.0, 54.0, 80.0, 76.0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Italian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+SHIELD PRODUCTION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Monegasque: 0.0, 6.0, 6.0, 9.0, 9.0, 14.0, 18.0, 19.0, 21.0, 35.0, 37.0, 40.0, 56.0
+1 Swedish: 0.0, 5.0, 5.0, 6.0, 12.0, 11.0, 17.0, 19.0, 19.0, 23.0, 26.0, 27.0, 36.0
+2 Uyghur: 0.0, 5.0, 5.0, 7.0, 6.0, 8.0, 10.0, 11.0, 10.0, 18.0, 22.0, 28.0, 31.0
+3 Finnish: 0.0, 4.0, 4.0, 12.0, 11.0, 17.0, 17.0, 15.0, 19.0, 19.0, 35.0, 33.0, 42.0
+4 Venetian: 0.0, 5.0, 5.0, 6.0, 9.0, 14.0, 11.0, 14.0, 18.0, 25.0, 26.0, 30.0, 32.0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Italian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+UNITS COUNT (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Monegasque: 5, 3, 3, 5, 3, 4, 4, 3, 6, 3, 7, 7, 3
+1 Swedish: 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0
+2 Uyghur: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+3 Finnish: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0
+4 Venetian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Italian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+MILITARY UNITS COUNT (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Monegasque: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+1 Swedish: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+2 Uyghur: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+3 Finnish: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+4 Venetian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Italian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+SCORES (derived from recordings)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Monegasque: 0, 2, 2, 2, 6, 12, 15, 19, 22, 29, 33, 39, 46
+1 Swedish: -1, -1, -1, -1, -1, -1, -1, -1, 24, 24, 31, 34, 40
+2 Uyghur: -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+3 Finnish: -1, -1, -1, -1, -1, -1, 12, 12, 20, 21, 31, 29, 39
+4 Venetian: -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Italian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+RANKINGS (derived from scores)
+Turn 1: 1=Monegasque(0), 2=Swedish(-1), 3=Uyghur(-1), 4=Finnish(-1), 5=Venetian(-1)
+Turn 5: 1=Monegasque(2), 2=Swedish(-1), 3=Uyghur(-1), 4=Finnish(-1), 5=Venetian(-1)
+Turn 10: 1=Monegasque(2), 2=Swedish(-1), 3=Uyghur(-1), 4=Finnish(-1), 5=Venetian(-1)
+Turn 15: 1=Monegasque(2), 2=Swedish(-1), 3=Uyghur(-1), 4=Finnish(-1), 5=Venetian(-1)
+Turn 20: 1=Monegasque(6), 2=Swedish(-1), 3=Uyghur(-1), 4=Finnish(-1), 5=Venetian(-1)
+Turn 25: 1=Monegasque(12), 2=Swedish(-1), 3=Uyghur(-1), 4=Finnish(-1), 5=Venetian(-1)
+Turn 30: 1=Monegasque(15), 2=Finnish(12), 3=Swedish(-1), 4=Uyghur(-1), 5=Venetian(-1)
+Turn 35: 1=Monegasque(19), 2=Finnish(12), 3=Swedish(-1), 4=Uyghur(-1), 5=Venetian(-1)
+Turn 40: 1=Swedish(24), 2=Monegasque(22), 3=Finnish(20), 4=Uyghur(-1), 5=Venetian(-1)
+Turn 45: 1=Monegasque(29), 2=Swedish(24), 3=Finnish(21), 4=Uyghur(-1), 5=Venetian(-1)
+Turn 50: 1=Monegasque(33), 2=Swedish(31), 3=Finnish(31), 4=Uyghur(-1), 5=Venetian(-1)
+Turn 55: 1=Monegasque(39), 2=Swedish(34), 3=Finnish(29), 4=Uyghur(-1), 5=Venetian(-1)
+Turn 60: 1=Monegasque(46), 2=Swedish(40), 3=Finnish(39), 4=Uyghur(-1), 5=Venetian(-1)
+
+EVENT TYPES (exhaustive)
+city_founded, city_conquered, city_destroyed, government_change, diplomatic_change, tech_discovered, wonder_completed
+If a type does not appear in EVENTS, it did not occur in the analyzed turns.
+
+EVENTS (chronological)
+Turn | Type | Civ | Description | Metadata
+--------------------------------------------------------------------------------
+1 | tech_discovered | Monegasque | Monegasque discovered Tech #0 | tech_id=0, tech_name=Tech #0
+1 | tech_discovered | Swedish | Swedish discovered Tech #0 | tech_id=0, tech_name=Tech #0
+1 | tech_discovered | Uyghur | Uyghur discovered Tech #0 | tech_id=0, tech_name=Tech #0
+1 | tech_discovered | Finnish | Finnish discovered Tech #0 | tech_id=0, tech_name=Tech #0
+1 | tech_discovered | Venetian | Venetian discovered Tech #0 | tech_id=0, tech_name=Tech #0
+2 | wonder_completed | Finnish | Finnish completed Palace in Oulu | wonder_id=21, wonder_name=Palace, city_name=Oulu
+2 | tech_discovered | Uyghur | Uyghur discovered Alphabet | tech_id=2, tech_name=Alphabet
+3 | city_founded | Monegasque | Monaco-Ville founded by Monegasque | city_id=127, city_name=Monaco-Ville
+3 | wonder_completed | Monegasque | Monegasque completed Palace in Monaco-Ville | wonder_id=21, wonder_name=Palace, city_name=Monaco-Ville
+3 | wonder_completed | Swedish | Swedish completed Palace in Norrköping | wonder_id=21, wonder_name=Palace, city_name=Norrköping
+3 | wonder_completed | Uyghur | Uyghur completed Palace in Ürümqi | wonder_id=21, wonder_name=Palace, city_name=Ürümqi
+3 | wonder_completed | Venetian | Venetian completed Palace in Eraclea | wonder_id=21, wonder_name=Palace, city_name=Eraclea
+4 | city_founded | Monegasque | La Condamine founded by Monegasque | city_id=133, city_name=La Condamine
+9 | tech_discovered | Uyghur | Uyghur discovered Masonry | tech_id=46, tech_name=Masonry
+12 | tech_discovered | Swedish | Swedish discovered Masonry | tech_id=46, tech_name=Masonry
+16 | city_founded | Monegasque | Fontvieille founded by Monegasque | city_id=143, city_name=Fontvieille
+16 | tech_discovered | Finnish | Finnish discovered Masonry | tech_id=46, tech_name=Masonry
+17 | tech_discovered | Venetian | Venetian discovered Masonry | tech_id=46, tech_name=Masonry
+18 | city_founded | Monegasque | La Rousse founded by Monegasque | city_id=147, city_name=La Rousse
+19 | tech_discovered | Monegasque | Monegasque discovered Masonry | tech_id=46, tech_name=Masonry
+20 | tech_discovered | Swedish | Swedish discovered Ceremonial Burial | tech_id=10, tech_name=Ceremonial Burial
+22 | tech_discovered | Monegasque | Monegasque discovered Bronze Working | tech_id=9, tech_name=Bronze Working
+24 | tech_discovered | Finnish | Finnish discovered Horseback Riding | tech_id=35, tech_name=Horseback Riding
+25 | tech_discovered | Monegasque | Monegasque discovered Pottery | tech_id=63, tech_name=Pottery
+25 | tech_discovered | Uyghur | Uyghur discovered Code of Laws | tech_id=13, tech_name=Code of Laws
+25 | tech_discovered | Venetian | Venetian discovered Warrior Code | tech_id=86, tech_name=Warrior Code
+26 | government_change | Finnish | Finnish changed government from Anarchy to Despotism | from=Anarchy, to=Despotism
+26 | tech_discovered | Swedish | Swedish discovered Horseback Riding | tech_id=35, tech_name=Horseback Riding
+28 | city_founded | Monegasque | Spélugues founded by Monegasque | city_id=164, city_name=Spélugues
+30 | tech_discovered | Monegasque | Monegasque discovered Horseback Riding | tech_id=35, tech_name=Horseback Riding
+30 | tech_discovered | Swedish | Swedish discovered Pottery | tech_id=63, tech_name=Pottery
+30 | tech_discovered | Venetian | Venetian discovered Alphabet | tech_id=2, tech_name=Alphabet
+31 | city_founded | Monegasque | Monte-Carlo founded by Monegasque | city_id=168, city_name=Monte-Carlo
+32 | tech_discovered | Finnish | Finnish discovered Warrior Code | tech_id=86, tech_name=Warrior Code
+34 | city_founded | Monegasque | Larvotto founded by Monegasque | city_id=172, city_name=Larvotto
+34 | tech_discovered | Monegasque | Monegasque discovered Alphabet | tech_id=2, tech_name=Alphabet
+35 | tech_discovered | Swedish | Swedish discovered Alphabet | tech_id=2, tech_name=Alphabet
+35 | tech_discovered | Uyghur | Uyghur discovered Writing | tech_id=87, tech_name=Writing
+36 | government_change | Swedish | Swedish changed government from Anarchy to Despotism | from=Anarchy, to=Despotism
+37 | tech_discovered | Finnish | Finnish discovered Alphabet | tech_id=2, tech_name=Alphabet
+37 | tech_discovered | Venetian | Venetian discovered Code of Laws | tech_id=13, tech_name=Code of Laws
+39 | city_founded | Monegasque | Saint-Roman founded by Monegasque | city_id=184, city_name=Saint-Roman
+39 | tech_discovered | Monegasque | Monegasque discovered Code of Laws | tech_id=13, tech_name=Code of Laws
+40 | tech_discovered | Swedish | Swedish discovered Warrior Code | tech_id=86, tech_name=Warrior Code
+42 | city_founded | Monegasque | Bas Moulins founded by Monegasque | city_id=192, city_name=Bas Moulins
+43 | city_founded | Monegasque | Saint-Michel founded by Monegasque | city_id=196, city_name=Saint-Michel
+43 | tech_discovered | Finnish | Finnish discovered Code of Laws | tech_id=13, tech_name=Code of Laws
+44 | city_founded | Monegasque | La Colle founded by Monegasque | city_id=199, city_name=La Colle
+44 | city_founded | Finnish | Helsinki founded by Finnish | city_id=131, city_name=Helsinki
+44 | tech_discovered | Monegasque | Monegasque discovered Writing | tech_id=87, tech_name=Writing
+45 | city_founded | Finnish | Vaasa founded by Finnish | city_id=149, city_name=Vaasa
+46 | city_founded | Finnish | Rauma founded by Finnish | city_id=166, city_name=Rauma
+46 | tech_discovered | Swedish | Swedish discovered Writing | tech_id=87, tech_name=Writing
+47 | tech_discovered | Venetian | Venetian discovered Mathematics | tech_id=48, tech_name=Mathematics
+48 | tech_discovered | Monegasque | Monegasque discovered Currency | tech_id=20, tech_name=Currency
+49 | tech_discovered | Finnish | Finnish discovered Writing | tech_id=87, tech_name=Writing
+50 | city_founded | Finnish | Lappeenranta founded by Finnish | city_id=222, city_name=Lappeenranta
+51 | city_founded | Monegasque | Les Révoires founded by Monegasque | city_id=223, city_name=Les Révoires
+51 | tech_discovered | Swedish | Swedish discovered Code of Laws | tech_id=13, tech_name=Code of Laws
+51 | tech_discovered | Uyghur | Uyghur discovered Literacy | tech_id=42, tech_name=Literacy
+52 | city_founded | Monegasque | Le Portier founded by Monegasque | city_id=228, city_name=Le Portier
+52 | city_founded | Finnish | Turku founded by Finnish | city_id=182, city_name=Turku
+52 | tech_discovered | Venetian | Venetian discovered Writing | tech_id=87, tech_name=Writing
+54 | city_founded | Finnish | Tampere founded by Finnish | city_id=145, city_name=Tampere
+54 | city_founded | Monegasque | Moneghetti founded by Monegasque | city_id=236, city_name=Moneghetti
+55 | city_founded | Monegasque | Le Ténao founded by Monegasque | city_id=242, city_name=Le Ténao
+55 | tech_discovered | Monegasque | Monegasque discovered Literacy | tech_id=42, tech_name=Literacy
+56 | city_founded | Monegasque | Roquebrune founded by Monegasque | city_id=246, city_name=Roquebrune
+56 | tech_discovered | Finnish | Finnish discovered Literacy | tech_id=42, tech_name=Literacy
+58 | city_founded | Monegasque | Menton founded by Monegasque | city_id=256, city_name=Menton
+59 | city_founded | Finnish | Kokkola founded by Finnish | city_id=225, city_name=Kokkola
+59 | city_founded | Monegasque | Garavan founded by Monegasque | city_id=262, city_name=Garavan
+59 | city_founded | Finnish | Kajaani founded by Finnish | city_id=253, city_name=Kajaani
+59 | city_founded | Monegasque | Monti founded by Monegasque | city_id=261, city_name=Monti
+59 | city_founded | Monegasque | Baux founded by Monegasque | city_id=263, city_name=Baux
+60 | city_founded | Monegasque | Cap-Martin founded by Monegasque | city_id=270, city_name=Cap-Martin
+60 | tech_discovered | Finnish | Finnish discovered The Republic | tech_id=80, tech_name=The Republic
+
+TERRITORY MAPS (PNG)
+Turn 10: data/questions/seed7/world_report/turn_060_territory_maps/territory_turn_010.png
+Turn 20: data/questions/seed7/world_report/turn_060_territory_maps/territory_turn_020.png
+Turn 30: data/questions/seed7/world_report/turn_060_territory_maps/territory_turn_030.png
+Turn 40: data/questions/seed7/world_report/turn_060_territory_maps/territory_turn_040.png
+Turn 50: data/questions/seed7/world_report/turn_060_territory_maps/territory_turn_050.png
+Turn 60: data/questions/seed7/world_report/turn_060_territory_maps/territory_turn_060.png
+
+## Questions
+1. How many cities does Finnish have at turn 60?
+2. How many technologies has Finnish discovered by turn 60?
+3. How much gold does Finnish have at turn 60?
+4. How many cities does Monegasque have at turn 60?
+5. How many technologies has Monegasque discovered by turn 60?
+6. How much gold does Monegasque have at turn 60?
+7. How many cities does Swedish have at turn 60?
+8. How many technologies has Swedish discovered by turn 60?
+9. How much gold does Swedish have at turn 60?
+10. How many cities does Uyghur have at turn 60?
+11. How many technologies has Uyghur discovered by turn 60?
+12. How much gold does Uyghur have at turn 60?
+13. How many cities does Venetian have at turn 60?
+14. How many technologies has Venetian discovered by turn 60?
+15. How much gold does Venetian have at turn 60?
+
+You may analyze the data, but you MUST end your response with percentile estimates in this exact format:
+<<<PERCENTILES>>>
+Q1: p10=5, p25=10, p50=15, p75=20, p90=25
+Q2: p10=100, p25=200, p50=300, p75=400, p90=500
+<<<END>>>
+
+For each question, provide one line with percentile estimates for all 15 questions, in order.
+- p10 means you estimate there's a 10% chance the true value is below this number
+- p25 means you estimate there's a 25% chance the true value is below this number
+- p50 (median) means you estimate there's a 50% chance the true value is below this number
+- p75 means you estimate there's a 75% chance the true value is below this number
+- p90 means you estimate there's a 90% chance the true value is below this number

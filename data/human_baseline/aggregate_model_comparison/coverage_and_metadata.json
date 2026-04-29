@@ -1,6 +1,8 @@
 {
   "model_run": "data/evaluations/runs/final_2026-03-07_newq_uncond_nonh0_bin_plus_cont_all30.json",
+  "h0_run": "data/evaluations/runs/final_2026-03-07_newq_uncond_h0_all30.json",
   "model_run_id": "20260307_065613",
+  "h0_run_id": "20260307_001117",
   "model_run_start_time": "2026-03-07T06:56:13.120090Z",
   "model_run_end_time": "2026-03-08T07:40:44.020157Z",
   "model_question_type_distribution": {
@@ -130,6 +132,26 @@
       "anthropic/claude-haiku-4-5-20251001": 1,
       "together_ai/deepseek-ai/DeepSeek-V3": 21
     }
+  },
+  "h0_availability": {
+    "h0_run_question_type_distribution": {
+      "binary": 562
+    },
+    "h0_run_template_distribution": {
+      "h0_tech_comparative": 44,
+      "h0_score_comparative": 44,
+      "h0_population_comparative": 44,
+      "h0_city_count_comparative": 44,
+      "h0_territory_comparative": 44,
+      "h0_treasury_comparative": 44,
+      "h0_tech_discovered": 110,
+      "h0_government_at": 62,
+      "h0_wonder_completed": 71,
+      "h0_score_rank_1": 55
+    },
+    "h0_continuous_questions": 0,
+    "exact_h0_continuous_scores_for_primary_660_available": false,
+    "h0_context_note": "The available H0 run is binary-only. Its Brier scores are included as context in h0_run_summary.csv, but they are not scores on the 660 continuous primary-proxy questions."
   },
   "comparability": {
     "equivalent_conditions": false,

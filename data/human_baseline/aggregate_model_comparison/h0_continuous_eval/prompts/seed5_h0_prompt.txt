@@ -1,0 +1,334 @@
+You are an expert superforecaster, familiar with the work of Tetlock and others. You are analyzing a FreeCiv game simulation. Make predictions based on the world report below.
+
+You MUST provide percentile estimates for each question UNDER ALL CIRCUMSTANCES. If for some reason you can't answer, provide reasonable mid-range estimates, but always return numeric percentile values.
+
+## World Report
+WORLD REPORT TXT v1
+Game ID: seed5
+Snapshot turn: 60
+Turns analyzed: 1..60
+Map size: 78x52
+
+CIVILIZATIONS
+ID | Name       | Adjective  | Nation ID
+---+------------+------------+----------
+0  | Komi       | Komi       | 261      
+1  | Uyghur     | Uyghur     | 518      
+2  | Tongan     | Tongan     | 500      
+3  | Swiss      | Swiss      | 479      
+4  | Lippian    | Lippian    | 286      
+5  | Barbarian  | Barbarian  | 558      
+6  | Pirate     | Pirate     | 559      
+7  | Hanoverian | Hanoverian | 207      
+
+CURRENT STATE (TURN 60)
+ID | Name       | Score | Rank | Government | Treasury | Population | Techs | Wonders | Cities | Territory | Units | Military | Science | Trade | Food  | Shields
+---+------------+-------+------+------------+----------+------------+-------+---------+--------+-----------+-------+----------+---------+-------+-------+--------
+0  | Komi       | 54    | NA   | Despotism  | 261.0    | 29.0       | 10    | 2       | 19     | 270       | 10    | 3        | 60      | 29.0  | 58.0  | 54.0   
+1  | Uyghur     | -1    | NA   | Anarchy    | 0.0      | 5.0        | 9     | 0       | 4      | 55        | 0     | 0        | 80      | 32.0  | 64.0  | 42.0   
+2  | Tongan     | -1    | NA   | Anarchy    | 0.0      | 0.0        | 9     | 0       | 0      | 1         | 0     | 0        | 60      | 29.0  | 58.0  | 45.0   
+3  | Swiss      | 37    | NA   | Despotism  | 455.0    | 0.0        | 8     | 0       | 0      | 0         | 0     | 0        | 60      | 49.0  | 98.0  | 43.0   
+4  | Lippian    | 39    | NA   | Despotism  | 325.0    | 9.0        | 9     | 0       | 7      | 90        | 1     | 0        | 60      | 50.0  | 100.0 | 38.0   
+5  | Barbarian  | NA    | NA   | NA         | None     | None       | None  | None    | None   | None      | None  | None     | None    | None  | None  | None   
+6  | Pirate     | NA    | NA   | NA         | None     | None       | None  | None    | None   | None      | None  | None     | None    | None  | None  | None   
+7  | Hanoverian | NA    | NA   | NA         | None     | None       | None  | None    | None   | None      | None  | None     | None    | None  | None  | None   
+
+GOVERNMENT TIMELINE (derived from recordings)
+Each entry is a change point (turn number -> new government); the first entry is the first observed government.
+0 Komi: 1 Despotism
+1 Uyghur: 1 Anarchy; 21 Despotism; 48 Anarchy
+2 Tongan: 1 Anarchy
+3 Swiss: 1 Anarchy; 22 Despotism
+4 Lippian: 1 Anarchy; 32 Despotism
+5 Barbarian: NA (no changes observed)
+6 Pirate: NA (no changes observed)
+7 Hanoverian: NA (no changes observed)
+
+TREASURY (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Komi: 50.0, 55.0, 65.0, 76.0, 91.0, 102.0, 113.0, 132.0, 151.0, 166.0, 190.0, 220.0, 261.0
+1 Uyghur: 0.0, 0.0, 0.0, 0.0, 0.0, 98.0, 114.0, 131.0, 149.0, 179.0, 0.0, 0.0, 0.0
+2 Tongan: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+3 Swiss: 0.0, 0.0, 0.0, 0.0, 0.0, 229.0, 249.0, 269.0, 293.0, 325.0, 365.0, 410.0, 455.0
+4 Lippian: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 184.0, 200.0, 223.0, 255.0, 290.0, 325.0
+5 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Hanoverian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+POPULATION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Komi: 0.0, 3.0, 3.0, 5.0, 4.0, 7.0, 9.0, 11.0, 14.0, 15.0, 20.0, 24.0, 29.0
+1 Uyghur: 0.0, 0.0, 0.0, 0.0, 0.0, 3.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0
+2 Tongan: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+3 Swiss: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+4 Lippian: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2.0, 3.0, 9.0
+5 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Hanoverian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+TECHS KNOWN (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Komi: 1, 1, 1, 1, 2, 3, 4, 5, 6, 8, 8, 10, 10
+1 Uyghur: 1, 2, 2, 4, 4, 5, 5, 6, 7, 7, 8, 8, 9
+2 Tongan: 1, 1, 1, 2, 2, 3, 4, 5, 6, 6, 8, 8, 9
+3 Swiss: 1, 1, 1, 1, 3, 4, 5, 6, 6, 6, 7, 7, 8
+4 Lippian: 1, 1, 1, 1, 2, 3, 3, 4, 5, 6, 7, 8, 9
+5 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Hanoverian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+WONDERS DISCOVERED (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Komi: 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2
+1 Uyghur: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+2 Tongan: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+3 Swiss: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+4 Lippian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+5 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Hanoverian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+CITIES COUNT (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Komi: 0, 3, 3, 4, 4, 5, 8, 8, 9, 11, 13, 16, 19
+1 Uyghur: 0, 0, 0, 0, 0, 2, 4, 4, 4, 4, 4, 4, 4
+2 Tongan: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+3 Swiss: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+4 Lippian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 7
+5 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Hanoverian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+TERRITORY SIZE (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Komi: 0, 87, 94, 100, 106, 124, 162, 166, 192, 211, 231, 248, 270
+1 Uyghur: 0, 0, 9, 10, 10, 29, 55, 55, 55, 55, 55, 55, 55
+2 Tongan: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1
+3 Swiss: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+4 Lippian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 23, 46, 90
+5 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Hanoverian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+SCIENCE (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Komi: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+1 Uyghur: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 80
+2 Tongan: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+3 Swiss: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+4 Lippian: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+5 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Hanoverian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+TRADE PRODUCTION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Komi: 0.0, 3.0, 3.0, 5.0, 4.0, 7.0, 9.0, 11.0, 14.0, 15.0, 20.0, 24.0, 29.0
+1 Uyghur: 0.0, 5.0, 5.0, 7.0, 7.0, 9.0, 11.0, 11.0, 16.0, 19.0, 21.0, 26.0, 32.0
+2 Tongan: 0.0, 8.0, 6.0, 8.0, 9.0, 14.0, 13.0, 17.0, 18.0, 21.0, 27.0, 29.0, 29.0
+3 Swiss: 0.0, 14.0, 14.0, 18.0, 18.0, 17.0, 18.0, 20.0, 24.0, 25.0, 29.0, 31.0, 49.0
+4 Lippian: 0.0, 14.0, 14.0, 19.0, 16.0, 22.0, 19.0, 30.0, 24.0, 26.0, 41.0, 40.0, 50.0
+5 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Hanoverian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+FOOD PRODUCTION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Komi: 0.0, 6.0, 6.0, 10.0, 8.0, 14.0, 18.0, 22.0, 28.0, 30.0, 40.0, 48.0, 58.0
+1 Uyghur: 0.0, 10.0, 10.0, 14.0, 14.0, 18.0, 22.0, 22.0, 32.0, 38.0, 42.0, 52.0, 64.0
+2 Tongan: 0.0, 16.0, 12.0, 16.0, 18.0, 28.0, 26.0, 34.0, 36.0, 42.0, 54.0, 58.0, 58.0
+3 Swiss: 0.0, 28.0, 28.0, 36.0, 36.0, 34.0, 36.0, 40.0, 48.0, 50.0, 58.0, 62.0, 98.0
+4 Lippian: 0.0, 28.0, 28.0, 38.0, 32.0, 44.0, 38.0, 60.0, 48.0, 52.0, 82.0, 80.0, 100.0
+5 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Hanoverian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+SHIELD PRODUCTION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Komi: 0.0, 9.0, 9.0, 13.0, 13.0, 18.0, 21.0, 23.0, 37.0, 36.0, 45.0, 47.0, 54.0
+1 Uyghur: 0.0, 7.0, 7.0, 9.0, 14.0, 18.0, 18.0, 18.0, 27.0, 30.0, 34.0, 38.0, 42.0
+2 Tongan: 0.0, 7.0, 7.0, 10.0, 9.0, 19.0, 12.0, 16.0, 21.0, 25.0, 32.0, 30.0, 45.0
+3 Swiss: 0.0, 5.0, 5.0, 9.0, 9.0, 12.0, 17.0, 18.0, 24.0, 27.0, 28.0, 39.0, 43.0
+4 Lippian: 0.0, 5.0, 5.0, 6.0, 8.0, 15.0, 14.0, 15.0, 22.0, 28.0, 30.0, 38.0, 38.0
+5 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Hanoverian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+UNITS COUNT (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Komi: 5, 3, 3, 3, 4, 7, 5, 6, 7, 8, 9, 9, 10
+1 Uyghur: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+2 Tongan: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+3 Swiss: 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0
+4 Lippian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1
+5 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Hanoverian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+MILITARY UNITS COUNT (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Komi: 0, 0, 0, 0, 0, 2, 2, 2, 2, 3, 3, 3, 3
+1 Uyghur: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+2 Tongan: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+3 Swiss: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+4 Lippian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+5 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Hanoverian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+SCORES (derived from recordings)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Komi: 0, 3, 3, 5, 6, 11, 15, 19, 25, 30, 35, 43, 54
+1 Uyghur: -1, -1, -1, -1, -1, 13, 16, 17, 24, 28, -1, -1, -1
+2 Tongan: -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+3 Swiss: -1, -1, -1, -1, -1, 11, 14, 18, 19, 23, 27, 35, 37
+4 Lippian: -1, -1, -1, -1, -1, -1, -1, 12, 20, 24, 30, 35, 39
+5 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Hanoverian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+RANKINGS (derived from scores)
+Turn 1: 1=Komi(0), 2=Uyghur(-1), 3=Tongan(-1), 4=Swiss(-1), 5=Lippian(-1)
+Turn 5: 1=Komi(3), 2=Uyghur(-1), 3=Tongan(-1), 4=Swiss(-1), 5=Lippian(-1)
+Turn 10: 1=Komi(3), 2=Uyghur(-1), 3=Tongan(-1), 4=Swiss(-1), 5=Lippian(-1)
+Turn 15: 1=Komi(5), 2=Uyghur(-1), 3=Tongan(-1), 4=Swiss(-1), 5=Lippian(-1)
+Turn 20: 1=Komi(6), 2=Uyghur(-1), 3=Tongan(-1), 4=Swiss(-1), 5=Lippian(-1)
+Turn 25: 1=Uyghur(13), 2=Komi(11), 3=Swiss(11), 4=Tongan(-1), 5=Lippian(-1)
+Turn 30: 1=Uyghur(16), 2=Komi(15), 3=Swiss(14), 4=Tongan(-1), 5=Lippian(-1)
+Turn 35: 1=Komi(19), 2=Swiss(18), 3=Uyghur(17), 4=Lippian(12), 5=Tongan(-1)
+Turn 40: 1=Komi(25), 2=Uyghur(24), 3=Lippian(20), 4=Swiss(19), 5=Tongan(-1)
+Turn 45: 1=Komi(30), 2=Uyghur(28), 3=Lippian(24), 4=Swiss(23), 5=Tongan(-1)
+Turn 50: 1=Komi(35), 2=Lippian(30), 3=Swiss(27), 4=Uyghur(-1), 5=Tongan(-1)
+Turn 55: 1=Komi(43), 2=Swiss(35), 3=Lippian(35), 4=Uyghur(-1), 5=Tongan(-1)
+Turn 60: 1=Komi(54), 2=Lippian(39), 3=Swiss(37), 4=Uyghur(-1), 5=Tongan(-1)
+
+EVENT TYPES (exhaustive)
+city_founded, city_conquered, city_destroyed, government_change, diplomatic_change, tech_discovered, wonder_completed
+If a type does not appear in EVENTS, it did not occur in the analyzed turns.
+
+EVENTS (chronological)
+Turn | Type | Civ | Description | Metadata
+--------------------------------------------------------------------------------
+1 | tech_discovered | Komi | Komi discovered Tech #0 | tech_id=0, tech_name=Tech #0
+1 | tech_discovered | Uyghur | Uyghur discovered Tech #0 | tech_id=0, tech_name=Tech #0
+1 | tech_discovered | Tongan | Tongan discovered Tech #0 | tech_id=0, tech_name=Tech #0
+1 | tech_discovered | Swiss | Swiss discovered Tech #0 | tech_id=0, tech_name=Tech #0
+1 | tech_discovered | Lippian | Lippian discovered Tech #0 | tech_id=0, tech_name=Tech #0
+2 | wonder_completed | Uyghur | Uyghur completed Palace in Ürümqi | wonder_id=21, wonder_name=Palace, city_name=Ürümqi
+2 | wonder_completed | Tongan | Tongan completed Palace in Nuku'alofa | wonder_id=21, wonder_name=Palace, city_name=Nuku'alofa
+2 | tech_discovered | Uyghur | Uyghur discovered Masonry | tech_id=46, tech_name=Masonry
+3 | city_founded | Komi | Syktyvkar founded by Komi | city_id=128, city_name=Syktyvkar
+3 | city_founded | Komi | Ukva founded by Komi | city_id=133, city_name=Ukva
+3 | wonder_completed | Komi | Komi completed Palace in Syktyvkar | wonder_id=21, wonder_name=Palace, city_name=Syktyvkar
+3 | wonder_completed | Swiss | Swiss completed Palace in Zürich | wonder_id=21, wonder_name=Palace, city_name=Zürich
+3 | wonder_completed | Lippian | Lippian completed Palace in Oerlinghausen | wonder_id=21, wonder_name=Palace, city_name=Oerlinghausen
+4 | city_founded | Komi | Uskar founded by Komi | city_id=134, city_name=Uskar
+12 | tech_discovered | Uyghur | Uyghur discovered Alphabet | tech_id=2, tech_name=Alphabet
+14 | tech_discovered | Uyghur | Uyghur discovered Horseback Riding | tech_id=35, tech_name=Horseback Riding
+14 | tech_discovered | Tongan | Tongan discovered Masonry | tech_id=46, tech_name=Masonry
+15 | city_founded | Komi | Parma founded by Komi | city_id=143, city_name=Parma
+16 | tech_discovered | Swiss | Swiss discovered Masonry | tech_id=46, tech_name=Masonry
+17 | tech_discovered | Lippian | Lippian discovered Masonry | tech_id=46, tech_name=Masonry
+18 | tech_discovered | Komi | Komi discovered Masonry | tech_id=46, tech_name=Masonry
+20 | tech_discovered | Swiss | Swiss discovered Warrior Code | tech_id=86, tech_name=Warrior Code
+21 | government_change | Uyghur | Uyghur changed government from Anarchy to Despotism | from=Anarchy, to=Despotism
+22 | government_change | Swiss | Swiss changed government from Anarchy to Despotism | from=Anarchy, to=Despotism
+22 | tech_discovered | Tongan | Tongan discovered Horseback Riding | tech_id=35, tech_name=Horseback Riding
+23 | city_founded | Komi | Inta founded by Komi | city_id=156, city_name=Inta
+23 | tech_discovered | Uyghur | Uyghur discovered Pottery | tech_id=63, tech_name=Pottery
+24 | city_founded | Uyghur | Karabalgasun founded by Uyghur | city_id=152, city_name=Karabalgasun
+24 | city_founded | Uyghur | Karamay founded by Uyghur | city_id=129, city_name=Karamay
+24 | tech_discovered | Komi | Komi discovered Alphabet | tech_id=2, tech_name=Alphabet
+24 | tech_discovered | Swiss | Swiss discovered Alphabet | tech_id=2, tech_name=Alphabet
+25 | tech_discovered | Lippian | Lippian discovered Ceremonial Burial | tech_id=10, tech_name=Ceremonial Burial
+27 | city_founded | Uyghur | Ürümqi founded by Uyghur | city_id=126, city_name=Ürümqi
+27 | city_founded | Komi | Vörkuta founded by Komi | city_id=167, city_name=Vörkuta
+28 | city_founded | Uyghur | Haml founded by Uyghur | city_id=172, city_name=Haml
+28 | city_founded | Komi | Vuktyl founded by Komi | city_id=171, city_name=Vuktyl
+28 | tech_discovered | Komi | Komi discovered Pottery | tech_id=63, tech_name=Pottery
+28 | tech_discovered | Tongan | Tongan discovered Warrior Code | tech_id=86, tech_name=Warrior Code
+28 | tech_discovered | Swiss | Swiss discovered Code of Laws | tech_id=13, tech_name=Code of Laws
+30 | city_founded | Komi | Emba founded by Komi | city_id=175, city_name=Emba
+31 | tech_discovered | Tongan | Tongan discovered Alphabet | tech_id=2, tech_name=Alphabet
+31 | tech_discovered | Lippian | Lippian discovered Pottery | tech_id=63, tech_name=Pottery
+32 | government_change | Lippian | Lippian changed government from Anarchy to Despotism | from=Anarchy, to=Despotism
+32 | tech_discovered | Komi | Komi discovered Bronze Working | tech_id=9, tech_name=Bronze Working
+32 | tech_discovered | Uyghur | Uyghur discovered Code of Laws | tech_id=13, tech_name=Code of Laws
+35 | tech_discovered | Swiss | Swiss discovered Writing | tech_id=87, tech_name=Writing
+37 | tech_discovered | Komi | Komi discovered Writing | tech_id=87, tech_name=Writing
+37 | tech_discovered | Lippian | Lippian discovered Alphabet | tech_id=2, tech_name=Alphabet
+38 | city_founded | Komi | Aykatyla founded by Komi | city_id=194, city_name=Aykatyla
+38 | tech_discovered | Tongan | Tongan discovered Code of Laws | tech_id=13, tech_name=Code of Laws
+39 | tech_discovered | Uyghur | Uyghur discovered Writing | tech_id=87, tech_name=Writing
+41 | city_founded | Komi | Izva founded by Komi | city_id=206, city_name=Izva
+42 | tech_discovered | Komi | Komi discovered Code of Laws | tech_id=13, tech_name=Code of Laws
+43 | city_founded | Komi | Abyachoy founded by Komi | city_id=210, city_name=Abyachoy
+43 | tech_discovered | Lippian | Lippian discovered Code of Laws | tech_id=13, tech_name=Code of Laws
+44 | tech_discovered | Komi | Komi discovered Ceremonial Burial | tech_id=10, tech_name=Ceremonial Burial
+46 | tech_discovered | Tongan | Tongan discovered Mathematics | tech_id=48, tech_name=Mathematics
+47 | city_founded | Komi | Koygort founded by Komi | city_id=225, city_name=Koygort
+47 | city_founded | Komi | Kulomdyn founded by Komi | city_id=224, city_name=Kulomdyn
+48 | government_change | Uyghur | Uyghur changed government from Despotism to Anarchy | from=Despotism, to=Anarchy
+49 | tech_discovered | Uyghur | Uyghur discovered Literacy | tech_id=42, tech_name=Literacy
+49 | tech_discovered | Tongan | Tongan discovered Writing | tech_id=87, tech_name=Writing
+49 | tech_discovered | Swiss | Swiss discovered Literacy | tech_id=42, tech_name=Literacy
+49 | tech_discovered | Lippian | Lippian discovered Map Making | tech_id=45, tech_name=Map Making
+50 | city_founded | Lippian | Schwalenberg founded by Lippian | city_id=205, city_name=Schwalenberg
+51 | city_founded | Komi | Körtkerös founded by Komi | city_id=244, city_name=Körtkerös
+51 | city_founded | Komi | Vizin founded by Komi | city_id=245, city_name=Vizin
+51 | city_founded | Lippian | Horn founded by Lippian | city_id=217, city_name=Horn
+53 | tech_discovered | Komi | Komi discovered Literacy | tech_id=42, tech_name=Literacy
+53 | tech_discovered | Lippian | Lippian discovered Writing | tech_id=87, tech_name=Writing
+54 | city_founded | Komi | Myldyn founded by Komi | city_id=259, city_name=Myldyn
+55 | tech_discovered | Komi | Komi discovered Currency | tech_id=20, tech_name=Currency
+56 | city_founded | Lippian | Extertal founded by Lippian | city_id=264, city_name=Extertal
+56 | city_founded | Komi | Vylgort founded by Komi | city_id=268, city_name=Vylgort
+56 | city_founded | Lippian | Barntrup founded by Lippian | city_id=197, city_name=Barntrup
+56 | city_founded | Komi | Sösnagort founded by Komi | city_id=267, city_name=Sösnagort
+56 | wonder_completed | Komi | Komi completed Great Wall in Syktyvkar | wonder_id=47, wonder_name=Great Wall, city_name=Syktyvkar
+56 | tech_discovered | Tongan | Tongan discovered Literacy | tech_id=42, tech_name=Literacy
+56 | tech_discovered | Lippian | Lippian discovered Horseback Riding | tech_id=35, tech_name=Horseback Riding
+57 | city_founded | Lippian | Dörentrup founded by Lippian | city_id=254, city_name=Dörentrup
+58 | city_founded | Komi | Chilimdyn founded by Komi | city_id=274, city_name=Chilimdyn
+58 | tech_discovered | Uyghur | Uyghur discovered The Republic | tech_id=80, tech_name=The Republic
+60 | city_founded | Lippian | Detmold founded by Lippian | city_id=137, city_name=Detmold
+60 | city_founded | Lippian | Lemgo founded by Lippian | city_id=159, city_name=Lemgo
+60 | tech_discovered | Swiss | Swiss discovered The Republic | tech_id=80, tech_name=The Republic
+
+TERRITORY MAPS (PNG)
+Turn 10: data/questions/seed5/world_report/turn_060_territory_maps/territory_turn_010.png
+Turn 20: data/questions/seed5/world_report/turn_060_territory_maps/territory_turn_020.png
+Turn 30: data/questions/seed5/world_report/turn_060_territory_maps/territory_turn_030.png
+Turn 40: data/questions/seed5/world_report/turn_060_territory_maps/territory_turn_040.png
+Turn 50: data/questions/seed5/world_report/turn_060_territory_maps/territory_turn_050.png
+Turn 60: data/questions/seed5/world_report/turn_060_territory_maps/territory_turn_060.png
+
+## Questions
+1. How many cities does Komi have at turn 60?
+2. How many technologies has Komi discovered by turn 60?
+3. How much gold does Komi have at turn 60?
+4. How many cities does Lippian have at turn 60?
+5. How many technologies has Lippian discovered by turn 60?
+6. How much gold does Lippian have at turn 60?
+7. How many cities does Swiss have at turn 60?
+8. How many technologies has Swiss discovered by turn 60?
+9. How much gold does Swiss have at turn 60?
+10. How many cities does Tongan have at turn 60?
+11. How many technologies has Tongan discovered by turn 60?
+12. How much gold does Tongan have at turn 60?
+13. How many cities does Uyghur have at turn 60?
+14. How many technologies has Uyghur discovered by turn 60?
+15. How much gold does Uyghur have at turn 60?
+
+You may analyze the data, but you MUST end your response with percentile estimates in this exact format:
+<<<PERCENTILES>>>
+Q1: p10=5, p25=10, p50=15, p75=20, p90=25
+Q2: p10=100, p25=200, p50=300, p75=400, p90=500
+<<<END>>>
+
+For each question, provide one line with percentile estimates for all 15 questions, in order.
+- p10 means you estimate there's a 10% chance the true value is below this number
+- p25 means you estimate there's a 25% chance the true value is below this number
+- p50 (median) means you estimate there's a 50% chance the true value is below this number
+- p75 means you estimate there's a 75% chance the true value is below this number
+- p90 means you estimate there's a 90% chance the true value is below this number

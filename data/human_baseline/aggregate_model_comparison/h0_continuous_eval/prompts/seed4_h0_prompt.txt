@@ -1,0 +1,361 @@
+You are an expert superforecaster, familiar with the work of Tetlock and others. You are analyzing a FreeCiv game simulation. Make predictions based on the world report below.
+
+You MUST provide percentile estimates for each question UNDER ALL CIRCUMSTANCES. If for some reason you can't answer, provide reasonable mid-range estimates, but always return numeric percentile values.
+
+## World Report
+WORLD REPORT TXT v1
+Game ID: seed4
+Snapshot turn: 60
+Turns analyzed: 1..60
+Map size: 78x52
+
+CIVILIZATIONS
+ID | Name      | Adjective | Nation ID
+---+-----------+-----------+----------
+0  | Jamaican  | Jamaican  | 241      
+1  | Karabakhi | Karabakhi | 247      
+2  | Iranian   | Iranian   | 231      
+3  | Palauan   | Palauan   | 376      
+4  | Santomean | Santomean | 425      
+5  | Pirate    | Pirate    | 559      
+6  | Tajik     | Tajik     | 485      
+7  | Afghani   | Afghani   | 6        
+8  | American  | American  | 18       
+9  | Barbarian | Barbarian | 558      
+
+CURRENT STATE (TURN 60)
+ID | Name      | Score | Rank | Government | Treasury | Population | Techs | Wonders | Cities | Territory | Units | Military | Science | Trade | Food  | Shields
+---+-----------+-------+------+------------+----------+------------+-------+---------+--------+-----------+-------+----------+---------+-------+-------+--------
+0  | Jamaican  | 41    | NA   | Despotism  | 390.0    | 22.0       | 10    | 1       | 12     | 131       | 5     | 0        | 60      | 22.0  | 44.0  | 35.0   
+1  | Karabakhi | 41    | NA   | Despotism  | 295.0    | 12.0       | 9     | 0       | 7      | 78        | 0     | 0        | 60      | 29.0  | 58.0  | 48.0   
+2  | Iranian   | 40    | NA   | Despotism  | 353.0    | 3.0        | 10    | 0       | 3      | 54        | 0     | 0        | 60      | 31.0  | 62.0  | 45.0   
+3  | Palauan   | -1    | NA   | Anarchy    | 0.0      | 0.0        | 10    | 0       | 0      | 1         | 0     | 0        | 60      | 44.0  | 88.0  | 36.0   
+4  | Santomean | 38    | NA   | Despotism  | 343.0    | 0.0        | 9     | 0       | 0      | 17        | 0     | 0        | 60      | 65.0  | 130.0 | 43.0   
+5  | Pirate    | NA    | NA   | NA         | None     | None       | None  | None    | None   | None      | None  | None     | None    | None  | None  | None   
+6  | Tajik     | NA    | NA   | NA         | None     | None       | None  | None    | None   | None      | None  | None     | None    | None  | None  | None   
+7  | Afghani   | NA    | NA   | NA         | None     | None       | None  | None    | None   | None      | None  | None     | None    | None  | None  | None   
+8  | American  | NA    | NA   | NA         | None     | None       | None  | None    | None   | None      | None  | None     | None    | None  | None  | None   
+9  | Barbarian | NA    | NA   | NA         | None     | None       | None  | None    | None   | None      | None  | None     | None    | None  | None  | None   
+
+GOVERNMENT TIMELINE (derived from recordings)
+Each entry is a change point (turn number -> new government); the first entry is the first observed government.
+0 Jamaican: 1 Despotism
+1 Karabakhi: 1 Anarchy; 51 Despotism
+2 Iranian: 1 Anarchy; 41 Despotism
+3 Palauan: 1 Anarchy
+4 Santomean: 1 Anarchy; 32 Despotism; 52 Anarchy; 59 Despotism
+5 Pirate: NA (no changes observed)
+6 Tajik: NA (no changes observed)
+7 Afghani: NA (no changes observed)
+8 American: NA (no changes observed)
+9 Barbarian: NA (no changes observed)
+
+TREASURY (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Jamaican: 50.0, 50.0, 52.0, 63.0, 78.0, 93.0, 113.0, 134.0, 164.0, 203.0, 242.0, 337.0, 390.0
+1 Karabakhi: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 227.0, 295.0
+2 Iranian: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 280.0, 315.0, 344.0, 353.0
+3 Palauan: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+4 Santomean: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 184.0, 208.0, 242.0, 270.0, 0.0, 343.0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Tajik: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Afghani: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 American: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+POPULATION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Jamaican: 0.0, 2.0, 2.0, 4.0, 4.0, 5.0, 7.0, 9.0, 11.0, 12.0, 16.0, 18.0, 22.0
+1 Karabakhi: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 7.0, 12.0
+2 Iranian: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.0, 3.0, 3.0, 3.0
+3 Palauan: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+4 Santomean: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Tajik: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Afghani: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 American: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+TECHS KNOWN (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Jamaican: 1, 1, 1, 2, 2, 3, 4, 5, 6, 7, 8, 8, 10
+1 Karabakhi: 1, 1, 1, 2, 3, 3, 4, 5, 6, 7, 8, 8, 9
+2 Iranian: 1, 1, 1, 1, 1, 2, 3, 4, 5, 5, 6, 8, 10
+3 Palauan: 1, 2, 3, 3, 4, 4, 5, 6, 6, 7, 8, 9, 10
+4 Santomean: 1, 2, 2, 3, 3, 4, 5, 6, 7, 8, 8, 9, 9
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Tajik: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Afghani: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 American: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+WONDERS DISCOVERED (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Jamaican: 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+1 Karabakhi: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+2 Iranian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+3 Palauan: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+4 Santomean: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Tajik: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Afghani: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 American: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+CITIES COUNT (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Jamaican: 0, 2, 2, 3, 3, 3, 5, 6, 7, 8, 10, 12, 12
+1 Karabakhi: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 7
+2 Iranian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3
+3 Palauan: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+4 Santomean: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Tajik: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Afghani: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 American: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+TERRITORY SIZE (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Jamaican: 0, 37, 42, 59, 65, 72, 85, 85, 96, 104, 115, 123, 131
+1 Karabakhi: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 43, 78
+2 Iranian: 0, 0, 0, 0, 0, 0, 0, 0, 16, 52, 54, 54, 54
+3 Palauan: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1
+4 Santomean: 0, 0, 0, 0, 0, 0, 8, 17, 17, 17, 17, 17, 17
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Tajik: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Afghani: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 American: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+SCIENCE (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Jamaican: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+1 Karabakhi: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+2 Iranian: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+3 Palauan: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+4 Santomean: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Tajik: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Afghani: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 American: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+TRADE PRODUCTION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Jamaican: 0.0, 2.0, 2.0, 4.0, 4.0, 5.0, 7.0, 9.0, 11.0, 12.0, 16.0, 18.0, 22.0
+1 Karabakhi: 0.0, 6.0, 6.0, 8.0, 8.0, 11.0, 11.0, 13.0, 15.0, 17.0, 20.0, 23.0, 29.0
+2 Iranian: 0.0, 8.0, 10.0, 12.0, 13.0, 13.0, 18.0, 16.0, 21.0, 21.0, 26.0, 31.0, 31.0
+3 Palauan: 0.0, 11.0, 11.0, 15.0, 16.0, 18.0, 19.0, 20.0, 26.0, 30.0, 31.0, 37.0, 44.0
+4 Santomean: 0.0, 14.0, 14.0, 20.0, 23.0, 25.0, 23.0, 28.0, 31.0, 33.0, 37.0, 37.0, 65.0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Tajik: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Afghani: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 American: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+FOOD PRODUCTION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Jamaican: 0.0, 4.0, 4.0, 8.0, 8.0, 10.0, 14.0, 18.0, 22.0, 24.0, 32.0, 36.0, 44.0
+1 Karabakhi: 0.0, 12.0, 12.0, 16.0, 16.0, 22.0, 22.0, 26.0, 30.0, 34.0, 40.0, 46.0, 58.0
+2 Iranian: 0.0, 16.0, 20.0, 24.0, 26.0, 26.0, 36.0, 32.0, 42.0, 42.0, 52.0, 62.0, 62.0
+3 Palauan: 0.0, 22.0, 22.0, 30.0, 32.0, 36.0, 38.0, 40.0, 52.0, 60.0, 62.0, 74.0, 88.0
+4 Santomean: 0.0, 28.0, 28.0, 40.0, 46.0, 50.0, 46.0, 56.0, 62.0, 66.0, 74.0, 74.0, 130.0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Tajik: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Afghani: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 American: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+SHIELD PRODUCTION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Jamaican: 0.0, 7.0, 7.0, 9.0, 9.0, 9.0, 15.0, 16.0, 19.0, 21.0, 24.0, 30.0, 35.0
+1 Karabakhi: 0.0, 8.0, 9.0, 11.0, 12.0, 9.0, 15.0, 21.0, 23.0, 22.0, 21.0, 32.0, 48.0
+2 Iranian: 0.0, 9.0, 9.0, 7.0, 10.0, 11.0, 15.0, 19.0, 20.0, 27.0, 30.0, 38.0, 45.0
+3 Palauan: 0.0, 7.0, 7.0, 8.0, 10.0, 12.0, 14.0, 14.0, 20.0, 22.0, 25.0, 33.0, 36.0
+4 Santomean: 0.0, 9.0, 9.0, 11.0, 12.0, 15.0, 16.0, 17.0, 23.0, 26.0, 35.0, 41.0, 43.0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Tajik: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Afghani: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 American: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+UNITS COUNT (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Jamaican: 5, 3, 3, 3, 3, 5, 3, 3, 4, 4, 4, 3, 5
+1 Karabakhi: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+2 Iranian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+3 Palauan: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+4 Santomean: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Tajik: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Afghani: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 American: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+MILITARY UNITS COUNT (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Jamaican: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+1 Karabakhi: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+2 Iranian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+3 Palauan: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+4 Santomean: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Tajik: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Afghani: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 American: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+SCORES (derived from recordings)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Jamaican: 0, 2, 2, 6, 6, 9, 13, 17, 21, 24, 30, 33, 41
+1 Karabakhi: -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 33, 41
+2 Iranian: -1, -1, -1, -1, -1, -1, -1, -1, -1, 21, 25, 32, 40
+3 Palauan: -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+4 Santomean: -1, -1, -1, -1, -1, -1, -1, 18, 23, 27, 32, -1, 38
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Tajik: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Afghani: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 American: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+RANKINGS (derived from scores)
+Turn 1: 1=Jamaican(0), 2=Karabakhi(-1), 3=Iranian(-1), 4=Palauan(-1), 5=Santomean(-1)
+Turn 5: 1=Jamaican(2), 2=Karabakhi(-1), 3=Iranian(-1), 4=Palauan(-1), 5=Santomean(-1)
+Turn 10: 1=Jamaican(2), 2=Karabakhi(-1), 3=Iranian(-1), 4=Palauan(-1), 5=Santomean(-1)
+Turn 15: 1=Jamaican(6), 2=Karabakhi(-1), 3=Iranian(-1), 4=Palauan(-1), 5=Santomean(-1)
+Turn 20: 1=Jamaican(6), 2=Karabakhi(-1), 3=Iranian(-1), 4=Palauan(-1), 5=Santomean(-1)
+Turn 25: 1=Jamaican(9), 2=Karabakhi(-1), 3=Iranian(-1), 4=Palauan(-1), 5=Santomean(-1)
+Turn 30: 1=Jamaican(13), 2=Karabakhi(-1), 3=Iranian(-1), 4=Palauan(-1), 5=Santomean(-1)
+Turn 35: 1=Santomean(18), 2=Jamaican(17), 3=Karabakhi(-1), 4=Iranian(-1), 5=Palauan(-1)
+Turn 40: 1=Santomean(23), 2=Jamaican(21), 3=Karabakhi(-1), 4=Iranian(-1), 5=Palauan(-1)
+Turn 45: 1=Santomean(27), 2=Jamaican(24), 3=Iranian(21), 4=Karabakhi(-1), 5=Palauan(-1)
+Turn 50: 1=Santomean(32), 2=Jamaican(30), 3=Iranian(25), 4=Karabakhi(-1), 5=Palauan(-1)
+Turn 55: 1=Jamaican(33), 2=Karabakhi(33), 3=Iranian(32), 4=Palauan(-1), 5=Santomean(-1)
+Turn 60: 1=Jamaican(41), 2=Karabakhi(41), 3=Iranian(40), 4=Santomean(38), 5=Palauan(-1)
+
+EVENT TYPES (exhaustive)
+city_founded, city_conquered, city_destroyed, government_change, diplomatic_change, tech_discovered, wonder_completed
+If a type does not appear in EVENTS, it did not occur in the analyzed turns.
+
+EVENTS (chronological)
+Turn | Type | Civ | Description | Metadata
+--------------------------------------------------------------------------------
+1 | tech_discovered | Jamaican | Jamaican discovered Tech #0 | tech_id=0, tech_name=Tech #0
+1 | tech_discovered | Karabakhi | Karabakhi discovered Tech #0 | tech_id=0, tech_name=Tech #0
+1 | tech_discovered | Iranian | Iranian discovered Tech #0 | tech_id=0, tech_name=Tech #0
+1 | tech_discovered | Palauan | Palauan discovered Tech #0 | tech_id=0, tech_name=Tech #0
+1 | tech_discovered | Santomean | Santomean discovered Tech #0 | tech_id=0, tech_name=Tech #0
+2 | tech_discovered | Palauan | Palauan discovered Alphabet | tech_id=2, tech_name=Alphabet
+2 | tech_discovered | Santomean | Santomean discovered Horseback Riding | tech_id=35, tech_name=Horseback Riding
+3 | city_founded | Jamaican | Montego Bay founded by Jamaican | city_id=126, city_name=Montego Bay
+3 | wonder_completed | Jamaican | Jamaican completed Palace in Montego Bay | wonder_id=21, wonder_name=Palace, city_name=Montego Bay
+3 | wonder_completed | Karabakhi | Karabakhi completed Palace in Stepanakert | wonder_id=21, wonder_name=Palace, city_name=Stepanakert
+3 | wonder_completed | Iranian | Iranian completed Palace in Mashhad | wonder_id=21, wonder_name=Palace, city_name=Mashhad
+3 | wonder_completed | Palauan | Palauan completed Palace in Melekeok | wonder_id=21, wonder_name=Palace, city_name=Melekeok
+4 | city_founded | Jamaican | Port Royal founded by Jamaican | city_id=132, city_name=Port Royal
+4 | wonder_completed | Santomean | Santomean completed Palace in São Tomé | wonder_id=21, wonder_name=Palace, city_name=São Tomé
+6 | tech_discovered | Palauan | Palauan discovered Masonry | tech_id=46, tech_name=Masonry
+12 | tech_discovered | Santomean | Santomean discovered Masonry | tech_id=46, tech_name=Masonry
+13 | tech_discovered | Karabakhi | Karabakhi discovered Masonry | tech_id=46, tech_name=Masonry
+15 | city_founded | Jamaican | Kingston founded by Jamaican | city_id=142, city_name=Kingston
+15 | tech_discovered | Jamaican | Jamaican discovered Masonry | tech_id=46, tech_name=Masonry
+16 | tech_discovered | Palauan | Palauan discovered Horseback Riding | tech_id=35, tech_name=Horseback Riding
+20 | tech_discovered | Karabakhi | Karabakhi discovered Alphabet | tech_id=2, tech_name=Alphabet
+21 | tech_discovered | Jamaican | Jamaican discovered Bronze Working | tech_id=9, tech_name=Bronze Working
+21 | tech_discovered | Iranian | Iranian discovered Masonry | tech_id=46, tech_name=Masonry
+23 | tech_discovered | Santomean | Santomean discovered The Wheel | tech_id=81, tech_name=The Wheel
+26 | city_founded | Jamaican | Spanish Town founded by Jamaican | city_id=158, city_name=Spanish Town
+26 | tech_discovered | Jamaican | Jamaican discovered Alphabet | tech_id=2, tech_name=Alphabet
+27 | tech_discovered | Santomean | Santomean discovered Alphabet | tech_id=2, tech_name=Alphabet
+28 | city_founded | Jamaican | Savanna la Mar founded by Jamaican | city_id=165, city_name=Savanna la Mar
+28 | tech_discovered | Iranian | Iranian discovered Pottery | tech_id=63, tech_name=Pottery
+28 | tech_discovered | Palauan | Palauan discovered Warrior Code | tech_id=86, tech_name=Warrior Code
+30 | tech_discovered | Karabakhi | Karabakhi discovered Code of Laws | tech_id=13, tech_name=Code of Laws
+31 | tech_discovered | Santomean | Santomean discovered Pottery | tech_id=63, tech_name=Pottery
+32 | government_change | Santomean | Santomean changed government from Anarchy to Despotism | from=Anarchy, to=Despotism
+33 | tech_discovered | Karabakhi | Karabakhi discovered Ceremonial Burial | tech_id=10, tech_name=Ceremonial Burial
+33 | tech_discovered | Iranian | Iranian discovered Alphabet | tech_id=2, tech_name=Alphabet
+33 | tech_discovered | Palauan | Palauan discovered Pottery | tech_id=63, tech_name=Pottery
+34 | tech_discovered | Jamaican | Jamaican discovered Code of Laws | tech_id=13, tech_name=Code of Laws
+35 | city_founded | Jamaican | Saint Ann's Bay founded by Jamaican | city_id=177, city_name=Saint Ann's Bay
+37 | tech_discovered | Jamaican | Jamaican discovered Pottery | tech_id=63, tech_name=Pottery
+37 | tech_discovered | Karabakhi | Karabakhi discovered Horseback Riding | tech_id=35, tech_name=Horseback Riding
+38 | tech_discovered | Santomean | Santomean discovered Writing | tech_id=87, tech_name=Writing
+40 | city_founded | Jamaican | May Pen founded by Jamaican | city_id=189, city_name=May Pen
+40 | tech_discovered | Iranian | Iranian discovered Horseback Riding | tech_id=35, tech_name=Horseback Riding
+41 | city_founded | Iranian | Mashhad founded by Iranian | city_id=129, city_name=Mashhad
+41 | government_change | Iranian | Iranian changed government from Anarchy to Despotism | from=Anarchy, to=Despotism
+42 | city_founded | Iranian | Isfahan founded by Iranian | city_id=151, city_name=Isfahan
+42 | city_founded | Iranian | Tabriz founded by Iranian | city_id=174, city_name=Tabriz
+42 | city_founded | Jamaican | Port Antonio founded by Jamaican | city_id=200, city_name=Port Antonio
+42 | tech_discovered | Karabakhi | Karabakhi discovered Warrior Code | tech_id=86, tech_name=Warrior Code
+42 | tech_discovered | Palauan | Palauan discovered Map Making | tech_id=45, tech_name=Map Making
+43 | tech_discovered | Santomean | Santomean discovered Code of Laws | tech_id=13, tech_name=Code of Laws
+45 | tech_discovered | Jamaican | Jamaican discovered Mathematics | tech_id=48, tech_name=Mathematics
+46 | tech_discovered | Iranian | Iranian discovered Code of Laws | tech_id=13, tech_name=Code of Laws
+47 | city_founded | Jamaican | Mandeville founded by Jamaican | city_id=212, city_name=Mandeville
+47 | tech_discovered | Karabakhi | Karabakhi discovered Writing | tech_id=87, tech_name=Writing
+47 | tech_discovered | Palauan | Palauan discovered Code of Laws | tech_id=13, tech_name=Code of Laws
+49 | tech_discovered | Jamaican | Jamaican discovered Writing | tech_id=87, tech_name=Writing
+50 | city_founded | Jamaican | Port Maria founded by Jamaican | city_id=222, city_name=Port Maria
+51 | government_change | Karabakhi | Karabakhi changed government from Anarchy to Despotism | from=Anarchy, to=Despotism
+51 | tech_discovered | Iranian | Iranian discovered The Wheel | tech_id=81, tech_name=The Wheel
+52 | city_founded | Karabakhi | Shushi founded by Karabakhi | city_id=136, city_name=Shushi
+52 | city_founded | Jamaican | Black River founded by Jamaican | city_id=228, city_name=Black River
+52 | government_change | Santomean | Santomean changed government from Despotism to Anarchy | from=Despotism, to=Anarchy
+52 | tech_discovered | Palauan | Palauan discovered Writing | tech_id=87, tech_name=Writing
+52 | tech_discovered | Santomean | Santomean discovered Literacy | tech_id=42, tech_name=Literacy
+53 | city_founded | Karabakhi | Stepanakert founded by Karabakhi | city_id=127, city_name=Stepanakert
+53 | tech_discovered | Iranian | Iranian discovered Warrior Code | tech_id=86, tech_name=Warrior Code
+54 | city_founded | Karabakhi | Berdzor founded by Karabakhi | city_id=128, city_name=Berdzor
+55 | city_founded | Karabakhi | Mardakert founded by Karabakhi | city_id=152, city_name=Mardakert
+55 | city_founded | Jamaican | Old Harbour founded by Jamaican | city_id=244, city_name=Old Harbour
+56 | city_founded | Karabakhi | Askeran founded by Karabakhi | city_id=183, city_name=Askeran
+56 | city_founded | Karabakhi | Noragyukh founded by Karabakhi | city_id=190, city_name=Noragyukh
+56 | tech_discovered | Jamaican | Jamaican discovered Literacy | tech_id=42, tech_name=Literacy
+56 | tech_discovered | Karabakhi | Karabakhi discovered Literacy | tech_id=42, tech_name=Literacy
+56 | tech_discovered | Iranian | Iranian discovered Writing | tech_id=87, tech_name=Writing
+57 | city_founded | Karabakhi | Taghavard founded by Karabakhi | city_id=218, city_name=Taghavard
+58 | tech_discovered | Iranian | Iranian discovered Bronze Working | tech_id=9, tech_name=Bronze Working
+59 | government_change | Santomean | Santomean changed government from Anarchy to Despotism | from=Anarchy, to=Despotism
+60 | tech_discovered | Jamaican | Jamaican discovered Currency | tech_id=20, tech_name=Currency
+60 | tech_discovered | Palauan | Palauan discovered Literacy | tech_id=42, tech_name=Literacy
+
+TERRITORY MAPS (PNG)
+Turn 10: data/questions/seed4/world_report/turn_060_territory_maps/territory_turn_010.png
+Turn 20: data/questions/seed4/world_report/turn_060_territory_maps/territory_turn_020.png
+Turn 30: data/questions/seed4/world_report/turn_060_territory_maps/territory_turn_030.png
+Turn 40: data/questions/seed4/world_report/turn_060_territory_maps/territory_turn_040.png
+Turn 50: data/questions/seed4/world_report/turn_060_territory_maps/territory_turn_050.png
+Turn 60: data/questions/seed4/world_report/turn_060_territory_maps/territory_turn_060.png
+
+## Questions
+1. How many cities does Iranian have at turn 60?
+2. How many technologies has Iranian discovered by turn 60?
+3. How much gold does Iranian have at turn 60?
+4. How many cities does Jamaican have at turn 60?
+5. How many technologies has Jamaican discovered by turn 60?
+6. How much gold does Jamaican have at turn 60?
+7. How many cities does Karabakhi have at turn 60?
+8. How many technologies has Karabakhi discovered by turn 60?
+9. How much gold does Karabakhi have at turn 60?
+10. How many cities does Palauan have at turn 60?
+11. How many technologies has Palauan discovered by turn 60?
+12. How much gold does Palauan have at turn 60?
+13. How many cities does Santomean have at turn 60?
+14. How many technologies has Santomean discovered by turn 60?
+15. How much gold does Santomean have at turn 60?
+
+You may analyze the data, but you MUST end your response with percentile estimates in this exact format:
+<<<PERCENTILES>>>
+Q1: p10=5, p25=10, p50=15, p75=20, p90=25
+Q2: p10=100, p25=200, p50=300, p75=400, p90=500
+<<<END>>>
+
+For each question, provide one line with percentile estimates for all 15 questions, in order.
+- p10 means you estimate there's a 10% chance the true value is below this number
+- p25 means you estimate there's a 25% chance the true value is below this number
+- p50 (median) means you estimate there's a 50% chance the true value is below this number
+- p75 means you estimate there's a 75% chance the true value is below this number
+- p90 means you estimate there's a 90% chance the true value is below this number

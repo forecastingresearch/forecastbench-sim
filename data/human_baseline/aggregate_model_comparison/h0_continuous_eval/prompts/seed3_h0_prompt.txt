@@ -1,0 +1,379 @@
+You are an expert superforecaster, familiar with the work of Tetlock and others. You are analyzing a FreeCiv game simulation. Make predictions based on the world report below.
+
+You MUST provide percentile estimates for each question UNDER ALL CIRCUMSTANCES. If for some reason you can't answer, provide reasonable mid-range estimates, but always return numeric percentile values.
+
+## World Report
+WORLD REPORT TXT v1
+Game ID: seed3
+Snapshot turn: 60
+Turns analyzed: 1..60
+Map size: 78x52
+
+CIVILIZATIONS
+ID | Name            | Adjective       | Nation ID
+---+-----------------+-----------------+----------
+0  | Jolof           | Jolof           | 243      
+1  | Wuerttembergian | Wuerttembergian | 545      
+2  | Thuringian      | Thuringian      | 494      
+3  | Lippian         | Lippian         | 286      
+4  | Arab            | Arab            | 27       
+5  | Pirate          | Pirate          | 559      
+6  | Saxon           | Saxon           | 430      
+7  | Franconian      | Franconian      | 171      
+8  | Kuwaiti         | Kuwaiti         | 268      
+9  | Westphalian     | Westphalian     | 544      
+10 | Barbarian       | Barbarian       | 558      
+
+CURRENT STATE (TURN 60)
+ID | Name            | Score | Rank | Government | Treasury | Population | Techs | Wonders | Cities | Territory | Units | Military | Science | Trade | Food  | Shields
+---+-----------------+-------+------+------------+----------+------------+-------+---------+--------+-----------+-------+----------+---------+-------+-------+--------
+0  | Jolof           | 37    | NA   | Despotism  | 333.0    | 20.0       | 9     | 1       | 10     | 138       | 5     | 0        | 60      | 20.0  | 40.0  | 27.0   
+1  | Wuerttembergian | -1    | NA   | Anarchy    | 0.0      | 0.0        | 12    | 0       | 0      | 0         | 0     | 0        | 70      | 29.0  | 58.0  | 38.0   
+2  | Thuringian      | 58    | NA   | Republic   | 495.0    | 0.0        | 13    | 0       | 0      | 0         | 0     | 0        | 80      | 43.0  | 86.0  | 56.0   
+3  | Lippian         | 30    | NA   | Despotism  | 270.0    | 9.0        | 9     | 0       | 4      | 58        | 0     | 0        | 60      | 32.0  | 64.0  | 19.0   
+4  | Arab            | 47    | NA   | Republic   | 424.0    | 0.0        | 11    | 0       | 0      | 0         | 0     | 0        | 80      | 54.0  | 108.0 | 41.0   
+5  | Pirate          | NA    | NA   | NA         | None     | None       | None  | None    | None   | None      | None  | None     | None    | None  | None  | None   
+6  | Saxon           | NA    | NA   | NA         | None     | None       | None  | None    | None   | None      | None  | None     | None    | None  | None  | None   
+7  | Franconian      | NA    | NA   | NA         | None     | None       | None  | None    | None   | None      | None  | None     | None    | None  | None  | None   
+8  | Kuwaiti         | NA    | NA   | NA         | None     | None       | None  | None    | None   | None      | None  | None     | None    | None  | None  | None   
+9  | Westphalian     | NA    | NA   | NA         | None     | None       | None  | None    | None   | None      | None  | None     | None    | None  | None  | None   
+10 | Barbarian       | NA    | NA   | NA         | None     | None       | None  | None    | None   | None      | None  | None     | None    | None  | None  | None   
+
+GOVERNMENT TIMELINE (derived from recordings)
+Each entry is a change point (turn number -> new government); the first entry is the first observed government.
+0 Jolof: 1 Despotism
+1 Wuerttembergian: 1 Anarchy
+2 Thuringian: 1 Anarchy; 23 Despotism; 55 Anarchy; 56 Republic
+3 Lippian: 1 Anarchy; 9 Despotism; 31 Anarchy; 39 Despotism
+4 Arab: 1 Anarchy; 47 Despotism; 53 Anarchy; 54 Republic
+5 Pirate: NA (no changes observed)
+6 Saxon: NA (no changes observed)
+7 Franconian: NA (no changes observed)
+8 Kuwaiti: NA (no changes observed)
+9 Westphalian: NA (no changes observed)
+10 Barbarian: NA (no changes observed)
+
+TREASURY (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Jolof: 50.0, 53.0, 60.0, 70.0, 80.0, 93.0, 112.0, 128.0, 150.0, 226.0, 261.0, 296.0, 333.0
+1 Wuerttembergian: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+2 Thuringian: 0.0, 0.0, 0.0, 0.0, 0.0, 134.0, 169.0, 210.0, 255.0, 300.0, 350.0, 400.0, 495.0
+3 Lippian: 0.0, 0.0, 111.0, 121.0, 131.0, 168.0, 186.0, 0.0, 223.0, 231.0, 244.0, 259.0, 270.0
+4 Arab: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 323.0, 359.0, 424.0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Saxon: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Franconian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Kuwaiti: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Westphalian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+10 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+POPULATION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Jolof: 0.0, 2.0, 3.0, 3.0, 5.0, 6.0, 8.0, 8.0, 11.0, 11.0, 15.0, 19.0, 20.0
+1 Wuerttembergian: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+2 Thuringian: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+3 Lippian: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 9.0, 9.0, 9.0, 9.0, 9.0
+4 Arab: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Saxon: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Franconian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Kuwaiti: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Westphalian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+10 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+TECHS KNOWN (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Jolof: 1, 2, 2, 2, 3, 4, 5, 5, 5, 6, 8, 9, 9
+1 Wuerttembergian: 1, 1, 1, 2, 2, 5, 6, 6, 6, 7, 9, 11, 12
+2 Thuringian: 1, 1, 1, 2, 3, 3, 5, 5, 6, 7, 7, 8, 13
+3 Lippian: 1, 1, 1, 2, 2, 3, 3, 4, 5, 6, 7, 8, 9
+4 Arab: 1, 1, 1, 2, 2, 4, 4, 5, 5, 5, 6, 9, 11
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Saxon: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Franconian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Kuwaiti: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Westphalian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+10 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+WONDERS DISCOVERED (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Jolof: 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+1 Wuerttembergian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+2 Thuringian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+3 Lippian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+4 Arab: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Saxon: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Franconian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Kuwaiti: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Westphalian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+10 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+CITIES COUNT (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Jolof: 0, 2, 2, 2, 3, 4, 4, 5, 6, 7, 9, 9, 10
+1 Wuerttembergian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+2 Thuringian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+3 Lippian: 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 4
+4 Arab: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Saxon: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Franconian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Kuwaiti: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Westphalian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+10 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+TERRITORY SIZE (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Jolof: 0, 43, 47, 53, 63, 82, 88, 101, 102, 116, 134, 134, 138
+1 Wuerttembergian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+2 Thuringian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+3 Lippian: 0, 0, 0, 0, 0, 0, 0, 0, 44, 56, 58, 58, 58
+4 Arab: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Saxon: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Franconian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Kuwaiti: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Westphalian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+10 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+SCIENCE (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Jolof: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+1 Wuerttembergian: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 70, 70, 70
+2 Thuringian: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 80
+3 Lippian: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+4 Arab: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 80, 80
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Saxon: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Franconian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Kuwaiti: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Westphalian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+10 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+TRADE PRODUCTION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Jolof: 0.0, 2.0, 3.0, 3.0, 5.0, 6.0, 8.0, 8.0, 11.0, 11.0, 15.0, 19.0, 20.0
+1 Wuerttembergian: 0.0, 5.0, 5.0, 8.0, 8.0, 8.0, 10.0, 10.0, 14.0, 16.0, 17.0, 26.0, 29.0
+2 Thuringian: 0.0, 9.0, 9.0, 14.0, 12.0, 19.0, 17.0, 21.0, 25.0, 28.0, 32.0, 36.0, 43.0
+3 Lippian: 0.0, 11.0, 12.0, 13.0, 14.0, 15.0, 19.0, 18.0, 20.0, 20.0, 24.0, 24.0, 32.0
+4 Arab: 0.0, 18.0, 18.0, 20.0, 23.0, 24.0, 26.0, 23.0, 30.0, 36.0, 39.0, 47.0, 54.0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Saxon: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Franconian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Kuwaiti: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Westphalian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+10 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+FOOD PRODUCTION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Jolof: 0.0, 4.0, 6.0, 6.0, 10.0, 12.0, 16.0, 16.0, 22.0, 22.0, 30.0, 38.0, 40.0
+1 Wuerttembergian: 0.0, 10.0, 10.0, 16.0, 16.0, 16.0, 20.0, 20.0, 28.0, 32.0, 34.0, 52.0, 58.0
+2 Thuringian: 0.0, 18.0, 18.0, 28.0, 24.0, 38.0, 34.0, 42.0, 50.0, 56.0, 64.0, 72.0, 86.0
+3 Lippian: 0.0, 22.0, 24.0, 26.0, 28.0, 30.0, 38.0, 36.0, 40.0, 40.0, 48.0, 48.0, 64.0
+4 Arab: 0.0, 36.0, 36.0, 40.0, 46.0, 48.0, 52.0, 46.0, 60.0, 72.0, 78.0, 94.0, 108.0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Saxon: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Franconian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Kuwaiti: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Westphalian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+10 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+SHIELD PRODUCTION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Jolof: 0.0, 4.0, 8.0, 4.0, 10.0, 8.0, 13.0, 14.0, 17.0, 17.0, 22.0, 29.0, 27.0
+1 Wuerttembergian: 0.0, 4.0, 4.0, 5.0, 7.0, 11.0, 12.0, 13.0, 20.0, 18.0, 27.0, 35.0, 38.0
+2 Thuringian: 0.0, 10.0, 10.0, 10.0, 13.0, 15.0, 19.0, 21.0, 31.0, 31.0, 38.0, 45.0, 56.0
+3 Lippian: 0.0, 5.0, 5.0, 5.0, 7.0, 8.0, 10.0, 14.0, 15.0, 12.0, 14.0, 17.0, 19.0
+4 Arab: 0.0, 2.0, 2.0, 7.0, 3.0, 8.0, 18.0, 15.0, 24.0, 26.0, 27.0, 31.0, 41.0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Saxon: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Franconian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Kuwaiti: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Westphalian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+10 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+UNITS COUNT (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Jolof: 5, 3, 3, 4, 3, 3, 3, 4, 3, 5, 3, 3, 5
+1 Wuerttembergian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+2 Thuringian: 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0
+3 Lippian: 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+4 Arab: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Saxon: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Franconian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Kuwaiti: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Westphalian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+10 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+MILITARY UNITS COUNT (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Jolof: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+1 Wuerttembergian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+2 Thuringian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+3 Lippian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+4 Arab: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Saxon: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Franconian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Kuwaiti: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Westphalian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+10 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+SCORES (derived from recordings)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Jolof: 0, 4, 5, 5, 9, 12, 16, 16, 19, 21, 29, 35, 37
+1 Wuerttembergian: -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+2 Thuringian: -1, -1, -1, -1, -1, 13, 19, 19, 27, 29, 35, 41, 58
+3 Lippian: -1, -1, 3, 6, 7, 10, 11, -1, 19, 21, 24, 26, 30
+4 Arab: -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 25, 36, 47
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Saxon: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Franconian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Kuwaiti: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Westphalian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+10 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+RANKINGS (derived from scores)
+Turn 1: 1=Jolof(0), 2=Wuerttembergian(-1), 3=Thuringian(-1), 4=Lippian(-1), 5=Arab(-1)
+Turn 5: 1=Jolof(4), 2=Wuerttembergian(-1), 3=Thuringian(-1), 4=Lippian(-1), 5=Arab(-1)
+Turn 10: 1=Jolof(5), 2=Lippian(3), 3=Wuerttembergian(-1), 4=Thuringian(-1), 5=Arab(-1)
+Turn 15: 1=Lippian(6), 2=Jolof(5), 3=Wuerttembergian(-1), 4=Thuringian(-1), 5=Arab(-1)
+Turn 20: 1=Jolof(9), 2=Lippian(7), 3=Wuerttembergian(-1), 4=Thuringian(-1), 5=Arab(-1)
+Turn 25: 1=Thuringian(13), 2=Jolof(12), 3=Lippian(10), 4=Wuerttembergian(-1), 5=Arab(-1)
+Turn 30: 1=Thuringian(19), 2=Jolof(16), 3=Lippian(11), 4=Wuerttembergian(-1), 5=Arab(-1)
+Turn 35: 1=Thuringian(19), 2=Jolof(16), 3=Wuerttembergian(-1), 4=Lippian(-1), 5=Arab(-1)
+Turn 40: 1=Thuringian(27), 2=Jolof(19), 3=Lippian(19), 4=Wuerttembergian(-1), 5=Arab(-1)
+Turn 45: 1=Thuringian(29), 2=Jolof(21), 3=Lippian(21), 4=Wuerttembergian(-1), 5=Arab(-1)
+Turn 50: 1=Thuringian(35), 2=Jolof(29), 3=Arab(25), 4=Lippian(24), 5=Wuerttembergian(-1)
+Turn 55: 1=Thuringian(41), 2=Arab(36), 3=Jolof(35), 4=Lippian(26), 5=Wuerttembergian(-1)
+Turn 60: 1=Thuringian(58), 2=Arab(47), 3=Jolof(37), 4=Lippian(30), 5=Wuerttembergian(-1)
+
+EVENT TYPES (exhaustive)
+city_founded, city_conquered, city_destroyed, government_change, diplomatic_change, tech_discovered, wonder_completed
+If a type does not appear in EVENTS, it did not occur in the analyzed turns.
+
+EVENTS (chronological)
+Turn | Type | Civ | Description | Metadata
+--------------------------------------------------------------------------------
+1 | tech_discovered | Jolof | Jolof discovered Tech #0 | tech_id=0, tech_name=Tech #0
+1 | tech_discovered | Wuerttembergian | Wuerttembergian discovered Tech #0 | tech_id=0, tech_name=Tech #0
+1 | tech_discovered | Thuringian | Thuringian discovered Tech #0 | tech_id=0, tech_name=Tech #0
+1 | tech_discovered | Lippian | Lippian discovered Tech #0 | tech_id=0, tech_name=Tech #0
+1 | tech_discovered | Arab | Arab discovered Tech #0 | tech_id=0, tech_name=Tech #0
+2 | wonder_completed | Wuerttembergian | Wuerttembergian completed Palace in Ludwigsburg | wonder_id=21, wonder_name=Palace, city_name=Ludwigsburg
+2 | wonder_completed | Thuringian | Thuringian completed Palace in Weimar | wonder_id=21, wonder_name=Palace, city_name=Weimar
+2 | tech_discovered | Jolof | Jolof discovered Ceremonial Burial | tech_id=10, tech_name=Ceremonial Burial
+3 | city_founded | Jolof | Rosso founded by Jolof | city_id=130, city_name=Rosso
+3 | city_founded | Jolof | Linguère founded by Jolof | city_id=129, city_name=Linguère
+3 | wonder_completed | Jolof | Jolof completed Palace in Linguère | wonder_id=21, wonder_name=Palace, city_name=Linguère
+3 | wonder_completed | Lippian | Lippian completed Palace in Detmold | wonder_id=21, wonder_name=Palace, city_name=Detmold
+3 | wonder_completed | Arab | Arab completed Palace in Al-Madina | wonder_id=21, wonder_name=Palace, city_name=Al-Madina
+9 | government_change | Lippian | Lippian changed government from Anarchy to Despotism | from=Anarchy, to=Despotism
+11 | tech_discovered | Thuringian | Thuringian discovered Masonry | tech_id=46, tech_name=Masonry
+12 | tech_discovered | Arab | Arab discovered Masonry | tech_id=46, tech_name=Masonry
+13 | tech_discovered | Lippian | Lippian discovered Masonry | tech_id=46, tech_name=Masonry
+15 | tech_discovered | Wuerttembergian | Wuerttembergian discovered Masonry | tech_id=46, tech_name=Masonry
+16 | city_founded | Jolof | Kaolack founded by Jolof | city_id=143, city_name=Kaolack
+18 | tech_discovered | Jolof | Jolof discovered Masonry | tech_id=46, tech_name=Masonry
+18 | tech_discovered | Thuringian | Thuringian discovered Alphabet | tech_id=2, tech_name=Alphabet
+21 | tech_discovered | Wuerttembergian | Wuerttembergian discovered Alphabet | tech_id=2, tech_name=Alphabet
+21 | tech_discovered | Arab | Arab discovered Alphabet | tech_id=2, tech_name=Alphabet
+22 | tech_discovered | Wuerttembergian | Wuerttembergian discovered Ceremonial Burial | tech_id=10, tech_name=Ceremonial Burial
+23 | government_change | Thuringian | Thuringian changed government from Anarchy to Despotism | from=Anarchy, to=Despotism
+23 | tech_discovered | Lippian | Lippian discovered Alphabet | tech_id=2, tech_name=Alphabet
+24 | tech_discovered | Jolof | Jolof discovered Alphabet | tech_id=2, tech_name=Alphabet
+24 | tech_discovered | Wuerttembergian | Wuerttembergian discovered Code of Laws | tech_id=13, tech_name=Code of Laws
+24 | tech_discovered | Arab | Arab discovered Code of Laws | tech_id=13, tech_name=Code of Laws
+25 | city_founded | Jolof | Louga founded by Jolof | city_id=157, city_name=Louga
+27 | tech_discovered | Thuringian | Thuringian discovered Code of Laws | tech_id=13, tech_name=Code of Laws
+29 | tech_discovered | Jolof | Jolof discovered Horseback Riding | tech_id=35, tech_name=Horseback Riding
+29 | tech_discovered | Wuerttembergian | Wuerttembergian discovered Pottery | tech_id=63, tech_name=Pottery
+30 | tech_discovered | Thuringian | Thuringian discovered Pottery | tech_id=63, tech_name=Pottery
+31 | government_change | Lippian | Lippian changed government from Despotism to Anarchy | from=Despotism, to=Anarchy
+33 | tech_discovered | Lippian | Lippian discovered Code of Laws | tech_id=13, tech_name=Code of Laws
+33 | tech_discovered | Arab | Arab discovered Writing | tech_id=87, tech_name=Writing
+35 | city_founded | Jolof | Dagana founded by Jolof | city_id=174, city_name=Dagana
+36 | tech_discovered | Thuringian | Thuringian discovered Writing | tech_id=87, tech_name=Writing
+37 | tech_discovered | Lippian | Lippian discovered Horseback Riding | tech_id=35, tech_name=Horseback Riding
+38 | city_founded | Lippian | Blomberg founded by Lippian | city_id=149, city_name=Blomberg
+39 | city_founded | Lippian | Detmold founded by Lippian | city_id=134, city_name=Detmold
+39 | city_founded | Lippian | Oerlinghausen founded by Lippian | city_id=135, city_name=Oerlinghausen
+39 | city_founded | Jolof | Dara founded by Jolof | city_id=184, city_name=Dara
+39 | government_change | Lippian | Lippian changed government from Anarchy to Despotism | from=Anarchy, to=Despotism
+40 | city_founded | Lippian | Lügde founded by Lippian | city_id=155, city_name=Lügde
+41 | tech_discovered | Jolof | Jolof discovered Mathematics | tech_id=48, tech_name=Mathematics
+41 | tech_discovered | Lippian | Lippian discovered Warrior Code | tech_id=86, tech_name=Warrior Code
+44 | tech_discovered | Wuerttembergian | Wuerttembergian discovered Monarchy | tech_id=53, tech_name=Monarchy
+45 | city_founded | Jolof | Kanifing founded by Jolof | city_id=199, city_name=Kanifing
+45 | tech_discovered | Thuringian | Thuringian discovered Literacy | tech_id=42, tech_name=Literacy
+46 | city_founded | Jolof | Koki founded by Jolof | city_id=205, city_name=Koki
+46 | tech_discovered | Jolof | Jolof discovered Code of Laws | tech_id=13, tech_name=Code of Laws
+47 | government_change | Arab | Arab changed government from Anarchy to Despotism | from=Anarchy, to=Despotism
+47 | tech_discovered | Lippian | Lippian discovered The Wheel | tech_id=81, tech_name=The Wheel
+48 | tech_discovered | Wuerttembergian | Wuerttembergian discovered Writing | tech_id=87, tech_name=Writing
+49 | tech_discovered | Jolof | Jolof discovered Bronze Working | tech_id=9, tech_name=Bronze Working
+49 | tech_discovered | Arab | Arab discovered Literacy | tech_id=42, tech_name=Literacy
+50 | city_founded | Jolof | Mekhé founded by Jolof | city_id=216, city_name=Mekhé
+50 | tech_discovered | Wuerttembergian | Wuerttembergian discovered Bronze Working | tech_id=9, tech_name=Bronze Working
+51 | tech_discovered | Lippian | Lippian discovered Bronze Working | tech_id=9, tech_name=Bronze Working
+52 | tech_discovered | Wuerttembergian | Wuerttembergian discovered Currency | tech_id=20, tech_name=Currency
+52 | tech_discovered | Arab | Arab discovered The Republic | tech_id=80, tech_name=The Republic
+53 | government_change | Arab | Arab changed government from Despotism to Anarchy | from=Despotism, to=Anarchy
+53 | tech_discovered | Jolof | Jolof discovered Writing | tech_id=87, tech_name=Writing
+53 | tech_discovered | Arab | Arab discovered Bronze Working | tech_id=9, tech_name=Bronze Working
+54 | government_change | Arab | Arab changed government from Anarchy to Republic | from=Anarchy, to=Republic
+54 | tech_discovered | Wuerttembergian | Wuerttembergian discovered Mysticism | tech_id=55, tech_name=Mysticism
+54 | tech_discovered | Thuringian | Thuringian discovered The Republic | tech_id=80, tech_name=The Republic
+55 | government_change | Thuringian | Thuringian changed government from Despotism to Anarchy | from=Despotism, to=Anarchy
+55 | tech_discovered | Arab | Arab discovered Currency | tech_id=20, tech_name=Currency
+56 | government_change | Thuringian | Thuringian changed government from Anarchy to Republic | from=Anarchy, to=Republic
+56 | tech_discovered | Thuringian | Thuringian discovered Bronze Working | tech_id=9, tech_name=Bronze Working
+56 | tech_discovered | Thuringian | Thuringian discovered Ceremonial Burial | tech_id=10, tech_name=Ceremonial Burial
+57 | tech_discovered | Thuringian | Thuringian discovered Currency | tech_id=20, tech_name=Currency
+57 | tech_discovered | Lippian | Lippian discovered Writing | tech_id=87, tech_name=Writing
+58 | tech_discovered | Wuerttembergian | Wuerttembergian discovered Literacy | tech_id=42, tech_name=Literacy
+58 | tech_discovered | Thuringian | Thuringian discovered Construction | tech_id=19, tech_name=Construction
+58 | tech_discovered | Arab | Arab discovered Trade | tech_id=84, tech_name=Trade
+59 | city_founded | Jolof | Mboro founded by Jolof | city_id=250, city_name=Mboro
+59 | tech_discovered | Arab | Arab discovered Mathematics | tech_id=48, tech_name=Mathematics
+60 | tech_discovered | Thuringian | Thuringian discovered Trade | tech_id=84, tech_name=Trade
+
+TERRITORY MAPS (PNG)
+Turn 10: data/questions/seed3/world_report/turn_060_territory_maps/territory_turn_010.png
+Turn 20: data/questions/seed3/world_report/turn_060_territory_maps/territory_turn_020.png
+Turn 30: data/questions/seed3/world_report/turn_060_territory_maps/territory_turn_030.png
+Turn 40: data/questions/seed3/world_report/turn_060_territory_maps/territory_turn_040.png
+Turn 50: data/questions/seed3/world_report/turn_060_territory_maps/territory_turn_050.png
+Turn 60: data/questions/seed3/world_report/turn_060_territory_maps/territory_turn_060.png
+
+## Questions
+1. How many cities does Arab have at turn 60?
+2. How many technologies has Arab discovered by turn 60?
+3. How much gold does Arab have at turn 60?
+4. How many cities does Jolof have at turn 60?
+5. How many technologies has Jolof discovered by turn 60?
+6. How much gold does Jolof have at turn 60?
+7. How many cities does Lippian have at turn 60?
+8. How many technologies has Lippian discovered by turn 60?
+9. How much gold does Lippian have at turn 60?
+10. How many cities does Thuringian have at turn 60?
+11. How many technologies has Thuringian discovered by turn 60?
+12. How much gold does Thuringian have at turn 60?
+13. How many cities does Wuerttembergian have at turn 60?
+14. How many technologies has Wuerttembergian discovered by turn 60?
+15. How much gold does Wuerttembergian have at turn 60?
+
+You may analyze the data, but you MUST end your response with percentile estimates in this exact format:
+<<<PERCENTILES>>>
+Q1: p10=5, p25=10, p50=15, p75=20, p90=25
+Q2: p10=100, p25=200, p50=300, p75=400, p90=500
+<<<END>>>
+
+For each question, provide one line with percentile estimates for all 15 questions, in order.
+- p10 means you estimate there's a 10% chance the true value is below this number
+- p25 means you estimate there's a 25% chance the true value is below this number
+- p50 (median) means you estimate there's a 50% chance the true value is below this number
+- p75 means you estimate there's a 75% chance the true value is below this number
+- p90 means you estimate there's a 90% chance the true value is below this number

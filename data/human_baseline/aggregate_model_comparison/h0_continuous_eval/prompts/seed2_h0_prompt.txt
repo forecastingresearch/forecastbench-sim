@@ -1,0 +1,362 @@
+You are an expert superforecaster, familiar with the work of Tetlock and others. You are analyzing a FreeCiv game simulation. Make predictions based on the world report below.
+
+You MUST provide percentile estimates for each question UNDER ALL CIRCUMSTANCES. If for some reason you can't answer, provide reasonable mid-range estimates, but always return numeric percentile values.
+
+## World Report
+WORLD REPORT TXT v1
+Game ID: seed2
+Snapshot turn: 60
+Turns analyzed: 1..60
+Map size: 78x52
+
+CIVILIZATIONS
+ID | Name           | Adjective      | Nation ID
+---+----------------+----------------+----------
+0  | Benin          | Benin          | 57       
+1  | Majapahit      | Majapahit      | 296      
+2  | Jolof          | Jolof          | 243      
+3  | Georgian       | Georgian       | 183      
+4  | Greater Polish | Greater Polish | 194      
+5  | Pirate         | Pirate         | 559      
+6  | Senegalese     | Senegalese     | 439      
+7  | Barbarian      | Barbarian      | 558      
+8  | Sri Vijaya     | Sri Vijaya     | 471      
+9  | Kongo          | Kongo          | 262      
+
+CURRENT STATE (TURN 60)
+ID | Name           | Score | Rank | Government | Treasury | Population | Techs | Wonders | Cities | Territory | Units | Military | Science | Trade | Food | Shields
+---+----------------+-------+------+------------+----------+------------+-------+---------+--------+-----------+-------+----------+---------+-------+------+--------
+0  | Benin          | 48    | NA   | Despotism  | 315.0    | 28.0       | 10    | 1       | 17     | 208       | 10    | 1        | 60      | 28.0  | 56.0 | 49.0   
+1  | Majapahit      | -1    | NA   | Anarchy    | 0.0      | 0.0        | 8     | 0       | 0      | 0         | 0     | 0        | 60      | 31.0  | 62.0 | 52.0   
+2  | Jolof          | 32    | NA   | Despotism  | 265.0    | 3.0        | 7     | 0       | 2      | 29        | 1     | 0        | 60      | 33.0  | 66.0 | 25.0   
+3  | Georgian       | 34    | NA   | Despotism  | 451.0    | 4.0        | 7     | 0       | 3      | 32        | 0     | 0        | 60      | 42.0  | 84.0 | 32.0   
+4  | Greater Polish | 43    | NA   | Despotism  | 298.0    | 8.0        | 11    | 0       | 6      | 109       | 0     | 0        | 60      | 42.0  | 84.0 | 38.0   
+5  | Pirate         | NA    | NA   | NA         | None     | None       | None  | None    | None   | None      | None  | None     | None    | None  | None | None   
+6  | Senegalese     | NA    | NA   | NA         | None     | None       | None  | None    | None   | None      | None  | None     | None    | None  | None | None   
+7  | Barbarian      | NA    | NA   | NA         | None     | None       | None  | None    | None   | None      | None  | None     | None    | None  | None | None   
+8  | Sri Vijaya     | NA    | NA   | NA         | None     | None       | None  | None    | None   | None      | None  | None     | None    | None  | None | None   
+9  | Kongo          | NA    | NA   | NA         | None     | None       | None  | None    | None   | None      | None  | None     | None    | None  | None | None   
+
+GOVERNMENT TIMELINE (derived from recordings)
+Each entry is a change point (turn number -> new government); the first entry is the first observed government.
+0 Benin: 1 Despotism
+1 Majapahit: 1 Anarchy
+2 Jolof: 1 Anarchy; 28 Despotism; 50 Anarchy; 53 Despotism
+3 Georgian: 1 Anarchy; 50 Despotism
+4 Greater Polish: 1 Anarchy; 21 Despotism
+5 Pirate: NA (no changes observed)
+6 Senegalese: NA (no changes observed)
+7 Barbarian: NA (no changes observed)
+8 Sri Vijaya: NA (no changes observed)
+9 Kongo: NA (no changes observed)
+
+TREASURY (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Benin: 50.0, 77.0, 82.0, 88.0, 93.0, 104.0, 119.0, 143.0, 166.0, 194.0, 233.0, 275.0, 315.0
+1 Majapahit: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+2 Jolof: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 132.0, 152.0, 172.0, 193.0, 0.0, 238.0, 265.0
+3 Georgian: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 377.0, 406.0, 451.0
+4 Greater Polish: 0.0, 0.0, 0.0, 0.0, 0.0, 80.0, 96.0, 163.0, 181.0, 194.0, 256.0, 274.0, 298.0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Senegalese: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Sri Vijaya: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Kongo: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+POPULATION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Benin: 0.0, 2.0, 3.0, 4.0, 5.0, 6.0, 10.0, 10.0, 14.0, 18.0, 22.0, 25.0, 28.0
+1 Majapahit: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+2 Jolof: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0
+3 Georgian: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2.0, 1.0, 4.0
+4 Greater Polish: 0.0, 0.0, 0.0, 0.0, 0.0, 2.0, 2.0, 5.0, 7.0, 7.0, 7.0, 8.0, 8.0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Senegalese: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Sri Vijaya: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Kongo: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+TECHS KNOWN (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Benin: 1, 1, 1, 2, 4, 4, 5, 6, 6, 6, 8, 8, 10
+1 Majapahit: 1, 1, 1, 1, 1, 2, 3, 4, 5, 6, 7, 8, 8
+2 Jolof: 1, 1, 1, 1, 2, 3, 3, 4, 4, 5, 6, 6, 7
+3 Georgian: 1, 1, 1, 2, 2, 5, 5, 6, 6, 6, 7, 7, 7
+4 Greater Polish: 1, 2, 3, 3, 4, 4, 6, 7, 9, 9, 10, 11, 11
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Senegalese: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Sri Vijaya: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Kongo: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+WONDERS DISCOVERED (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Benin: 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+1 Majapahit: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+2 Jolof: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+3 Georgian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+4 Greater Polish: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Senegalese: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Sri Vijaya: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Kongo: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+CITIES COUNT (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Benin: 0, 2, 3, 3, 4, 5, 7, 7, 10, 12, 12, 14, 17
+1 Majapahit: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+2 Jolof: 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2
+3 Georgian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 3
+4 Greater Polish: 0, 0, 0, 0, 0, 2, 2, 4, 5, 5, 5, 6, 6
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Senegalese: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Sri Vijaya: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Kongo: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+TERRITORY SIZE (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Benin: 0, 35, 59, 67, 83, 96, 111, 115, 147, 153, 154, 170, 208
+1 Majapahit: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+2 Jolof: 0, 0, 0, 0, 0, 0, 29, 29, 29, 29, 29, 29, 29
+3 Georgian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 16, 32
+4 Greater Polish: 0, 0, 0, 0, 2, 25, 25, 60, 75, 75, 75, 103, 109
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Senegalese: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Sri Vijaya: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Kongo: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+SCIENCE (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Benin: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+1 Majapahit: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+2 Jolof: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+3 Georgian: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+4 Greater Polish: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Senegalese: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Sri Vijaya: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Kongo: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+TRADE PRODUCTION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Benin: 0.0, 2.0, 3.0, 4.0, 5.0, 6.0, 10.0, 10.0, 14.0, 18.0, 22.0, 25.0, 28.0
+1 Majapahit: 0.0, 5.0, 5.0, 7.0, 7.0, 10.0, 11.0, 12.0, 17.0, 19.0, 23.0, 26.0, 31.0
+2 Jolof: 0.0, 8.0, 9.0, 10.0, 12.0, 13.0, 13.0, 15.0, 16.0, 21.0, 19.0, 28.0, 33.0
+3 Georgian: 0.0, 11.0, 11.0, 13.0, 13.0, 14.0, 17.0, 22.0, 19.0, 23.0, 32.0, 32.0, 42.0
+4 Greater Polish: 0.0, 14.0, 14.0, 22.0, 16.0, 18.0, 23.0, 20.0, 29.0, 33.0, 40.0, 41.0, 42.0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Senegalese: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Sri Vijaya: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Kongo: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+FOOD PRODUCTION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Benin: 0.0, 4.0, 6.0, 8.0, 10.0, 12.0, 20.0, 20.0, 28.0, 36.0, 44.0, 50.0, 56.0
+1 Majapahit: 0.0, 10.0, 10.0, 14.0, 14.0, 20.0, 22.0, 24.0, 34.0, 38.0, 46.0, 52.0, 62.0
+2 Jolof: 0.0, 16.0, 18.0, 20.0, 24.0, 26.0, 26.0, 30.0, 32.0, 42.0, 38.0, 56.0, 66.0
+3 Georgian: 0.0, 22.0, 22.0, 26.0, 26.0, 28.0, 34.0, 44.0, 38.0, 46.0, 64.0, 64.0, 84.0
+4 Greater Polish: 0.0, 28.0, 28.0, 44.0, 32.0, 36.0, 46.0, 40.0, 58.0, 66.0, 80.0, 82.0, 84.0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Senegalese: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Sri Vijaya: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Kongo: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+SHIELD PRODUCTION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Benin: 0.0, 7.0, 9.0, 10.0, 13.0, 17.0, 18.0, 20.0, 23.0, 31.0, 37.0, 45.0, 49.0
+1 Majapahit: 0.0, 10.0, 10.0, 12.0, 15.0, 18.0, 17.0, 19.0, 25.0, 26.0, 35.0, 46.0, 52.0
+2 Jolof: 0.0, 3.0, 5.0, 5.0, 7.0, 7.0, 9.0, 9.0, 13.0, 13.0, 20.0, 28.0, 25.0
+3 Georgian: 0.0, 3.0, 3.0, 8.0, 6.0, 11.0, 14.0, 9.0, 17.0, 23.0, 25.0, 24.0, 32.0
+4 Greater Polish: 0.0, 7.0, 7.0, 9.0, 11.0, 16.0, 16.0, 16.0, 24.0, 22.0, 24.0, 30.0, 38.0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Senegalese: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Sri Vijaya: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Kongo: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+UNITS COUNT (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Benin: 5, 3, 3, 4, 4, 6, 4, 6, 6, 4, 6, 6, 10
+1 Majapahit: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+2 Jolof: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1
+3 Georgian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+4 Greater Polish: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Senegalese: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Sri Vijaya: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Kongo: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+MILITARY UNITS COUNT (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Benin: 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1
+1 Majapahit: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+2 Jolof: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+3 Georgian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+4 Greater Polish: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Senegalese: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Sri Vijaya: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Kongo: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+SCORES (derived from recordings)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Benin: 0, 2, 3, 6, 11, 12, 18, 20, 24, 28, 37, 40, 48
+1 Majapahit: -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+2 Jolof: -1, -1, -1, -1, -1, -1, 11, 13, 16, 17, -1, 30, 32
+3 Georgian: -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 26, 30, 34
+4 Greater Polish: -1, -1, -1, -1, -1, 12, 17, 20, 29, 29, 35, 38, 43
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Senegalese: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+8 Sri Vijaya: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+9 Kongo: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+RANKINGS (derived from scores)
+Turn 1: 1=Benin(0), 2=Majapahit(-1), 3=Jolof(-1), 4=Georgian(-1), 5=Greater Polish(-1)
+Turn 5: 1=Benin(2), 2=Majapahit(-1), 3=Jolof(-1), 4=Georgian(-1), 5=Greater Polish(-1)
+Turn 10: 1=Benin(3), 2=Majapahit(-1), 3=Jolof(-1), 4=Georgian(-1), 5=Greater Polish(-1)
+Turn 15: 1=Benin(6), 2=Majapahit(-1), 3=Jolof(-1), 4=Georgian(-1), 5=Greater Polish(-1)
+Turn 20: 1=Benin(11), 2=Majapahit(-1), 3=Jolof(-1), 4=Georgian(-1), 5=Greater Polish(-1)
+Turn 25: 1=Benin(12), 2=Greater Polish(12), 3=Majapahit(-1), 4=Jolof(-1), 5=Georgian(-1)
+Turn 30: 1=Benin(18), 2=Greater Polish(17), 3=Jolof(11), 4=Majapahit(-1), 5=Georgian(-1)
+Turn 35: 1=Benin(20), 2=Greater Polish(20), 3=Jolof(13), 4=Majapahit(-1), 5=Georgian(-1)
+Turn 40: 1=Greater Polish(29), 2=Benin(24), 3=Jolof(16), 4=Majapahit(-1), 5=Georgian(-1)
+Turn 45: 1=Greater Polish(29), 2=Benin(28), 3=Jolof(17), 4=Majapahit(-1), 5=Georgian(-1)
+Turn 50: 1=Benin(37), 2=Greater Polish(35), 3=Georgian(26), 4=Majapahit(-1), 5=Jolof(-1)
+Turn 55: 1=Benin(40), 2=Greater Polish(38), 3=Jolof(30), 4=Georgian(30), 5=Majapahit(-1)
+Turn 60: 1=Benin(48), 2=Greater Polish(43), 3=Georgian(34), 4=Jolof(32), 5=Majapahit(-1)
+
+EVENT TYPES (exhaustive)
+city_founded, city_conquered, city_destroyed, government_change, diplomatic_change, tech_discovered, wonder_completed
+If a type does not appear in EVENTS, it did not occur in the analyzed turns.
+
+EVENTS (chronological)
+Turn | Type | Civ | Description | Metadata
+--------------------------------------------------------------------------------
+1 | tech_discovered | Benin | Benin discovered Tech #0 | tech_id=0, tech_name=Tech #0
+1 | tech_discovered | Majapahit | Majapahit discovered Tech #0 | tech_id=0, tech_name=Tech #0
+1 | tech_discovered | Jolof | Jolof discovered Tech #0 | tech_id=0, tech_name=Tech #0
+1 | tech_discovered | Georgian | Georgian discovered Tech #0 | tech_id=0, tech_name=Tech #0
+1 | tech_discovered | Greater Polish | Greater Polish discovered Tech #0 | tech_id=0, tech_name=Tech #0
+2 | wonder_completed | Georgian | Georgian completed Palace in Tbilisi | wonder_id=21, wonder_name=Palace, city_name=Tbilisi
+3 | city_founded | Benin | Gwatto founded by Benin | city_id=128, city_name=Gwatto
+3 | wonder_completed | Benin | Benin completed Palace in Gwatto | wonder_id=21, wonder_name=Palace, city_name=Gwatto
+3 | wonder_completed | Majapahit | Majapahit completed Palace in Batu | wonder_id=21, wonder_name=Palace, city_name=Batu
+3 | wonder_completed | Jolof | Jolof completed Palace in Linguère | wonder_id=21, wonder_name=Palace, city_name=Linguère
+3 | wonder_completed | Greater Polish | Greater Polish completed Palace in Poznań | wonder_id=21, wonder_name=Palace, city_name=Poznań
+3 | tech_discovered | Greater Polish | Greater Polish discovered Masonry | tech_id=46, tech_name=Masonry
+4 | city_founded | Benin | Ego founded by Benin | city_id=132, city_name=Ego
+6 | tech_discovered | Greater Polish | Greater Polish discovered Alphabet | tech_id=2, tech_name=Alphabet
+8 | city_founded | Benin | Benin founded by Benin | city_id=136, city_name=Benin
+14 | tech_discovered | Benin | Benin discovered Masonry | tech_id=46, tech_name=Masonry
+14 | tech_discovered | Georgian | Georgian discovered Masonry | tech_id=46, tech_name=Masonry
+16 | tech_discovered | Jolof | Jolof discovered Masonry | tech_id=46, tech_name=Masonry
+17 | city_founded | Benin | Warri founded by Benin | city_id=144, city_name=Warri
+17 | tech_discovered | Benin | Benin discovered Bronze Working | tech_id=9, tech_name=Bronze Working
+17 | tech_discovered | Greater Polish | Greater Polish discovered Pottery | tech_id=63, tech_name=Pottery
+20 | tech_discovered | Benin | Benin discovered Alphabet | tech_id=2, tech_name=Alphabet
+21 | city_founded | Greater Polish | Poznań founded by Greater Polish | city_id=131, city_name=Poznań
+21 | government_change | Greater Polish | Greater Polish changed government from Anarchy to Despotism | from=Anarchy, to=Despotism
+21 | tech_discovered | Majapahit | Majapahit discovered Masonry | tech_id=46, tech_name=Masonry
+21 | tech_discovered | Georgian | Georgian discovered Alphabet | tech_id=2, tech_name=Alphabet
+22 | city_founded | Greater Polish | Kalisz founded by Greater Polish | city_id=143, city_name=Kalisz
+22 | tech_discovered | Georgian | Georgian discovered Code of Laws | tech_id=13, tech_name=Code of Laws
+23 | city_founded | Benin | Usama founded by Benin | city_id=155, city_name=Usama
+23 | tech_discovered | Georgian | Georgian discovered Pottery | tech_id=63, tech_name=Pottery
+24 | tech_discovered | Jolof | Jolof discovered Alphabet | tech_id=2, tech_name=Alphabet
+27 | city_founded | Benin | Ikara founded by Benin | city_id=161, city_name=Ikara
+27 | tech_discovered | Greater Polish | Greater Polish discovered Horseback Riding | tech_id=35, tech_name=Horseback Riding
+28 | city_founded | Jolof | Linguère founded by Jolof | city_id=130, city_name=Linguère
+28 | city_founded | Jolof | Kaolack founded by Jolof | city_id=154, city_name=Kaolack
+28 | government_change | Jolof | Jolof changed government from Anarchy to Despotism | from=Anarchy, to=Despotism
+28 | tech_discovered | Majapahit | Majapahit discovered Bronze Working | tech_id=9, tech_name=Bronze Working
+29 | city_founded | Benin | Oka founded by Benin | city_id=166, city_name=Oka
+29 | tech_discovered | Benin | Benin discovered Code of Laws | tech_id=13, tech_name=Code of Laws
+29 | tech_discovered | Greater Polish | Greater Polish discovered Code of Laws | tech_id=13, tech_name=Code of Laws
+32 | tech_discovered | Greater Polish | Greater Polish discovered Bronze Working | tech_id=9, tech_name=Bronze Working
+33 | tech_discovered | Majapahit | Majapahit discovered Pottery | tech_id=63, tech_name=Pottery
+33 | tech_discovered | Georgian | Georgian discovered Writing | tech_id=87, tech_name=Writing
+34 | city_founded | Greater Polish | Konin founded by Greater Polish | city_id=148, city_name=Konin
+34 | tech_discovered | Benin | Benin discovered Currency | tech_id=20, tech_name=Currency
+34 | tech_discovered | Jolof | Jolof discovered Code of Laws | tech_id=13, tech_name=Code of Laws
+35 | city_founded | Greater Polish | Gniezno founded by Greater Polish | city_id=135, city_name=Gniezno
+36 | city_founded | Greater Polish | Piła founded by Greater Polish | city_id=169, city_name=Piła
+37 | tech_discovered | Majapahit | Majapahit discovered Alphabet | tech_id=2, tech_name=Alphabet
+37 | tech_discovered | Greater Polish | Greater Polish discovered Warrior Code | tech_id=86, tech_name=Warrior Code
+39 | city_founded | Benin | Isebu-Ode founded by Benin | city_id=189, city_name=Isebu-Ode
+39 | city_founded | Benin | Akure founded by Benin | city_id=190, city_name=Akure
+40 | city_founded | Benin | Owo founded by Benin | city_id=193, city_name=Owo
+40 | tech_discovered | Greater Polish | Greater Polish discovered The Wheel | tech_id=81, tech_name=The Wheel
+41 | city_founded | Benin | Ifon founded by Benin | city_id=195, city_name=Ifon
+41 | tech_discovered | Jolof | Jolof discovered Writing | tech_id=87, tech_name=Writing
+42 | tech_discovered | Majapahit | Majapahit discovered Code of Laws | tech_id=13, tech_name=Code of Laws
+44 | city_founded | Benin | Lagos founded by Benin | city_id=202, city_name=Lagos
+47 | tech_discovered | Benin | Benin discovered Trade | tech_id=84, tech_name=Trade
+47 | tech_discovered | Majapahit | Majapahit discovered Map Making | tech_id=45, tech_name=Map Making
+48 | tech_discovered | Georgian | Georgian discovered Literacy | tech_id=42, tech_name=Literacy
+48 | tech_discovered | Greater Polish | Greater Polish discovered Iron Working | tech_id=38, tech_name=Iron Working
+49 | tech_discovered | Benin | Benin discovered Pottery | tech_id=63, tech_name=Pottery
+50 | city_founded | Georgian | Poti founded by Georgian | city_id=188, city_name=Poti
+50 | government_change | Jolof | Jolof changed government from Despotism to Anarchy | from=Despotism, to=Anarchy
+50 | government_change | Georgian | Georgian changed government from Anarchy to Despotism | from=Anarchy, to=Despotism
+50 | tech_discovered | Jolof | Jolof discovered Horseback Riding | tech_id=35, tech_name=Horseback Riding
+51 | tech_discovered | Majapahit | Majapahit discovered Currency | tech_id=20, tech_name=Currency
+52 | city_founded | Benin | Idah founded by Benin | city_id=232, city_name=Idah
+53 | city_founded | Benin | Siluko founded by Benin | city_id=237, city_name=Siluko
+53 | government_change | Jolof | Jolof changed government from Anarchy to Despotism | from=Anarchy, to=Despotism
+53 | tech_discovered | Greater Polish | Greater Polish discovered Writing | tech_id=87, tech_name=Writing
+55 | city_founded | Greater Polish | Września founded by Greater Polish | city_id=247, city_name=Września
+56 | city_founded | Benin | Auchi founded by Benin | city_id=251, city_name=Auchi
+56 | tech_discovered | Benin | Benin discovered Construction | tech_id=19, tech_name=Construction
+56 | tech_discovered | Jolof | Jolof discovered Warrior Code | tech_id=86, tech_name=Warrior Code
+57 | city_founded | Georgian | Akhalkalaki founded by Georgian | city_id=240, city_name=Akhalkalaki
+59 | city_founded | Benin | Agbor Bojiboji founded by Benin | city_id=265, city_name=Agbor Bojiboji
+59 | city_founded | Benin | Uromi founded by Benin | city_id=264, city_name=Uromi
+59 | tech_discovered | Benin | Benin discovered Writing | tech_id=87, tech_name=Writing
+60 | city_founded | Georgian | Kutaisi founded by Georgian | city_id=152, city_name=Kutaisi
+
+TERRITORY MAPS (PNG)
+Turn 10: data/questions/seed2/world_report/turn_060_territory_maps/territory_turn_010.png
+Turn 20: data/questions/seed2/world_report/turn_060_territory_maps/territory_turn_020.png
+Turn 30: data/questions/seed2/world_report/turn_060_territory_maps/territory_turn_030.png
+Turn 40: data/questions/seed2/world_report/turn_060_territory_maps/territory_turn_040.png
+Turn 50: data/questions/seed2/world_report/turn_060_territory_maps/territory_turn_050.png
+Turn 60: data/questions/seed2/world_report/turn_060_territory_maps/territory_turn_060.png
+
+## Questions
+1. How many cities does Benin have at turn 60?
+2. How many technologies has Benin discovered by turn 60?
+3. How much gold does Benin have at turn 60?
+4. How many cities does Georgian have at turn 60?
+5. How many technologies has Georgian discovered by turn 60?
+6. How much gold does Georgian have at turn 60?
+7. How many cities does Greater Polish have at turn 60?
+8. How many technologies has Greater Polish discovered by turn 60?
+9. How much gold does Greater Polish have at turn 60?
+10. How many cities does Jolof have at turn 60?
+11. How many technologies has Jolof discovered by turn 60?
+12. How much gold does Jolof have at turn 60?
+13. How many cities does Majapahit have at turn 60?
+14. How many technologies has Majapahit discovered by turn 60?
+15. How much gold does Majapahit have at turn 60?
+
+You may analyze the data, but you MUST end your response with percentile estimates in this exact format:
+<<<PERCENTILES>>>
+Q1: p10=5, p25=10, p50=15, p75=20, p90=25
+Q2: p10=100, p25=200, p50=300, p75=400, p90=500
+<<<END>>>
+
+For each question, provide one line with percentile estimates for all 15 questions, in order.
+- p10 means you estimate there's a 10% chance the true value is below this number
+- p25 means you estimate there's a 25% chance the true value is below this number
+- p50 (median) means you estimate there's a 50% chance the true value is below this number
+- p75 means you estimate there's a 75% chance the true value is below this number
+- p90 means you estimate there's a 90% chance the true value is below this number

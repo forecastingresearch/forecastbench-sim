@@ -10,6 +10,8 @@ This analysis compares the human pilot to existing model evaluations without rer
 - `model_setting_summary.csv`: model CRPS/MAE summaries for three settings.
 - `model_template_horizon_summary.csv`: primary-setting breakdown by model, target template, and horizon.
 - `aggregate_comparison.csv`: descriptive human-vs-model normalized CRPS differences with independent bootstrap intervals.
+- `template_text_audit.csv`: confirms that the primary proxy questions use exactly the expected city, technology, and gold question templates.
+- `h0_run_summary.csv`: audits the existing H0 run. Exact H0 scores for the 660 continuous proxy questions do not exist; the H0 run is binary-only, so its Brier scores are context only.
 - `coverage_and_metadata.json`: run source, model list, setting definitions, and coverage diagnostics.
 
 ## Primary Setting
