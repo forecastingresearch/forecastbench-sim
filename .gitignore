@@ -22,7 +22,9 @@ __pycache__/
 *.log
 tmp.prof
 dataset/
-data/
+data/*
+!data/human_baseline/
+!data/human_baseline/**
 archive/
 
 .DS_Store

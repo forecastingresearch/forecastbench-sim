@@ -1,0 +1,25 @@
+question_id,world_id,civilization,template,horizon,resolution_turn,ground_truth,bin_min,bin_max,bin_unit,question_text
+seed1327_cities_H1,seed1327,Italian Greek,cities,H1,90,10.0,0.0,40.0,cities,How many cities will Italian Greek have at turn 90?
+seed1327_cities_H3,seed1327,Italian Greek,cities,H3,150,18.0,0.0,40.0,cities,How many cities will Italian Greek have at turn 150?
+seed1327_cities_H4,seed1327,Italian Greek,cities,H4,180,19.0,0.0,40.0,cities,How many cities will Italian Greek have at turn 180?
+seed1327_cities_H6,seed1327,Italian Greek,cities,H6,240,22.0,0.0,40.0,cities,How many cities will Italian Greek have at turn 240?
+seed1327_techs_H1,seed1327,Italian Greek,techs,H1,90,19.0,0.0,60.0,techs,How many technologies will Italian Greek have discovered by turn 90?
+seed1327_techs_H3,seed1327,Italian Greek,techs,H3,150,35.0,0.0,60.0,techs,How many technologies will Italian Greek have discovered by turn 150?
+seed1327_techs_H4,seed1327,Italian Greek,techs,H4,180,48.0,0.0,60.0,techs,How many technologies will Italian Greek have discovered by turn 180?
+seed1327_techs_H6,seed1327,Italian Greek,techs,H6,240,55.0,0.0,60.0,techs,How many technologies will Italian Greek have discovered by turn 240?
+seed1327_treasury_H1,seed1327,Italian Greek,treasury,H1,90,364.0,0.0,2000.0,gold,How much gold will Italian Greek have at turn 90?
+seed1327_treasury_H3,seed1327,Italian Greek,treasury,H3,150,485.0,0.0,2000.0,gold,How much gold will Italian Greek have at turn 150?
+seed1327_treasury_H4,seed1327,Italian Greek,treasury,H4,180,304.0,0.0,2000.0,gold,How much gold will Italian Greek have at turn 180?
+seed1327_treasury_H6,seed1327,Italian Greek,treasury,H6,240,161.0,0.0,2000.0,gold,How much gold will Italian Greek have at turn 240?
+seed1976_cities_H1,seed1976,Afghani,cities,H1,90,32.0,0.0,40.0,cities,How many cities will Afghani have at turn 90?
+seed1976_cities_H3,seed1976,Afghani,cities,H3,150,34.0,0.0,40.0,cities,How many cities will Afghani have at turn 150?
+seed1976_cities_H4,seed1976,Afghani,cities,H4,180,15.0,0.0,40.0,cities,How many cities will Afghani have at turn 180?
+seed1976_cities_H6,seed1976,Afghani,cities,H6,240,19.0,0.0,40.0,cities,How many cities will Afghani have at turn 240?
+seed1976_techs_H1,seed1976,Afghani,techs,H1,90,24.0,0.0,60.0,techs,How many technologies will Afghani have discovered by turn 90?
+seed1976_techs_H3,seed1976,Afghani,techs,H3,150,44.0,0.0,60.0,techs,How many technologies will Afghani have discovered by turn 150?
+seed1976_techs_H4,seed1976,Afghani,techs,H4,180,46.0,0.0,60.0,techs,How many technologies will Afghani have discovered by turn 180?
+seed1976_techs_H6,seed1976,Afghani,techs,H6,240,60.0,0.0,60.0,techs,How many technologies will Afghani have discovered by turn 240?
+seed1976_treasury_H1,seed1976,Afghani,treasury,H1,90,901.0,0.0,2000.0,gold,How much gold will Afghani have at turn 90?
+seed1976_treasury_H3,seed1976,Afghani,treasury,H3,150,461.0,0.0,2000.0,gold,How much gold will Afghani have at turn 150?
+seed1976_treasury_H4,seed1976,Afghani,treasury,H4,180,132.0,0.0,2000.0,gold,How much gold will Afghani have at turn 180?
+seed1976_treasury_H6,seed1976,Afghani,treasury,H6,240,414.0,0.0,2000.0,gold,How much gold will Afghani have at turn 240?

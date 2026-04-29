@@ -1,0 +1,27 @@
+{
+  "response_format": "Participants assigned probability mass, in percentage points, across five equal-width bins.",
+  "probability_columns": [
+    "prob_bin_1_pct",
+    "prob_bin_2_pct",
+    "prob_bin_3_pct",
+    "prob_bin_4_pct",
+    "prob_bin_5_pct"
+  ],
+  "bin_interpretation": {
+    "bin_1": "[bin_min, bin_min + 0.2 * (bin_max - bin_min))",
+    "bin_2": "[bin_min + 0.2 * range, bin_min + 0.4 * range)",
+    "bin_3": "[bin_min + 0.4 * range, bin_min + 0.6 * range)",
+    "bin_4": "[bin_min + 0.6 * range, bin_min + 0.8 * range)",
+    "bin_5": "[bin_min + 0.8 * range, bin_max]"
+  },
+  "units_by_template": {
+    "treasury": "gold",
+    "cities": "cities",
+    "techs": "technologies discovered"
+  },
+  "notes": [
+    "Probabilities are stored as percentages, not fractions.",
+    "Small deviations from 100 can occur due to UI precision and export rounding.",
+    "The raw survey identifiers, timestamps, demographics, comments, consent rows, and interaction event logs are excluded from the repository release."
+  ]
+}

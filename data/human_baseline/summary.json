@@ -1,0 +1,37 @@
+{
+  "dataset": "CivBench human baseline pilot",
+  "source_file": "pilot_data.csv from sqb_pilot export",
+  "participants": 10,
+  "questions": 24,
+  "responses": 240,
+  "worlds": [
+    "seed1327",
+    "seed1976"
+  ],
+  "templates": [
+    "cities",
+    "techs",
+    "treasury"
+  ],
+  "horizons": [
+    "H1",
+    "H3",
+    "H4",
+    "H6"
+  ],
+  "anonymization": {
+    "participant_ids": "Raw survey user identifiers replaced with random human_<8 hex chars> labels.",
+    "private_mapping": "Generated outside the repository and intentionally excluded from this release.",
+    "excluded_fields": [
+      "raw session_id",
+      "raw user_id",
+      "Prolific IDs",
+      "Quorum IDs",
+      "timestamps",
+      "demographics",
+      "free-text comments",
+      "consent responses",
+      "raw mouse/click events"
+    ]
+  }
+}

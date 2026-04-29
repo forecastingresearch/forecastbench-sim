@@ -1,0 +1,32 @@
+# CivBench Human Baseline Pilot
+
+This directory contains an anonymized release of a small general-population human baseline pilot for CivBench.
+
+## Contents
+
+- `pilot_responses_clean.csv`: one row per approved participant forecast.
+- `questions.csv`: one row per unique question shown in the pilot.
+- `bin_schema.json`: interpretation of the five probability bins used by the survey UI.
+- `summary.json`: counts and anonymization summary.
+
+## Dataset Summary
+
+- Participants: 10 approved Prolific respondents.
+- Forecast responses: 240.
+- Unique questions: 24.
+- Worlds: `seed1327, seed1976`.
+- Forecast targets: `treasury`, `cities`, and `techs`.
+- Horizons: `H1, H3, H4, H6`.
+
+Participants saw two simulated Freeciv world reports and answered continuous forecasting questions by allocating probability mass across five equal-width bins. The task was designed as a pilot human baseline for comparing general-population forecasts with model forecasts on the same simulated-world benchmark.
+
+## Anonymization
+
+Raw survey identifiers were replaced with randomly generated participant labels of the form `human_<random hex>`. The private mapping from raw IDs to release IDs was generated outside this repository and is not included here.
+
+The repository release excludes raw Prolific/Quorum IDs, raw session IDs, timestamps, consent rows, demographics, free-text feedback, and raw interaction-event logs. `response_time_ms` is retained because it is useful for effort/speeding checks and is not a clock timestamp.
+
+## Forecast Format
+
+Each response contains five probability columns: `prob_bin_1_pct` through `prob_bin_5_pct`. These are percentage points and should sum to approximately 100. See `bin_schema.json` for bin boundaries.
+
