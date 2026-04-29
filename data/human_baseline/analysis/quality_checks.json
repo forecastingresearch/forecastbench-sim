@@ -1,0 +1,46 @@
+{
+  "n_participants": 10,
+  "n_questions": 24,
+  "n_question_manifest_rows": 24,
+  "n_forecasts": 240,
+  "per_participant_forecast_counts": {
+    "human_2693dcf9": 24,
+    "human_40053498": 24,
+    "human_458490b6": 24,
+    "human_4b5ba0fb": 24,
+    "human_62b8d931": 24,
+    "human_6445b883": 24,
+    "human_94e468f3": 24,
+    "human_98154a6d": 24,
+    "human_a8c76b64": 24,
+    "human_b408cdd6": 24
+  },
+  "prob_sum_pct": {
+    "min": 99.501601993592,
+    "median": 100.00000000000001,
+    "max": 100.48076923076928,
+    "mean_abs_error_from_100": 0.26610400856830363,
+    "max_abs_error_from_100": 0.4983980064079958
+  },
+  "response_time_ms": {
+    "min": 8703,
+    "median": 28726.0,
+    "max": 256120,
+    "mean": 37201.27916666667
+  },
+  "worlds": [
+    "seed1327",
+    "seed1976"
+  ],
+  "templates": [
+    "cities",
+    "techs",
+    "treasury"
+  ],
+  "horizons": [
+    "H1",
+    "H3",
+    "H4",
+    "H6"
+  ]
+}
