@@ -1,0 +1,23 @@
+\begin{table}[t]
+\centering
+\caption{H0 comprehension checks. H0 questions are answerable from the turn-60 report and test report reading rather than future forecasting. Lower is better.}
+\label{tab:h0-comprehension}
+\small
+\resizebox{0.78\linewidth}{!}{%
+\begin{tabular}{lrrrr}
+\toprule
+Model & Bin. Brier & Bin. $n$ & Cont. nCRPS & Cont. $n$ \\
+\midrule
+Claude Sonnet 4.5 & 0.0142 & 562 & 0.0000 & 165/165 \\
+GPT-5.1 & 0.0178 & 562 & 0.0008 & 165/165 \\
+GPT-5 & 0.0035 & 562 & 0.0000 & 165/165 \\
+GPT-5 mini & 0.0002 & 562 & 0.0004 & 165/165 \\
+GPT-4.1 & 0.0276 & 562 & 0.0001 & 165/165 \\
+o3 & 0.0053 & 562 & 0.0029 & 165/165 \\
+Gemini 3 Pro & 0.0319 & 562 & 0.0240 & 165/165 \\
+Gemini 2.5 Pro & 0.0047 & 562 & 0.0000 & 165/165 \\
+Gemini 2.5 Flash & 0.0018 & 562 & 0.0000 & 165/165 \\
+\bottomrule
+\end{tabular}
+}
+\end{table}

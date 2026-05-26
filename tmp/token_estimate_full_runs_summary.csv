@@ -1,0 +1,5 @@
+run_key,run_label,run_id,total_questions,num_batches,models_in_run,input_tokens_per_model_o200k,input_tokens_per_model_cl100k,output_tokens_per_model_o200k_mean,output_tokens_per_model_o200k_min,output_tokens_per_model_o200k_max,output_tokens_per_model_cl100k_mean,output_tokens_per_model_cl100k_min,output_tokens_per_model_cl100k_max,input_tokens_all_models_o200k,output_tokens_all_models_o200k
+unconditional_binary,Unconditional (binary),20260217_115234,2352,121,10,1240239,1253046,10446.8,10062,10580,10325.8,9941,10459,12402390,104468
+unconditional_continuous,Unconditional (continuous),20260217_115528,396,22,10,226930,229336,11582.1,11516,11707,11582.1,11516,11707,2269300,115821
+conditional_binary,Conditional (binary),20260217_120446,1176,66,10,686628,693954,5242.8,4818,5356,5176.8,4752,5290,6866280,52428
+conditional_continuous,Conditional (continuous),20260217_121128,198,11,10,115463,116738,5756.3,5705,5789,5756.3,5705,5789,1154630,57563

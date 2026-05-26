@@ -1,0 +1,100 @@
+{
+  "game_id": "seed0",
+  "questions": [
+    {
+      "question_id": "q0000",
+      "template_id": "tech_comparative",
+      "resolution_turn": 90,
+      "horizon": "H1",
+      "parameters": {
+        "civ_a": "Pontic",
+        "civ_b": "Leonese",
+        "player_id_a": 0,
+        "player_id_b": 4,
+        "resolution_turn": 90
+      },
+      "question_text": "Will Pontic have more technologies than Leonese at turn 90?",
+      "resolution": {
+        "answer": true,
+        "value_a": 28,
+        "value_b": 26
+      }
+    },
+    {
+      "question_id": "q0001",
+      "template_id": "tech_comparative",
+      "resolution_turn": 90,
+      "horizon": "H1",
+      "parameters": {
+        "civ_a": "Leonese",
+        "civ_b": "Tongan",
+        "player_id_a": 4,
+        "player_id_b": 1,
+        "resolution_turn": 90
+      },
+      "question_text": "Will Leonese have more technologies than Tongan at turn 90?",
+      "resolution": {
+        "answer": true,
+        "value_a": 26,
+        "value_b": 22
+      }
+    },
+    {
+      "question_id": "q0002",
+      "template_id": "tech_comparative",
+      "resolution_turn": 90,
+      "horizon": "H1",
+      "parameters": {
+        "civ_a": "Tongan",
+        "civ_b": "Sarmatian",
+        "player_id_a": 1,
+        "player_id_b": 2,
+        "resolution_turn": 90
+      },
+      "question_text": "Will Tongan have more technologies than Sarmatian at turn 90?",
+      "resolution": {
+        "answer": true,
+        "value_a": 22,
+        "value_b": 21
+      }
+    },
+    {
+      "question_id": "q0003",
+      "template_id": "tech_comparative",
+      "resolution_turn": 90,
+      "horizon": "H1",
+      "parameters": {
+        "civ_a": "Sarmatian",
+        "civ_b": "Mon",
+        "player_id_a": 2,
+        "player_id_b": 3,
+        "resolution_turn": 90
+      },
+      "question_text": "Will Sarmatian have more technologies than Mon at turn 90?",
+      "resolution": {
+        "answer": false,
+        "value_a": 21,
+        "value_b": 22
+      }
+    },
+    {
+      "question_id": "q0004",
+      "template_id": "tech_comparative",
+      "resolution_turn": 120,
+      "horizon": "H2",
+      "parameters": {
+        "civ_a": "Pontic",
+        "civ_b": "Leonese",
+        "player_id_a": 0,
+        "player_id_b": 4,
+        "resolution_turn": 120
+      },
+      "question_text": "Will Pontic have more technologies than Leonese at turn 120?",
+      "resolution": {
+        "answer": true,
+        "value_a": 39,
+        "value_b": 33
+      }
+    }
+  ]
+}

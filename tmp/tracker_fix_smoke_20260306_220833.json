@@ -1,0 +1,98 @@
+{
+  "run_id": "tracker_fix_smoke_20260306_220833",
+  "results": [
+    {
+      "model": "openai/gpt-3.5-turbo-0125",
+      "status": "ok",
+      "duration_ms": 1100.2,
+      "response": "0.5",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-4o",
+      "status": "ok",
+      "duration_ms": 838.1,
+      "response": "0.5",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-5-nano-2025-08-07",
+      "status": "error",
+      "duration_ms": 245.5,
+      "response": null,
+      "error": "UnsupportedParamsError: litellm.UnsupportedParamsError: gpt-5 models (including gpt-5-codex) don't support temperature=0.0. Only temperature=1 is supported. To drop unsupported params set `litellm.drop_params = True`"
+    }
+  ],
+  "summary_file": "/Users/jaeholee0404/civbench/logs/tracker_fix_smoke_20260306_220833/spend_summary.json",
+  "events_file": "/Users/jaeholee0404/civbench/logs/tracker_fix_smoke_20260306_220833/spend_events.jsonl",
+  "summary": {
+    "run_id": "tracker_fix_smoke_20260306_220833",
+    "start_time": "2026-03-07T03:08:33.977006+00:00",
+    "success_calls": 2,
+    "failure_calls": 1,
+    "events_logged": 3,
+    "cost_total_usd": 7.65e-05,
+    "cost_missing_calls": 0,
+    "usage_missing_calls": 1,
+    "prompt_tokens_total": 28,
+    "completion_tokens_total": 6,
+    "total_tokens_total": 34,
+    "reasoning_tokens_total": 0,
+    "reasoning_model_calls": 1,
+    "reasoning_tokens_reported_calls": 0,
+    "reasoning_tokens_missing_calls": 1,
+    "reasoning_tokens_zero_calls": 0,
+    "reasoning_tokens_positive_calls": 0,
+    "per_model": {
+      "openai/gpt-5-nano-2025-08-07": {
+        "success_calls": 0,
+        "failure_calls": 1,
+        "cost_total_usd": 0.0,
+        "cost_missing_calls": 0,
+        "usage_missing_calls": 1,
+        "prompt_tokens_total": 0,
+        "completion_tokens_total": 0,
+        "total_tokens_total": 0,
+        "reasoning_model_calls": 1,
+        "reasoning_tokens_total": 0,
+        "reasoning_tokens_reported_calls": 0,
+        "reasoning_tokens_missing_calls": 1,
+        "reasoning_tokens_zero_calls": 0,
+        "reasoning_tokens_positive_calls": 0
+      },
+      "gpt-4o": {
+        "success_calls": 1,
+        "failure_calls": 0,
+        "cost_total_usd": 6.500000000000001e-05,
+        "cost_missing_calls": 0,
+        "usage_missing_calls": 0,
+        "prompt_tokens_total": 14,
+        "completion_tokens_total": 3,
+        "total_tokens_total": 17,
+        "reasoning_model_calls": 0,
+        "reasoning_tokens_total": 0,
+        "reasoning_tokens_reported_calls": 0,
+        "reasoning_tokens_missing_calls": 0,
+        "reasoning_tokens_zero_calls": 0,
+        "reasoning_tokens_positive_calls": 0
+      },
+      "gpt-3.5-turbo-0125": {
+        "success_calls": 1,
+        "failure_calls": 0,
+        "cost_total_usd": 1.15e-05,
+        "cost_missing_calls": 0,
+        "usage_missing_calls": 0,
+        "prompt_tokens_total": 14,
+        "completion_tokens_total": 3,
+        "total_tokens_total": 17,
+        "reasoning_model_calls": 0,
+        "reasoning_tokens_total": 0,
+        "reasoning_tokens_reported_calls": 0,
+        "reasoning_tokens_missing_calls": 0,
+        "reasoning_tokens_zero_calls": 0,
+        "reasoning_tokens_positive_calls": 0
+      }
+    },
+    "end_time": "2026-03-07T03:08:35.081983+00:00"
+  }
+}

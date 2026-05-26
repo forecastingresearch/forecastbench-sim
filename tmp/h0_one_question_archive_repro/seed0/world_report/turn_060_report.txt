@@ -1,0 +1,284 @@
+WORLD REPORT TXT v1
+Game ID: seed0
+Snapshot turn: 60
+Turns analyzed: 1..60
+Map size: 78x52
+
+CIVILIZATIONS
+ID | Name      | Adjective | Nation ID
+---+-----------+-----------+----------
+0  | Pontic    | Pontic    | 394      
+1  | Tongan    | Tongan    | 500      
+2  | Sarmatian | Sarmatian | 427      
+3  | Mon       | Mon       | 330      
+4  | Leonese   | Leonese   | 277      
+5  | Pirate    | Pirate    | 559      
+6  | Barbarian | Barbarian | 558      
+7  | Abkhaz    | Abkhaz    | 0        
+
+CURRENT STATE (TURN 60)
+ID | Name      | Score | Rank | Government | Treasury | Population | Techs | Wonders | Cities | Territory | Units | Military | Science | Trade | Food  | Shields
+---+-----------+-------+------+------------+----------+------------+-------+---------+--------+-----------+-------+----------+---------+-------+-------+--------
+0  | Pontic    | 46    | NA   | Republic   | 382.0    | 27.0       | 10    | 1       | 18     | 250       | 5     | 2        | 80      | 27.0  | 54.0  | 49.0   
+1  | Tongan    | -1    | NA   | Anarchy    | 0.0      | 0.0        | 8     | 0       | 0      | 0         | 0     | 0        | 60      | 33.0  | 66.0  | 47.0   
+2  | Sarmatian | -1    | NA   | Anarchy    | 0.0      | 0.0        | 7     | 0       | 0      | 0         | 0     | 0        | 60      | 33.0  | 66.0  | 28.0   
+3  | Mon       | 37    | NA   | Despotism  | 365.0    | 0.0        | 7     | 0       | 0      | 0         | 0     | 0        | 60      | 39.0  | 78.0  | 29.0   
+4  | Leonese   | 42    | NA   | Despotism  | 443.0    | 0.0        | 9     | 0       | 0      | 0         | 0     | 0        | 60      | 60.0  | 120.0 | 52.0   
+5  | Pirate    | NA    | NA   | NA         | None     | None       | None  | None    | None   | None      | None  | None     | None    | None  | None  | None   
+6  | Barbarian | NA    | NA   | NA         | None     | None       | None  | None    | None   | None      | None  | None     | None    | None  | None  | None   
+7  | Abkhaz    | NA    | NA   | NA         | None     | None       | None  | None    | None   | None      | None  | None     | None    | None  | None  | None   
+
+GOVERNMENT TIMELINE (derived from recordings)
+Each entry is a change point (turn number -> new government); the first entry is the first observed government.
+0 Pontic: 1 Despotism; 58 Republic
+1 Tongan: 1 Anarchy
+2 Sarmatian: 1 Anarchy; 39 Despotism; 60 Anarchy
+3 Mon: 1 Anarchy; 26 Despotism
+4 Leonese: 1 Anarchy; 48 Despotism
+5 Pirate: NA (no changes observed)
+6 Barbarian: NA (no changes observed)
+7 Abkhaz: NA (no changes observed)
+
+TREASURY (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Pontic: 50.0, 57.0, 67.0, 77.0, 87.0, 197.0, 214.0, 228.0, 248.0, 276.0, 310.0, 342.0, 382.0
+1 Tongan: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+2 Sarmatian: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 284.0, 319.0, 354.0, 392.0, 0.0
+3 Mon: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 117.0, 141.0, 167.0, 192.0, 273.0, 315.0, 365.0
+4 Leonese: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 344.0, 392.0, 443.0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Abkhaz: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+POPULATION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Pontic: 0.0, 2.0, 2.0, 3.0, 4.0, 5.0, 7.0, 8.0, 13.0, 13.0, 17.0, 21.0, 27.0
+1 Tongan: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+2 Sarmatian: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+3 Mon: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+4 Leonese: 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Abkhaz: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+TECHS KNOWN (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Pontic: 1, 1, 1, 1, 2, 4, 4, 5, 5, 5, 6, 6, 10
+1 Tongan: 1, 1, 1, 1, 1, 2, 3, 3, 4, 5, 6, 8, 8
+2 Sarmatian: 1, 2, 2, 3, 3, 3, 4, 5, 6, 6, 6, 7, 7
+3 Mon: 1, 1, 1, 2, 2, 3, 4, 5, 5, 6, 6, 7, 7
+4 Leonese: 1, 1, 2, 3, 3, 4, 4, 5, 6, 7, 7, 8, 9
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Abkhaz: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+WONDERS DISCOVERED (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Pontic: 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+1 Tongan: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+2 Sarmatian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+3 Mon: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+4 Leonese: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Abkhaz: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+CITIES COUNT (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Pontic: 0, 2, 2, 2, 4, 4, 6, 7, 8, 9, 11, 14, 18
+1 Tongan: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+2 Sarmatian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+3 Mon: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+4 Leonese: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Abkhaz: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+TERRITORY SIZE (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Pontic: 0, 46, 51, 61, 99, 106, 131, 149, 167, 183, 190, 219, 250
+1 Tongan: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+2 Sarmatian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+3 Mon: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+4 Leonese: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Abkhaz: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+SCIENCE (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Pontic: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 80
+1 Tongan: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+2 Sarmatian: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+3 Mon: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+4 Leonese: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Abkhaz: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+TRADE PRODUCTION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Pontic: 0.0, 2.0, 2.0, 3.0, 4.0, 5.0, 7.0, 8.0, 13.0, 13.0, 17.0, 21.0, 27.0
+1 Tongan: 0.0, 5.0, 6.0, 7.0, 8.0, 11.0, 13.0, 17.0, 18.0, 20.0, 23.0, 28.0, 33.0
+2 Sarmatian: 0.0, 8.0, 8.0, 10.0, 13.0, 14.0, 14.0, 19.0, 21.0, 22.0, 27.0, 29.0, 33.0
+3 Mon: 0.0, 14.0, 14.0, 18.0, 16.0, 19.0, 19.0, 22.0, 28.0, 29.0, 31.0, 41.0, 39.0
+4 Leonese: 0.0, 14.0, 14.0, 19.0, 20.0, 19.0, 23.0, 23.0, 29.0, 46.0, 37.0, 56.0, 60.0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Abkhaz: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+FOOD PRODUCTION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Pontic: 0.0, 4.0, 4.0, 6.0, 8.0, 10.0, 14.0, 16.0, 26.0, 26.0, 34.0, 42.0, 54.0
+1 Tongan: 0.0, 10.0, 12.0, 14.0, 16.0, 22.0, 26.0, 34.0, 36.0, 40.0, 46.0, 56.0, 66.0
+2 Sarmatian: 0.0, 16.0, 16.0, 20.0, 26.0, 28.0, 28.0, 38.0, 42.0, 44.0, 54.0, 58.0, 66.0
+3 Mon: 0.0, 28.0, 28.0, 36.0, 32.0, 38.0, 38.0, 44.0, 56.0, 58.0, 62.0, 82.0, 78.0
+4 Leonese: 0.0, 28.0, 28.0, 38.0, 40.0, 38.0, 46.0, 46.0, 58.0, 92.0, 74.0, 112.0, 120.0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Abkhaz: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+SHIELD PRODUCTION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Pontic: 0.0, 5.0, 5.0, 7.0, 11.0, 16.0, 16.0, 19.0, 25.0, 26.0, 31.0, 42.0, 49.0
+1 Tongan: 0.0, 9.0, 8.0, 12.0, 15.0, 12.0, 18.0, 20.0, 22.0, 34.0, 37.0, 43.0, 47.0
+2 Sarmatian: 0.0, 4.0, 3.0, 5.0, 4.0, 11.0, 9.0, 9.0, 15.0, 21.0, 22.0, 24.0, 28.0
+3 Mon: 0.0, 6.0, 5.0, 5.0, 7.0, 13.0, 11.0, 13.0, 17.0, 20.0, 23.0, 25.0, 29.0
+4 Leonese: 0.0, 5.0, 5.0, 6.0, 13.0, 15.0, 18.0, 23.0, 31.0, 35.0, 37.0, 42.0, 52.0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Abkhaz: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+UNITS COUNT (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Pontic: 5, 3, 4, 6, 5, 6, 6, 6, 5, 7, 6, 8, 5
+1 Tongan: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+2 Sarmatian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+3 Mon: 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0
+4 Leonese: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Abkhaz: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+MILITARY UNITS COUNT (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Pontic: 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2
+1 Tongan: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+2 Sarmatian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+3 Mon: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+4 Leonese: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Abkhaz: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+SCORES (derived from recordings)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Pontic: 0, 2, 2, 3, 6, 9, 13, 16, 21, 22, 28, 32, 46
+1 Tongan: -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+2 Sarmatian: -1, -1, -1, -1, -1, -1, -1, -1, 21, 22, 25, 29, -1
+3 Mon: -1, -1, -1, -1, -1, -1, 13, 15, 18, 21, 26, 33, 37
+4 Leonese: -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 30, 35, 42
+5 Pirate: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+6 Barbarian: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+7 Abkhaz: NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+
+RANKINGS (derived from scores)
+Turn 1: 1=Pontic(0), 2=Tongan(-1), 3=Sarmatian(-1), 4=Mon(-1), 5=Leonese(-1)
+Turn 5: 1=Pontic(2), 2=Tongan(-1), 3=Sarmatian(-1), 4=Mon(-1), 5=Leonese(-1)
+Turn 10: 1=Pontic(2), 2=Tongan(-1), 3=Sarmatian(-1), 4=Mon(-1), 5=Leonese(-1)
+Turn 15: 1=Pontic(3), 2=Tongan(-1), 3=Sarmatian(-1), 4=Mon(-1), 5=Leonese(-1)
+Turn 20: 1=Pontic(6), 2=Tongan(-1), 3=Sarmatian(-1), 4=Mon(-1), 5=Leonese(-1)
+Turn 25: 1=Pontic(9), 2=Tongan(-1), 3=Sarmatian(-1), 4=Mon(-1), 5=Leonese(-1)
+Turn 30: 1=Pontic(13), 2=Mon(13), 3=Tongan(-1), 4=Sarmatian(-1), 5=Leonese(-1)
+Turn 35: 1=Pontic(16), 2=Mon(15), 3=Tongan(-1), 4=Sarmatian(-1), 5=Leonese(-1)
+Turn 40: 1=Pontic(21), 2=Sarmatian(21), 3=Mon(18), 4=Tongan(-1), 5=Leonese(-1)
+Turn 45: 1=Pontic(22), 2=Sarmatian(22), 3=Mon(21), 4=Tongan(-1), 5=Leonese(-1)
+Turn 50: 1=Leonese(30), 2=Pontic(28), 3=Mon(26), 4=Sarmatian(25), 5=Tongan(-1)
+Turn 55: 1=Leonese(35), 2=Mon(33), 3=Pontic(32), 4=Sarmatian(29), 5=Tongan(-1)
+Turn 60: 1=Pontic(46), 2=Leonese(42), 3=Mon(37), 4=Tongan(-1), 5=Sarmatian(-1)
+
+EVENT TYPES (exhaustive)
+city_founded, city_conquered, city_destroyed, government_change, diplomatic_change, tech_discovered, wonder_completed
+If a type does not appear in EVENTS, it did not occur in the analyzed turns.
+
+EVENTS (chronological)
+Turn | Type | Civ | Description | Metadata
+--------------------------------------------------------------------------------
+1 | tech_discovered | Pontic | Pontic discovered Tech #0 | tech_id=0, tech_name=Tech #0
+1 | tech_discovered | Tongan | Tongan discovered Tech #0 | tech_id=0, tech_name=Tech #0
+1 | tech_discovered | Sarmatian | Sarmatian discovered Tech #0 | tech_id=0, tech_name=Tech #0
+1 | tech_discovered | Mon | Mon discovered Tech #0 | tech_id=0, tech_name=Tech #0
+1 | tech_discovered | Leonese | Leonese discovered Tech #0 | tech_id=0, tech_name=Tech #0
+2 | city_founded | Pontic | Sinopi founded by Pontic | city_id=126, city_name=Sinopi
+2 | wonder_completed | Pontic | Pontic completed Palace in Sinopi | wonder_id=21, wonder_name=Palace, city_name=Sinopi
+2 | wonder_completed | Leonese | Leonese completed Palace in Zamora | wonder_id=21, wonder_name=Palace, city_name=Zamora
+3 | city_founded | Pontic | Trapezounta founded by Pontic | city_id=128, city_name=Trapezounta
+3 | wonder_completed | Sarmatian | Sarmatian completed Palace in Andronovo | wonder_id=21, wonder_name=Palace, city_name=Andronovo
+3 | wonder_completed | Mon | Mon completed Palace in Thaton | wonder_id=21, wonder_name=Palace, city_name=Thaton
+3 | tech_discovered | Sarmatian | Sarmatian discovered Masonry | tech_id=46, tech_name=Masonry
+4 | wonder_completed | Tongan | Tongan completed Palace in Nuku'alofa | wonder_id=21, wonder_name=Palace, city_name=Nuku'alofa
+7 | tech_discovered | Leonese | Leonese discovered Masonry | tech_id=46, tech_name=Masonry
+12 | tech_discovered | Sarmatian | Sarmatian discovered Alphabet | tech_id=2, tech_name=Alphabet
+14 | tech_discovered | Leonese | Leonese discovered Alphabet | tech_id=2, tech_name=Alphabet
+15 | tech_discovered | Mon | Mon discovered Masonry | tech_id=46, tech_name=Masonry
+16 | tech_discovered | Pontic | Pontic discovered Masonry | tech_id=46, tech_name=Masonry
+17 | city_founded | Pontic | Kotyora founded by Pontic | city_id=146, city_name=Kotyora
+19 | city_founded | Pontic | Amaseia founded by Pontic | city_id=148, city_name=Amaseia
+21 | tech_discovered | Tongan | Tongan discovered Masonry | tech_id=46, tech_name=Masonry
+21 | tech_discovered | Leonese | Leonese discovered Pottery | tech_id=63, tech_name=Pottery
+23 | tech_discovered | Mon | Mon discovered Alphabet | tech_id=2, tech_name=Alphabet
+24 | tech_discovered | Pontic | Pontic discovered Alphabet | tech_id=2, tech_name=Alphabet
+25 | tech_discovered | Pontic | Pontic discovered Writing | tech_id=87, tech_name=Writing
+26 | government_change | Mon | Mon changed government from Anarchy to Despotism | from=Anarchy, to=Despotism
+26 | tech_discovered | Sarmatian | Sarmatian discovered Code of Laws | tech_id=13, tech_name=Code of Laws
+28 | tech_discovered | Mon | Mon discovered Pottery | tech_id=63, tech_name=Pottery
+29 | city_founded | Pontic | Kerasounta founded by Pontic | city_id=169, city_name=Kerasounta
+29 | tech_discovered | Tongan | Tongan discovered Bronze Working | tech_id=9, tech_name=Bronze Working
+30 | city_founded | Pontic | Euchaita founded by Pontic | city_id=173, city_name=Euchaita
+31 | tech_discovered | Sarmatian | Sarmatian discovered Pottery | tech_id=63, tech_name=Pottery
+31 | tech_discovered | Leonese | Leonese discovered Code of Laws | tech_id=13, tech_name=Code of Laws
+34 | city_founded | Pontic | Themiskyra founded by Pontic | city_id=180, city_name=Themiskyra
+34 | tech_discovered | Pontic | Pontic discovered Code of Laws | tech_id=13, tech_name=Code of Laws
+35 | tech_discovered | Mon | Mon discovered Code of Laws | tech_id=13, tech_name=Code of Laws
+37 | city_founded | Pontic | Riza founded by Pontic | city_id=189, city_name=Riza
+37 | tech_discovered | Tongan | Tongan discovered Currency | tech_id=20, tech_name=Currency
+39 | government_change | Sarmatian | Sarmatian changed government from Anarchy to Despotism | from=Anarchy, to=Despotism
+40 | tech_discovered | Sarmatian | Sarmatian discovered Writing | tech_id=87, tech_name=Writing
+40 | tech_discovered | Leonese | Leonese discovered Mathematics | tech_id=48, tech_name=Mathematics
+41 | tech_discovered | Tongan | Tongan discovered Alphabet | tech_id=2, tech_name=Alphabet
+42 | city_founded | Pontic | Chersonisos Tauriki founded by Pontic | city_id=203, city_name=Chersonisos Tauriki
+42 | tech_discovered | Mon | Mon discovered Writing | tech_id=87, tech_name=Writing
+44 | tech_discovered | Leonese | Leonese discovered Writing | tech_id=87, tech_name=Writing
+46 | city_founded | Pontic | Herakleia Pontiki founded by Pontic | city_id=222, city_name=Herakleia Pontiki
+46 | city_founded | Pontic | Amisos founded by Pontic | city_id=221, city_name=Amisos
+46 | tech_discovered | Pontic | Pontic discovered Literacy | tech_id=42, tech_name=Literacy
+47 | tech_discovered | Tongan | Tongan discovered Writing | tech_id=87, tech_name=Writing
+48 | government_change | Leonese | Leonese changed government from Anarchy to Despotism | from=Anarchy, to=Despotism
+52 | tech_discovered | Tongan | Tongan discovered Code of Laws | tech_id=13, tech_name=Code of Laws
+52 | tech_discovered | Sarmatian | Sarmatian discovered Literacy | tech_id=42, tech_name=Literacy
+52 | tech_discovered | Mon | Mon discovered Literacy | tech_id=42, tech_name=Literacy
+52 | tech_discovered | Leonese | Leonese discovered Literacy | tech_id=42, tech_name=Literacy
+53 | city_founded | Pontic | Fasis founded by Pontic | city_id=238, city_name=Fasis
+54 | city_founded | Pontic | Olbia Pontiki founded by Pontic | city_id=245, city_name=Olbia Pontiki
+54 | tech_discovered | Tongan | Tongan discovered Horseback Riding | tech_id=35, tech_name=Horseback Riding
+55 | city_founded | Pontic | Sebastoupolis founded by Pontic | city_id=248, city_name=Sebastoupolis
+57 | city_founded | Pontic | Ta Kabeira founded by Pontic | city_id=260, city_name=Ta Kabeira
+57 | wonder_completed | Tongan | Tongan completed Great Wall in Nuku'alofa | wonder_id=47, wonder_name=Great Wall, city_name=Nuku'alofa
+57 | tech_discovered | Pontic | Pontic discovered The Republic | tech_id=80, tech_name=The Republic
+58 | city_founded | Pontic | Tanais founded by Pontic | city_id=267, city_name=Tanais
+58 | government_change | Pontic | Pontic changed government from Despotism to Republic | from=Despotism, to=Republic
+59 | city_founded | Pontic | Pantikapaion founded by Pontic | city_id=272, city_name=Pantikapaion
+59 | city_founded | Pontic | Kamacha founded by Pontic | city_id=273, city_name=Kamacha
+59 | tech_discovered | Pontic | Pontic discovered Ceremonial Burial | tech_id=10, tech_name=Ceremonial Burial
+59 | tech_discovered | Pontic | Pontic discovered Bronze Working | tech_id=9, tech_name=Bronze Working
+60 | government_change | Sarmatian | Sarmatian changed government from Despotism to Anarchy | from=Despotism, to=Anarchy
+60 | tech_discovered | Pontic | Pontic discovered Currency | tech_id=20, tech_name=Currency
+60 | tech_discovered | Leonese | Leonese discovered The Republic | tech_id=80, tech_name=The Republic
+
+TERRITORY MAPS (PNG)
+Turn 10: data/questions/seed0/world_report/turn_060_territory_maps/territory_turn_010.png
+Turn 20: data/questions/seed0/world_report/turn_060_territory_maps/territory_turn_020.png
+Turn 30: data/questions/seed0/world_report/turn_060_territory_maps/territory_turn_030.png
+Turn 40: data/questions/seed0/world_report/turn_060_territory_maps/territory_turn_040.png
+Turn 50: data/questions/seed0/world_report/turn_060_territory_maps/territory_turn_050.png
+Turn 60: data/questions/seed0/world_report/turn_060_territory_maps/territory_turn_060.png

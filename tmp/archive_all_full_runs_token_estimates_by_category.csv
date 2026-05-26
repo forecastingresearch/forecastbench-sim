@@ -1,0 +1,5 @@
+category,runs_included,questions_total,input_tokens_per_model_total,visible_output_tokens_per_model_total
+conditional_binary,2,3312,1842400,14740.6
+conditional_continuous,2,558,326651,16323.0
+unconditional_binary,2,4704,2480478,20899.3
+unconditional_continuous,3,3102,1703899,89939.4

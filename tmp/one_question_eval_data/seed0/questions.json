@@ -1,0 +1,24 @@
+{
+  "game_id": "seed0",
+  "questions": [
+    {
+      "question_id": "q0000",
+      "template_id": "tech_comparative",
+      "resolution_turn": 90,
+      "horizon": "H1",
+      "parameters": {
+        "civ_a": "Pontic",
+        "civ_b": "Leonese",
+        "player_id_a": 0,
+        "player_id_b": 4,
+        "resolution_turn": 90
+      },
+      "question_text": "Will Pontic have more technologies than Leonese at turn 90?",
+      "resolution": {
+        "answer": true,
+        "value_a": 28,
+        "value_b": 26
+      }
+    }
+  ]
+}

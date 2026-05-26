@@ -1,0 +1,363 @@
+{
+  "run_id": "working33_probe_20260306_214722",
+  "prompt": "Reply with one probability between 0 and 1 only.",
+  "total_models": 33,
+  "ok": 29,
+  "error": 4,
+  "timeout": 0,
+  "results": [
+    {
+      "requested_name": "Claude-Sonnet-4-5-20250929",
+      "model_id": "anthropic/claude-sonnet-4-5-20250929",
+      "status": "ok",
+      "duration_ms": 2005.2,
+      "response_snippet": "0.7",
+      "parsed_number": 0.7,
+      "error": null
+    },
+    {
+      "requested_name": "Grok-4-0709",
+      "model_id": "xai/grok-4-0709",
+      "status": "ok",
+      "duration_ms": 28780.5,
+      "response_snippet": "0.5",
+      "parsed_number": 0.5,
+      "error": null
+    },
+    {
+      "requested_name": "Claude-Sonnet-4-20250514",
+      "model_id": "anthropic/claude-sonnet-4-20250514",
+      "status": "ok",
+      "duration_ms": 1678.5,
+      "response_snippet": "0.7",
+      "parsed_number": 0.7,
+      "error": null
+    },
+    {
+      "requested_name": "Mistral-Large-2407",
+      "model_id": "mistral/mistral-large-2407",
+      "status": "ok",
+      "duration_ms": 1180.8,
+      "response_snippet": "0.42",
+      "parsed_number": 0.42,
+      "error": null
+    },
+    {
+      "requested_name": "GPT-4o",
+      "model_id": "openai/gpt-4o",
+      "status": "ok",
+      "duration_ms": 1517.2,
+      "response_snippet": "0.5",
+      "parsed_number": 0.5,
+      "error": null
+    },
+    {
+      "requested_name": "Gemini-3-Pro-Preview",
+      "model_id": "google/gemini-3-pro-preview",
+      "status": "ok",
+      "duration_ms": 5874.2,
+      "response_snippet": "0.5",
+      "parsed_number": 0.5,
+      "error": null
+    },
+    {
+      "requested_name": "O3-2025-04-16",
+      "model_id": "openai/o3-2025-04-16",
+      "status": "ok",
+      "duration_ms": 2718.1,
+      "response_snippet": "0.42",
+      "parsed_number": 0.42,
+      "error": null
+    },
+    {
+      "requested_name": "GPT-4.1-2025-04-14",
+      "model_id": "openai/gpt-4.1-2025-04-14",
+      "status": "ok",
+      "duration_ms": 947.6,
+      "response_snippet": "0.73",
+      "parsed_number": 0.73,
+      "error": null
+    },
+    {
+      "requested_name": "Mistral-Large-2411",
+      "model_id": "mistral/mistral-large-2411",
+      "status": "ok",
+      "duration_ms": 488.6,
+      "response_snippet": "0.75",
+      "parsed_number": 0.75,
+      "error": null
+    },
+    {
+      "requested_name": "GPT-5-2025-08-07",
+      "model_id": "openai/gpt-5-2025-08-07",
+      "status": "ok",
+      "duration_ms": 4653.0,
+      "response_snippet": "0.5",
+      "parsed_number": 0.5,
+      "error": null
+    },
+    {
+      "requested_name": "Gemini-2.5-Pro",
+      "model_id": "google/gemini-2.5-pro",
+      "status": "ok",
+      "duration_ms": 8669.5,
+      "response_snippet": "0.5",
+      "parsed_number": 0.5,
+      "error": null
+    },
+    {
+      "requested_name": "GPT-5.1-2025-11-13",
+      "model_id": "openai/gpt-5.1-2025-11-13",
+      "status": "error",
+      "duration_ms": 24.5,
+      "response_snippet": null,
+      "parsed_number": null,
+      "error": "UnsupportedParamsError: litellm.UnsupportedParamsError: gpt-5 models (including gpt-5-codex) don't support temperature=0.0. Only temperature=1 is supported. To drop unsupported params set `litellm.drop_params = True`"
+    },
+    {
+      "requested_name": "DeepSeek-V3",
+      "model_id": "together_ai/deepseek-ai/DeepSeek-V3",
+      "status": "ok",
+      "duration_ms": 10244.2,
+      "response_snippet": "0.5",
+      "parsed_number": 0.5,
+      "error": null
+    },
+    {
+      "requested_name": "O4-Mini-2025-04-16",
+      "model_id": "openai/o4-mini-2025-04-16",
+      "status": "ok",
+      "duration_ms": 3700.3,
+      "response_snippet": "0.42",
+      "parsed_number": 0.42,
+      "error": null
+    },
+    {
+      "requested_name": "O3-Mini-2025-01-31",
+      "model_id": "openai/o3-mini-2025-01-31",
+      "status": "ok",
+      "duration_ms": 3252.7,
+      "response_snippet": "0.5",
+      "parsed_number": 0.5,
+      "error": null
+    },
+    {
+      "requested_name": "Claude-Haiku-4-5-20251001",
+      "model_id": "anthropic/claude-haiku-4-5-20251001",
+      "status": "ok",
+      "duration_ms": 351.3,
+      "response_snippet": "0.5",
+      "parsed_number": 0.5,
+      "error": null
+    },
+    {
+      "requested_name": "Kimi-K2-Instruct-0905",
+      "model_id": "together_ai/moonshotai/Kimi-K2-Instruct-0905",
+      "status": "error",
+      "duration_ms": 273.6,
+      "response_snippet": null,
+      "parsed_number": null,
+      "error": "BadRequestError: litellm.BadRequestError: Together_aiException - Unable to access non-serverless model moonshotai/Kimi-K2-Instruct-0905. Please visit https://api.together.ai/models/moonshotai/Kimi-K2-Instruct-0905 to create and start a new dedicated endpoint for the model."
+    },
+    {
+      "requested_name": "Kimi-K2-Instruct",
+      "model_id": "together_ai/moonshotai/Kimi-K2-Instruct",
+      "status": "error",
+      "duration_ms": 265.2,
+      "response_snippet": null,
+      "parsed_number": null,
+      "error": "BadRequestError: litellm.BadRequestError: Together_aiException - Unable to access non-serverless model moonshotai/Kimi-K2-Instruct. Please visit https://api.together.ai/models/moonshotai/Kimi-K2-Instruct to create and start a new dedicated endpoint for the model."
+    },
+    {
+      "requested_name": "Llama-3.3-70B-Instruct-Turbo",
+      "model_id": "together_ai/meta-llama/Llama-3.3-70B-Instruct-Turbo",
+      "status": "ok",
+      "duration_ms": 723.9,
+      "response_snippet": "0.5",
+      "parsed_number": 0.5,
+      "error": null
+    },
+    {
+      "requested_name": "DeepSeek-V3.1",
+      "model_id": "together_ai/deepseek-ai/DeepSeek-V3.1",
+      "status": "ok",
+      "duration_ms": 796.0,
+      "response_snippet": "0.5",
+      "parsed_number": 0.5,
+      "error": null
+    },
+    {
+      "requested_name": "Mixtral-8x7B-Instruct-V0.1",
+      "model_id": "together_ai/mistralai/Mixtral-8x7B-Instruct-v0.1",
+      "status": "ok",
+      "duration_ms": 1212.4,
+      "response_snippet": "0.75 (meaning there is a 75% probability) is one possible answer between 0 and 1. However, without a specific context or event to base the probability on, this is just an arbitrary",
+      "parsed_number": 0.75,
+      "error": null
+    },
+    {
+      "requested_name": "Mistral-Large-Latest",
+      "model_id": "mistral/mistral-large-latest",
+      "status": "ok",
+      "duration_ms": 597.7,
+      "response_snippet": "0.42",
+      "parsed_number": 0.42,
+      "error": null
+    },
+    {
+      "requested_name": "GPT-3.5-Turbo-0125",
+      "model_id": "openai/gpt-3.5-turbo-0125",
+      "status": "ok",
+      "duration_ms": 855.1,
+      "response_snippet": "0.75",
+      "parsed_number": 0.75,
+      "error": null
+    },
+    {
+      "requested_name": "Gemini-2.5-Flash",
+      "model_id": "google/gemini-2.5-flash",
+      "status": "ok",
+      "duration_ms": 678.5,
+      "response_snippet": "0.5",
+      "parsed_number": 0.5,
+      "error": null
+    },
+    {
+      "requested_name": "GPT-5-Mini-2025-08-07",
+      "model_id": "openai/gpt-5-mini-2025-08-07",
+      "status": "ok",
+      "duration_ms": 3529.3,
+      "response_snippet": "0.42",
+      "parsed_number": 0.42,
+      "error": null
+    },
+    {
+      "requested_name": "Claude-3-Haiku-20240307",
+      "model_id": "anthropic/claude-3-haiku-20240307",
+      "status": "ok",
+      "duration_ms": 534.6,
+      "response_snippet": "0.5",
+      "parsed_number": 0.5,
+      "error": null
+    },
+    {
+      "requested_name": "GLM-4.5-Air-FP8",
+      "model_id": "together_ai/zai-org/GLM-4.5-Air-FP8",
+      "status": "ok",
+      "duration_ms": 3672.9,
+      "response_snippet": "0.5",
+      "parsed_number": 0.5,
+      "error": null
+    },
+    {
+      "requested_name": "Grok-4-Fast-Reasoning",
+      "model_id": "xai/grok-4-fast-reasoning",
+      "status": "ok",
+      "duration_ms": 1386.4,
+      "response_snippet": "0.618",
+      "parsed_number": 0.618,
+      "error": null
+    },
+    {
+      "requested_name": "Grok-4-1-Fast-Reasoning",
+      "model_id": "xai/grok-4-1-fast-reasoning",
+      "status": "ok",
+      "duration_ms": 3434.0,
+      "response_snippet": "0.73",
+      "parsed_number": 0.73,
+      "error": null
+    },
+    {
+      "requested_name": "Grok-4-1-Fast-Non-Reasoning",
+      "model_id": "xai/grok-4-1-fast-non-reasoning",
+      "status": "ok",
+      "duration_ms": 414.7,
+      "response_snippet": "0.5",
+      "parsed_number": 0.5,
+      "error": null
+    },
+    {
+      "requested_name": "Grok-4-Fast-Non-Reasoning",
+      "model_id": "xai/grok-4-fast-non-reasoning",
+      "status": "ok",
+      "duration_ms": 412.4,
+      "response_snippet": "0.5",
+      "parsed_number": 0.5,
+      "error": null
+    },
+    {
+      "requested_name": "Gemini-2.0-Flash-Lite-001",
+      "model_id": "google/gemini-2.0-flash-lite-001",
+      "status": "ok",
+      "duration_ms": 395.6,
+      "response_snippet": "0.62",
+      "parsed_number": 0.62,
+      "error": null
+    },
+    {
+      "requested_name": "GPT-5-Nano-2025-08-07",
+      "model_id": "openai/gpt-5-nano-2025-08-07",
+      "status": "error",
+      "duration_ms": 31.4,
+      "response_snippet": null,
+      "parsed_number": null,
+      "error": "UnsupportedParamsError: litellm.UnsupportedParamsError: gpt-5 models (including gpt-5-codex) don't support temperature=0.0. Only temperature=1 is supported. To drop unsupported params set `litellm.drop_params = True`"
+    }
+  ],
+  "spend_summary": {
+    "run_id": "working33_probe_20260306_214722",
+    "start_time": "2026-03-07T02:47:22.017034+00:00",
+    "success_calls": 0,
+    "failure_calls": 2,
+    "events_logged": 2,
+    "cost_total_usd": 0.0,
+    "cost_missing_calls": 0,
+    "usage_missing_calls": 2,
+    "prompt_tokens_total": 0,
+    "completion_tokens_total": 0,
+    "total_tokens_total": 0,
+    "reasoning_tokens_total": 0,
+    "reasoning_model_calls": 2,
+    "reasoning_tokens_reported_calls": 0,
+    "reasoning_tokens_missing_calls": 2,
+    "reasoning_tokens_zero_calls": 0,
+    "reasoning_tokens_positive_calls": 0,
+    "per_model": {
+      "openai/gpt-5.1-2025-11-13": {
+        "success_calls": 0,
+        "failure_calls": 1,
+        "cost_total_usd": 0.0,
+        "cost_missing_calls": 0,
+        "usage_missing_calls": 1,
+        "prompt_tokens_total": 0,
+        "completion_tokens_total": 0,
+        "total_tokens_total": 0,
+        "reasoning_model_calls": 1,
+        "reasoning_tokens_total": 0,
+        "reasoning_tokens_reported_calls": 0,
+        "reasoning_tokens_missing_calls": 1,
+        "reasoning_tokens_zero_calls": 0,
+        "reasoning_tokens_positive_calls": 0
+      },
+      "openai/gpt-5-nano-2025-08-07": {
+        "success_calls": 0,
+        "failure_calls": 1,
+        "cost_total_usd": 0.0,
+        "cost_missing_calls": 0,
+        "usage_missing_calls": 1,
+        "prompt_tokens_total": 0,
+        "completion_tokens_total": 0,
+        "total_tokens_total": 0,
+        "reasoning_model_calls": 1,
+        "reasoning_tokens_total": 0,
+        "reasoning_tokens_reported_calls": 0,
+        "reasoning_tokens_missing_calls": 1,
+        "reasoning_tokens_zero_calls": 0,
+        "reasoning_tokens_positive_calls": 0
+      }
+    },
+    "end_time": "2026-03-07T02:47:50.809598+00:00"
+  },
+  "spend_events_file": "/Users/jaeholee0404/civbench/logs/working33_probe_20260306_214722/spend_events.jsonl",
+  "spend_summary_file": "/Users/jaeholee0404/civbench/logs/working33_probe_20260306_214722/spend_summary.json"
+}

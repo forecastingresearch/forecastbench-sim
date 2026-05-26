@@ -1,0 +1,62 @@
+{
+  "Llama-4-Scout-17B-16E-Instruct": {
+    "status": "error",
+    "model_id": "together_ai/meta-llama/Llama-4-Scout-17B-16E-Instruct",
+    "response_snippet": null,
+    "error": "BadRequestError: litellm.BadRequestError: Together_aiException - Unable to access non-serverless model meta-llama/Llama-4-Scout-17B-16E-Instruct. Please visit https://api.together.ai/models/meta-llama/Llama-4-Scout-17B-16E-Instruct to create and start a new dedicated endpoint for the model."
+  },
+  "Qwen3-235B-A22B-Fp8-Tput": {
+    "status": "error",
+    "model_id": "together_ai/Qwen/Qwen3-235B-A22B-fp8-tput",
+    "response_snippet": null,
+    "error": "BadRequestError: litellm.BadRequestError: Together_aiException - Unable to access non-serverless model Qwen/Qwen3-235B-A22B-fp8-tput. Please visit https://api.together.ai/models/Qwen/Qwen3-235B-A22B-fp8-tput to create and start a new dedicated endpoint for the model."
+  },
+  "Mixtral-8x7B-Instruct-V0.1": {
+    "status": "ok",
+    "model_id": "together_ai/mistralai/Mixtral-8x7B-Instruct-v0.1",
+    "response_snippet": "I cannot precisely predict weather or astronomical phenomena; however, the sun has risen every day for billions of years",
+    "error": null
+  },
+  "Llama-3.3-70B-Instruct-Turbo": {
+    "status": "ok",
+    "model_id": "together_ai/meta-llama/Llama-3.3-70B-Instruct-Turbo",
+    "response_snippet": "0.9999999999999999",
+    "error": null
+  },
+  "GLM-4.5-Air-FP8": {
+    "status": "ok",
+    "model_id": "together_ai/zai-org/GLM-4.5-Air-FP8",
+    "response_snippet": "1",
+    "error": null
+  },
+  "DeepSeek-V3": {
+    "status": "ok",
+    "model_id": "together_ai/deepseek-ai/DeepSeek-V3",
+    "response_snippet": "Based on historical observation and the consistent patterns of Earth's rotation, the probability that the sun will rise ",
+    "error": null
+  },
+  "DeepSeek-V3.1": {
+    "status": "ok",
+    "model_id": "together_ai/deepseek-ai/DeepSeek-V3.1",
+    "response_snippet": "Based on historical evidence and the consistent rotation of the Earth, the probability that the sun will rise tomorrow i",
+    "error": null
+  },
+  "Kimi-K2-Instruct-0905": {
+    "status": "ok",
+    "model_id": "together_ai/moonshotai/Kimi-K2-Instruct-0905",
+    "response_snippet": "0.999999",
+    "error": null
+  },
+  "Kimi-K2-Instruct": {
+    "status": "ok",
+    "model_id": "together_ai/moonshotai/Kimi-K2-Instruct",
+    "response_snippet": "0.999999",
+    "error": null
+  },
+  "Meta-Llama-3.1-405B-Instruct-Turbo": {
+    "status": "error",
+    "model_id": "together_ai/meta-llama/Meta-Llama-3.1-405B-Instruct-Turbo",
+    "response_snippet": null,
+    "error": "BadRequestError: litellm.BadRequestError: Together_aiException - Unable to access non-serverless model meta-llama/Meta-Llama-3.1-405B-Instruct-Turbo. Please visit https://api.together.ai/models/meta-llama/Meta-Llama-3.1-405B-Instruct-Turbo to create and start a new dedicated endpoint for the model."
+  }
+}

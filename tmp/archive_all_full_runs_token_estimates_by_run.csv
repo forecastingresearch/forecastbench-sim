@@ -1,0 +1,10 @@
+run_file,run_id,category,questions,batches,input_tokens_per_model,visible_output_tokens_per_model_mean,visible_output_tokens_per_model_min,visible_output_tokens_per_model_max
+gold500_conditional_binary_all.json,20260217_120446,conditional_binary,1176,66,686628,5242.8,4818,5356
+republic_conditional_binary_all.json,20260217_113119,conditional_binary,2136,110,1155772,9497.8,9000,9630
+gold500_conditional_continuous_all.json,20260217_121128,conditional_continuous,198,11,115463,5756.3,5705,5789
+republic_conditional_continuous_all.json,20260217_115024,conditional_continuous,360,20,211188,10566.7,10496,10670
+gold500_baseline_binary_all.json,20260217_115234,unconditional_binary,2352,121,1240239,10446.8,10062,10580
+republic_baseline_binary_all.json,20260217_113116,unconditional_binary,2352,121,1240239,10452.5,10071,10598
+cont_uncond_all.json,20260217_113115,unconditional_continuous,2310,121,1250039,66786.2,66598,67369
+gold500_baseline_continuous_all.json,20260217_115528,unconditional_continuous,396,22,226930,11582.1,11516,11707
+republic_baseline_continuous_all.json,20260217_025507,unconditional_continuous,396,22,226930,11571.1,11507,11707

@@ -1,0 +1,24 @@
+{
+  "timestamp": "2026-03-06 21:55:41",
+  "bootstrap": {
+    "dotenv_loaded": true,
+    "gcp_keys_loaded": true
+  },
+  "prompt": "Return only: 0.5",
+  "results": [
+    {
+      "model_id": "together_ai/moonshotai/Kimi-K2-Instruct-0905",
+      "status": "error",
+      "duration_ms": 570.1,
+      "response_snippet": null,
+      "error": "BadRequestError: litellm.BadRequestError: Together_aiException - Unable to access non-serverless model moonshotai/Kimi-K2-Instruct-0905. Please visit https://api.together.ai/models/moonshotai/Kimi-K2-Instruct-0905 to create and start a new dedicated endpoint for the model."
+    },
+    {
+      "model_id": "together_ai/moonshotai/Kimi-K2-Instruct",
+      "status": "error",
+      "duration_ms": 308.3,
+      "response_snippet": null,
+      "error": "BadRequestError: litellm.BadRequestError: Together_aiException - Unable to access non-serverless model moonshotai/Kimi-K2-Instruct. Please visit https://api.together.ai/models/moonshotai/Kimi-K2-Instruct to create and start a new dedicated endpoint for the model."
+    }
+  ]
+}

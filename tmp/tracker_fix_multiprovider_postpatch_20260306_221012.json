@@ -1,0 +1,43 @@
+{
+  "run_id": "tracker_fix_multiprovider_postpatch_20260306_221012",
+  "results": [
+    {
+      "model": "openai/gpt-3.5-turbo-0125",
+      "status": "ok"
+    },
+    {
+      "model": "openai/gpt-4o",
+      "status": "ok"
+    },
+    {
+      "model": "anthropic/claude-3-haiku-20240307",
+      "status": "ok"
+    },
+    {
+      "model": "google/gemini-2.0-flash-lite-001",
+      "status": "ok"
+    },
+    {
+      "model": "together_ai/deepseek-ai/DeepSeek-V3.1",
+      "status": "ok"
+    },
+    {
+      "model": "openai/gpt-5-nano-2025-08-07",
+      "status": "error",
+      "error": "litellm.UnsupportedParamsError: gpt-5 models (including gpt-5-codex) don't support temperature=0.0. Only temperature=1 i"
+    }
+  ],
+  "events_logged": 6,
+  "success_calls": 5,
+  "failure_calls": 1,
+  "per_model_count": 6,
+  "per_model_keys": [
+    "anthropic/claude-3-haiku-20240307",
+    "deepseek-ai/DeepSeek-V3.1",
+    "gemini/gemini-2.0-flash-lite-001",
+    "openai/gpt-3.5-turbo-0125",
+    "openai/gpt-4o",
+    "openai/gpt-5-nano-2025-08-07"
+  ],
+  "summary_file": "/Users/jaeholee0404/civbench/logs/tracker_fix_multiprovider_postpatch_20260306_221012/spend_summary.json"
+}

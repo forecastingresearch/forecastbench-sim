@@ -1,0 +1,126 @@
+{
+  "metadata": {
+    "run_id": "20260306_225217",
+    "seed": 42,
+    "questions_per_template": null,
+    "questions_per_horizon_template": null,
+    "sampling_mode": "all",
+    "total_questions": 5,
+    "base_rate": 0.8,
+    "question_type_distribution": {
+      "binary": 5
+    },
+    "template_distribution": {
+      "tech_comparative": 5
+    },
+    "horizon_filter": null,
+    "question_type_filter": "binary",
+    "models": [
+      "together_ai/zai-org/GLM-4.5-Air-FP8"
+    ],
+    "start_time": "2026-03-06T22:52:17.513418Z",
+    "end_time": "2026-03-06T22:52:25.741870Z",
+    "duration_seconds": 8.228399
+  },
+  "model_results": {
+    "together_ai/zai-org/GLM-4.5-Air-FP8": {
+      "binary": {
+        "brier_score": NaN,
+        "brier_by_template": {},
+        "ece": NaN,
+        "num_predictions": 0,
+        "num_failures": 5
+      },
+      "continuous": {
+        "crps": NaN,
+        "mae": NaN,
+        "crps_by_template": {},
+        "mae_by_template": {},
+        "num_predictions": 0,
+        "num_failures": 0
+      }
+    }
+  },
+  "questions": [
+    {
+      "question_id": "q0000",
+      "game_id": "seed0",
+      "template_id": "tech_comparative",
+      "question_text": "Will Pontic have more technologies than Leonese at turn 90?",
+      "question_type": "binary",
+      "difficulty": {},
+      "ground_truth": true,
+      "predictions": {
+        "together_ai/zai-org/GLM-4.5-Air-FP8": {
+          "probability": null,
+          "latency_ms": 8198.821000056341,
+          "error": "all_parse_failed"
+        }
+      }
+    },
+    {
+      "question_id": "q0001",
+      "game_id": "seed0",
+      "template_id": "tech_comparative",
+      "question_text": "Will Leonese have more technologies than Tongan at turn 90?",
+      "question_type": "binary",
+      "difficulty": {},
+      "ground_truth": true,
+      "predictions": {
+        "together_ai/zai-org/GLM-4.5-Air-FP8": {
+          "probability": null,
+          "latency_ms": 8198.821000056341,
+          "error": "all_parse_failed"
+        }
+      }
+    },
+    {
+      "question_id": "q0002",
+      "game_id": "seed0",
+      "template_id": "tech_comparative",
+      "question_text": "Will Tongan have more technologies than Sarmatian at turn 90?",
+      "question_type": "binary",
+      "difficulty": {},
+      "ground_truth": true,
+      "predictions": {
+        "together_ai/zai-org/GLM-4.5-Air-FP8": {
+          "probability": null,
+          "latency_ms": 8198.821000056341,
+          "error": "all_parse_failed"
+        }
+      }
+    },
+    {
+      "question_id": "q0003",
+      "game_id": "seed0",
+      "template_id": "tech_comparative",
+      "question_text": "Will Sarmatian have more technologies than Mon at turn 90?",
+      "question_type": "binary",
+      "difficulty": {},
+      "ground_truth": false,
+      "predictions": {
+        "together_ai/zai-org/GLM-4.5-Air-FP8": {
+          "probability": null,
+          "latency_ms": 8198.821000056341,
+          "error": "all_parse_failed"
+        }
+      }
+    },
+    {
+      "question_id": "q0004",
+      "game_id": "seed0",
+      "template_id": "tech_comparative",
+      "question_text": "Will Pontic have more technologies than Leonese at turn 120?",
+      "question_type": "binary",
+      "difficulty": {},
+      "ground_truth": true,
+      "predictions": {
+        "together_ai/zai-org/GLM-4.5-Air-FP8": {
+          "probability": null,
+          "latency_ms": 8198.821000056341,
+          "error": "all_parse_failed"
+        }
+      }
+    }
+  ]
+}

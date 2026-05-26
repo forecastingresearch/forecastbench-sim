@@ -1,0 +1,57 @@
+{
+  "run_id": "tracker_fix_multiprovider_20260306_220906",
+  "results": [
+    {
+      "model": "openai/gpt-3.5-turbo-0125",
+      "status": "ok",
+      "response": "0.5",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-4o",
+      "status": "ok",
+      "response": "0.5",
+      "error": null
+    },
+    {
+      "model": "anthropic/claude-3-haiku-20240307",
+      "status": "ok",
+      "response": "0.5",
+      "error": null
+    },
+    {
+      "model": "google/gemini-2.0-flash-lite-001",
+      "status": "ok",
+      "response": "0.5\n",
+      "error": null
+    },
+    {
+      "model": "together_ai/deepseek-ai/DeepSeek-V3.1",
+      "status": "ok",
+      "response": "0.5",
+      "error": null
+    },
+    {
+      "model": "openai/gpt-5-nano-2025-08-07",
+      "status": "error",
+      "response": null,
+      "error": "UnsupportedParamsError: litellm.UnsupportedParamsError: gpt-5 models (including gpt-5-codex) don't support temperature=0.0. Only temperature=1 is supported. To drop unsupported params set `litellm.drop_params = True`"
+    }
+  ],
+  "summary_file": "/Users/jaeholee0404/civbench/logs/tracker_fix_multiprovider_20260306_220906/spend_summary.json",
+  "events_file": "/Users/jaeholee0404/civbench/logs/tracker_fix_multiprovider_20260306_220906/spend_events.jsonl",
+  "summary_counts": {
+    "events_logged": 6,
+    "success_calls": 5,
+    "failure_calls": 1,
+    "per_model_count": 6
+  },
+  "summary_per_model_keys": [
+    "claude-3-haiku-20240307",
+    "deepseek-ai/DeepSeek-V3.1",
+    "gemini-2.0-flash-lite-001",
+    "gpt-3.5-turbo-0125",
+    "gpt-4o",
+    "openai/gpt-5-nano-2025-08-07"
+  ]
+}

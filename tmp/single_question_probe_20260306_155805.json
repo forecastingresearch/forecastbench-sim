@@ -1,0 +1,366 @@
+{
+  "prompt": "Will the sun rise tomorrow? Reply with one probability between 0 and 1.",
+  "results": [
+    {
+      "requested_name": "Gemini-1.5-Flash",
+      "status": "error",
+      "model_id": null,
+      "response_snippet": null,
+      "errors": [
+        {
+          "model_id": "google/gemini-1.5-flash",
+          "error": "NotFoundError: litellm.NotFoundError: GeminiException - {\n  \"error\": {\n    \"code\": 404,\n    \"message\": \"models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.\",\n    \"status\": \"NOT_FOUND\"\n  }\n}\n"
+        }
+      ]
+    },
+    {
+      "requested_name": "Gemini-2.0-Flash-Lite-001",
+      "status": "ok",
+      "model_id": "google/gemini-2.0-flash-lite-001",
+      "response_snippet": "1.0",
+      "errors": []
+    },
+    {
+      "requested_name": "GPT-5-Nano-2025-08-07",
+      "status": "ok",
+      "model_id": "openai/gpt-5-nano-2025-08-07",
+      "response_snippet": "0.999999",
+      "errors": [
+        {
+          "model_id": "openai/gpt-5-nano-2025-08-07",
+          "error": "initial wrapper call failed due temperature=0.0; retest without temperature succeeded"
+        }
+      ]
+    },
+    {
+      "requested_name": "Grok-4-Fast-Reasoning",
+      "status": "ok",
+      "model_id": "xai/grok-4-fast-reasoning",
+      "response_snippet": "1",
+      "errors": []
+    },
+    {
+      "requested_name": "Grok-4-1-Fast-Reasoning",
+      "status": "ok",
+      "model_id": "xai/grok-4-1-fast-reasoning",
+      "response_snippet": "1",
+      "errors": []
+    },
+    {
+      "requested_name": "Grok-4-1-Fast-Non-Reasoning",
+      "status": "ok",
+      "model_id": "xai/grok-4-1-fast-non-reasoning",
+      "response_snippet": "0.999999999",
+      "errors": []
+    },
+    {
+      "requested_name": "Grok-4-Fast-Non-Reasoning",
+      "status": "ok",
+      "model_id": "xai/grok-4-fast-non-reasoning",
+      "response_snippet": "0.999999999",
+      "errors": []
+    },
+    {
+      "requested_name": "Llama-4-Scout-17B-16E-Instruct",
+      "status": "error",
+      "model_id": "together_ai/meta-llama/Llama-4-Scout-17B-16E-Instruct",
+      "response_snippet": null,
+      "errors": [
+        {
+          "model_id": "together_ai/meta-llama/Llama-4-Scout-17B-16E-Instruct",
+          "error": "BadRequestError: litellm.BadRequestError: Together_aiException - Unable to access non-serverless model meta-llama/Llama-4-Scout-17B-16E-Instruct. Please visit https://api.together.ai/models/meta-llama/Llama-4-Scout-17B-16E-Instruct to create and start a new dedicated endpoint for the model."
+        }
+      ]
+    },
+    {
+      "requested_name": "Gemini-2.5-Flash-Preview-04-17",
+      "status": "error",
+      "model_id": null,
+      "response_snippet": null,
+      "errors": [
+        {
+          "model_id": "google/gemini-2.5-flash-preview-04-17",
+          "error": "NotFoundError: litellm.NotFoundError: GeminiException - {\n  \"error\": {\n    \"code\": 404,\n    \"message\": \"models/gemini-2.5-flash-preview-04-17 is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.\",\n    \"status\": \"NOT_FOUND\"\n  }\n}\n"
+        }
+      ]
+    },
+    {
+      "requested_name": "Qwen3-235B-A22B-Fp8-Tput",
+      "status": "error",
+      "model_id": "together_ai/Qwen/Qwen3-235B-A22B-fp8-tput",
+      "response_snippet": null,
+      "errors": [
+        {
+          "model_id": "together_ai/Qwen/Qwen3-235B-A22B-fp8-tput",
+          "error": "BadRequestError: litellm.BadRequestError: Together_aiException - Unable to access non-serverless model Qwen/Qwen3-235B-A22B-fp8-tput. Please visit https://api.together.ai/models/Qwen/Qwen3-235B-A22B-fp8-tput to create and start a new dedicated endpoint for the model."
+        }
+      ]
+    },
+    {
+      "requested_name": "Mixtral-8x7B-Instruct-V0.1",
+      "status": "ok",
+      "model_id": "together_ai/mistralai/Mixtral-8x7B-Instruct-v0.1",
+      "response_snippet": "I cannot precisely predict weather or astronomical phenomena; however, the sun has risen every day for billions of years",
+      "errors": []
+    },
+    {
+      "requested_name": "Llama-3.3-70B-Instruct-Turbo",
+      "status": "ok",
+      "model_id": "together_ai/meta-llama/Llama-3.3-70B-Instruct-Turbo",
+      "response_snippet": "0.9999999999999999",
+      "errors": []
+    },
+    {
+      "requested_name": "GLM-4.5-Air-FP8",
+      "status": "ok",
+      "model_id": "together_ai/zai-org/GLM-4.5-Air-FP8",
+      "response_snippet": "1",
+      "errors": []
+    },
+    {
+      "requested_name": "Claude-3-Haiku-20240307",
+      "status": "ok",
+      "model_id": "anthropic/claude-3-haiku-20240307",
+      "response_snippet": "0.999999",
+      "errors": []
+    },
+    {
+      "requested_name": "DeepSeek-V3",
+      "status": "ok",
+      "model_id": "together_ai/deepseek-ai/DeepSeek-V3",
+      "response_snippet": "Based on historical observation and the consistent patterns of Earth's rotation, the probability that the sun will rise ",
+      "errors": []
+    },
+    {
+      "requested_name": "Mistral-Large-Latest",
+      "status": "ok",
+      "model_id": "mistral/mistral-large-latest",
+      "response_snippet": "0.999999",
+      "errors": []
+    },
+    {
+      "requested_name": "GPT-3.5-Turbo-0125",
+      "status": "ok",
+      "model_id": "openai/gpt-3.5-turbo-0125",
+      "response_snippet": "0.9999",
+      "errors": []
+    },
+    {
+      "requested_name": "DeepSeek-V3.1",
+      "status": "ok",
+      "model_id": "together_ai/deepseek-ai/DeepSeek-V3.1",
+      "response_snippet": "Based on historical evidence and the consistent rotation of the Earth, the probability that the sun will rise tomorrow i",
+      "errors": []
+    },
+    {
+      "requested_name": "GPT-5-Mini-2025-08-07",
+      "status": "ok",
+      "model_id": "openai/gpt-5-mini-2025-08-07",
+      "response_snippet": "0.999999999999",
+      "errors": []
+    },
+    {
+      "requested_name": "Gemini-2.5-Flash",
+      "status": "error",
+      "model_id": null,
+      "response_snippet": null,
+      "errors": [
+        {
+          "model_id": "google/gemini-2.5-flash",
+          "error": "manual_interrupt_after_no_timeout_wait(~95s); request did not return"
+        }
+      ]
+    },
+    {
+      "requested_name": "Kimi-K2-Instruct-0905",
+      "status": "ok",
+      "model_id": "together_ai/moonshotai/Kimi-K2-Instruct-0905",
+      "response_snippet": "0.999999",
+      "errors": []
+    },
+    {
+      "requested_name": "Kimi-K2-Instruct",
+      "status": "ok",
+      "model_id": "together_ai/moonshotai/Kimi-K2-Instruct",
+      "response_snippet": "0.999999",
+      "errors": []
+    },
+    {
+      "requested_name": "Meta-Llama-3.1-405B-Instruct-Turbo",
+      "status": "error",
+      "model_id": "together_ai/meta-llama/Meta-Llama-3.1-405B-Instruct-Turbo",
+      "response_snippet": null,
+      "errors": [
+        {
+          "model_id": "together_ai/meta-llama/Meta-Llama-3.1-405B-Instruct-Turbo",
+          "error": "BadRequestError: litellm.BadRequestError: Together_aiException - Unable to access non-serverless model meta-llama/Meta-Llama-3.1-405B-Instruct-Turbo. Please visit https://api.together.ai/models/meta-llama/Meta-Llama-3.1-405B-Instruct-Turbo to create and start a new dedicated endpoint for the model."
+        }
+      ]
+    },
+    {
+      "requested_name": "O4-Mini-2025-04-16",
+      "status": "ok",
+      "model_id": "openai/o4-mini-2025-04-16",
+      "response_snippet": "0.9999999",
+      "errors": []
+    },
+    {
+      "requested_name": "O3-Mini-2025-01-31",
+      "status": "ok",
+      "model_id": "openai/o3-mini-2025-01-31",
+      "response_snippet": "1",
+      "errors": []
+    },
+    {
+      "requested_name": "Claude-Haiku-4-5-20251001",
+      "status": "ok",
+      "model_id": "anthropic/claude-haiku-4-5-20251001",
+      "response_snippet": "0.9999",
+      "errors": []
+    },
+    {
+      "requested_name": "Gemini-1.5-Pro",
+      "status": "error",
+      "model_id": null,
+      "response_snippet": null,
+      "errors": [
+        {
+          "model_id": "google/gemini-1.5-pro",
+          "error": "NotFoundError: litellm.NotFoundError: GeminiException - {\n  \"error\": {\n    \"code\": 404,\n    \"message\": \"models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.\",\n    \"status\": \"NOT_FOUND\"\n  }\n}\n"
+        }
+      ]
+    },
+    {
+      "requested_name": "Mistral-Large-2411",
+      "status": "ok",
+      "model_id": "mistral/mistral-large-2411",
+      "response_snippet": "0.9999999",
+      "errors": []
+    },
+    {
+      "requested_name": "O3-2025-04-16",
+      "status": "ok",
+      "model_id": "openai/o3-2025-04-16",
+      "response_snippet": "0.99999",
+      "errors": []
+    },
+    {
+      "requested_name": "GPT-4.1-2025-04-14",
+      "status": "ok",
+      "model_id": "openai/gpt-4.1-2025-04-14",
+      "response_snippet": "0.999999",
+      "errors": []
+    },
+    {
+      "requested_name": "Mistral-Large-2407",
+      "status": "ok",
+      "model_id": "mistral/mistral-large-2407",
+      "response_snippet": "0.999999",
+      "errors": []
+    },
+    {
+      "requested_name": "GPT-5-2025-08-07",
+      "status": "ok",
+      "model_id": "openai/gpt-5-2025-08-07",
+      "response_snippet": "0.999999999",
+      "errors": []
+    },
+    {
+      "requested_name": "Gemini-2.5-Pro-Preview-03-25",
+      "status": "error",
+      "model_id": null,
+      "response_snippet": null,
+      "errors": [
+        {
+          "model_id": "google/gemini-2.5-pro-preview-03-25",
+          "error": "NotFoundError: litellm.NotFoundError: GeminiException - {\n  \"error\": {\n    \"code\": 404,\n    \"message\": \"models/gemini-2.5-pro-preview-03-25 is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.\",\n    \"status\": \"NOT_FOUND\"\n  }\n}\n"
+        }
+      ]
+    },
+    {
+      "requested_name": "Gemini-2.5-Pro",
+      "status": "ok",
+      "model_id": "google/gemini-2.5-pro",
+      "response_snippet": "1",
+      "errors": []
+    },
+    {
+      "requested_name": "GPT-5.1-2025-11-13",
+      "status": "ok",
+      "model_id": "openai/gpt-5.1-2025-11-13",
+      "response_snippet": "0.9999999999",
+      "errors": []
+    },
+    {
+      "requested_name": "GPT-4o",
+      "status": "ok",
+      "model_id": "openai/gpt-4o",
+      "response_snippet": "The probability that the sun will rise tomorrow is extremely high, close to 1. While it's impossible to predict the futu",
+      "errors": []
+    },
+    {
+      "requested_name": "Gemini-3-Pro-Preview",
+      "status": "ok",
+      "model_id": "google/gemini-3-pro-preview",
+      "response_snippet": "1",
+      "errors": []
+    },
+    {
+      "requested_name": "Claude-Sonnet-4-5-20250929",
+      "status": "ok",
+      "model_id": "anthropic/claude-sonnet-4-5-20250929",
+      "response_snippet": "0.9999",
+      "errors": []
+    },
+    {
+      "requested_name": "Grok-4-0709",
+      "status": "ok",
+      "model_id": "xai/grok-4-0709",
+      "response_snippet": "1",
+      "errors": []
+    },
+    {
+      "requested_name": "Claude-3-7-Sonnet-20250219",
+      "status": "error",
+      "model_id": null,
+      "response_snippet": null,
+      "errors": [
+        {
+          "model_id": "anthropic/claude-3-7-sonnet-20250219",
+          "error": "NotFoundError: litellm.NotFoundError: AnthropicException - {\"type\":\"error\",\"error\":{\"type\":\"not_found_error\",\"message\":\"model: claude-3-7-sonnet-20250219\"},\"request_id\":\"req_011CYnW4njJN7n4614q5TC4S\"}"
+        }
+      ]
+    },
+    {
+      "requested_name": "Claude-Sonnet-4-20250514",
+      "status": "ok",
+      "model_id": "anthropic/claude-sonnet-4-20250514",
+      "response_snippet": "0.99999",
+      "errors": []
+    },
+    {
+      "requested_name": "Claude-3-5-Sonnet-20241022",
+      "status": "error",
+      "model_id": null,
+      "response_snippet": null,
+      "errors": [
+        {
+          "model_id": "anthropic/claude-3-5-sonnet-20241022",
+          "error": "NotFoundError: litellm.NotFoundError: AnthropicException - {\"type\":\"error\",\"error\":{\"type\":\"not_found_error\",\"message\":\"model: claude-3-5-sonnet-20241022\"},\"request_id\":\"req_011CYnW4tiiCuFiYAU6VVk9b\"}"
+        }
+      ]
+    },
+    {
+      "requested_name": "Claude-3-5-Sonnet-20240620",
+      "status": "error",
+      "model_id": null,
+      "response_snippet": null,
+      "errors": [
+        {
+          "model_id": "anthropic/claude-3-5-sonnet-20240620",
+          "error": "NotFoundError: litellm.NotFoundError: AnthropicException - {\"type\":\"error\",\"error\":{\"type\":\"not_found_error\",\"message\":\"model: claude-3-5-sonnet-20240620\"},\"request_id\":\"req_011CYnW4u2ZjeS7GuA7ue1wp\"}"
+        }
+      ]
+    }
+  ]
+}

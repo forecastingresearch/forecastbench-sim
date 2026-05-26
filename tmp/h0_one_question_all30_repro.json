@@ -1,0 +1,791 @@
+{
+  "metadata": {
+    "run_id": "20260306_231021",
+    "seed": 42,
+    "questions_per_template": null,
+    "questions_per_horizon_template": null,
+    "sampling_mode": "all",
+    "total_questions": 1,
+    "base_rate": 1.0,
+    "question_type_distribution": {
+      "binary": 1
+    },
+    "template_distribution": {
+      "h0_tech_comparative": 1
+    },
+    "horizon_filter": [
+      "H0"
+    ],
+    "question_type_filter": "binary",
+    "models": [
+      "anthropic/claude-sonnet-4-5-20250929",
+      "xai/grok-4-0709",
+      "anthropic/claude-sonnet-4-20250514",
+      "mistral/mistral-large-2407",
+      "openai/gpt-4o",
+      "google/gemini-3-pro-preview",
+      "openai/o3-2025-04-16",
+      "openai/gpt-4.1-2025-04-14",
+      "mistral/mistral-large-2411",
+      "openai/gpt-5-2025-08-07",
+      "google/gemini-2.5-pro",
+      "openai/gpt-5.1-2025-11-13",
+      "together_ai/deepseek-ai/DeepSeek-V3",
+      "openai/o4-mini-2025-04-16",
+      "openai/o3-mini-2025-01-31",
+      "anthropic/claude-haiku-4-5-20251001",
+      "together_ai/meta-llama/Llama-3.3-70B-Instruct-Turbo",
+      "together_ai/deepseek-ai/DeepSeek-V3.1",
+      "together_ai/mistralai/Mixtral-8x7B-Instruct-v0.1",
+      "mistral/mistral-large-latest",
+      "openai/gpt-3.5-turbo-0125",
+      "google/gemini-2.5-flash",
+      "openai/gpt-5-mini-2025-08-07",
+      "anthropic/claude-3-haiku-20240307",
+      "xai/grok-4-fast-reasoning",
+      "xai/grok-4-1-fast-reasoning",
+      "xai/grok-4-1-fast-non-reasoning",
+      "xai/grok-4-fast-non-reasoning",
+      "google/gemini-2.0-flash-lite-001",
+      "openai/gpt-5-nano-2025-08-07"
+    ],
+    "start_time": "2026-03-06T23:10:21.488893Z",
+    "end_time": "2026-03-06T23:11:50.859044Z",
+    "duration_seconds": 89.370111
+  },
+  "model_results": {
+    "anthropic/claude-sonnet-4-5-20250929": {
+      "binary": {
+        "brier_score": 0.0,
+        "brier_by_template": {
+          "h0_tech_comparative": 0.0
+        },
+        "ece": 0.0,
+        "num_predictions": 1,
+        "num_failures": 0
+      },
+      "continuous": {
+        "crps": NaN,
+        "mae": NaN,
+        "crps_by_template": {},
+        "mae_by_template": {},
+        "num_predictions": 0,
+        "num_failures": 0
+      }
+    },
+    "xai/grok-4-0709": {
+      "binary": {
+        "brier_score": 0.0,
+        "brier_by_template": {
+          "h0_tech_comparative": 0.0
+        },
+        "ece": 0.0,
+        "num_predictions": 1,
+        "num_failures": 0
+      },
+      "continuous": {
+        "crps": NaN,
+        "mae": NaN,
+        "crps_by_template": {},
+        "mae_by_template": {},
+        "num_predictions": 0,
+        "num_failures": 0
+      }
+    },
+    "anthropic/claude-sonnet-4-20250514": {
+      "binary": {
+        "brier_score": 0.0,
+        "brier_by_template": {
+          "h0_tech_comparative": 0.0
+        },
+        "ece": 0.0,
+        "num_predictions": 1,
+        "num_failures": 0
+      },
+      "continuous": {
+        "crps": NaN,
+        "mae": NaN,
+        "crps_by_template": {},
+        "mae_by_template": {},
+        "num_predictions": 0,
+        "num_failures": 0
+      }
+    },
+    "mistral/mistral-large-2407": {
+      "binary": {
+        "brier_score": 0.0025000000000000044,
+        "brier_by_template": {
+          "h0_tech_comparative": 0.0025000000000000044
+        },
+        "ece": 0.050000000000000044,
+        "num_predictions": 1,
+        "num_failures": 0
+      },
+      "continuous": {
+        "crps": NaN,
+        "mae": NaN,
+        "crps_by_template": {},
+        "mae_by_template": {},
+        "num_predictions": 0,
+        "num_failures": 0
+      }
+    },
+    "openai/gpt-4o": {
+      "binary": {
+        "brier_score": 0.0,
+        "brier_by_template": {
+          "h0_tech_comparative": 0.0
+        },
+        "ece": 0.0,
+        "num_predictions": 1,
+        "num_failures": 0
+      },
+      "continuous": {
+        "crps": NaN,
+        "mae": NaN,
+        "crps_by_template": {},
+        "mae_by_template": {},
+        "num_predictions": 0,
+        "num_failures": 0
+      }
+    },
+    "google/gemini-3-pro-preview": {
+      "binary": {
+        "brier_score": 0.0,
+        "brier_by_template": {
+          "h0_tech_comparative": 0.0
+        },
+        "ece": 0.0,
+        "num_predictions": 1,
+        "num_failures": 0
+      },
+      "continuous": {
+        "crps": NaN,
+        "mae": NaN,
+        "crps_by_template": {},
+        "mae_by_template": {},
+        "num_predictions": 0,
+        "num_failures": 0
+      }
+    },
+    "openai/o3-2025-04-16": {
+      "binary": {
+        "brier_score": 0.004899999999999993,
+        "brier_by_template": {
+          "h0_tech_comparative": 0.004899999999999993
+        },
+        "ece": 0.06999999999999995,
+        "num_predictions": 1,
+        "num_failures": 0
+      },
+      "continuous": {
+        "crps": NaN,
+        "mae": NaN,
+        "crps_by_template": {},
+        "mae_by_template": {},
+        "num_predictions": 0,
+        "num_failures": 0
+      }
+    },
+    "openai/gpt-4.1-2025-04-14": {
+      "binary": {
+        "brier_score": 0.00010000000000000018,
+        "brier_by_template": {
+          "h0_tech_comparative": 0.00010000000000000018
+        },
+        "ece": 0.010000000000000009,
+        "num_predictions": 1,
+        "num_failures": 0
+      },
+      "continuous": {
+        "crps": NaN,
+        "mae": NaN,
+        "crps_by_template": {},
+        "mae_by_template": {},
+        "num_predictions": 0,
+        "num_failures": 0
+      }
+    },
+    "mistral/mistral-large-2411": {
+      "binary": {
+        "brier_score": 0.0,
+        "brier_by_template": {
+          "h0_tech_comparative": 0.0
+        },
+        "ece": 0.0,
+        "num_predictions": 1,
+        "num_failures": 0
+      },
+      "continuous": {
+        "crps": NaN,
+        "mae": NaN,
+        "crps_by_template": {},
+        "mae_by_template": {},
+        "num_predictions": 0,
+        "num_failures": 0
+      }
+    },
+    "openai/gpt-5-2025-08-07": {
+      "binary": {
+        "brier_score": 0.0004000000000000007,
+        "brier_by_template": {
+          "h0_tech_comparative": 0.0004000000000000007
+        },
+        "ece": 0.020000000000000018,
+        "num_predictions": 1,
+        "num_failures": 0
+      },
+      "continuous": {
+        "crps": NaN,
+        "mae": NaN,
+        "crps_by_template": {},
+        "mae_by_template": {},
+        "num_predictions": 0,
+        "num_failures": 0
+      }
+    },
+    "google/gemini-2.5-pro": {
+      "binary": {
+        "brier_score": 0.00010000000000000018,
+        "brier_by_template": {
+          "h0_tech_comparative": 0.00010000000000000018
+        },
+        "ece": 0.010000000000000009,
+        "num_predictions": 1,
+        "num_failures": 0
+      },
+      "continuous": {
+        "crps": NaN,
+        "mae": NaN,
+        "crps_by_template": {},
+        "mae_by_template": {},
+        "num_predictions": 0,
+        "num_failures": 0
+      }
+    },
+    "openai/gpt-5.1-2025-11-13": {
+      "binary": {
+        "brier_score": 0.0,
+        "brier_by_template": {
+          "h0_tech_comparative": 0.0
+        },
+        "ece": 0.0,
+        "num_predictions": 1,
+        "num_failures": 0
+      },
+      "continuous": {
+        "crps": NaN,
+        "mae": NaN,
+        "crps_by_template": {},
+        "mae_by_template": {},
+        "num_predictions": 0,
+        "num_failures": 0
+      }
+    },
+    "together_ai/deepseek-ai/DeepSeek-V3": {
+      "binary": {
+        "brier_score": 0.0,
+        "brier_by_template": {
+          "h0_tech_comparative": 0.0
+        },
+        "ece": 0.0,
+        "num_predictions": 1,
+        "num_failures": 0
+      },
+      "continuous": {
+        "crps": NaN,
+        "mae": NaN,
+        "crps_by_template": {},
+        "mae_by_template": {},
+        "num_predictions": 0,
+        "num_failures": 0
+      }
+    },
+    "openai/o4-mini-2025-04-16": {
+      "binary": {
+        "brier_score": 0.0,
+        "brier_by_template": {
+          "h0_tech_comparative": 0.0
+        },
+        "ece": 0.0,
+        "num_predictions": 1,
+        "num_failures": 0
+      },
+      "continuous": {
+        "crps": NaN,
+        "mae": NaN,
+        "crps_by_template": {},
+        "mae_by_template": {},
+        "num_predictions": 0,
+        "num_failures": 0
+      }
+    },
+    "openai/o3-mini-2025-01-31": {
+      "binary": {
+        "brier_score": 0.0004000000000000007,
+        "brier_by_template": {
+          "h0_tech_comparative": 0.0004000000000000007
+        },
+        "ece": 0.020000000000000018,
+        "num_predictions": 1,
+        "num_failures": 0
+      },
+      "continuous": {
+        "crps": NaN,
+        "mae": NaN,
+        "crps_by_template": {},
+        "mae_by_template": {},
+        "num_predictions": 0,
+        "num_failures": 0
+      }
+    },
+    "anthropic/claude-haiku-4-5-20251001": {
+      "binary": {
+        "brier_score": 0.00010000000000000018,
+        "brier_by_template": {
+          "h0_tech_comparative": 0.00010000000000000018
+        },
+        "ece": 0.010000000000000009,
+        "num_predictions": 1,
+        "num_failures": 0
+      },
+      "continuous": {
+        "crps": NaN,
+        "mae": NaN,
+        "crps_by_template": {},
+        "mae_by_template": {},
+        "num_predictions": 0,
+        "num_failures": 0
+      }
+    },
+    "together_ai/meta-llama/Llama-3.3-70B-Instruct-Turbo": {
+      "binary": {
+        "brier_score": 0.0,
+        "brier_by_template": {
+          "h0_tech_comparative": 0.0
+        },
+        "ece": 0.0,
+        "num_predictions": 1,
+        "num_failures": 0
+      },
+      "continuous": {
+        "crps": NaN,
+        "mae": NaN,
+        "crps_by_template": {},
+        "mae_by_template": {},
+        "num_predictions": 0,
+        "num_failures": 0
+      }
+    },
+    "together_ai/deepseek-ai/DeepSeek-V3.1": {
+      "binary": {
+        "brier_score": 0.00010000000000000018,
+        "brier_by_template": {
+          "h0_tech_comparative": 0.00010000000000000018
+        },
+        "ece": 0.010000000000000009,
+        "num_predictions": 1,
+        "num_failures": 0
+      },
+      "continuous": {
+        "crps": NaN,
+        "mae": NaN,
+        "crps_by_template": {},
+        "mae_by_template": {},
+        "num_predictions": 0,
+        "num_failures": 0
+      }
+    },
+    "together_ai/mistralai/Mixtral-8x7B-Instruct-v0.1": {
+      "binary": {
+        "brier_score": 0.0,
+        "brier_by_template": {
+          "h0_tech_comparative": 0.0
+        },
+        "ece": 0.0,
+        "num_predictions": 1,
+        "num_failures": 0
+      },
+      "continuous": {
+        "crps": NaN,
+        "mae": NaN,
+        "crps_by_template": {},
+        "mae_by_template": {},
+        "num_predictions": 0,
+        "num_failures": 0
+      }
+    },
+    "mistral/mistral-large-latest": {
+      "binary": {
+        "brier_score": 0.00010000000000000018,
+        "brier_by_template": {
+          "h0_tech_comparative": 0.00010000000000000018
+        },
+        "ece": 0.010000000000000009,
+        "num_predictions": 1,
+        "num_failures": 0
+      },
+      "continuous": {
+        "crps": NaN,
+        "mae": NaN,
+        "crps_by_template": {},
+        "mae_by_template": {},
+        "num_predictions": 0,
+        "num_failures": 0
+      }
+    },
+    "openai/gpt-3.5-turbo-0125": {
+      "binary": {
+        "brier_score": 0.0,
+        "brier_by_template": {
+          "h0_tech_comparative": 0.0
+        },
+        "ece": 0.0,
+        "num_predictions": 1,
+        "num_failures": 0
+      },
+      "continuous": {
+        "crps": NaN,
+        "mae": NaN,
+        "crps_by_template": {},
+        "mae_by_template": {},
+        "num_predictions": 0,
+        "num_failures": 0
+      }
+    },
+    "google/gemini-2.5-flash": {
+      "binary": {
+        "brier_score": 0.0,
+        "brier_by_template": {
+          "h0_tech_comparative": 0.0
+        },
+        "ece": 0.0,
+        "num_predictions": 1,
+        "num_failures": 0
+      },
+      "continuous": {
+        "crps": NaN,
+        "mae": NaN,
+        "crps_by_template": {},
+        "mae_by_template": {},
+        "num_predictions": 0,
+        "num_failures": 0
+      }
+    },
+    "openai/gpt-5-mini-2025-08-07": {
+      "binary": {
+        "brier_score": 0.00010000000000000018,
+        "brier_by_template": {
+          "h0_tech_comparative": 0.00010000000000000018
+        },
+        "ece": 0.010000000000000009,
+        "num_predictions": 1,
+        "num_failures": 0
+      },
+      "continuous": {
+        "crps": NaN,
+        "mae": NaN,
+        "crps_by_template": {},
+        "mae_by_template": {},
+        "num_predictions": 0,
+        "num_failures": 0
+      }
+    },
+    "anthropic/claude-3-haiku-20240307": {
+      "binary": {
+        "brier_score": 0.009999999999999995,
+        "brier_by_template": {
+          "h0_tech_comparative": 0.009999999999999995
+        },
+        "ece": 0.09999999999999998,
+        "num_predictions": 1,
+        "num_failures": 0
+      },
+      "continuous": {
+        "crps": NaN,
+        "mae": NaN,
+        "crps_by_template": {},
+        "mae_by_template": {},
+        "num_predictions": 0,
+        "num_failures": 0
+      }
+    },
+    "xai/grok-4-fast-reasoning": {
+      "binary": {
+        "brier_score": 0.0,
+        "brier_by_template": {
+          "h0_tech_comparative": 0.0
+        },
+        "ece": 0.0,
+        "num_predictions": 1,
+        "num_failures": 0
+      },
+      "continuous": {
+        "crps": NaN,
+        "mae": NaN,
+        "crps_by_template": {},
+        "mae_by_template": {},
+        "num_predictions": 0,
+        "num_failures": 0
+      }
+    },
+    "xai/grok-4-1-fast-reasoning": {
+      "binary": {
+        "brier_score": 0.0,
+        "brier_by_template": {
+          "h0_tech_comparative": 0.0
+        },
+        "ece": 0.0,
+        "num_predictions": 1,
+        "num_failures": 0
+      },
+      "continuous": {
+        "crps": NaN,
+        "mae": NaN,
+        "crps_by_template": {},
+        "mae_by_template": {},
+        "num_predictions": 0,
+        "num_failures": 0
+      }
+    },
+    "xai/grok-4-1-fast-non-reasoning": {
+      "binary": {
+        "brier_score": 0.0,
+        "brier_by_template": {
+          "h0_tech_comparative": 0.0
+        },
+        "ece": 0.0,
+        "num_predictions": 1,
+        "num_failures": 0
+      },
+      "continuous": {
+        "crps": NaN,
+        "mae": NaN,
+        "crps_by_template": {},
+        "mae_by_template": {},
+        "num_predictions": 0,
+        "num_failures": 0
+      }
+    },
+    "xai/grok-4-fast-non-reasoning": {
+      "binary": {
+        "brier_score": 0.0,
+        "brier_by_template": {
+          "h0_tech_comparative": 0.0
+        },
+        "ece": 0.0,
+        "num_predictions": 1,
+        "num_failures": 0
+      },
+      "continuous": {
+        "crps": NaN,
+        "mae": NaN,
+        "crps_by_template": {},
+        "mae_by_template": {},
+        "num_predictions": 0,
+        "num_failures": 0
+      }
+    },
+    "google/gemini-2.0-flash-lite-001": {
+      "binary": {
+        "brier_score": 0.00010000000000000018,
+        "brier_by_template": {
+          "h0_tech_comparative": 0.00010000000000000018
+        },
+        "ece": 0.010000000000000009,
+        "num_predictions": 1,
+        "num_failures": 0
+      },
+      "continuous": {
+        "crps": NaN,
+        "mae": NaN,
+        "crps_by_template": {},
+        "mae_by_template": {},
+        "num_predictions": 0,
+        "num_failures": 0
+      }
+    },
+    "openai/gpt-5-nano-2025-08-07": {
+      "binary": {
+        "brier_score": 0.0,
+        "brier_by_template": {
+          "h0_tech_comparative": 0.0
+        },
+        "ece": 0.0,
+        "num_predictions": 1,
+        "num_failures": 0
+      },
+      "continuous": {
+        "crps": NaN,
+        "mae": NaN,
+        "crps_by_template": {},
+        "mae_by_template": {},
+        "num_predictions": 0,
+        "num_failures": 0
+      }
+    }
+  },
+  "questions": [
+    {
+      "question_id": "q0000",
+      "game_id": "seed0",
+      "template_id": "h0_tech_comparative",
+      "question_text": "At turn 60, does Pontic currently have more techs known than Leonese?",
+      "question_type": "binary",
+      "difficulty": {},
+      "ground_truth": true,
+      "predictions": {
+        "anthropic/claude-sonnet-4-5-20250929": {
+          "probability": 1.0,
+          "latency_ms": 5743.805459002033,
+          "error": null
+        },
+        "xai/grok-4-0709": {
+          "probability": 1.0,
+          "latency_ms": 89347.9732091073,
+          "error": null
+        },
+        "anthropic/claude-sonnet-4-20250514": {
+          "probability": 1.0,
+          "latency_ms": 6809.28966589272,
+          "error": null
+        },
+        "mistral/mistral-large-2407": {
+          "probability": 0.95,
+          "latency_ms": 5470.042500179261,
+          "error": null
+        },
+        "openai/gpt-4o": {
+          "probability": 1.0,
+          "latency_ms": 3719.7569580748677,
+          "error": null
+        },
+        "google/gemini-3-pro-preview": {
+          "probability": 1.0,
+          "latency_ms": 15495.253500062972,
+          "error": null
+        },
+        "openai/o3-2025-04-16": {
+          "probability": 0.93,
+          "latency_ms": 5610.637166071683,
+          "error": null
+        },
+        "openai/gpt-4.1-2025-04-14": {
+          "probability": 0.99,
+          "latency_ms": 3473.293791990727,
+          "error": null
+        },
+        "mistral/mistral-large-2411": {
+          "probability": 1.0,
+          "latency_ms": 4366.87225010246,
+          "error": null
+        },
+        "openai/gpt-5-2025-08-07": {
+          "probability": 0.98,
+          "latency_ms": 4466.141333105043,
+          "error": null
+        },
+        "google/gemini-2.5-pro": {
+          "probability": 0.99,
+          "latency_ms": 16680.514250183478,
+          "error": null
+        },
+        "openai/gpt-5.1-2025-11-13": {
+          "probability": 1.0,
+          "latency_ms": 2031.0485421214253,
+          "error": null
+        },
+        "together_ai/deepseek-ai/DeepSeek-V3": {
+          "probability": 1.0,
+          "latency_ms": 8496.864000102505,
+          "error": null
+        },
+        "openai/o4-mini-2025-04-16": {
+          "probability": 1.0,
+          "latency_ms": 2380.838541081175,
+          "error": null
+        },
+        "openai/o3-mini-2025-01-31": {
+          "probability": 0.98,
+          "latency_ms": 4218.171417014673,
+          "error": null
+        },
+        "anthropic/claude-haiku-4-5-20251001": {
+          "probability": 0.99,
+          "latency_ms": 2788.0138750188053,
+          "error": null
+        },
+        "together_ai/meta-llama/Llama-3.3-70B-Instruct-Turbo": {
+          "probability": 1.0,
+          "latency_ms": 1818.1530421134084,
+          "error": null
+        },
+        "together_ai/deepseek-ai/DeepSeek-V3.1": {
+          "probability": 0.99,
+          "latency_ms": 3724.288749974221,
+          "error": null
+        },
+        "together_ai/mistralai/Mixtral-8x7B-Instruct-v0.1": {
+          "probability": 1.0,
+          "latency_ms": 1591.6705839335918,
+          "error": null
+        },
+        "mistral/mistral-large-latest": {
+          "probability": 0.99,
+          "latency_ms": 4809.175916016102,
+          "error": null
+        },
+        "openai/gpt-3.5-turbo-0125": {
+          "probability": 1.0,
+          "latency_ms": 2061.8710829876363,
+          "error": null
+        },
+        "google/gemini-2.5-flash": {
+          "probability": 1.0,
+          "latency_ms": 1775.914791971445,
+          "error": null
+        },
+        "openai/gpt-5-mini-2025-08-07": {
+          "probability": 0.99,
+          "latency_ms": 6566.328083863482,
+          "error": null
+        },
+        "anthropic/claude-3-haiku-20240307": {
+          "probability": 0.9,
+          "latency_ms": 1628.7234579212964,
+          "error": null
+        },
+        "xai/grok-4-fast-reasoning": {
+          "probability": 1.0,
+          "latency_ms": 2237.0934579521418,
+          "error": null
+        },
+        "xai/grok-4-1-fast-reasoning": {
+          "probability": 1.0,
+          "latency_ms": 4840.332125080749,
+          "error": null
+        },
+        "xai/grok-4-1-fast-non-reasoning": {
+          "probability": 1.0,
+          "latency_ms": 1484.4718331005424,
+          "error": null
+        },
+        "xai/grok-4-fast-non-reasoning": {
+          "probability": 1.0,
+          "latency_ms": 779.1229169815779,
+          "error": null
+        },
+        "google/gemini-2.0-flash-lite-001": {
+          "probability": 0.99,
+          "latency_ms": 1050.676167011261,
+          "error": null
+        },
+        "openai/gpt-5-nano-2025-08-07": {
+          "probability": 1.0,
+          "latency_ms": 5575.044832890853,
+          "error": null
+        }
+      }
+    }
+  ]
+}

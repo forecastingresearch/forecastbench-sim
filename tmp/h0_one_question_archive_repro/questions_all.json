@@ -1,0 +1,28 @@
+{
+  "metadata": {
+    "source": "archive/20260302_121948/questions/questions_all.json",
+    "note": "single H0 question repro dataset"
+  },
+  "questions": [
+    {
+      "question_id": "q0000",
+      "template_id": "h0_tech_comparative",
+      "resolution_turn": 60,
+      "horizon": "H0",
+      "parameters": {
+        "civ_a": "Pontic",
+        "civ_b": "Leonese",
+        "player_id_a": 0,
+        "player_id_b": 4,
+        "snapshot_turn": 60,
+        "game_id": "seed0"
+      },
+      "question_text": "At turn 60, does Pontic currently have more techs known than Leonese?",
+      "resolution": {
+        "answer": true,
+        "value_a": 10,
+        "value_b": 9
+      }
+    }
+  ]
+}
