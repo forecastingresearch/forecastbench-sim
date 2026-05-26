@@ -139,6 +139,77 @@ class SavegameModifier:
         self.content = re.sub(pattern, replace_tech, self.content, flags=re.DOTALL)
 
     # -------------------------------------------------------------------------
+    # RNG state mutation (for Monte Carlo rollouts)
+    # -------------------------------------------------------------------------
+
+    @staticmethod
+    def _fc_srand_state(seed: int) -> tuple[list[int], int, int, int]:
+        """Reproduce Freeciv's ``fc_srand(seed)`` in Python.
+
+        Returns ``(v, j, k, x)`` matching the global ``rand_state`` Freeciv
+        would hold after ``fc_srand(seed)``. Mirrors ``utility/rand.c``
+        bit-for-bit: linear congruential init, then a 10000-iteration
+        warm-up via the Mitchell-Moore additive generator with
+        ``size = MAX_UINT32``.
+        """
+        MASK = 0xFFFFFFFF
+        v = [0] * 56
+        v[0] = seed & MASK
+        for i in range(1, 56):
+            v[i] = (3 * v[i - 1] + 257) & MASK
+        j, k, x = 0, 31, 55
+
+        # Heat-up: 10000 iterations of fc_rand(MAX_UINT32).
+        # With size == MAX_UINT32, divisor == 1 and max == MAX_UINT32 - 1,
+        # so the rejection branch only fires when v[j]+v[k] == MASK exactly.
+        for _ in range(10000):
+            while True:
+                new_rand = (v[j] + v[k]) & MASK
+                x = (x + 1) % 56
+                j = (j + 1) % 56
+                k = (k + 1) % 56
+                v[x] = new_rand
+                if new_rand <= MASK - 1:
+                    break
+        return v, j, k, x
+
+    def set_rng_from_seed(self, seed: int) -> None:
+        """Overwrite the savegame's ``[random]`` block with the state Freeciv
+        would have after ``fc_srand(seed)``.
+
+        Two Freeciv-only callers of ``fc_srand`` produce game RNG state:
+        ``init_game_seed`` at game start, and (after loading) restoration of
+        the saved table. By writing a ``fc_srand``-equivalent state directly
+        into the savegame, we get a deterministic, seed-controlled rollout
+        from this saved turn — without patching the server.
+        """
+        v, j, k, x = self._fc_srand_state(seed)
+
+        def _table_line(words: list[int]) -> str:
+            # Freeciv writes each word as %8x (lowercase, space-padded, no
+            # leading zeros), space-separated, the whole thing in quotes.
+            return '"' + ' '.join(f'{w:8x}' for w in words) + '"'
+
+        new_block_lines = [
+            '[random]',
+            'saved=TRUE',
+            f'index_J={j}',
+            f'index_K={k}',
+            f'index_X={x}',
+        ]
+        for t in range(8):
+            words = v[t * 7:(t + 1) * 7]
+            new_block_lines.append(f'table{t}={_table_line(words)}')
+        new_block = '\n'.join(new_block_lines)
+
+        # Replace the existing [random] block (up to the next [section] header).
+        pattern = r'\[random\].*?(?=\n\[)'
+        new_content, n = re.subn(pattern, new_block, self.content, count=1, flags=re.DOTALL)
+        if n != 1:
+            raise RuntimeError("Failed to locate [random] block in savegame")
+        self.content = new_content
+
+    # -------------------------------------------------------------------------
     # Game state queries
     # -------------------------------------------------------------------------
 
