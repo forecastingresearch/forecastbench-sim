@@ -1,0 +1,41 @@
+FREECIV PATCH — Monte Carlo reseed on load
+===========================================
+
+Target file: server/savegame/savegame3.c
+Target function: sg_load_random
+
+After restoring the saved RNG state via fc_rand_set_state(), check for
+/tmp/freeciv_reseed. If it contains an integer, call fc_srand() with that
+value to overwrite the restored state with a fresh fc_srand(seed) state.
+Delete the file so each load uses it at most once.
+
+This enables Monte Carlo rollouts: start with one savegame, write N
+different seed values to /tmp/freeciv_reseed between loads, get N
+different futures from the same saved state.
+
+Original sg_load_random (in `random.saved=TRUE` branch):
+
+    loading->rstate.is_init = TRUE;
+    fc_rand_set_state(loading->rstate);
+
+Patched sg_load_random:
+
+    loading->rstate.is_init = TRUE;
+    fc_rand_set_state(loading->rstate);
+
+    /* CIVBENCH MC reseed hook: if /tmp/freeciv_reseed exists, treat its
+     * contents as an unsigned integer and reseed via fc_srand(). The file
+     * is consumed (deleted) so it only applies to one load. */
+    {
+      FILE *fp = fopen("/tmp/freeciv_reseed", "r");
+      if (fp != NULL) {
+        unsigned long mc_seed = 0;
+        if (fscanf(fp, "%lu", &mc_seed) == 1) {
+          log_normal("CIVBENCH: reseeding RNG via fc_srand(%lu)", mc_seed);
+          fc_srand((RANDOM_TYPE) mc_seed);
+          loading->rstate = fc_rand_state();
+        }
+        fclose(fp);
+        (void) unlink("/tmp/freeciv_reseed");
+      }
+    }
