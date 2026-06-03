@@ -72,8 +72,8 @@ def main() -> int:
     ap.add_argument("--lr", type=float, default=5e-6)
     ap.add_argument("--kl-coef", type=float, default=0.04,
                     help="KL penalty to the reference (SFT) model.")
-    ap.add_argument("--max-prompt", type=int, default=5500)
-    ap.add_argument("--max-completion", type=int, default=400)
+    ap.add_argument("--max-prompt", type=int, default=7600)
+    ap.add_argument("--max-completion", type=int, default=512)
     ap.add_argument("--steps", type=int, default=600)
     ap.add_argument("--dr-grpo", action="store_true",
                     help="Dr.GRPO mode: scale_rewards=False (robust to noisy rewards).")

@@ -16,10 +16,12 @@ from __future__ import annotations
 import sys
 import json
 import csv
+import random
 import argparse
 import urllib.request
 from datetime import datetime
 from pathlib import Path
+from collections import defaultdict
 
 REPO_API = "https://api.github.com/repos/forecastingresearch/forecastbench-datasets/contents"
 RAW = "https://raw.githubusercontent.com/forecastingresearch/forecastbench-datasets/main"
@@ -56,6 +58,10 @@ def main() -> int:
     ap.add_argument("--cache-dir", default="data/forecastbench/cache")
     ap.add_argument("--sources", nargs="+", default=sorted(MARKET_SOURCES),
                     help="Which sources to include (default: market-style).")
+    ap.add_argument("--sample", type=int, default=None,
+                    help="If set, stratified-downsample to ~N questions, preserving "
+                         "(source, resolved_to) proportions. Seeded for reproducibility.")
+    ap.add_argument("--sample-seed", type=int, default=42)
     args = ap.parse_args()
 
     cutoff = datetime.strptime(args.cutoff, "%Y-%m-%d")
@@ -142,6 +148,20 @@ def main() -> int:
     print("Skipped:")
     for k, v in skipped.items():
         print(f"  {k}: {v}")
+
+    if args.sample and args.sample < len(unique):
+        rng = random.Random(args.sample_seed)
+        strata = defaultdict(list)
+        for r in unique:
+            strata[(r["source"], r["resolved_to"])].append(r)
+        frac = args.sample / len(unique)
+        sampled = []
+        for k, items in strata.items():
+            rng.shuffle(items)
+            keep = max(1, round(len(items) * frac))
+            sampled.extend(items[:keep])
+        print(f"\nStratified downsample: {len(unique)} -> {len(sampled)} (target ~{args.sample})")
+        unique = sampled
 
     from collections import Counter
     by_src = Counter(r["source"] for r in unique)

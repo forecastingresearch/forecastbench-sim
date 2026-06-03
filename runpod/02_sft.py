@@ -54,7 +54,7 @@ def main() -> int:
     ap.add_argument("--grad-accum", type=int, default=8)
     ap.add_argument("--lr", type=float, default=2e-4)
     ap.add_argument("--lora-r", type=int, default=16)
-    ap.add_argument("--max-seq", type=int, default=6144)
+    ap.add_argument("--max-seq", type=int, default=8192)
     ap.add_argument("--use-weights", action="store_true",
                     help="Sample-weight by 4*p*(1-p); else uniform.")
     args = ap.parse_args()

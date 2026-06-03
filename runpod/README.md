@@ -28,9 +28,11 @@ Both data dirs are git-ignored; build them deterministically from the scripts
 in this repo, then rsync the results to the pod.
 
 ```bash
-# 1. ForecastBench eval set (~1200 post-cutoff binary real-world questions)
+# 1. ForecastBench eval set: stratified-sample ~400 of 1246 post-cutoff binary
+#    real-world questions (preserves source × resolved_to proportions, base rate 0.19).
 uv run python scripts/build_forecastbench_eval.py \
     --cutoff 2025-01-01 \
+    --sample 400 \
     --output data/forecastbench/eval_post2025.csv
 
 # 2. Freeciv training JSONL (joins questions + world reports + p_mc)
@@ -106,23 +108,24 @@ exploration didn't help further).
 
 ## Cost rough math
 
-At RunPod community H100 ($1.99/hr) using the existing 220-example dataset:
+Qwen3-8B (instruct, thinking-mode-capable) on RunPod community H100
+($1.99/hr), 641-train / 57-val Freeciv + 401 stratified-sampled ForecastBench:
 
 | step | wall time | $ |
 |---|---|---|
-| setup + base download | 15 min | $0.50 |
-| baseline eval (1246 + 57 prompts, vLLM) | 30 min | $1 |
-| SFT (4 epochs, ~660 weighted examples) | 1.5 h | $3 |
-| eval after SFT | 30 min | $1 |
-| RL (600 steps, G=4) | ~18 h | $35 |
-| eval after RL | 30 min | $1 |
-| **total** | **~22 h** | **~$42** |
+| setup + Qwen3-8B download (~16 GB) | 8 min | $0.27 |
+| baseline eval (401 + 57 prompts, vLLM) | 8 min | $0.27 |
+| SFT (4 epochs, ~2400 weighted examples) | 1 h | $2 |
+| eval after SFT | 8 min | $0.27 |
+| RL (600 steps, G=4) | ~8 h | $16 |
+| eval after RL | 8 min | $0.27 |
+| **total** | **~10 h** | **~$19** |
 
-Budget **$80** for one full loop incl. retries; **$200** for a 3-way sweep
-(±dr-grpo, ±weights, ±KL).
+Budget **$30** for one full loop incl. retries; **$80** for a 3-way sweep
+(±dr-grpo, ±weights, ±KL). Stop after SFT if you only care about the
+transfer-failure-vs-transfer decision — that's ~$3 of pod time.
 
-With more training data (after running step 7 below), RL time scales roughly
-linearly with #examples × steps; budget proportionally.
+For Qwen3-14B substitute, multiply RL/SFT time by ~1.7 (so ~$45 full loop).
 
 ## Notes / common gotchas
 
@@ -131,7 +134,10 @@ linearly with #examples × steps; budget proportionally.
 - `bnb_4bit_quant_type="nf4"` is the recommended quant for inference + RL on
   H100. For H200, you can skip 4-bit and load bf16 directly.
 - If the model's `max_model_len` is < your longest prompt, vLLM will silently
-  truncate; check `eval.json["results"][...]["stats"]["n_parsed"]`.
+  truncate; check `eval.json["results"][...]["stats"]["n_parsed"]`. Defaults
+  here are tuned for the actual Freeciv prompt distribution (p95 ≈ 6.8K
+  tokens): SFT `--max-seq 8192`, RL `--max-prompt 7600`, eval `max_model_len
+  10240`. Drop these only if you hit OOM, and only to fit the p50 prompt.
 - The Qwen3 thinking-mode token (`<think>...</think>`) is fine inside our
   CoT region; the parser only cares about the final `PROBABILITY:` line.
 - For Llama-3.1-8B / Qwen3-8B (cheaper), bump `--batch 4 --grad-accum 4`.

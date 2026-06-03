@@ -57,9 +57,9 @@ def build_fb_prompts(csv_path: str) -> list[tuple[str, str, float, dict]]:
         for r in csv.DictReader(f):
             prompt = FB_PROMPT.format(
                 freeze_date=r["freeze_date"], source=r["source"],
-                question=r["question"][:600],
-                background=(r["background"] or "(none)")[:600],
-                criteria=(r["resolution_criteria"] or "(none)")[:400])
+                question=r["question"],
+                background=(r["background"] or "(none)"),
+                criteria=(r["resolution_criteria"] or "(none)"))
             out.append((r["qid"], prompt, float(r["resolved_to"]),
                         {"source": r["source"],
                          "freeze_market_value": r["freeze_market_value"],
@@ -113,7 +113,7 @@ def main() -> int:
     enable_lora = args.adapter is not None
     llm = LLM(model=args.base, enable_lora=enable_lora, max_lora_rank=64,
               gpu_memory_utilization=0.88, dtype="bfloat16",
-              max_model_len=8192, enforce_eager=False)
+              max_model_len=10240, enforce_eager=False)
     sp = SamplingParams(temperature=args.temperature, max_tokens=args.max_new_tokens,
                         stop=["</s>", "<|endoftext|>", "<|im_end|>"])
     lora_req = LoRARequest("adapter", 1, args.adapter) if enable_lora else None
