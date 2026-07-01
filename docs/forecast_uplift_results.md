@@ -57,12 +57,34 @@ Outcome = final gold. Setup: 5 seeds, 2 AI opponents (see "survival" below), hor
    before the forecast horizons even arrive. Reducing to 2 opponents lets it survive to
    the horizon, so the outcome is real "gold at turn 16," not "gold at death."
 
-## Results (Track A)
+## Results (Track A) — 30 games, 5 seeds × 3 arms × 2 repeats
 
-<!-- FILLED AFTER RUN COMPLETES -->
-_Pending full 30-game run (5 seeds × 3 arms × 2 repeats). Preliminary: on seed201 the
-forecast arm accumulated **less** gold than control (74 vs 90), consistent with a null-
-or-negative effect for this weak agent + mostly-peaceful forecasts._
+Final gold (turn 16), mean over 10 games/arm:
+
+| arm | mean gold | median | range |
+|-----|-----------|--------|-------|
+| control   | **90.8** | 89 | 67–123 |
+| scrambled | 88.0 | 82 | 67–120 |
+| forecast  | **83.4** | 80 | 66–104 |
+
+Paired by seed (`forecast − control`): seed201 **−17**, seed202 −8, seed203 −6,
+seed204 **+2**, seed205 −9.
+
+- **`forecast − control` = −7.4 gold, 95% bootstrap CI [−13.1, −1.9] (excludes 0).**
+  4 of 5 seeds negative. Giving the agent the game-true forecast table **reduced** its
+  gold by ~8% at the pilot level.
+- **`forecast − scrambled` = −4.6, 95% CI [−9.5, +0.6] (includes 0).** The true forecast
+  is not distinguishable from shuffled numbers; both are ≤ control.
+
+**Headline: a clean, mildly *negative* result.** For a weak agent (Gemini 2.5 Flash) on
+mostly-peaceful maps, injecting a 6-event probability table each turn slightly *hurt* gold
+accumulation rather than helping. Because `forecast ≈ scrambled ≤ control`, the effect is
+consistent with **the forecast table acting as distraction / added cognitive load** rather
+than as usable decision-relevant information — exactly the failure mode the value-of-
+information and advice-taking literature predicts when a forecast has low decision-
+relevance and the decision-maker is weak ("bare numbers are hard to use").
+
+![Track A A/B](../tmp/uplift/agentic_ab2.png)
 
 ## Honest caveats
 - **Weak agent, short horizon, small gold** (~60–110 at turn 16): low statistical power;
