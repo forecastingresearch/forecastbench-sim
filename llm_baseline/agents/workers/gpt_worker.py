@@ -138,8 +138,10 @@ class AzureGPTWorker(BaseWorker):
             f"[{m.get('role', 'user')}]\n{m.get('content', '')}"
             for m in self.dialogue
         )
+        # No max_tokens: never truncate the model's output (Gemini 2.5 also
+        # spends tokens on hidden thinking, which truncation would starve).
         text = self.llm.get_response(prompt, temperature=temperature,
-                                     max_tokens=2048)
+                                     max_tokens=None)
         return {"choices": [{"message": {"role": "assistant",
                                          "content": text or ""}}]}
 
