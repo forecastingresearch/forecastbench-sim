@@ -23,7 +23,7 @@ ROOT = Path(__file__).resolve().parent.parent.parent
 
 def run_one(seed, arm, rep, horizon, ai, forecasts, model, outdir):
     out = Path(outdir) / f"ag_s{seed}_{arm}_r{rep}.json"
-    cmd = [sys.executable, str(ROOT / "scripts" / "uplift" / "agentic_run.py"),
+    cmd = [sys.executable, "-u", str(ROOT / "scripts" / "uplift" / "agentic_run.py"),
            "--seed", str(seed), "--arm", arm, "--horizon", str(horizon),
            "--ai", str(ai), "--output", str(out)]
     if forecasts:
