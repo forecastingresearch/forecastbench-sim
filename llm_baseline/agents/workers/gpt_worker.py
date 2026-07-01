@@ -156,17 +156,23 @@ class AzureGPTWorker(BaseWorker):
 
     def parse_response(self, response):
         content = response['choices'][0]['message']['content']
+        # Always extract the {...} span first — models often wrap JSON in ```json
+        # fences or add prose, which broke the original (it only sliced when the
+        # braces were unbalanced, so fenced-but-balanced JSON failed to parse).
         start_index = content.find('{')
         end_index = content.rfind('}') + 1
+        if start_index != -1 and end_index > start_index:
+            content = content[start_index:end_index]
         rlack = content.count("{") - content.count("}")
         if rlack > 0:
-            content = content[start_index:end_index] + "}" * rlack
+            content = content + "}" * rlack
         return json.loads(content)
 
     def process_command(self, response, obs_input_prompt,
                         current_avail_actions):
         # First try to parse the reponse by the given json format
         fc_logger.debug(f'Processing response: {response}')
+        _dbg = os.environ.get("DEBUG_AGENT")
         try:
             command_json = self.parse_response(response)
             command_input = command_json['command']['input']
@@ -174,8 +180,14 @@ class AzureGPTWorker(BaseWorker):
         except Exception as e:
             fc_logger.error(
                 f'\nRESPONSE:{response}\nCommond json parsing error: {e}')
+            if _dbg:
+                content = response['choices'][0]['message']['content']
+                print(f'[DBG parse-fail: {e}] content[:200]={content[:200]!r}', flush=True)
             print('Not in given json format, retrying...')
             return None, self.prompt_handler.insist_json()
+
+        if _dbg:
+            print(f'[DBG command={command_name} input={str(command_input)[:80]}]', flush=True)
 
         # Then check if the command is valid
         if command_name not in self.command_handlers:

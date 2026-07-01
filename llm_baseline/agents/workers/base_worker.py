@@ -132,7 +132,7 @@ class BaseWorker(ABC):
                     continue
             else:
                 exec_action_name = random.choice(avail_action_list)
-                fc_logger.debug('Timeout, randomly choose:', exec_action_name)
+                fc_logger.debug(f'Timeout, randomly choose: {exec_action_name}')
                 print('Timeout, randomly choose:', exec_action_name)
                 break
         return exec_action_name

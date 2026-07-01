@@ -22,8 +22,10 @@ import re
 import copy
 from civrealm.freeciv.utils.freeciv_logging import fc_logger
 
-print(os.getcwd())
-PROMPT_ROOT_DIR = "./prompt_collections/"
+# Absolute path to the vendored prompt_collections/, robust to CWD.
+PROMPT_ROOT_DIR = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+    "prompt_collections", "")
 BASE_DIR = "base_prompts/"
 
 
