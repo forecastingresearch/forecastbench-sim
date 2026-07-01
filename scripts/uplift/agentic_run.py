@@ -104,7 +104,7 @@ def main() -> int:
                  f"your treasury (GOLD) by turn {args.horizon}. Prioritize actions "
                  f"that grow and protect your economy; nothing else matters.")
     fc_block = build_forecast_block(args.forecasts, args.seed, args.arm,
-                                    random.Random((args.seed, args.arm)))
+                                    random.Random(f"{args.seed}-{args.arm}"))
 
     env = gymnasium.make("civrealm/FreecivLLM-v0")
     agent = make_mission(objective, fc_block)

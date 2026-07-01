@@ -63,13 +63,14 @@ def checkpoint_baseline(seed: int, ckpt: int) -> dict:
 
 
 def build_scenario(seed: int, ckpt: int, horizon: int, fc_horizons: list,
-                   n: int, workers: int) -> dict:
+                   n: int, workers: int, governments: list = GOVERNMENTS) -> dict:
     rec_dir = f"logs/recordings/seed{seed}"
     end_turn = ckpt + horizon
     base = checkpoint_baseline(seed, ckpt)
 
-    # Build all rollout specs: status-quo + one set per government, n reseeds each.
-    policies = ["statusquo"] + GOVERNMENTS
+    # Build all rollout specs: status-quo (always, for forecasts) + one set per
+    # government policy (empty governments => forecast-only, ~5x faster).
+    policies = ["statusquo"] + list(governments)
     specs, meta = [], []
     for pol in policies:
         extra = None if pol == "statusquo" else [
@@ -116,8 +117,8 @@ def build_scenario(seed: int, ckpt: int, horizon: int, fc_horizons: list,
     gold_stats = {p: {"mean": mean(v), "n": len(v),
                       "vals": sorted(round(x, 1) for x in v)}
                   for p, v in gold_by_policy.items()}
-    govs = {g: gold_stats[g]["mean"] for g in GOVERNMENTS
-            if gold_stats[g]["mean"] is not None}
+    govs = {g: gold_stats[g]["mean"] for g in governments
+            if gold_stats.get(g, {}).get("mean") is not None}
     best_gov = max(govs, key=govs.get) if govs else None
 
     p_mc = {f"h{h}": {e: (mean(fc_hits[h][e]) if fc_hits[h][e] else None)
@@ -151,6 +152,8 @@ def main() -> int:
                     help="forecast horizons relative to checkpoint (default: H/2, H)")
     ap.add_argument("--n", type=int, default=8, help="rollouts per policy")
     ap.add_argument("--workers", type=int, default=6)
+    ap.add_argument("--governments", nargs="*", default=GOVERNMENTS,
+                    help="government policies to score (empty => forecast-only)")
     ap.add_argument("--output", type=str, required=True)
     args = ap.parse_args()
 
@@ -173,14 +176,14 @@ def main() -> int:
     for i, (sd, ck) in enumerate(todo):
         t0 = time.time()
         try:
-            sc = build_scenario(sd, ck, args.horizon, fc_h, args.n, args.workers)
+            sc = build_scenario(sd, ck, args.horizon, fc_h, args.n, args.workers,
+                                governments=args.governments)
         except Exception as e:  # noqa: BLE001
             print(f"[{i+1}/{len(todo)}] seed{sd} T{ck} FAILED: {e!r}")
             continue
         scenarios.append(sc)
-        gp = {g: (round(sc['gold_by_policy'][g]['mean'], 0)
-                  if sc['gold_by_policy'][g]['mean'] is not None else None)
-              for g in GOVERNMENTS}
+        gp = {g: (round(v['mean'], 0) if v.get('mean') is not None else None)
+              for g, v in sc['gold_by_policy'].items() if g != 'statusquo'}
         print(f"[{i+1}/{len(todo)}] seed{sd} T{ck} ({time.time()-t0:.0f}s) "
               f"best={sc['best_gov']} spread={sc['gold_spread']} gold={gp}")
         print(f"      p_mc h{fc_h[-1]}: "
