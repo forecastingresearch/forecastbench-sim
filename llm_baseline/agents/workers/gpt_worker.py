@@ -28,8 +28,8 @@ from agents.prompt_handlers.base_prompt_handler import BasePromptHandler
 
 from .base_worker import BaseWorker
 
-# Model id is configurable so the run script can pick it (default: Gemini 2.5 Pro).
-UPLIFT_MODEL_ID = os.environ.get("UPLIFT_MODEL", "google/gemini-2.5-pro")
+# Model id is configurable so the run script can pick it (default: Gemini 2.5 Flash).
+UPLIFT_MODEL_ID = os.environ.get("UPLIFT_MODEL", "google/gemini-2.5-flash")
 
 
 class _StubMemory:
@@ -113,9 +113,8 @@ class AzureGPTWorker(BaseWorker):
                   f'available action list, available actions are ' +
                   f'{current_avail_actions}, retrying...')
             fc_logger.error(
-                f'{self.name}\'s chosen action "{exec_action}"',
-                'not in the available action list, available',
-                f'actions are {current_avail_actions}, retrying...')
+                f'{self.name}\'s chosen action "{exec_action}" not in the '
+                f'available action list {current_avail_actions}, retrying...')
             return None, self.prompt_handler.insist_avail_action()
 
         self.taken_actions_list.append(command_input['action'])
