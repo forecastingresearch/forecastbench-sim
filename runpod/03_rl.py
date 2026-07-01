@@ -32,7 +32,7 @@ import torch
 from datasets import Dataset
 from transformers import (AutoTokenizer, AutoModelForCausalLM,
                           BitsAndBytesConfig)
-from peft import PeftModel, LoraConfig
+from peft import PeftModel, LoraConfig, get_peft_model
 from trl import GRPOConfig, GRPOTrainer
 
 
@@ -62,8 +62,9 @@ def main() -> int:
     ap.add_argument("--train", required=True)
     ap.add_argument("--val", required=True)
     ap.add_argument("--base", default="Qwen/Qwen3-14B")
-    ap.add_argument("--adapter", required=True,
-                    help="Path to SFT LoRA adapter to start from.")
+    ap.add_argument("--adapter", default=None,
+                    help="Path to SFT LoRA adapter to start from. "
+                         "Omit for RL from the base model.")
     ap.add_argument("--output", default="runs/rl")
     ap.add_argument("--num-generations", type=int, default=4,
                     help="G in GRPO. 1 = REINFORCE-with-baseline (~ReMax-style).")
@@ -80,21 +81,47 @@ def main() -> int:
     ap.add_argument("--use-weights", action="store_true",
                     help="Multiply per-example reward by 4*p*(1-p).")
     ap.add_argument("--unparseable-penalty", type=float, default=-1.0)
+    ap.add_argument("--use-vllm", action="store_true",
+                    help="Use vLLM for rollout generation (5-10x faster than HF generate).")
+    ap.add_argument("--no-quant", action="store_true",
+                    help="Skip 4-bit quant; load base in bf16. Needed on H200 with use_vllm.")
+    ap.add_argument("--grad-checkpoint", action="store_true",
+                    help="Enable gradient checkpointing. Required at seq>4K on most GPUs.")
     args = ap.parse_args()
 
     Path(args.output).mkdir(parents=True, exist_ok=True)
 
-    print(f"Loading base {args.base} in 4-bit + SFT adapter from {args.adapter}...")
-    bnb = BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_quant_type="nf4",
-                             bnb_4bit_compute_dtype=torch.bfloat16,
-                             bnb_4bit_use_double_quant=True)
     tok = AutoTokenizer.from_pretrained(args.base, trust_remote_code=True)
     if tok.pad_token is None:
         tok.pad_token = tok.eos_token
+
+    adapter_desc = (f"SFT adapter from {args.adapter}" if args.adapter
+                    else "new trainable LoRA adapter")
+    if args.no_quant:
+        print(f"Loading base {args.base} in bf16 + {adapter_desc}...")
+        bnb = None
+    else:
+        print(f"Loading base {args.base} in 4-bit + {adapter_desc}...")
+        bnb = BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_quant_type="nf4",
+                                 bnb_4bit_compute_dtype=torch.bfloat16,
+                                 bnb_4bit_use_double_quant=True)
     model = AutoModelForCausalLM.from_pretrained(
         args.base, quantization_config=bnb, torch_dtype=torch.bfloat16,
-        device_map="auto", trust_remote_code=True)
-    model = PeftModel.from_pretrained(model, args.adapter, is_trainable=True)
+        device_map="auto", trust_remote_code=True,
+        attn_implementation="sdpa")
+    if args.no_quant and args.grad_checkpoint:
+        model.enable_input_require_grads()
+        model.gradient_checkpointing_enable()
+    if args.adapter is None:
+        print("[rl] starting from base model (no SFT adapter)")
+        lora = LoraConfig(
+            r=16, lora_alpha=32,
+            target_modules=["q_proj", "k_proj", "v_proj", "o_proj",
+                            "gate_proj", "up_proj", "down_proj"],
+            lora_dropout=0.05, bias="none", task_type="CAUSAL_LM")
+        model = get_peft_model(model, lora)
+    else:
+        model = PeftModel.from_pretrained(model, args.adapter, is_trainable=True)
     # Merge nothing — keep adapter trainable. TRL will optimize the LoRA.
 
     # Build dataset: each example carries the prompt and a precomputed p_mc.
@@ -103,7 +130,10 @@ def main() -> int:
     val = load_jsonl(args.val)
 
     def to_record(ex):
-        return {"prompt": ex["prompt"], "p_mc": float(ex["p_mc"]),
+        msgs = [{"role": "user", "content": ex["prompt"]}]
+        prompt_text = tok.apply_chat_template(
+            msgs, tokenize=False, add_generation_prompt=True)
+        return {"prompt": prompt_text, "p_mc": float(ex["p_mc"]),
                 "weight": float(ex.get("weight", 1.0)), "qid": ex["qid"],
                 "game_id": ex["game_id"]}
 
@@ -138,16 +168,20 @@ def main() -> int:
         warmup_ratio=0.05,
         bf16=True,
         logging_steps=5,
-        save_strategy="steps", save_steps=200, save_total_limit=2,
+        save_strategy="steps", save_steps=100, save_total_limit=2,
         report_to=[],
         num_generations=args.num_generations,
         max_prompt_length=args.max_prompt,
         max_completion_length=args.max_completion,
         beta=args.kl_coef,
         temperature=0.7,
-        scale_rewards=not args.dr_grpo,  # Dr.GRPO: turn off per-group std norm
+        scale_rewards=not args.dr_grpo,
         log_completions=True,
         num_completions_to_print=2,
+        use_vllm=args.use_vllm,
+        vllm_mode="colocate" if args.use_vllm else None,
+        vllm_gpu_memory_utilization=0.25 if args.use_vllm else None,
+        gradient_checkpointing=args.grad_checkpoint,
     )
 
     trainer = GRPOTrainer(

@@ -21,6 +21,10 @@ import argparse
 from pathlib import Path
 
 PROB_RE = re.compile(r"PROBABILITY:\s*([01](?:\.\d+)?|\.\d+)", re.IGNORECASE)
+GUIDED_PROB_RE = (
+    r"[\s\S]*PROBABILITY:\s*"
+    r"(?:0(?:\.\d{1,2})?|1(?:\.0{1,2})?)\s*"
+)
 
 
 def parse_probability(text: str) -> float | None:
@@ -100,25 +104,59 @@ def main() -> int:
     ap.add_argument("--freeciv-val", default=None)
     ap.add_argument("--output", required=True)
     ap.add_argument("--max-new-tokens", type=int, default=400)
+    ap.add_argument("--max-model-len", type=int, default=16384,
+                    help="vLLM context length. Needs to exceed the longest "
+                         "chat-templated prompt plus generated tokens.")
+    ap.add_argument("--gpu-memory-utilization", type=float, default=0.88)
     ap.add_argument("--temperature", type=float, default=0.0,
                     help="0 = greedy. For variance-style eval bump to 0.7.")
     ap.add_argument("--limit", type=int, default=None,
                     help="Subsample for quick checks.")
+    ap.add_argument("--chat-template", action="store_true",
+                    help="Wrap each prompt as a user message and apply the model's chat "
+                         "template (via llm.chat). Default off keeps raw-completion behavior.")
+    ap.add_argument("--enable-thinking", action="store_true",
+                    help="When --chat-template is set, keep Qwen3 thinking mode enabled. "
+                         "Default is disabled so eval reaches the final probability line.")
+    ap.add_argument("--no-guided-probability", action="store_true",
+                    help="Disable vLLM regex-guided decoding for the final PROBABILITY line.")
     args = ap.parse_args()
 
     Path(args.output).parent.mkdir(parents=True, exist_ok=True)
     from vllm import LLM, SamplingParams
     from vllm.lora.request import LoRARequest
+    from vllm.sampling_params import GuidedDecodingParams
 
     enable_lora = args.adapter is not None
     llm = LLM(model=args.base, enable_lora=enable_lora, max_lora_rank=64,
-              gpu_memory_utilization=0.88, dtype="bfloat16",
-              max_model_len=10240, enforce_eager=False)
-    sp = SamplingParams(temperature=args.temperature, max_tokens=args.max_new_tokens,
-                        stop=["</s>", "<|endoftext|>", "<|im_end|>"])
+              gpu_memory_utilization=args.gpu_memory_utilization,
+              dtype="bfloat16", max_model_len=args.max_model_len,
+              enforce_eager=False)
+    guided = None
+    if not args.no_guided_probability:
+        guided = GuidedDecodingParams(regex=GUIDED_PROB_RE)
+    sp = SamplingParams(
+        temperature=args.temperature,
+        max_tokens=args.max_new_tokens,
+        stop=["</s>", "<|endoftext|>", "<|im_end|>"],
+        guided_decoding=guided,
+    )
+    fallback_sp = SamplingParams(
+        temperature=args.temperature,
+        max_tokens=args.max_new_tokens,
+        stop=["</s>", "<|endoftext|>", "<|im_end|>"],
+    )
     lora_req = LoRARequest("adapter", 1, args.adapter) if enable_lora else None
 
-    output = {"base": args.base, "adapter": args.adapter, "results": {}}
+    output = {
+        "base": args.base,
+        "adapter": args.adapter,
+        "chat_template": args.chat_template,
+        "enable_thinking": args.enable_thinking,
+        "guided_probability": guided is not None,
+        "max_model_len": args.max_model_len,
+        "results": {},
+    }
 
     suites = []
     if args.forecastbench:
@@ -129,9 +167,30 @@ def main() -> int:
     for name, items in suites:
         if args.limit:
             items = items[: args.limit]
-        print(f"\n[{name}] generating on {len(items)} items...")
+        print(f"\n[{name}] generating on {len(items)} items "
+              f"(chat_template={'on' if args.chat_template else 'off'})...")
         prompts = [it[1] for it in items]
-        outs = llm.generate(prompts, sp, lora_request=lora_req)
+        chat_kwargs = None
+        if args.chat_template and not args.enable_thinking:
+            chat_kwargs = {"enable_thinking": False}
+        try:
+            if args.chat_template:
+                messages = [[{"role": "user", "content": p}] for p in prompts]
+                outs = llm.chat(messages, sp, lora_request=lora_req,
+                                chat_template_kwargs=chat_kwargs)
+            else:
+                outs = llm.generate(prompts, sp, lora_request=lora_req)
+        except Exception as e:
+            if guided is None:
+                raise
+            print(f"  guided decoding failed ({e}); retrying without guided decoding")
+            output["guided_probability_fallback"] = str(e)
+            if args.chat_template:
+                messages = [[{"role": "user", "content": p}] for p in prompts]
+                outs = llm.chat(messages, fallback_sp, lora_request=lora_req,
+                                chat_template_kwargs=chat_kwargs)
+            else:
+                outs = llm.generate(prompts, fallback_sp, lora_request=lora_req)
         rows = []
         for (qid, _prompt, target, meta), out in zip(items, outs):
             text = out.outputs[0].text if out.outputs else ""
