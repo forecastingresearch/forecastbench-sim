@@ -1,0 +1,133 @@
+{
+  "spearman": 0.9384615384615385,
+  "n_questions": 163,
+  "min_rollouts": 15,
+  "rows": [
+    {
+      "model": "google/gemini-2.5-pro",
+      "n": 163,
+      "brier_hard": 0.24604907975460125,
+      "brier_dense": 0.1444723926380368,
+      "rank_hard": 1,
+      "rank_dense": 1,
+      "rank_shift": 0
+    },
+    {
+      "model": "openai/gpt-4o",
+      "n": 163,
+      "brier_hard": 0.269820245398773,
+      "brier_dense": 0.17545828220858894,
+      "rank_hard": 3,
+      "rank_dense": 5,
+      "rank_shift": -2
+    },
+    {
+      "model": "google/gemini-2.5-flash",
+      "n": 163,
+      "brier_hard": 0.32091042944785275,
+      "brier_dense": 0.2028736196319018,
+      "rank_hard": 13,
+      "rank_dense": 11,
+      "rank_shift": 2
+    },
+    {
+      "model": "openai/gpt-3.5-turbo-0125",
+      "n": 163,
+      "brier_hard": 0.32993865030674846,
+      "brier_dense": 0.23503067484662574,
+      "rank_hard": 14,
+      "rank_dense": 14,
+      "rank_shift": 0
+    },
+    {
+      "model": "openai/gpt-5-mini-2025-08-07",
+      "n": 163,
+      "brier_hard": 0.28198159509202453,
+      "brier_dense": 0.18177300613496933,
+      "rank_hard": 7,
+      "rank_dense": 7,
+      "rank_shift": 0
+    },
+    {
+      "model": "openai/gpt-4.1-2025-04-14",
+      "n": 163,
+      "brier_hard": 0.2914466257668712,
+      "brier_dense": 0.18759386503067485,
+      "rank_hard": 9,
+      "rank_dense": 9,
+      "rank_shift": 0
+    },
+    {
+      "model": "openai/o4-mini-2025-04-16",
+      "n": 163,
+      "brier_hard": 0.30767546012269936,
+      "brier_dense": 0.20978588957055214,
+      "rank_hard": 11,
+      "rank_dense": 12,
+      "rank_shift": -1
+    },
+    {
+      "model": "google/gemini-2.0-flash-lite-001",
+      "n": 163,
+      "brier_hard": 0.2701061349693252,
+      "brier_dense": 0.1740877300613497,
+      "rank_hard": 4,
+      "rank_dense": 4,
+      "rank_shift": 0
+    },
+    {
+      "model": "mistral/mistral-large-2411",
+      "n": 163,
+      "brier_hard": 0.31512269938650306,
+      "brier_dense": 0.21383435582822083,
+      "rank_hard": 12,
+      "rank_dense": 13,
+      "rank_shift": -1
+    },
+    {
+      "model": "xai/grok-4-fast-non-reasoning",
+      "n": 163,
+      "brier_hard": 0.2843079754601227,
+      "brier_dense": 0.19514233128834355,
+      "rank_hard": 8,
+      "rank_dense": 10,
+      "rank_shift": -2
+    },
+    {
+      "model": "openai/gpt-5-2025-08-07",
+      "n": 163,
+      "brier_hard": 0.2765251533742331,
+      "brier_dense": 0.1712122699386503,
+      "rank_hard": 6,
+      "rank_dense": 3,
+      "rank_shift": 3
+    },
+    {
+      "model": "together_ai/meta-llama/Llama-3.3-70B-Instruct-Turbo",
+      "n": 162,
+      "brier_hard": 0.29647222222222225,
+      "brier_dense": 0.18389814814814814,
+      "rank_hard": 10,
+      "rank_dense": 8,
+      "rank_shift": 2
+    },
+    {
+      "model": "xai/grok-4-fast-reasoning",
+      "n": 163,
+      "brier_hard": 0.27022515337423314,
+      "brier_dense": 0.1759122699386503,
+      "rank_hard": 5,
+      "rank_dense": 6,
+      "rank_shift": -1
+    },
+    {
+      "model": "mistral/mistral-large-2407",
+      "n": 163,
+      "brier_hard": 0.26751349693251536,
+      "brier_dense": 0.1492435582822086,
+      "rank_hard": 2,
+      "rank_dense": 2,
+      "rank_shift": 0
+    }
+  ]
+}

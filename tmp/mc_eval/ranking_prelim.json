@@ -1,0 +1,97 @@
+{
+  "spearman": 0.9151515151515152,
+  "n_questions": 109,
+  "min_rollouts": 15,
+  "rows": [
+    {
+      "model": "google/gemini-2.5-pro",
+      "n": 109,
+      "brier_hard": 0.25204311926605505,
+      "brier_dense": 0.12944220183486238,
+      "rank_hard": 1,
+      "rank_dense": 1,
+      "rank_shift": 0
+    },
+    {
+      "model": "openai/gpt-4o",
+      "n": 109,
+      "brier_hard": 0.25435963302752296,
+      "brier_dense": 0.16634587155963304,
+      "rank_hard": 2,
+      "rank_dense": 3,
+      "rank_shift": -1
+    },
+    {
+      "model": "google/gemini-2.5-flash",
+      "n": 109,
+      "brier_hard": 0.27196605504587157,
+      "brier_dense": 0.16282385321100915,
+      "rank_hard": 3,
+      "rank_dense": 2,
+      "rank_shift": 1
+    },
+    {
+      "model": "openai/gpt-3.5-turbo-0125",
+      "n": 109,
+      "brier_hard": 0.29358073394495415,
+      "brier_dense": 0.19924587155963303,
+      "rank_hard": 4,
+      "rank_dense": 5,
+      "rank_shift": -1
+    },
+    {
+      "model": "openai/gpt-5-mini-2025-08-07",
+      "n": 109,
+      "brier_hard": 0.31222660550458714,
+      "brier_dense": 0.23088256880733946,
+      "rank_hard": 6,
+      "rank_dense": 6,
+      "rank_shift": 0
+    },
+    {
+      "model": "openai/gpt-4.1-2025-04-14",
+      "n": 109,
+      "brier_hard": 0.3426880733944954,
+      "brier_dense": 0.25515137614678896,
+      "rank_hard": 8,
+      "rank_dense": 7,
+      "rank_shift": 1
+    },
+    {
+      "model": "openai/o4-mini-2025-04-16",
+      "n": 109,
+      "brier_hard": 0.3631669724770642,
+      "brier_dense": 0.26404311926605506,
+      "rank_hard": 10,
+      "rank_dense": 8,
+      "rank_shift": 2
+    },
+    {
+      "model": "google/gemini-2.0-flash-lite-001",
+      "n": 109,
+      "brier_hard": 0.34281926605504587,
+      "brier_dense": 0.2698880733944954,
+      "rank_hard": 9,
+      "rank_dense": 10,
+      "rank_shift": -1
+    },
+    {
+      "model": "mistral/mistral-large-2411",
+      "n": 109,
+      "brier_hard": 0.34073394495412845,
+      "brier_dense": 0.264105504587156,
+      "rank_hard": 7,
+      "rank_dense": 9,
+      "rank_shift": -2
+    },
+    {
+      "model": "xai/grok-4-fast-non-reasoning",
+      "n": 109,
+      "brier_hard": 0.298394495412844,
+      "brier_dense": 0.19786697247706422,
+      "rank_hard": 5,
+      "rank_dense": 4,
+      "rank_shift": 1
+    }
+  ]
+}

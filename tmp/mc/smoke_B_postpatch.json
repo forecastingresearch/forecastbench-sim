@@ -1,0 +1,26 @@
+{
+  "config": {
+    "base_seed": 122,
+    "checkpoint_turn": 100,
+    "run_turns": 3,
+    "rng_seeds": [
+      1
+    ],
+    "method": "save_edit",
+    "recording_dir": null,
+    "output": "tmp/mc/smoke_B_postpatch.json",
+    "tag": "smokeBp"
+  },
+  "results": [
+    {
+      "rng_seed": 1,
+      "fork_name": "smokeBpsavs1",
+      "success": false,
+      "final_turn": 0,
+      "player_states": {},
+      "error": "Subprocess produced no RESULT_JSON. stderr tail: '^^^^^^^^^^^^\\n  File \"/Users/jaeholee0404/.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/email/message.py\", line 614, in get_content_type\\n    value = self.get(\\'content-type\\', missing)\\n            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \"/Users/jaeholee0404/.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/email/message.py\", line 507, in get\\n    return self.policy.header_fetch_parse(k, v)\\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \"/Users/jaeholee0404/.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/email/_policybase.py\", line 324, in header_fetch_parse\\n    return self._sanitize_header(name, value)\\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \"/Users/jaeholee0404/.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/email/_policybase.py\", line 295, in _sanitize_header\\n    if _has_surrogates(value):\\n       ^^^^^^^^^^^^^^^^^^^^^^\\nRecursionError: maximum recursion depth exceeded\\n'"
+    }
+  ],
+  "elapsed_sec": 131.79036378860474,
+  "in_progress": false
+}

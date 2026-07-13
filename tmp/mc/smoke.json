@@ -1,0 +1,75 @@
+{
+  "config": {
+    "base_seed": 122,
+    "checkpoint_turn": 100,
+    "run_turns": 3,
+    "rng_seeds": [
+      1
+    ],
+    "method": "save_edit",
+    "recording_dir": null,
+    "output": "tmp/mc/smoke.json",
+    "tag": "smoke"
+  },
+  "results": [
+    {
+      "success": true,
+      "final_turn": 104,
+      "player_states": {
+        "0": {
+          "name": "Seed122forksmokesavs1",
+          "nation": 522,
+          "score": 130,
+          "gold": 1074,
+          "is_alive": true,
+          "researching": 75
+        },
+        "1": {
+          "name": "Chen Duxiu",
+          "nation": 107,
+          "score": 149,
+          "gold": 1232,
+          "is_alive": true,
+          "researching": 53
+        },
+        "2": {
+          "name": "Yahya Jammeh",
+          "nation": 181,
+          "score": -1,
+          "gold": 0,
+          "is_alive": true,
+          "researching": null
+        },
+        "3": {
+          "name": "James Spriggs Payne",
+          "nation": 279,
+          "score": 125,
+          "gold": 1219,
+          "is_alive": true,
+          "researching": 29
+        },
+        "4": {
+          "name": "Vijaya",
+          "nation": 271,
+          "score": 128,
+          "gold": 1352,
+          "is_alive": true,
+          "researching": 21
+        },
+        "5": {
+          "name": "Cofres\u00ed",
+          "nation": 559,
+          "score": -1,
+          "gold": 0,
+          "is_alive": true,
+          "researching": null
+        }
+      },
+      "error": null,
+      "rng_seed": 1,
+      "fork_name": "smokesavs1"
+    }
+  ],
+  "elapsed_sec": 21.33865213394165,
+  "in_progress": false
+}

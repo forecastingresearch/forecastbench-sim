@@ -32,3 +32,7 @@ reports/
 
 .env
 .worktrees/
+# Large generated run outputs (forecast-uplift sessions)
+saved_dialogues/
+tmp/session2/
+tmp/rl_session/

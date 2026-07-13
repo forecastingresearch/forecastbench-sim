@@ -1,0 +1,24 @@
+{
+  "seed": 100,
+  "arm": "scrambled",
+  "horizon": 30,
+  "final_gold": 64,
+  "final_turn": 12,
+  "steps": 34,
+  "elapsed_sec": 140.6,
+  "gold_trace": {
+    "1": 50,
+    "2": 51,
+    "3": 58,
+    "4": 59,
+    "5": 60,
+    "6": 61,
+    "7": 62,
+    "8": 63,
+    "9": 64,
+    "10": 65,
+    "11": 66,
+    "12": 64
+  },
+  "had_forecast": true
+}

@@ -1,0 +1,597 @@
+{
+  "config": {
+    "base_seed": 122,
+    "checkpoint_turn": 100,
+    "run_turns": 8,
+    "rng_seeds": [
+      100,
+      101,
+      102,
+      103,
+      104,
+      105,
+      106,
+      107,
+      108,
+      109
+    ],
+    "method": "save_edit",
+    "recording_dir": null,
+    "output": "tmp/mc/method_b_n10_batch2.json",
+    "tag": "mcB2"
+  },
+  "results": [
+    {
+      "success": true,
+      "final_turn": 109,
+      "player_states": {
+        "0": {
+          "name": "Seed122forkmcB2savs100",
+          "nation": 522,
+          "score": 139,
+          "gold": 1190,
+          "is_alive": true,
+          "researching": 75
+        },
+        "1": {
+          "name": "Chen Duxiu",
+          "nation": 107,
+          "score": 157,
+          "gold": 1271,
+          "is_alive": true,
+          "researching": 82
+        },
+        "2": {
+          "name": "Yahya Jammeh",
+          "nation": 181,
+          "score": -1,
+          "gold": 0,
+          "is_alive": true,
+          "researching": null
+        },
+        "3": {
+          "name": "James Spriggs Payne",
+          "nation": 279,
+          "score": 129,
+          "gold": 1187,
+          "is_alive": true,
+          "researching": 48
+        },
+        "4": {
+          "name": "Vijaya",
+          "nation": 271,
+          "score": 139,
+          "gold": 1481,
+          "is_alive": true,
+          "researching": 50
+        },
+        "5": {
+          "name": "Cofres\u00ed",
+          "nation": 559,
+          "score": -1,
+          "gold": 0,
+          "is_alive": true,
+          "researching": null
+        }
+      },
+      "error": null,
+      "rng_seed": 100,
+      "fork_name": "mcB2savs100"
+    },
+    {
+      "success": true,
+      "final_turn": 109,
+      "player_states": {
+        "0": {
+          "name": "Seed122forkmcB2savs101",
+          "nation": 522,
+          "score": 138,
+          "gold": 1150,
+          "is_alive": true,
+          "researching": 75
+        },
+        "1": {
+          "name": "Chen Duxiu",
+          "nation": 107,
+          "score": 158,
+          "gold": 1282,
+          "is_alive": true,
+          "researching": 71
+        },
+        "2": {
+          "name": "Yahya Jammeh",
+          "nation": 181,
+          "score": -1,
+          "gold": 0,
+          "is_alive": true,
+          "researching": null
+        },
+        "3": {
+          "name": "James Spriggs Payne",
+          "nation": 279,
+          "score": 130,
+          "gold": 1159,
+          "is_alive": true,
+          "researching": 49
+        },
+        "4": {
+          "name": "Vijaya",
+          "nation": 271,
+          "score": 137,
+          "gold": 1454,
+          "is_alive": true,
+          "researching": 50
+        },
+        "5": {
+          "name": "Cofres\u00ed",
+          "nation": 559,
+          "score": -1,
+          "gold": 0,
+          "is_alive": true,
+          "researching": null
+        }
+      },
+      "error": null,
+      "rng_seed": 101,
+      "fork_name": "mcB2savs101"
+    },
+    {
+      "success": true,
+      "final_turn": 109,
+      "player_states": {
+        "0": {
+          "name": "Seed122forkmcB2savs102",
+          "nation": 522,
+          "score": 139,
+          "gold": 1166,
+          "is_alive": true,
+          "researching": 75
+        },
+        "1": {
+          "name": "Chen Duxiu",
+          "nation": 107,
+          "score": 155,
+          "gold": 1247,
+          "is_alive": true,
+          "researching": 82
+        },
+        "2": {
+          "name": "Yahya Jammeh",
+          "nation": 181,
+          "score": -1,
+          "gold": 0,
+          "is_alive": true,
+          "researching": null
+        },
+        "3": {
+          "name": "James Spriggs Payne",
+          "nation": 279,
+          "score": 131,
+          "gold": 1218,
+          "is_alive": true,
+          "researching": 49
+        },
+        "4": {
+          "name": "Vijaya",
+          "nation": 271,
+          "score": 139,
+          "gold": 1517,
+          "is_alive": true,
+          "researching": 50
+        },
+        "5": {
+          "name": "Cofres\u00ed",
+          "nation": 559,
+          "score": -1,
+          "gold": 0,
+          "is_alive": true,
+          "researching": null
+        }
+      },
+      "error": null,
+      "rng_seed": 102,
+      "fork_name": "mcB2savs102"
+    },
+    {
+      "success": true,
+      "final_turn": 109,
+      "player_states": {
+        "0": {
+          "name": "Seed122forkmcB2savs103",
+          "nation": 522,
+          "score": 140,
+          "gold": 1171,
+          "is_alive": true,
+          "researching": 75
+        },
+        "1": {
+          "name": "Chen Duxiu",
+          "nation": 107,
+          "score": 155,
+          "gold": 1272,
+          "is_alive": true,
+          "researching": 50
+        },
+        "2": {
+          "name": "Yahya Jammeh",
+          "nation": 181,
+          "score": -1,
+          "gold": 0,
+          "is_alive": true,
+          "researching": null
+        },
+        "3": {
+          "name": "James Spriggs Payne",
+          "nation": 279,
+          "score": 130,
+          "gold": 1294,
+          "is_alive": true,
+          "researching": 29
+        },
+        "4": {
+          "name": "Vijaya",
+          "nation": 271,
+          "score": 136,
+          "gold": 1450,
+          "is_alive": true,
+          "researching": 54
+        },
+        "5": {
+          "name": "Cofres\u00ed",
+          "nation": 559,
+          "score": -1,
+          "gold": 0,
+          "is_alive": true,
+          "researching": null
+        }
+      },
+      "error": null,
+      "rng_seed": 103,
+      "fork_name": "mcB2savs103"
+    },
+    {
+      "success": true,
+      "final_turn": 109,
+      "player_states": {
+        "0": {
+          "name": "Seed122forkmcB2savs104",
+          "nation": 522,
+          "score": 142,
+          "gold": 1210,
+          "is_alive": true,
+          "researching": 75
+        },
+        "1": {
+          "name": "Chen Duxiu",
+          "nation": 107,
+          "score": 154,
+          "gold": 1260,
+          "is_alive": true,
+          "researching": 50
+        },
+        "2": {
+          "name": "Yahya Jammeh",
+          "nation": 181,
+          "score": -1,
+          "gold": 0,
+          "is_alive": true,
+          "researching": null
+        },
+        "3": {
+          "name": "James Spriggs Payne",
+          "nation": 279,
+          "score": 132,
+          "gold": 1185,
+          "is_alive": true,
+          "researching": 82
+        },
+        "4": {
+          "name": "Vijaya",
+          "nation": 271,
+          "score": 137,
+          "gold": 1442,
+          "is_alive": true,
+          "researching": 50
+        },
+        "5": {
+          "name": "Cofres\u00ed",
+          "nation": 559,
+          "score": -1,
+          "gold": 0,
+          "is_alive": true,
+          "researching": null
+        }
+      },
+      "error": null,
+      "rng_seed": 104,
+      "fork_name": "mcB2savs104"
+    },
+    {
+      "success": true,
+      "final_turn": 109,
+      "player_states": {
+        "0": {
+          "name": "Seed122forkmcB2savs105",
+          "nation": 522,
+          "score": 139,
+          "gold": 1174,
+          "is_alive": true,
+          "researching": 75
+        },
+        "1": {
+          "name": "Chen Duxiu",
+          "nation": 107,
+          "score": 155,
+          "gold": 1282,
+          "is_alive": true,
+          "researching": 82
+        },
+        "2": {
+          "name": "Yahya Jammeh",
+          "nation": 181,
+          "score": -1,
+          "gold": 0,
+          "is_alive": true,
+          "researching": null
+        },
+        "3": {
+          "name": "James Spriggs Payne",
+          "nation": 279,
+          "score": 139,
+          "gold": 1316,
+          "is_alive": true,
+          "researching": 72
+        },
+        "4": {
+          "name": "Vijaya",
+          "nation": 271,
+          "score": 138,
+          "gold": 1424,
+          "is_alive": true,
+          "researching": 50
+        },
+        "5": {
+          "name": "Cofres\u00ed",
+          "nation": 559,
+          "score": -1,
+          "gold": 0,
+          "is_alive": true,
+          "researching": null
+        }
+      },
+      "error": null,
+      "rng_seed": 105,
+      "fork_name": "mcB2savs105"
+    },
+    {
+      "success": true,
+      "final_turn": 109,
+      "player_states": {
+        "0": {
+          "name": "Seed122forkmcB2savs106",
+          "nation": 522,
+          "score": 140,
+          "gold": 1171,
+          "is_alive": true,
+          "researching": 75
+        },
+        "1": {
+          "name": "Chen Duxiu",
+          "nation": 107,
+          "score": 152,
+          "gold": 1257,
+          "is_alive": true,
+          "researching": 85
+        },
+        "2": {
+          "name": "Yahya Jammeh",
+          "nation": 181,
+          "score": -1,
+          "gold": 0,
+          "is_alive": true,
+          "researching": null
+        },
+        "3": {
+          "name": "James Spriggs Payne",
+          "nation": 279,
+          "score": 130,
+          "gold": 1150,
+          "is_alive": true,
+          "researching": 56
+        },
+        "4": {
+          "name": "Vijaya",
+          "nation": 271,
+          "score": 138,
+          "gold": 1456,
+          "is_alive": true,
+          "researching": 54
+        },
+        "5": {
+          "name": "Cofres\u00ed",
+          "nation": 559,
+          "score": -1,
+          "gold": 0,
+          "is_alive": true,
+          "researching": null
+        }
+      },
+      "error": null,
+      "rng_seed": 106,
+      "fork_name": "mcB2savs106"
+    },
+    {
+      "success": true,
+      "final_turn": 109,
+      "player_states": {
+        "0": {
+          "name": "Seed122forkmcB2savs107",
+          "nation": 522,
+          "score": 138,
+          "gold": 1150,
+          "is_alive": true,
+          "researching": 75
+        },
+        "1": {
+          "name": "Chen Duxiu",
+          "nation": 107,
+          "score": 158,
+          "gold": 1251,
+          "is_alive": true,
+          "researching": 50
+        },
+        "2": {
+          "name": "Yahya Jammeh",
+          "nation": 181,
+          "score": -1,
+          "gold": 0,
+          "is_alive": true,
+          "researching": null
+        },
+        "3": {
+          "name": "James Spriggs Payne",
+          "nation": 279,
+          "score": 128,
+          "gold": 1187,
+          "is_alive": true,
+          "researching": 48
+        },
+        "4": {
+          "name": "Vijaya",
+          "nation": 271,
+          "score": 137,
+          "gold": 1448,
+          "is_alive": true,
+          "researching": 54
+        },
+        "5": {
+          "name": "Cofres\u00ed",
+          "nation": 559,
+          "score": -1,
+          "gold": 0,
+          "is_alive": true,
+          "researching": null
+        }
+      },
+      "error": null,
+      "rng_seed": 107,
+      "fork_name": "mcB2savs107"
+    },
+    {
+      "success": true,
+      "final_turn": 109,
+      "player_states": {
+        "0": {
+          "name": "Seed122forkmcB2savs108",
+          "nation": 522,
+          "score": 138,
+          "gold": 1184,
+          "is_alive": true,
+          "researching": 75
+        },
+        "1": {
+          "name": "Chen Duxiu",
+          "nation": 107,
+          "score": 157,
+          "gold": 1251,
+          "is_alive": true,
+          "researching": 50
+        },
+        "2": {
+          "name": "Yahya Jammeh",
+          "nation": 181,
+          "score": -1,
+          "gold": 0,
+          "is_alive": true,
+          "researching": null
+        },
+        "3": {
+          "name": "James Spriggs Payne",
+          "nation": 279,
+          "score": 124,
+          "gold": 1061,
+          "is_alive": true,
+          "researching": 48
+        },
+        "4": {
+          "name": "Vijaya",
+          "nation": 271,
+          "score": 138,
+          "gold": 1418,
+          "is_alive": true,
+          "researching": 54
+        },
+        "5": {
+          "name": "Cofres\u00ed",
+          "nation": 559,
+          "score": -1,
+          "gold": 0,
+          "is_alive": true,
+          "researching": null
+        }
+      },
+      "error": null,
+      "rng_seed": 108,
+      "fork_name": "mcB2savs108"
+    },
+    {
+      "success": true,
+      "final_turn": 109,
+      "player_states": {
+        "0": {
+          "name": "Seed122forkmcB2savs109",
+          "nation": 522,
+          "score": 140,
+          "gold": 1150,
+          "is_alive": true,
+          "researching": 75
+        },
+        "1": {
+          "name": "Chen Duxiu",
+          "nation": 107,
+          "score": 151,
+          "gold": 1319,
+          "is_alive": true,
+          "researching": 85
+        },
+        "2": {
+          "name": "Yahya Jammeh",
+          "nation": 181,
+          "score": -1,
+          "gold": 0,
+          "is_alive": true,
+          "researching": null
+        },
+        "3": {
+          "name": "James Spriggs Payne",
+          "nation": 279,
+          "score": 135,
+          "gold": 1245,
+          "is_alive": true,
+          "researching": 4
+        },
+        "4": {
+          "name": "Vijaya",
+          "nation": 271,
+          "score": 136,
+          "gold": 1466,
+          "is_alive": true,
+          "researching": 50
+        },
+        "5": {
+          "name": "Cofres\u00ed",
+          "nation": 559,
+          "score": -1,
+          "gold": 0,
+          "is_alive": true,
+          "researching": null
+        }
+      },
+      "error": null,
+      "rng_seed": 109,
+      "fork_name": "mcB2savs109"
+    }
+  ],
+  "elapsed_sec": 325.8478591442108,
+  "in_progress": false
+}

@@ -1,0 +1,26 @@
+{
+  "config": {
+    "base_seed": 122,
+    "checkpoint_turn": 100,
+    "run_turns": 3,
+    "rng_seeds": [
+      1
+    ],
+    "method": "save_edit",
+    "recording_dir": null,
+    "output": "tmp/mc/smoke_B2.json",
+    "tag": "smkBp2"
+  },
+  "results": [
+    {
+      "success": false,
+      "final_turn": 0,
+      "player_states": {},
+      "error": "Timeout: No begin_turn packet received from server.",
+      "rng_seed": 1,
+      "fork_name": "smkBp2savs1"
+    }
+  ],
+  "elapsed_sec": 510.30089378356934,
+  "in_progress": false
+}
