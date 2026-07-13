@@ -119,7 +119,34 @@ class SavegameModifier:
             player_id: Player number
             tech_id: Technology ID to grant
         """
-        # Find the player's tech section
+        # Newer save format: techs live in the [research] table, one row per
+        # research number (== player id without team research), with a known-
+        # techs count in column 3 and a "done" bitstring as the last field:
+        #   0,"The Republic",8,0,2,"",30,"The Republic",0,"1010...01"
+        research_idx = self.content.find('[research]')
+        if research_idx != -1:
+            row_pattern = re.compile(
+                rf'^({player_id},"[^"]*",)(\d+)(,.*,")([01]+)("\s*)$', re.MULTILINE)
+
+            def replace_row(match):
+                head, count, mid, bits, tail = match.groups()
+                if tech_id >= len(bits) or bits[tech_id] == '1':
+                    return match.group(0)
+                new_bits = bits[:tech_id] + '1' + bits[tech_id + 1:]
+                return f'{head}{int(count) + 1}{mid}{new_bits}{tail}'
+
+            section_end = self.content.find('\n[', research_idx + 1)
+            section_end = len(self.content) if section_end == -1 else section_end
+            section = self.content[research_idx:section_end]
+            new_section, n = row_pattern.subn(replace_row, section)
+            if n == 0:
+                raise ValueError(
+                    f"grant_player_tech: no [research] row matched for player {player_id}")
+            self.content = (self.content[:research_idx] + new_section
+                            + self.content[section_end:])
+            return
+
+        # Old save format: per-player inventions bitstring.
         pattern = rf'(\[player{player_id}\].*?research="inventions",")[01]*"'
 
         def replace_tech(match):
@@ -136,7 +163,11 @@ class SavegameModifier:
 
             return f'{prefix}{tech_string}"'
 
-        self.content = re.sub(pattern, replace_tech, self.content, flags=re.DOTALL)
+        new_content, n = re.subn(pattern, replace_tech, self.content, flags=re.DOTALL)
+        if n == 0:
+            raise ValueError(
+                f"grant_player_tech: no inventions field matched for player {player_id}")
+        self.content = new_content
 
     # -------------------------------------------------------------------------
     # RNG state mutation (for Monte Carlo rollouts)
