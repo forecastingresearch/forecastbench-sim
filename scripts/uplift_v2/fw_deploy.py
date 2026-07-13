@@ -31,12 +31,17 @@ def _req(method: str, path: str, body: dict | None = None, params: dict | None =
         url, method=method,
         data=json.dumps(body).encode() if body is not None else None,
         headers={"Authorization": f"Bearer {os.environ['FIREWORKS_API_KEY']}",
-                 "Content-Type": "application/json"})
+                 "Content-Type": "application/json",
+                 "User-Agent": "civbench-fw-deploy/1.0"})
     try:
         with urllib.request.urlopen(req, timeout=60) as r:
             return r.status, json.load(r)
     except urllib.error.HTTPError as e:
-        return e.code, json.loads(e.read() or b"{}")
+        raw = e.read() or b"{}"
+        try:
+            return e.code, json.loads(raw)
+        except json.JSONDecodeError:
+            return e.code, {"raw": raw.decode(errors="replace")[:800]}
 
 
 def main() -> int:

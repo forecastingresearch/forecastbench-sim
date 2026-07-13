@@ -73,7 +73,8 @@ def call_chat(model: str, messages: list[dict], max_tokens: int, mode: str,
         f"{API_BASE}/chat/completions",
         data=json.dumps(body).encode(),
         headers={"Authorization": f"Bearer {os.environ['FIREWORKS_API_KEY']}",
-                 "Content-Type": "application/json"})
+                 "Content-Type": "application/json",
+                 "User-Agent": "civbench-eval/1.0"})
     with urllib.request.urlopen(req, timeout=timeout) as r:
         out = json.load(r)
     return out["choices"][0]["message"]["content"] or ""
