@@ -1,0 +1,26 @@
+{
+ "0": {
+  "player": 0,
+  "tech": "Iron Working",
+  "tech_id": 38,
+  "freq": 0.425
+ },
+ "1": {
+  "player": 1,
+  "tech": "Ceremonial Burial",
+  "tech_id": 10,
+  "freq": 0.475
+ },
+ "2": {
+  "player": 0,
+  "tech": "The Republic",
+  "tech_id": 80,
+  "freq": 0.25
+ },
+ "3": {
+  "player": 2,
+  "tech": "Warrior Code",
+  "tech_id": 86,
+  "freq": 0.55
+ }
+}

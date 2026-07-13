@@ -1,0 +1,9636 @@
+{
+  "config": {
+    "game_id": "seed3",
+    "base_seed": 3,
+    "snapshot_turn": 60,
+    "resolution_turns": [
+      90
+    ],
+    "rng_seeds": [
+      1001,
+      1002,
+      1003,
+      1004,
+      1005,
+      1006,
+      1007,
+      1008,
+      1009,
+      1010,
+      1011,
+      1012,
+      1013,
+      1014,
+      1015,
+      1016,
+      1017,
+      1018,
+      1019,
+      1020,
+      1021,
+      1022,
+      1023,
+      1024,
+      1025,
+      1026,
+      1027,
+      1028,
+      1029,
+      1030,
+      1031,
+      1032,
+      1033,
+      1034,
+      1035,
+      1036,
+      1037,
+      1038,
+      1039,
+      1040
+    ],
+    "questions": "data/questions_mc/seed3/questions.json",
+    "outdir": "tmp/causal/seed3/do-tech86p2",
+    "intervention": [
+      "tech:2:86"
+    ],
+    "fork_prefix": "cd3"
+  },
+  "answers": {
+    "q0000": [
+      {
+        "tag": "s1001",
+        "answer": true
+      },
+      {
+        "tag": "s1002",
+        "answer": true
+      },
+      {
+        "tag": "s1003",
+        "answer": true
+      },
+      {
+        "tag": "s1004",
+        "answer": true
+      },
+      {
+        "tag": "s1005",
+        "answer": true
+      },
+      {
+        "tag": "s1006",
+        "answer": true
+      },
+      {
+        "tag": "s1007",
+        "answer": true
+      },
+      {
+        "tag": "s1008",
+        "answer": true
+      },
+      {
+        "tag": "s1009",
+        "answer": true
+      },
+      {
+        "tag": "s1010",
+        "answer": true
+      },
+      {
+        "tag": "s1011",
+        "answer": true
+      },
+      {
+        "tag": "s1012",
+        "answer": true
+      },
+      {
+        "tag": "s1013",
+        "answer": true
+      },
+      {
+        "tag": "s1014",
+        "answer": true
+      },
+      {
+        "tag": "s1015",
+        "answer": true
+      },
+      {
+        "tag": "s1016",
+        "answer": true
+      },
+      {
+        "tag": "s1017",
+        "answer": true
+      },
+      {
+        "tag": "s1018",
+        "answer": true
+      },
+      {
+        "tag": "s1019",
+        "answer": true
+      },
+      {
+        "tag": "s1020",
+        "answer": true
+      },
+      {
+        "tag": "s1021",
+        "answer": true
+      },
+      {
+        "tag": "s1022",
+        "answer": true
+      },
+      {
+        "tag": "s1023",
+        "answer": true
+      },
+      {
+        "tag": "s1024",
+        "answer": false
+      },
+      {
+        "tag": "s1025",
+        "answer": false
+      },
+      {
+        "tag": "s1026",
+        "answer": true
+      },
+      {
+        "tag": "s1027",
+        "answer": true
+      },
+      {
+        "tag": "s1028",
+        "answer": true
+      },
+      {
+        "tag": "s1029",
+        "answer": true
+      },
+      {
+        "tag": "s1030",
+        "answer": true
+      },
+      {
+        "tag": "s1031",
+        "answer": true
+      },
+      {
+        "tag": "s1032",
+        "answer": true
+      },
+      {
+        "tag": "s1033",
+        "answer": true
+      },
+      {
+        "tag": "s1034",
+        "answer": true
+      },
+      {
+        "tag": "s1035",
+        "answer": true
+      },
+      {
+        "tag": "s1036",
+        "answer": true
+      },
+      {
+        "tag": "s1037",
+        "answer": true
+      },
+      {
+        "tag": "s1038",
+        "answer": true
+      },
+      {
+        "tag": "s1039",
+        "answer": true
+      },
+      {
+        "tag": "s1040",
+        "answer": true
+      }
+    ],
+    "q0001": [
+      {
+        "tag": "s1001",
+        "answer": false
+      },
+      {
+        "tag": "s1002",
+        "answer": false
+      },
+      {
+        "tag": "s1003",
+        "answer": false
+      },
+      {
+        "tag": "s1004",
+        "answer": false
+      },
+      {
+        "tag": "s1005",
+        "answer": false
+      },
+      {
+        "tag": "s1006",
+        "answer": false
+      },
+      {
+        "tag": "s1007",
+        "answer": true
+      },
+      {
+        "tag": "s1008",
+        "answer": false
+      },
+      {
+        "tag": "s1009",
+        "answer": false
+      },
+      {
+        "tag": "s1010",
+        "answer": false
+      },
+      {
+        "tag": "s1011",
+        "answer": false
+      },
+      {
+        "tag": "s1012",
+        "answer": false
+      },
+      {
+        "tag": "s1013",
+        "answer": false
+      },
+      {
+        "tag": "s1014",
+        "answer": false
+      },
+      {
+        "tag": "s1015",
+        "answer": false
+      },
+      {
+        "tag": "s1016",
+        "answer": false
+      },
+      {
+        "tag": "s1017",
+        "answer": false
+      },
+      {
+        "tag": "s1018",
+        "answer": true
+      },
+      {
+        "tag": "s1019",
+        "answer": false
+      },
+      {
+        "tag": "s1020",
+        "answer": false
+      },
+      {
+        "tag": "s1021",
+        "answer": false
+      },
+      {
+        "tag": "s1022",
+        "answer": true
+      },
+      {
+        "tag": "s1023",
+        "answer": false
+      },
+      {
+        "tag": "s1024",
+        "answer": true
+      },
+      {
+        "tag": "s1025",
+        "answer": false
+      },
+      {
+        "tag": "s1026",
+        "answer": false
+      },
+      {
+        "tag": "s1027",
+        "answer": false
+      },
+      {
+        "tag": "s1028",
+        "answer": false
+      },
+      {
+        "tag": "s1029",
+        "answer": false
+      },
+      {
+        "tag": "s1030",
+        "answer": false
+      },
+      {
+        "tag": "s1031",
+        "answer": false
+      },
+      {
+        "tag": "s1032",
+        "answer": false
+      },
+      {
+        "tag": "s1033",
+        "answer": false
+      },
+      {
+        "tag": "s1034",
+        "answer": false
+      },
+      {
+        "tag": "s1035",
+        "answer": false
+      },
+      {
+        "tag": "s1036",
+        "answer": false
+      },
+      {
+        "tag": "s1037",
+        "answer": false
+      },
+      {
+        "tag": "s1038",
+        "answer": false
+      },
+      {
+        "tag": "s1039",
+        "answer": false
+      },
+      {
+        "tag": "s1040",
+        "answer": false
+      }
+    ],
+    "q0002": [
+      {
+        "tag": "s1001",
+        "answer": true
+      },
+      {
+        "tag": "s1002",
+        "answer": true
+      },
+      {
+        "tag": "s1003",
+        "answer": true
+      },
+      {
+        "tag": "s1004",
+        "answer": true
+      },
+      {
+        "tag": "s1005",
+        "answer": true
+      },
+      {
+        "tag": "s1006",
+        "answer": true
+      },
+      {
+        "tag": "s1007",
+        "answer": true
+      },
+      {
+        "tag": "s1008",
+        "answer": true
+      },
+      {
+        "tag": "s1009",
+        "answer": true
+      },
+      {
+        "tag": "s1010",
+        "answer": true
+      },
+      {
+        "tag": "s1011",
+        "answer": true
+      },
+      {
+        "tag": "s1012",
+        "answer": true
+      },
+      {
+        "tag": "s1013",
+        "answer": true
+      },
+      {
+        "tag": "s1014",
+        "answer": true
+      },
+      {
+        "tag": "s1015",
+        "answer": true
+      },
+      {
+        "tag": "s1016",
+        "answer": true
+      },
+      {
+        "tag": "s1017",
+        "answer": true
+      },
+      {
+        "tag": "s1018",
+        "answer": true
+      },
+      {
+        "tag": "s1019",
+        "answer": true
+      },
+      {
+        "tag": "s1020",
+        "answer": true
+      },
+      {
+        "tag": "s1021",
+        "answer": true
+      },
+      {
+        "tag": "s1022",
+        "answer": true
+      },
+      {
+        "tag": "s1023",
+        "answer": true
+      },
+      {
+        "tag": "s1024",
+        "answer": true
+      },
+      {
+        "tag": "s1025",
+        "answer": true
+      },
+      {
+        "tag": "s1026",
+        "answer": true
+      },
+      {
+        "tag": "s1027",
+        "answer": true
+      },
+      {
+        "tag": "s1028",
+        "answer": true
+      },
+      {
+        "tag": "s1029",
+        "answer": true
+      },
+      {
+        "tag": "s1030",
+        "answer": true
+      },
+      {
+        "tag": "s1031",
+        "answer": true
+      },
+      {
+        "tag": "s1032",
+        "answer": true
+      },
+      {
+        "tag": "s1033",
+        "answer": true
+      },
+      {
+        "tag": "s1034",
+        "answer": true
+      },
+      {
+        "tag": "s1035",
+        "answer": true
+      },
+      {
+        "tag": "s1036",
+        "answer": true
+      },
+      {
+        "tag": "s1037",
+        "answer": true
+      },
+      {
+        "tag": "s1038",
+        "answer": true
+      },
+      {
+        "tag": "s1039",
+        "answer": true
+      },
+      {
+        "tag": "s1040",
+        "answer": true
+      }
+    ],
+    "q0003": [
+      {
+        "tag": "s1001",
+        "answer": false
+      },
+      {
+        "tag": "s1002",
+        "answer": true
+      },
+      {
+        "tag": "s1003",
+        "answer": false
+      },
+      {
+        "tag": "s1004",
+        "answer": false
+      },
+      {
+        "tag": "s1005",
+        "answer": false
+      },
+      {
+        "tag": "s1006",
+        "answer": true
+      },
+      {
+        "tag": "s1007",
+        "answer": true
+      },
+      {
+        "tag": "s1008",
+        "answer": true
+      },
+      {
+        "tag": "s1009",
+        "answer": true
+      },
+      {
+        "tag": "s1010",
+        "answer": true
+      },
+      {
+        "tag": "s1011",
+        "answer": true
+      },
+      {
+        "tag": "s1012",
+        "answer": true
+      },
+      {
+        "tag": "s1013",
+        "answer": true
+      },
+      {
+        "tag": "s1014",
+        "answer": true
+      },
+      {
+        "tag": "s1015",
+        "answer": false
+      },
+      {
+        "tag": "s1016",
+        "answer": false
+      },
+      {
+        "tag": "s1017",
+        "answer": false
+      },
+      {
+        "tag": "s1018",
+        "answer": true
+      },
+      {
+        "tag": "s1019",
+        "answer": false
+      },
+      {
+        "tag": "s1020",
+        "answer": false
+      },
+      {
+        "tag": "s1021",
+        "answer": true
+      },
+      {
+        "tag": "s1022",
+        "answer": true
+      },
+      {
+        "tag": "s1023",
+        "answer": true
+      },
+      {
+        "tag": "s1024",
+        "answer": true
+      },
+      {
+        "tag": "s1025",
+        "answer": true
+      },
+      {
+        "tag": "s1026",
+        "answer": true
+      },
+      {
+        "tag": "s1027",
+        "answer": true
+      },
+      {
+        "tag": "s1028",
+        "answer": true
+      },
+      {
+        "tag": "s1029",
+        "answer": true
+      },
+      {
+        "tag": "s1030",
+        "answer": false
+      },
+      {
+        "tag": "s1031",
+        "answer": true
+      },
+      {
+        "tag": "s1032",
+        "answer": true
+      },
+      {
+        "tag": "s1033",
+        "answer": false
+      },
+      {
+        "tag": "s1034",
+        "answer": true
+      },
+      {
+        "tag": "s1035",
+        "answer": true
+      },
+      {
+        "tag": "s1036",
+        "answer": true
+      },
+      {
+        "tag": "s1037",
+        "answer": false
+      },
+      {
+        "tag": "s1038",
+        "answer": true
+      },
+      {
+        "tag": "s1039",
+        "answer": true
+      },
+      {
+        "tag": "s1040",
+        "answer": true
+      }
+    ],
+    "q0004": [
+      {
+        "tag": "s1001",
+        "answer": true
+      },
+      {
+        "tag": "s1002",
+        "answer": true
+      },
+      {
+        "tag": "s1003",
+        "answer": true
+      },
+      {
+        "tag": "s1004",
+        "answer": true
+      },
+      {
+        "tag": "s1005",
+        "answer": true
+      },
+      {
+        "tag": "s1006",
+        "answer": true
+      },
+      {
+        "tag": "s1007",
+        "answer": true
+      },
+      {
+        "tag": "s1008",
+        "answer": true
+      },
+      {
+        "tag": "s1009",
+        "answer": true
+      },
+      {
+        "tag": "s1010",
+        "answer": true
+      },
+      {
+        "tag": "s1011",
+        "answer": true
+      },
+      {
+        "tag": "s1012",
+        "answer": true
+      },
+      {
+        "tag": "s1013",
+        "answer": true
+      },
+      {
+        "tag": "s1014",
+        "answer": true
+      },
+      {
+        "tag": "s1015",
+        "answer": true
+      },
+      {
+        "tag": "s1016",
+        "answer": true
+      },
+      {
+        "tag": "s1017",
+        "answer": true
+      },
+      {
+        "tag": "s1018",
+        "answer": true
+      },
+      {
+        "tag": "s1019",
+        "answer": true
+      },
+      {
+        "tag": "s1020",
+        "answer": true
+      },
+      {
+        "tag": "s1021",
+        "answer": false
+      },
+      {
+        "tag": "s1022",
+        "answer": false
+      },
+      {
+        "tag": "s1023",
+        "answer": true
+      },
+      {
+        "tag": "s1024",
+        "answer": true
+      },
+      {
+        "tag": "s1025",
+        "answer": true
+      },
+      {
+        "tag": "s1026",
+        "answer": false
+      },
+      {
+        "tag": "s1027",
+        "answer": true
+      },
+      {
+        "tag": "s1028",
+        "answer": true
+      },
+      {
+        "tag": "s1029",
+        "answer": true
+      },
+      {
+        "tag": "s1030",
+        "answer": true
+      },
+      {
+        "tag": "s1031",
+        "answer": true
+      },
+      {
+        "tag": "s1032",
+        "answer": false
+      },
+      {
+        "tag": "s1033",
+        "answer": true
+      },
+      {
+        "tag": "s1034",
+        "answer": true
+      },
+      {
+        "tag": "s1035",
+        "answer": true
+      },
+      {
+        "tag": "s1036",
+        "answer": true
+      },
+      {
+        "tag": "s1037",
+        "answer": true
+      },
+      {
+        "tag": "s1038",
+        "answer": true
+      },
+      {
+        "tag": "s1039",
+        "answer": true
+      },
+      {
+        "tag": "s1040",
+        "answer": true
+      }
+    ],
+    "q0005": [
+      {
+        "tag": "s1001",
+        "answer": true
+      },
+      {
+        "tag": "s1002",
+        "answer": true
+      },
+      {
+        "tag": "s1003",
+        "answer": true
+      },
+      {
+        "tag": "s1004",
+        "answer": true
+      },
+      {
+        "tag": "s1005",
+        "answer": true
+      },
+      {
+        "tag": "s1006",
+        "answer": true
+      },
+      {
+        "tag": "s1007",
+        "answer": true
+      },
+      {
+        "tag": "s1008",
+        "answer": true
+      },
+      {
+        "tag": "s1009",
+        "answer": true
+      },
+      {
+        "tag": "s1010",
+        "answer": true
+      },
+      {
+        "tag": "s1011",
+        "answer": true
+      },
+      {
+        "tag": "s1012",
+        "answer": true
+      },
+      {
+        "tag": "s1013",
+        "answer": true
+      },
+      {
+        "tag": "s1014",
+        "answer": false
+      },
+      {
+        "tag": "s1015",
+        "answer": true
+      },
+      {
+        "tag": "s1016",
+        "answer": true
+      },
+      {
+        "tag": "s1017",
+        "answer": true
+      },
+      {
+        "tag": "s1018",
+        "answer": true
+      },
+      {
+        "tag": "s1019",
+        "answer": true
+      },
+      {
+        "tag": "s1020",
+        "answer": true
+      },
+      {
+        "tag": "s1021",
+        "answer": true
+      },
+      {
+        "tag": "s1022",
+        "answer": true
+      },
+      {
+        "tag": "s1023",
+        "answer": true
+      },
+      {
+        "tag": "s1024",
+        "answer": true
+      },
+      {
+        "tag": "s1025",
+        "answer": true
+      },
+      {
+        "tag": "s1026",
+        "answer": true
+      },
+      {
+        "tag": "s1027",
+        "answer": true
+      },
+      {
+        "tag": "s1028",
+        "answer": true
+      },
+      {
+        "tag": "s1029",
+        "answer": true
+      },
+      {
+        "tag": "s1030",
+        "answer": true
+      },
+      {
+        "tag": "s1031",
+        "answer": true
+      },
+      {
+        "tag": "s1032",
+        "answer": true
+      },
+      {
+        "tag": "s1033",
+        "answer": false
+      },
+      {
+        "tag": "s1034",
+        "answer": true
+      },
+      {
+        "tag": "s1035",
+        "answer": true
+      },
+      {
+        "tag": "s1036",
+        "answer": true
+      },
+      {
+        "tag": "s1037",
+        "answer": true
+      },
+      {
+        "tag": "s1038",
+        "answer": true
+      },
+      {
+        "tag": "s1039",
+        "answer": true
+      },
+      {
+        "tag": "s1040",
+        "answer": true
+      }
+    ],
+    "q0006": [
+      {
+        "tag": "s1001",
+        "answer": true
+      },
+      {
+        "tag": "s1002",
+        "answer": true
+      },
+      {
+        "tag": "s1003",
+        "answer": false
+      },
+      {
+        "tag": "s1004",
+        "answer": true
+      },
+      {
+        "tag": "s1005",
+        "answer": true
+      },
+      {
+        "tag": "s1006",
+        "answer": true
+      },
+      {
+        "tag": "s1007",
+        "answer": true
+      },
+      {
+        "tag": "s1008",
+        "answer": true
+      },
+      {
+        "tag": "s1009",
+        "answer": true
+      },
+      {
+        "tag": "s1010",
+        "answer": true
+      },
+      {
+        "tag": "s1011",
+        "answer": true
+      },
+      {
+        "tag": "s1012",
+        "answer": true
+      },
+      {
+        "tag": "s1013",
+        "answer": true
+      },
+      {
+        "tag": "s1014",
+        "answer": false
+      },
+      {
+        "tag": "s1015",
+        "answer": false
+      },
+      {
+        "tag": "s1016",
+        "answer": false
+      },
+      {
+        "tag": "s1017",
+        "answer": false
+      },
+      {
+        "tag": "s1018",
+        "answer": true
+      },
+      {
+        "tag": "s1019",
+        "answer": false
+      },
+      {
+        "tag": "s1020",
+        "answer": true
+      },
+      {
+        "tag": "s1021",
+        "answer": true
+      },
+      {
+        "tag": "s1022",
+        "answer": true
+      },
+      {
+        "tag": "s1023",
+        "answer": true
+      },
+      {
+        "tag": "s1024",
+        "answer": true
+      },
+      {
+        "tag": "s1025",
+        "answer": true
+      },
+      {
+        "tag": "s1026",
+        "answer": true
+      },
+      {
+        "tag": "s1027",
+        "answer": true
+      },
+      {
+        "tag": "s1028",
+        "answer": true
+      },
+      {
+        "tag": "s1029",
+        "answer": false
+      },
+      {
+        "tag": "s1030",
+        "answer": false
+      },
+      {
+        "tag": "s1031",
+        "answer": true
+      },
+      {
+        "tag": "s1032",
+        "answer": true
+      },
+      {
+        "tag": "s1033",
+        "answer": false
+      },
+      {
+        "tag": "s1034",
+        "answer": true
+      },
+      {
+        "tag": "s1035",
+        "answer": false
+      },
+      {
+        "tag": "s1036",
+        "answer": true
+      },
+      {
+        "tag": "s1037",
+        "answer": true
+      },
+      {
+        "tag": "s1038",
+        "answer": true
+      },
+      {
+        "tag": "s1039",
+        "answer": true
+      },
+      {
+        "tag": "s1040",
+        "answer": true
+      }
+    ],
+    "q0007": [
+      {
+        "tag": "s1001",
+        "answer": false
+      },
+      {
+        "tag": "s1002",
+        "answer": true
+      },
+      {
+        "tag": "s1003",
+        "answer": true
+      },
+      {
+        "tag": "s1004",
+        "answer": true
+      },
+      {
+        "tag": "s1005",
+        "answer": true
+      },
+      {
+        "tag": "s1006",
+        "answer": true
+      },
+      {
+        "tag": "s1007",
+        "answer": true
+      },
+      {
+        "tag": "s1008",
+        "answer": true
+      },
+      {
+        "tag": "s1009",
+        "answer": false
+      },
+      {
+        "tag": "s1010",
+        "answer": true
+      },
+      {
+        "tag": "s1011",
+        "answer": false
+      },
+      {
+        "tag": "s1012",
+        "answer": true
+      },
+      {
+        "tag": "s1013",
+        "answer": true
+      },
+      {
+        "tag": "s1014",
+        "answer": false
+      },
+      {
+        "tag": "s1015",
+        "answer": false
+      },
+      {
+        "tag": "s1016",
+        "answer": true
+      },
+      {
+        "tag": "s1017",
+        "answer": true
+      },
+      {
+        "tag": "s1018",
+        "answer": false
+      },
+      {
+        "tag": "s1019",
+        "answer": true
+      },
+      {
+        "tag": "s1020",
+        "answer": false
+      },
+      {
+        "tag": "s1021",
+        "answer": false
+      },
+      {
+        "tag": "s1022",
+        "answer": true
+      },
+      {
+        "tag": "s1023",
+        "answer": true
+      },
+      {
+        "tag": "s1024",
+        "answer": true
+      },
+      {
+        "tag": "s1025",
+        "answer": true
+      },
+      {
+        "tag": "s1026",
+        "answer": false
+      },
+      {
+        "tag": "s1027",
+        "answer": false
+      },
+      {
+        "tag": "s1028",
+        "answer": true
+      },
+      {
+        "tag": "s1029",
+        "answer": false
+      },
+      {
+        "tag": "s1030",
+        "answer": true
+      },
+      {
+        "tag": "s1031",
+        "answer": true
+      },
+      {
+        "tag": "s1032",
+        "answer": false
+      },
+      {
+        "tag": "s1033",
+        "answer": true
+      },
+      {
+        "tag": "s1034",
+        "answer": false
+      },
+      {
+        "tag": "s1035",
+        "answer": true
+      },
+      {
+        "tag": "s1036",
+        "answer": true
+      },
+      {
+        "tag": "s1037",
+        "answer": false
+      },
+      {
+        "tag": "s1038",
+        "answer": true
+      },
+      {
+        "tag": "s1039",
+        "answer": true
+      },
+      {
+        "tag": "s1040",
+        "answer": false
+      }
+    ],
+    "q0008": [
+      {
+        "tag": "s1001",
+        "answer": true
+      },
+      {
+        "tag": "s1002",
+        "answer": true
+      },
+      {
+        "tag": "s1003",
+        "answer": false
+      },
+      {
+        "tag": "s1004",
+        "answer": true
+      },
+      {
+        "tag": "s1005",
+        "answer": true
+      },
+      {
+        "tag": "s1006",
+        "answer": true
+      },
+      {
+        "tag": "s1007",
+        "answer": true
+      },
+      {
+        "tag": "s1008",
+        "answer": true
+      },
+      {
+        "tag": "s1009",
+        "answer": true
+      },
+      {
+        "tag": "s1010",
+        "answer": true
+      },
+      {
+        "tag": "s1011",
+        "answer": true
+      },
+      {
+        "tag": "s1012",
+        "answer": true
+      },
+      {
+        "tag": "s1013",
+        "answer": true
+      },
+      {
+        "tag": "s1014",
+        "answer": true
+      },
+      {
+        "tag": "s1015",
+        "answer": true
+      },
+      {
+        "tag": "s1016",
+        "answer": true
+      },
+      {
+        "tag": "s1017",
+        "answer": false
+      },
+      {
+        "tag": "s1018",
+        "answer": true
+      },
+      {
+        "tag": "s1019",
+        "answer": false
+      },
+      {
+        "tag": "s1020",
+        "answer": true
+      },
+      {
+        "tag": "s1021",
+        "answer": true
+      },
+      {
+        "tag": "s1022",
+        "answer": true
+      },
+      {
+        "tag": "s1023",
+        "answer": true
+      },
+      {
+        "tag": "s1024",
+        "answer": true
+      },
+      {
+        "tag": "s1025",
+        "answer": true
+      },
+      {
+        "tag": "s1026",
+        "answer": true
+      },
+      {
+        "tag": "s1027",
+        "answer": true
+      },
+      {
+        "tag": "s1028",
+        "answer": true
+      },
+      {
+        "tag": "s1029",
+        "answer": true
+      },
+      {
+        "tag": "s1030",
+        "answer": true
+      },
+      {
+        "tag": "s1031",
+        "answer": true
+      },
+      {
+        "tag": "s1032",
+        "answer": true
+      },
+      {
+        "tag": "s1033",
+        "answer": true
+      },
+      {
+        "tag": "s1034",
+        "answer": true
+      },
+      {
+        "tag": "s1035",
+        "answer": true
+      },
+      {
+        "tag": "s1036",
+        "answer": true
+      },
+      {
+        "tag": "s1037",
+        "answer": true
+      },
+      {
+        "tag": "s1038",
+        "answer": true
+      },
+      {
+        "tag": "s1039",
+        "answer": true
+      },
+      {
+        "tag": "s1040",
+        "answer": true
+      }
+    ],
+    "q0009": [
+      {
+        "tag": "s1001",
+        "answer": true
+      },
+      {
+        "tag": "s1002",
+        "answer": true
+      },
+      {
+        "tag": "s1003",
+        "answer": true
+      },
+      {
+        "tag": "s1004",
+        "answer": false
+      },
+      {
+        "tag": "s1005",
+        "answer": true
+      },
+      {
+        "tag": "s1006",
+        "answer": true
+      },
+      {
+        "tag": "s1007",
+        "answer": true
+      },
+      {
+        "tag": "s1008",
+        "answer": true
+      },
+      {
+        "tag": "s1009",
+        "answer": true
+      },
+      {
+        "tag": "s1010",
+        "answer": true
+      },
+      {
+        "tag": "s1011",
+        "answer": true
+      },
+      {
+        "tag": "s1012",
+        "answer": true
+      },
+      {
+        "tag": "s1013",
+        "answer": true
+      },
+      {
+        "tag": "s1014",
+        "answer": true
+      },
+      {
+        "tag": "s1015",
+        "answer": true
+      },
+      {
+        "tag": "s1016",
+        "answer": true
+      },
+      {
+        "tag": "s1017",
+        "answer": true
+      },
+      {
+        "tag": "s1018",
+        "answer": true
+      },
+      {
+        "tag": "s1019",
+        "answer": true
+      },
+      {
+        "tag": "s1020",
+        "answer": true
+      },
+      {
+        "tag": "s1021",
+        "answer": true
+      },
+      {
+        "tag": "s1022",
+        "answer": true
+      },
+      {
+        "tag": "s1023",
+        "answer": true
+      },
+      {
+        "tag": "s1024",
+        "answer": true
+      },
+      {
+        "tag": "s1025",
+        "answer": true
+      },
+      {
+        "tag": "s1026",
+        "answer": true
+      },
+      {
+        "tag": "s1027",
+        "answer": true
+      },
+      {
+        "tag": "s1028",
+        "answer": true
+      },
+      {
+        "tag": "s1029",
+        "answer": true
+      },
+      {
+        "tag": "s1030",
+        "answer": true
+      },
+      {
+        "tag": "s1031",
+        "answer": true
+      },
+      {
+        "tag": "s1032",
+        "answer": true
+      },
+      {
+        "tag": "s1033",
+        "answer": true
+      },
+      {
+        "tag": "s1034",
+        "answer": true
+      },
+      {
+        "tag": "s1035",
+        "answer": true
+      },
+      {
+        "tag": "s1036",
+        "answer": true
+      },
+      {
+        "tag": "s1037",
+        "answer": true
+      },
+      {
+        "tag": "s1038",
+        "answer": true
+      },
+      {
+        "tag": "s1039",
+        "answer": true
+      },
+      {
+        "tag": "s1040",
+        "answer": true
+      }
+    ],
+    "q0010": [
+      {
+        "tag": "s1001",
+        "answer": false
+      },
+      {
+        "tag": "s1002",
+        "answer": false
+      },
+      {
+        "tag": "s1003",
+        "answer": false
+      },
+      {
+        "tag": "s1004",
+        "answer": true
+      },
+      {
+        "tag": "s1005",
+        "answer": false
+      },
+      {
+        "tag": "s1006",
+        "answer": false
+      },
+      {
+        "tag": "s1007",
+        "answer": false
+      },
+      {
+        "tag": "s1008",
+        "answer": false
+      },
+      {
+        "tag": "s1009",
+        "answer": false
+      },
+      {
+        "tag": "s1010",
+        "answer": false
+      },
+      {
+        "tag": "s1011",
+        "answer": false
+      },
+      {
+        "tag": "s1012",
+        "answer": false
+      },
+      {
+        "tag": "s1013",
+        "answer": false
+      },
+      {
+        "tag": "s1014",
+        "answer": false
+      },
+      {
+        "tag": "s1015",
+        "answer": false
+      },
+      {
+        "tag": "s1016",
+        "answer": false
+      },
+      {
+        "tag": "s1017",
+        "answer": true
+      },
+      {
+        "tag": "s1018",
+        "answer": false
+      },
+      {
+        "tag": "s1019",
+        "answer": false
+      },
+      {
+        "tag": "s1020",
+        "answer": false
+      },
+      {
+        "tag": "s1021",
+        "answer": false
+      },
+      {
+        "tag": "s1022",
+        "answer": false
+      },
+      {
+        "tag": "s1023",
+        "answer": false
+      },
+      {
+        "tag": "s1024",
+        "answer": false
+      },
+      {
+        "tag": "s1025",
+        "answer": false
+      },
+      {
+        "tag": "s1026",
+        "answer": false
+      },
+      {
+        "tag": "s1027",
+        "answer": false
+      },
+      {
+        "tag": "s1028",
+        "answer": false
+      },
+      {
+        "tag": "s1029",
+        "answer": false
+      },
+      {
+        "tag": "s1030",
+        "answer": false
+      },
+      {
+        "tag": "s1031",
+        "answer": false
+      },
+      {
+        "tag": "s1032",
+        "answer": false
+      },
+      {
+        "tag": "s1033",
+        "answer": false
+      },
+      {
+        "tag": "s1034",
+        "answer": false
+      },
+      {
+        "tag": "s1035",
+        "answer": false
+      },
+      {
+        "tag": "s1036",
+        "answer": false
+      },
+      {
+        "tag": "s1037",
+        "answer": false
+      },
+      {
+        "tag": "s1038",
+        "answer": false
+      },
+      {
+        "tag": "s1039",
+        "answer": false
+      },
+      {
+        "tag": "s1040",
+        "answer": false
+      }
+    ],
+    "q0011": [
+      {
+        "tag": "s1001",
+        "answer": true
+      },
+      {
+        "tag": "s1002",
+        "answer": true
+      },
+      {
+        "tag": "s1003",
+        "answer": true
+      },
+      {
+        "tag": "s1004",
+        "answer": false
+      },
+      {
+        "tag": "s1005",
+        "answer": true
+      },
+      {
+        "tag": "s1006",
+        "answer": true
+      },
+      {
+        "tag": "s1007",
+        "answer": true
+      },
+      {
+        "tag": "s1008",
+        "answer": false
+      },
+      {
+        "tag": "s1009",
+        "answer": true
+      },
+      {
+        "tag": "s1010",
+        "answer": true
+      },
+      {
+        "tag": "s1011",
+        "answer": true
+      },
+      {
+        "tag": "s1012",
+        "answer": true
+      },
+      {
+        "tag": "s1013",
+        "answer": true
+      },
+      {
+        "tag": "s1014",
+        "answer": true
+      },
+      {
+        "tag": "s1015",
+        "answer": false
+      },
+      {
+        "tag": "s1016",
+        "answer": false
+      },
+      {
+        "tag": "s1017",
+        "answer": true
+      },
+      {
+        "tag": "s1018",
+        "answer": true
+      },
+      {
+        "tag": "s1019",
+        "answer": true
+      },
+      {
+        "tag": "s1020",
+        "answer": true
+      },
+      {
+        "tag": "s1021",
+        "answer": true
+      },
+      {
+        "tag": "s1022",
+        "answer": false
+      },
+      {
+        "tag": "s1023",
+        "answer": true
+      },
+      {
+        "tag": "s1024",
+        "answer": true
+      },
+      {
+        "tag": "s1025",
+        "answer": true
+      },
+      {
+        "tag": "s1026",
+        "answer": true
+      },
+      {
+        "tag": "s1027",
+        "answer": true
+      },
+      {
+        "tag": "s1028",
+        "answer": true
+      },
+      {
+        "tag": "s1029",
+        "answer": true
+      },
+      {
+        "tag": "s1030",
+        "answer": true
+      },
+      {
+        "tag": "s1031",
+        "answer": true
+      },
+      {
+        "tag": "s1032",
+        "answer": true
+      },
+      {
+        "tag": "s1033",
+        "answer": true
+      },
+      {
+        "tag": "s1034",
+        "answer": true
+      },
+      {
+        "tag": "s1035",
+        "answer": true
+      },
+      {
+        "tag": "s1036",
+        "answer": false
+      },
+      {
+        "tag": "s1037",
+        "answer": true
+      },
+      {
+        "tag": "s1038",
+        "answer": true
+      },
+      {
+        "tag": "s1039",
+        "answer": true
+      },
+      {
+        "tag": "s1040",
+        "answer": true
+      }
+    ],
+    "q0012": [
+      {
+        "tag": "s1001",
+        "answer": true
+      },
+      {
+        "tag": "s1002",
+        "answer": true
+      },
+      {
+        "tag": "s1003",
+        "answer": false
+      },
+      {
+        "tag": "s1004",
+        "answer": true
+      },
+      {
+        "tag": "s1005",
+        "answer": true
+      },
+      {
+        "tag": "s1006",
+        "answer": true
+      },
+      {
+        "tag": "s1007",
+        "answer": true
+      },
+      {
+        "tag": "s1008",
+        "answer": true
+      },
+      {
+        "tag": "s1009",
+        "answer": true
+      },
+      {
+        "tag": "s1010",
+        "answer": true
+      },
+      {
+        "tag": "s1011",
+        "answer": true
+      },
+      {
+        "tag": "s1012",
+        "answer": true
+      },
+      {
+        "tag": "s1013",
+        "answer": true
+      },
+      {
+        "tag": "s1014",
+        "answer": true
+      },
+      {
+        "tag": "s1015",
+        "answer": true
+      },
+      {
+        "tag": "s1016",
+        "answer": true
+      },
+      {
+        "tag": "s1017",
+        "answer": false
+      },
+      {
+        "tag": "s1018",
+        "answer": true
+      },
+      {
+        "tag": "s1019",
+        "answer": false
+      },
+      {
+        "tag": "s1020",
+        "answer": true
+      },
+      {
+        "tag": "s1021",
+        "answer": true
+      },
+      {
+        "tag": "s1022",
+        "answer": true
+      },
+      {
+        "tag": "s1023",
+        "answer": true
+      },
+      {
+        "tag": "s1024",
+        "answer": true
+      },
+      {
+        "tag": "s1025",
+        "answer": true
+      },
+      {
+        "tag": "s1026",
+        "answer": true
+      },
+      {
+        "tag": "s1027",
+        "answer": true
+      },
+      {
+        "tag": "s1028",
+        "answer": true
+      },
+      {
+        "tag": "s1029",
+        "answer": true
+      },
+      {
+        "tag": "s1030",
+        "answer": true
+      },
+      {
+        "tag": "s1031",
+        "answer": true
+      },
+      {
+        "tag": "s1032",
+        "answer": true
+      },
+      {
+        "tag": "s1033",
+        "answer": true
+      },
+      {
+        "tag": "s1034",
+        "answer": true
+      },
+      {
+        "tag": "s1035",
+        "answer": true
+      },
+      {
+        "tag": "s1036",
+        "answer": true
+      },
+      {
+        "tag": "s1037",
+        "answer": true
+      },
+      {
+        "tag": "s1038",
+        "answer": true
+      },
+      {
+        "tag": "s1039",
+        "answer": true
+      },
+      {
+        "tag": "s1040",
+        "answer": true
+      }
+    ],
+    "q0013": [
+      {
+        "tag": "s1001",
+        "answer": true
+      },
+      {
+        "tag": "s1002",
+        "answer": true
+      },
+      {
+        "tag": "s1003",
+        "answer": true
+      },
+      {
+        "tag": "s1004",
+        "answer": false
+      },
+      {
+        "tag": "s1005",
+        "answer": true
+      },
+      {
+        "tag": "s1006",
+        "answer": true
+      },
+      {
+        "tag": "s1007",
+        "answer": true
+      },
+      {
+        "tag": "s1008",
+        "answer": true
+      },
+      {
+        "tag": "s1009",
+        "answer": true
+      },
+      {
+        "tag": "s1010",
+        "answer": true
+      },
+      {
+        "tag": "s1011",
+        "answer": true
+      },
+      {
+        "tag": "s1012",
+        "answer": true
+      },
+      {
+        "tag": "s1013",
+        "answer": true
+      },
+      {
+        "tag": "s1014",
+        "answer": true
+      },
+      {
+        "tag": "s1015",
+        "answer": true
+      },
+      {
+        "tag": "s1016",
+        "answer": true
+      },
+      {
+        "tag": "s1017",
+        "answer": true
+      },
+      {
+        "tag": "s1018",
+        "answer": true
+      },
+      {
+        "tag": "s1019",
+        "answer": true
+      },
+      {
+        "tag": "s1020",
+        "answer": true
+      },
+      {
+        "tag": "s1021",
+        "answer": true
+      },
+      {
+        "tag": "s1022",
+        "answer": true
+      },
+      {
+        "tag": "s1023",
+        "answer": true
+      },
+      {
+        "tag": "s1024",
+        "answer": true
+      },
+      {
+        "tag": "s1025",
+        "answer": true
+      },
+      {
+        "tag": "s1026",
+        "answer": true
+      },
+      {
+        "tag": "s1027",
+        "answer": true
+      },
+      {
+        "tag": "s1028",
+        "answer": true
+      },
+      {
+        "tag": "s1029",
+        "answer": true
+      },
+      {
+        "tag": "s1030",
+        "answer": true
+      },
+      {
+        "tag": "s1031",
+        "answer": true
+      },
+      {
+        "tag": "s1032",
+        "answer": true
+      },
+      {
+        "tag": "s1033",
+        "answer": true
+      },
+      {
+        "tag": "s1034",
+        "answer": true
+      },
+      {
+        "tag": "s1035",
+        "answer": true
+      },
+      {
+        "tag": "s1036",
+        "answer": true
+      },
+      {
+        "tag": "s1037",
+        "answer": true
+      },
+      {
+        "tag": "s1038",
+        "answer": true
+      },
+      {
+        "tag": "s1039",
+        "answer": true
+      },
+      {
+        "tag": "s1040",
+        "answer": true
+      }
+    ],
+    "q0014": [
+      {
+        "tag": "s1001",
+        "answer": false
+      },
+      {
+        "tag": "s1002",
+        "answer": false
+      },
+      {
+        "tag": "s1003",
+        "answer": false
+      },
+      {
+        "tag": "s1004",
+        "answer": true
+      },
+      {
+        "tag": "s1005",
+        "answer": false
+      },
+      {
+        "tag": "s1006",
+        "answer": false
+      },
+      {
+        "tag": "s1007",
+        "answer": false
+      },
+      {
+        "tag": "s1008",
+        "answer": false
+      },
+      {
+        "tag": "s1009",
+        "answer": false
+      },
+      {
+        "tag": "s1010",
+        "answer": false
+      },
+      {
+        "tag": "s1011",
+        "answer": false
+      },
+      {
+        "tag": "s1012",
+        "answer": false
+      },
+      {
+        "tag": "s1013",
+        "answer": false
+      },
+      {
+        "tag": "s1014",
+        "answer": false
+      },
+      {
+        "tag": "s1015",
+        "answer": false
+      },
+      {
+        "tag": "s1016",
+        "answer": false
+      },
+      {
+        "tag": "s1017",
+        "answer": false
+      },
+      {
+        "tag": "s1018",
+        "answer": false
+      },
+      {
+        "tag": "s1019",
+        "answer": false
+      },
+      {
+        "tag": "s1020",
+        "answer": false
+      },
+      {
+        "tag": "s1021",
+        "answer": false
+      },
+      {
+        "tag": "s1022",
+        "answer": false
+      },
+      {
+        "tag": "s1023",
+        "answer": false
+      },
+      {
+        "tag": "s1024",
+        "answer": false
+      },
+      {
+        "tag": "s1025",
+        "answer": false
+      },
+      {
+        "tag": "s1026",
+        "answer": false
+      },
+      {
+        "tag": "s1027",
+        "answer": false
+      },
+      {
+        "tag": "s1028",
+        "answer": false
+      },
+      {
+        "tag": "s1029",
+        "answer": false
+      },
+      {
+        "tag": "s1030",
+        "answer": false
+      },
+      {
+        "tag": "s1031",
+        "answer": false
+      },
+      {
+        "tag": "s1032",
+        "answer": false
+      },
+      {
+        "tag": "s1033",
+        "answer": false
+      },
+      {
+        "tag": "s1034",
+        "answer": false
+      },
+      {
+        "tag": "s1035",
+        "answer": false
+      },
+      {
+        "tag": "s1036",
+        "answer": false
+      },
+      {
+        "tag": "s1037",
+        "answer": false
+      },
+      {
+        "tag": "s1038",
+        "answer": false
+      },
+      {
+        "tag": "s1039",
+        "answer": false
+      },
+      {
+        "tag": "s1040",
+        "answer": false
+      }
+    ],
+    "q0015": [
+      {
+        "tag": "s1001",
+        "answer": true
+      },
+      {
+        "tag": "s1002",
+        "answer": true
+      },
+      {
+        "tag": "s1003",
+        "answer": true
+      },
+      {
+        "tag": "s1004",
+        "answer": false
+      },
+      {
+        "tag": "s1005",
+        "answer": true
+      },
+      {
+        "tag": "s1006",
+        "answer": true
+      },
+      {
+        "tag": "s1007",
+        "answer": true
+      },
+      {
+        "tag": "s1008",
+        "answer": false
+      },
+      {
+        "tag": "s1009",
+        "answer": true
+      },
+      {
+        "tag": "s1010",
+        "answer": true
+      },
+      {
+        "tag": "s1011",
+        "answer": true
+      },
+      {
+        "tag": "s1012",
+        "answer": true
+      },
+      {
+        "tag": "s1013",
+        "answer": true
+      },
+      {
+        "tag": "s1014",
+        "answer": true
+      },
+      {
+        "tag": "s1015",
+        "answer": false
+      },
+      {
+        "tag": "s1016",
+        "answer": false
+      },
+      {
+        "tag": "s1017",
+        "answer": true
+      },
+      {
+        "tag": "s1018",
+        "answer": true
+      },
+      {
+        "tag": "s1019",
+        "answer": true
+      },
+      {
+        "tag": "s1020",
+        "answer": true
+      },
+      {
+        "tag": "s1021",
+        "answer": true
+      },
+      {
+        "tag": "s1022",
+        "answer": false
+      },
+      {
+        "tag": "s1023",
+        "answer": true
+      },
+      {
+        "tag": "s1024",
+        "answer": true
+      },
+      {
+        "tag": "s1025",
+        "answer": true
+      },
+      {
+        "tag": "s1026",
+        "answer": true
+      },
+      {
+        "tag": "s1027",
+        "answer": true
+      },
+      {
+        "tag": "s1028",
+        "answer": true
+      },
+      {
+        "tag": "s1029",
+        "answer": true
+      },
+      {
+        "tag": "s1030",
+        "answer": true
+      },
+      {
+        "tag": "s1031",
+        "answer": true
+      },
+      {
+        "tag": "s1032",
+        "answer": true
+      },
+      {
+        "tag": "s1033",
+        "answer": true
+      },
+      {
+        "tag": "s1034",
+        "answer": true
+      },
+      {
+        "tag": "s1035",
+        "answer": true
+      },
+      {
+        "tag": "s1036",
+        "answer": false
+      },
+      {
+        "tag": "s1037",
+        "answer": true
+      },
+      {
+        "tag": "s1038",
+        "answer": true
+      },
+      {
+        "tag": "s1039",
+        "answer": true
+      },
+      {
+        "tag": "s1040",
+        "answer": true
+      }
+    ],
+    "q0016": [
+      {
+        "tag": "s1001",
+        "answer": true
+      },
+      {
+        "tag": "s1002",
+        "answer": true
+      },
+      {
+        "tag": "s1003",
+        "answer": true
+      },
+      {
+        "tag": "s1004",
+        "answer": true
+      },
+      {
+        "tag": "s1005",
+        "answer": true
+      },
+      {
+        "tag": "s1006",
+        "answer": true
+      },
+      {
+        "tag": "s1007",
+        "answer": true
+      },
+      {
+        "tag": "s1008",
+        "answer": true
+      },
+      {
+        "tag": "s1009",
+        "answer": true
+      },
+      {
+        "tag": "s1010",
+        "answer": true
+      },
+      {
+        "tag": "s1011",
+        "answer": true
+      },
+      {
+        "tag": "s1012",
+        "answer": true
+      },
+      {
+        "tag": "s1013",
+        "answer": true
+      },
+      {
+        "tag": "s1014",
+        "answer": true
+      },
+      {
+        "tag": "s1015",
+        "answer": true
+      },
+      {
+        "tag": "s1016",
+        "answer": true
+      },
+      {
+        "tag": "s1017",
+        "answer": false
+      },
+      {
+        "tag": "s1018",
+        "answer": true
+      },
+      {
+        "tag": "s1019",
+        "answer": false
+      },
+      {
+        "tag": "s1020",
+        "answer": true
+      },
+      {
+        "tag": "s1021",
+        "answer": true
+      },
+      {
+        "tag": "s1022",
+        "answer": true
+      },
+      {
+        "tag": "s1023",
+        "answer": true
+      },
+      {
+        "tag": "s1024",
+        "answer": true
+      },
+      {
+        "tag": "s1025",
+        "answer": true
+      },
+      {
+        "tag": "s1026",
+        "answer": true
+      },
+      {
+        "tag": "s1027",
+        "answer": true
+      },
+      {
+        "tag": "s1028",
+        "answer": true
+      },
+      {
+        "tag": "s1029",
+        "answer": true
+      },
+      {
+        "tag": "s1030",
+        "answer": true
+      },
+      {
+        "tag": "s1031",
+        "answer": true
+      },
+      {
+        "tag": "s1032",
+        "answer": true
+      },
+      {
+        "tag": "s1033",
+        "answer": true
+      },
+      {
+        "tag": "s1034",
+        "answer": true
+      },
+      {
+        "tag": "s1035",
+        "answer": true
+      },
+      {
+        "tag": "s1036",
+        "answer": true
+      },
+      {
+        "tag": "s1037",
+        "answer": true
+      },
+      {
+        "tag": "s1038",
+        "answer": true
+      },
+      {
+        "tag": "s1039",
+        "answer": true
+      },
+      {
+        "tag": "s1040",
+        "answer": true
+      }
+    ],
+    "q0017": [
+      {
+        "tag": "s1001",
+        "answer": false
+      },
+      {
+        "tag": "s1002",
+        "answer": false
+      },
+      {
+        "tag": "s1003",
+        "answer": true
+      },
+      {
+        "tag": "s1004",
+        "answer": false
+      },
+      {
+        "tag": "s1005",
+        "answer": false
+      },
+      {
+        "tag": "s1006",
+        "answer": true
+      },
+      {
+        "tag": "s1007",
+        "answer": false
+      },
+      {
+        "tag": "s1008",
+        "answer": true
+      },
+      {
+        "tag": "s1009",
+        "answer": false
+      },
+      {
+        "tag": "s1010",
+        "answer": false
+      },
+      {
+        "tag": "s1011",
+        "answer": false
+      },
+      {
+        "tag": "s1012",
+        "answer": true
+      },
+      {
+        "tag": "s1013",
+        "answer": true
+      },
+      {
+        "tag": "s1014",
+        "answer": true
+      },
+      {
+        "tag": "s1015",
+        "answer": false
+      },
+      {
+        "tag": "s1016",
+        "answer": true
+      },
+      {
+        "tag": "s1017",
+        "answer": true
+      },
+      {
+        "tag": "s1018",
+        "answer": false
+      },
+      {
+        "tag": "s1019",
+        "answer": true
+      },
+      {
+        "tag": "s1020",
+        "answer": false
+      },
+      {
+        "tag": "s1021",
+        "answer": true
+      },
+      {
+        "tag": "s1022",
+        "answer": false
+      },
+      {
+        "tag": "s1023",
+        "answer": true
+      },
+      {
+        "tag": "s1024",
+        "answer": true
+      },
+      {
+        "tag": "s1025",
+        "answer": true
+      },
+      {
+        "tag": "s1026",
+        "answer": true
+      },
+      {
+        "tag": "s1027",
+        "answer": true
+      },
+      {
+        "tag": "s1028",
+        "answer": false
+      },
+      {
+        "tag": "s1029",
+        "answer": false
+      },
+      {
+        "tag": "s1030",
+        "answer": false
+      },
+      {
+        "tag": "s1031",
+        "answer": true
+      },
+      {
+        "tag": "s1032",
+        "answer": false
+      },
+      {
+        "tag": "s1033",
+        "answer": true
+      },
+      {
+        "tag": "s1034",
+        "answer": false
+      },
+      {
+        "tag": "s1035",
+        "answer": true
+      },
+      {
+        "tag": "s1036",
+        "answer": false
+      },
+      {
+        "tag": "s1037",
+        "answer": true
+      },
+      {
+        "tag": "s1038",
+        "answer": false
+      },
+      {
+        "tag": "s1039",
+        "answer": true
+      },
+      {
+        "tag": "s1040",
+        "answer": false
+      }
+    ],
+    "q0018": [
+      {
+        "tag": "s1001",
+        "answer": false
+      },
+      {
+        "tag": "s1002",
+        "answer": false
+      },
+      {
+        "tag": "s1003",
+        "answer": false
+      },
+      {
+        "tag": "s1004",
+        "answer": true
+      },
+      {
+        "tag": "s1005",
+        "answer": false
+      },
+      {
+        "tag": "s1006",
+        "answer": false
+      },
+      {
+        "tag": "s1007",
+        "answer": false
+      },
+      {
+        "tag": "s1008",
+        "answer": false
+      },
+      {
+        "tag": "s1009",
+        "answer": false
+      },
+      {
+        "tag": "s1010",
+        "answer": false
+      },
+      {
+        "tag": "s1011",
+        "answer": false
+      },
+      {
+        "tag": "s1012",
+        "answer": false
+      },
+      {
+        "tag": "s1013",
+        "answer": false
+      },
+      {
+        "tag": "s1014",
+        "answer": false
+      },
+      {
+        "tag": "s1015",
+        "answer": false
+      },
+      {
+        "tag": "s1016",
+        "answer": false
+      },
+      {
+        "tag": "s1017",
+        "answer": false
+      },
+      {
+        "tag": "s1018",
+        "answer": false
+      },
+      {
+        "tag": "s1019",
+        "answer": false
+      },
+      {
+        "tag": "s1020",
+        "answer": false
+      },
+      {
+        "tag": "s1021",
+        "answer": false
+      },
+      {
+        "tag": "s1022",
+        "answer": false
+      },
+      {
+        "tag": "s1023",
+        "answer": false
+      },
+      {
+        "tag": "s1024",
+        "answer": false
+      },
+      {
+        "tag": "s1025",
+        "answer": false
+      },
+      {
+        "tag": "s1026",
+        "answer": false
+      },
+      {
+        "tag": "s1027",
+        "answer": false
+      },
+      {
+        "tag": "s1028",
+        "answer": false
+      },
+      {
+        "tag": "s1029",
+        "answer": false
+      },
+      {
+        "tag": "s1030",
+        "answer": false
+      },
+      {
+        "tag": "s1031",
+        "answer": false
+      },
+      {
+        "tag": "s1032",
+        "answer": false
+      },
+      {
+        "tag": "s1033",
+        "answer": false
+      },
+      {
+        "tag": "s1034",
+        "answer": false
+      },
+      {
+        "tag": "s1035",
+        "answer": false
+      },
+      {
+        "tag": "s1036",
+        "answer": false
+      },
+      {
+        "tag": "s1037",
+        "answer": false
+      },
+      {
+        "tag": "s1038",
+        "answer": false
+      },
+      {
+        "tag": "s1039",
+        "answer": false
+      },
+      {
+        "tag": "s1040",
+        "answer": false
+      }
+    ],
+    "q0019": [
+      {
+        "tag": "s1001",
+        "answer": true
+      },
+      {
+        "tag": "s1002",
+        "answer": true
+      },
+      {
+        "tag": "s1003",
+        "answer": true
+      },
+      {
+        "tag": "s1004",
+        "answer": false
+      },
+      {
+        "tag": "s1005",
+        "answer": true
+      },
+      {
+        "tag": "s1006",
+        "answer": true
+      },
+      {
+        "tag": "s1007",
+        "answer": true
+      },
+      {
+        "tag": "s1008",
+        "answer": false
+      },
+      {
+        "tag": "s1009",
+        "answer": true
+      },
+      {
+        "tag": "s1010",
+        "answer": true
+      },
+      {
+        "tag": "s1011",
+        "answer": true
+      },
+      {
+        "tag": "s1012",
+        "answer": true
+      },
+      {
+        "tag": "s1013",
+        "answer": true
+      },
+      {
+        "tag": "s1014",
+        "answer": true
+      },
+      {
+        "tag": "s1015",
+        "answer": false
+      },
+      {
+        "tag": "s1016",
+        "answer": false
+      },
+      {
+        "tag": "s1017",
+        "answer": false
+      },
+      {
+        "tag": "s1018",
+        "answer": true
+      },
+      {
+        "tag": "s1019",
+        "answer": true
+      },
+      {
+        "tag": "s1020",
+        "answer": true
+      },
+      {
+        "tag": "s1021",
+        "answer": true
+      },
+      {
+        "tag": "s1022",
+        "answer": false
+      },
+      {
+        "tag": "s1023",
+        "answer": true
+      },
+      {
+        "tag": "s1024",
+        "answer": true
+      },
+      {
+        "tag": "s1025",
+        "answer": true
+      },
+      {
+        "tag": "s1026",
+        "answer": true
+      },
+      {
+        "tag": "s1027",
+        "answer": true
+      },
+      {
+        "tag": "s1028",
+        "answer": true
+      },
+      {
+        "tag": "s1029",
+        "answer": true
+      },
+      {
+        "tag": "s1030",
+        "answer": true
+      },
+      {
+        "tag": "s1031",
+        "answer": true
+      },
+      {
+        "tag": "s1032",
+        "answer": true
+      },
+      {
+        "tag": "s1033",
+        "answer": true
+      },
+      {
+        "tag": "s1034",
+        "answer": true
+      },
+      {
+        "tag": "s1035",
+        "answer": true
+      },
+      {
+        "tag": "s1036",
+        "answer": false
+      },
+      {
+        "tag": "s1037",
+        "answer": true
+      },
+      {
+        "tag": "s1038",
+        "answer": true
+      },
+      {
+        "tag": "s1039",
+        "answer": true
+      },
+      {
+        "tag": "s1040",
+        "answer": false
+      }
+    ],
+    "q0020": [
+      {
+        "tag": "s1001",
+        "answer": true
+      },
+      {
+        "tag": "s1002",
+        "answer": true
+      },
+      {
+        "tag": "s1003",
+        "answer": true
+      },
+      {
+        "tag": "s1004",
+        "answer": false
+      },
+      {
+        "tag": "s1005",
+        "answer": true
+      },
+      {
+        "tag": "s1006",
+        "answer": false
+      },
+      {
+        "tag": "s1007",
+        "answer": true
+      },
+      {
+        "tag": "s1008",
+        "answer": true
+      },
+      {
+        "tag": "s1009",
+        "answer": true
+      },
+      {
+        "tag": "s1010",
+        "answer": true
+      },
+      {
+        "tag": "s1011",
+        "answer": false
+      },
+      {
+        "tag": "s1012",
+        "answer": true
+      },
+      {
+        "tag": "s1013",
+        "answer": false
+      },
+      {
+        "tag": "s1014",
+        "answer": true
+      },
+      {
+        "tag": "s1015",
+        "answer": false
+      },
+      {
+        "tag": "s1016",
+        "answer": true
+      },
+      {
+        "tag": "s1017",
+        "answer": false
+      },
+      {
+        "tag": "s1018",
+        "answer": true
+      },
+      {
+        "tag": "s1019",
+        "answer": false
+      },
+      {
+        "tag": "s1020",
+        "answer": true
+      },
+      {
+        "tag": "s1021",
+        "answer": false
+      },
+      {
+        "tag": "s1022",
+        "answer": false
+      },
+      {
+        "tag": "s1023",
+        "answer": true
+      },
+      {
+        "tag": "s1024",
+        "answer": true
+      },
+      {
+        "tag": "s1025",
+        "answer": false
+      },
+      {
+        "tag": "s1026",
+        "answer": false
+      },
+      {
+        "tag": "s1027",
+        "answer": false
+      },
+      {
+        "tag": "s1028",
+        "answer": true
+      },
+      {
+        "tag": "s1029",
+        "answer": true
+      },
+      {
+        "tag": "s1030",
+        "answer": false
+      },
+      {
+        "tag": "s1031",
+        "answer": true
+      },
+      {
+        "tag": "s1032",
+        "answer": true
+      },
+      {
+        "tag": "s1033",
+        "answer": true
+      },
+      {
+        "tag": "s1034",
+        "answer": true
+      },
+      {
+        "tag": "s1035",
+        "answer": true
+      },
+      {
+        "tag": "s1036",
+        "answer": true
+      },
+      {
+        "tag": "s1037",
+        "answer": true
+      },
+      {
+        "tag": "s1038",
+        "answer": true
+      },
+      {
+        "tag": "s1039",
+        "answer": true
+      },
+      {
+        "tag": "s1040",
+        "answer": true
+      }
+    ],
+    "q0021": [
+      {
+        "tag": "s1001",
+        "answer": true
+      },
+      {
+        "tag": "s1002",
+        "answer": true
+      },
+      {
+        "tag": "s1003",
+        "answer": true
+      },
+      {
+        "tag": "s1004",
+        "answer": true
+      },
+      {
+        "tag": "s1005",
+        "answer": true
+      },
+      {
+        "tag": "s1006",
+        "answer": true
+      },
+      {
+        "tag": "s1007",
+        "answer": true
+      },
+      {
+        "tag": "s1008",
+        "answer": true
+      },
+      {
+        "tag": "s1009",
+        "answer": true
+      },
+      {
+        "tag": "s1010",
+        "answer": true
+      },
+      {
+        "tag": "s1011",
+        "answer": true
+      },
+      {
+        "tag": "s1012",
+        "answer": true
+      },
+      {
+        "tag": "s1013",
+        "answer": true
+      },
+      {
+        "tag": "s1014",
+        "answer": false
+      },
+      {
+        "tag": "s1015",
+        "answer": true
+      },
+      {
+        "tag": "s1016",
+        "answer": false
+      },
+      {
+        "tag": "s1017",
+        "answer": true
+      },
+      {
+        "tag": "s1018",
+        "answer": true
+      },
+      {
+        "tag": "s1019",
+        "answer": true
+      },
+      {
+        "tag": "s1020",
+        "answer": true
+      },
+      {
+        "tag": "s1021",
+        "answer": true
+      },
+      {
+        "tag": "s1022",
+        "answer": true
+      },
+      {
+        "tag": "s1023",
+        "answer": true
+      },
+      {
+        "tag": "s1024",
+        "answer": true
+      },
+      {
+        "tag": "s1025",
+        "answer": true
+      },
+      {
+        "tag": "s1026",
+        "answer": true
+      },
+      {
+        "tag": "s1027",
+        "answer": true
+      },
+      {
+        "tag": "s1028",
+        "answer": true
+      },
+      {
+        "tag": "s1029",
+        "answer": true
+      },
+      {
+        "tag": "s1030",
+        "answer": true
+      },
+      {
+        "tag": "s1031",
+        "answer": true
+      },
+      {
+        "tag": "s1032",
+        "answer": true
+      },
+      {
+        "tag": "s1033",
+        "answer": false
+      },
+      {
+        "tag": "s1034",
+        "answer": true
+      },
+      {
+        "tag": "s1035",
+        "answer": true
+      },
+      {
+        "tag": "s1036",
+        "answer": true
+      },
+      {
+        "tag": "s1037",
+        "answer": true
+      },
+      {
+        "tag": "s1038",
+        "answer": true
+      },
+      {
+        "tag": "s1039",
+        "answer": true
+      },
+      {
+        "tag": "s1040",
+        "answer": true
+      }
+    ],
+    "q0022": [
+      {
+        "tag": "s1001",
+        "answer": true
+      },
+      {
+        "tag": "s1002",
+        "answer": false
+      },
+      {
+        "tag": "s1003",
+        "answer": true
+      },
+      {
+        "tag": "s1004",
+        "answer": true
+      },
+      {
+        "tag": "s1005",
+        "answer": true
+      },
+      {
+        "tag": "s1006",
+        "answer": true
+      },
+      {
+        "tag": "s1007",
+        "answer": true
+      },
+      {
+        "tag": "s1008",
+        "answer": true
+      },
+      {
+        "tag": "s1009",
+        "answer": true
+      },
+      {
+        "tag": "s1010",
+        "answer": true
+      },
+      {
+        "tag": "s1011",
+        "answer": true
+      },
+      {
+        "tag": "s1012",
+        "answer": true
+      },
+      {
+        "tag": "s1013",
+        "answer": true
+      },
+      {
+        "tag": "s1014",
+        "answer": true
+      },
+      {
+        "tag": "s1015",
+        "answer": true
+      },
+      {
+        "tag": "s1016",
+        "answer": true
+      },
+      {
+        "tag": "s1017",
+        "answer": true
+      },
+      {
+        "tag": "s1018",
+        "answer": true
+      },
+      {
+        "tag": "s1019",
+        "answer": false
+      },
+      {
+        "tag": "s1020",
+        "answer": true
+      },
+      {
+        "tag": "s1021",
+        "answer": true
+      },
+      {
+        "tag": "s1022",
+        "answer": true
+      },
+      {
+        "tag": "s1023",
+        "answer": true
+      },
+      {
+        "tag": "s1024",
+        "answer": true
+      },
+      {
+        "tag": "s1025",
+        "answer": true
+      },
+      {
+        "tag": "s1026",
+        "answer": true
+      },
+      {
+        "tag": "s1027",
+        "answer": true
+      },
+      {
+        "tag": "s1028",
+        "answer": true
+      },
+      {
+        "tag": "s1029",
+        "answer": true
+      },
+      {
+        "tag": "s1030",
+        "answer": true
+      },
+      {
+        "tag": "s1031",
+        "answer": true
+      },
+      {
+        "tag": "s1032",
+        "answer": true
+      },
+      {
+        "tag": "s1033",
+        "answer": true
+      },
+      {
+        "tag": "s1034",
+        "answer": true
+      },
+      {
+        "tag": "s1035",
+        "answer": true
+      },
+      {
+        "tag": "s1036",
+        "answer": true
+      },
+      {
+        "tag": "s1037",
+        "answer": true
+      },
+      {
+        "tag": "s1038",
+        "answer": true
+      },
+      {
+        "tag": "s1039",
+        "answer": true
+      },
+      {
+        "tag": "s1040",
+        "answer": true
+      }
+    ],
+    "q0023": [
+      {
+        "tag": "s1001",
+        "answer": false
+      },
+      {
+        "tag": "s1002",
+        "answer": true
+      },
+      {
+        "tag": "s1003",
+        "answer": true
+      },
+      {
+        "tag": "s1004",
+        "answer": true
+      },
+      {
+        "tag": "s1005",
+        "answer": true
+      },
+      {
+        "tag": "s1006",
+        "answer": true
+      },
+      {
+        "tag": "s1007",
+        "answer": true
+      },
+      {
+        "tag": "s1008",
+        "answer": true
+      },
+      {
+        "tag": "s1009",
+        "answer": false
+      },
+      {
+        "tag": "s1010",
+        "answer": true
+      },
+      {
+        "tag": "s1011",
+        "answer": false
+      },
+      {
+        "tag": "s1012",
+        "answer": true
+      },
+      {
+        "tag": "s1013",
+        "answer": true
+      },
+      {
+        "tag": "s1014",
+        "answer": false
+      },
+      {
+        "tag": "s1015",
+        "answer": false
+      },
+      {
+        "tag": "s1016",
+        "answer": true
+      },
+      {
+        "tag": "s1017",
+        "answer": true
+      },
+      {
+        "tag": "s1018",
+        "answer": false
+      },
+      {
+        "tag": "s1019",
+        "answer": true
+      },
+      {
+        "tag": "s1020",
+        "answer": false
+      },
+      {
+        "tag": "s1021",
+        "answer": false
+      },
+      {
+        "tag": "s1022",
+        "answer": true
+      },
+      {
+        "tag": "s1023",
+        "answer": true
+      },
+      {
+        "tag": "s1024",
+        "answer": true
+      },
+      {
+        "tag": "s1025",
+        "answer": true
+      },
+      {
+        "tag": "s1026",
+        "answer": false
+      },
+      {
+        "tag": "s1027",
+        "answer": false
+      },
+      {
+        "tag": "s1028",
+        "answer": true
+      },
+      {
+        "tag": "s1029",
+        "answer": false
+      },
+      {
+        "tag": "s1030",
+        "answer": true
+      },
+      {
+        "tag": "s1031",
+        "answer": true
+      },
+      {
+        "tag": "s1032",
+        "answer": false
+      },
+      {
+        "tag": "s1033",
+        "answer": true
+      },
+      {
+        "tag": "s1034",
+        "answer": false
+      },
+      {
+        "tag": "s1035",
+        "answer": true
+      },
+      {
+        "tag": "s1036",
+        "answer": true
+      },
+      {
+        "tag": "s1037",
+        "answer": false
+      },
+      {
+        "tag": "s1038",
+        "answer": true
+      },
+      {
+        "tag": "s1039",
+        "answer": true
+      },
+      {
+        "tag": "s1040",
+        "answer": false
+      }
+    ],
+    "q0024": [
+      {
+        "tag": "s1001",
+        "answer": false
+      },
+      {
+        "tag": "s1002",
+        "answer": false
+      },
+      {
+        "tag": "s1003",
+        "answer": false
+      },
+      {
+        "tag": "s1004",
+        "answer": false
+      },
+      {
+        "tag": "s1005",
+        "answer": false
+      },
+      {
+        "tag": "s1006",
+        "answer": false
+      },
+      {
+        "tag": "s1007",
+        "answer": false
+      },
+      {
+        "tag": "s1008",
+        "answer": false
+      },
+      {
+        "tag": "s1009",
+        "answer": false
+      },
+      {
+        "tag": "s1010",
+        "answer": false
+      },
+      {
+        "tag": "s1011",
+        "answer": false
+      },
+      {
+        "tag": "s1012",
+        "answer": false
+      },
+      {
+        "tag": "s1013",
+        "answer": false
+      },
+      {
+        "tag": "s1014",
+        "answer": false
+      },
+      {
+        "tag": "s1015",
+        "answer": false
+      },
+      {
+        "tag": "s1016",
+        "answer": false
+      },
+      {
+        "tag": "s1017",
+        "answer": false
+      },
+      {
+        "tag": "s1018",
+        "answer": false
+      },
+      {
+        "tag": "s1019",
+        "answer": false
+      },
+      {
+        "tag": "s1020",
+        "answer": false
+      },
+      {
+        "tag": "s1021",
+        "answer": false
+      },
+      {
+        "tag": "s1022",
+        "answer": false
+      },
+      {
+        "tag": "s1023",
+        "answer": false
+      },
+      {
+        "tag": "s1024",
+        "answer": false
+      },
+      {
+        "tag": "s1025",
+        "answer": false
+      },
+      {
+        "tag": "s1026",
+        "answer": false
+      },
+      {
+        "tag": "s1027",
+        "answer": false
+      },
+      {
+        "tag": "s1028",
+        "answer": false
+      },
+      {
+        "tag": "s1029",
+        "answer": false
+      },
+      {
+        "tag": "s1030",
+        "answer": false
+      },
+      {
+        "tag": "s1031",
+        "answer": false
+      },
+      {
+        "tag": "s1032",
+        "answer": false
+      },
+      {
+        "tag": "s1033",
+        "answer": false
+      },
+      {
+        "tag": "s1034",
+        "answer": false
+      },
+      {
+        "tag": "s1035",
+        "answer": false
+      },
+      {
+        "tag": "s1036",
+        "answer": false
+      },
+      {
+        "tag": "s1037",
+        "answer": false
+      },
+      {
+        "tag": "s1038",
+        "answer": false
+      },
+      {
+        "tag": "s1039",
+        "answer": false
+      },
+      {
+        "tag": "s1040",
+        "answer": false
+      }
+    ],
+    "q0025": [
+      {
+        "tag": "s1001",
+        "answer": false
+      },
+      {
+        "tag": "s1002",
+        "answer": false
+      },
+      {
+        "tag": "s1003",
+        "answer": false
+      },
+      {
+        "tag": "s1004",
+        "answer": false
+      },
+      {
+        "tag": "s1005",
+        "answer": false
+      },
+      {
+        "tag": "s1006",
+        "answer": false
+      },
+      {
+        "tag": "s1007",
+        "answer": false
+      },
+      {
+        "tag": "s1008",
+        "answer": false
+      },
+      {
+        "tag": "s1009",
+        "answer": false
+      },
+      {
+        "tag": "s1010",
+        "answer": false
+      },
+      {
+        "tag": "s1011",
+        "answer": false
+      },
+      {
+        "tag": "s1012",
+        "answer": false
+      },
+      {
+        "tag": "s1013",
+        "answer": false
+      },
+      {
+        "tag": "s1014",
+        "answer": false
+      },
+      {
+        "tag": "s1015",
+        "answer": false
+      },
+      {
+        "tag": "s1016",
+        "answer": false
+      },
+      {
+        "tag": "s1017",
+        "answer": false
+      },
+      {
+        "tag": "s1018",
+        "answer": false
+      },
+      {
+        "tag": "s1019",
+        "answer": false
+      },
+      {
+        "tag": "s1020",
+        "answer": false
+      },
+      {
+        "tag": "s1021",
+        "answer": false
+      },
+      {
+        "tag": "s1022",
+        "answer": false
+      },
+      {
+        "tag": "s1023",
+        "answer": false
+      },
+      {
+        "tag": "s1024",
+        "answer": false
+      },
+      {
+        "tag": "s1025",
+        "answer": false
+      },
+      {
+        "tag": "s1026",
+        "answer": false
+      },
+      {
+        "tag": "s1027",
+        "answer": false
+      },
+      {
+        "tag": "s1028",
+        "answer": false
+      },
+      {
+        "tag": "s1029",
+        "answer": false
+      },
+      {
+        "tag": "s1030",
+        "answer": false
+      },
+      {
+        "tag": "s1031",
+        "answer": false
+      },
+      {
+        "tag": "s1032",
+        "answer": false
+      },
+      {
+        "tag": "s1033",
+        "answer": false
+      },
+      {
+        "tag": "s1034",
+        "answer": false
+      },
+      {
+        "tag": "s1035",
+        "answer": false
+      },
+      {
+        "tag": "s1036",
+        "answer": false
+      },
+      {
+        "tag": "s1037",
+        "answer": false
+      },
+      {
+        "tag": "s1038",
+        "answer": false
+      },
+      {
+        "tag": "s1039",
+        "answer": false
+      },
+      {
+        "tag": "s1040",
+        "answer": false
+      }
+    ],
+    "q0026": [
+      {
+        "tag": "s1001",
+        "answer": true
+      },
+      {
+        "tag": "s1002",
+        "answer": true
+      },
+      {
+        "tag": "s1003",
+        "answer": true
+      },
+      {
+        "tag": "s1004",
+        "answer": true
+      },
+      {
+        "tag": "s1005",
+        "answer": true
+      },
+      {
+        "tag": "s1006",
+        "answer": true
+      },
+      {
+        "tag": "s1007",
+        "answer": true
+      },
+      {
+        "tag": "s1008",
+        "answer": true
+      },
+      {
+        "tag": "s1009",
+        "answer": true
+      },
+      {
+        "tag": "s1010",
+        "answer": true
+      },
+      {
+        "tag": "s1011",
+        "answer": true
+      },
+      {
+        "tag": "s1012",
+        "answer": true
+      },
+      {
+        "tag": "s1013",
+        "answer": true
+      },
+      {
+        "tag": "s1014",
+        "answer": true
+      },
+      {
+        "tag": "s1015",
+        "answer": true
+      },
+      {
+        "tag": "s1016",
+        "answer": true
+      },
+      {
+        "tag": "s1017",
+        "answer": true
+      },
+      {
+        "tag": "s1018",
+        "answer": true
+      },
+      {
+        "tag": "s1019",
+        "answer": true
+      },
+      {
+        "tag": "s1020",
+        "answer": true
+      },
+      {
+        "tag": "s1021",
+        "answer": false
+      },
+      {
+        "tag": "s1022",
+        "answer": false
+      },
+      {
+        "tag": "s1023",
+        "answer": true
+      },
+      {
+        "tag": "s1024",
+        "answer": true
+      },
+      {
+        "tag": "s1025",
+        "answer": true
+      },
+      {
+        "tag": "s1026",
+        "answer": false
+      },
+      {
+        "tag": "s1027",
+        "answer": true
+      },
+      {
+        "tag": "s1028",
+        "answer": true
+      },
+      {
+        "tag": "s1029",
+        "answer": true
+      },
+      {
+        "tag": "s1030",
+        "answer": true
+      },
+      {
+        "tag": "s1031",
+        "answer": true
+      },
+      {
+        "tag": "s1032",
+        "answer": true
+      },
+      {
+        "tag": "s1033",
+        "answer": true
+      },
+      {
+        "tag": "s1034",
+        "answer": true
+      },
+      {
+        "tag": "s1035",
+        "answer": true
+      },
+      {
+        "tag": "s1036",
+        "answer": true
+      },
+      {
+        "tag": "s1037",
+        "answer": true
+      },
+      {
+        "tag": "s1038",
+        "answer": true
+      },
+      {
+        "tag": "s1039",
+        "answer": true
+      },
+      {
+        "tag": "s1040",
+        "answer": true
+      }
+    ],
+    "q0027": [
+      {
+        "tag": "s1001",
+        "answer": false
+      },
+      {
+        "tag": "s1002",
+        "answer": false
+      },
+      {
+        "tag": "s1003",
+        "answer": false
+      },
+      {
+        "tag": "s1004",
+        "answer": false
+      },
+      {
+        "tag": "s1005",
+        "answer": false
+      },
+      {
+        "tag": "s1006",
+        "answer": false
+      },
+      {
+        "tag": "s1007",
+        "answer": false
+      },
+      {
+        "tag": "s1008",
+        "answer": false
+      },
+      {
+        "tag": "s1009",
+        "answer": false
+      },
+      {
+        "tag": "s1010",
+        "answer": false
+      },
+      {
+        "tag": "s1011",
+        "answer": false
+      },
+      {
+        "tag": "s1012",
+        "answer": false
+      },
+      {
+        "tag": "s1013",
+        "answer": false
+      },
+      {
+        "tag": "s1014",
+        "answer": false
+      },
+      {
+        "tag": "s1015",
+        "answer": false
+      },
+      {
+        "tag": "s1016",
+        "answer": false
+      },
+      {
+        "tag": "s1017",
+        "answer": false
+      },
+      {
+        "tag": "s1018",
+        "answer": false
+      },
+      {
+        "tag": "s1019",
+        "answer": false
+      },
+      {
+        "tag": "s1020",
+        "answer": false
+      },
+      {
+        "tag": "s1021",
+        "answer": false
+      },
+      {
+        "tag": "s1022",
+        "answer": false
+      },
+      {
+        "tag": "s1023",
+        "answer": false
+      },
+      {
+        "tag": "s1024",
+        "answer": false
+      },
+      {
+        "tag": "s1025",
+        "answer": false
+      },
+      {
+        "tag": "s1026",
+        "answer": false
+      },
+      {
+        "tag": "s1027",
+        "answer": false
+      },
+      {
+        "tag": "s1028",
+        "answer": false
+      },
+      {
+        "tag": "s1029",
+        "answer": false
+      },
+      {
+        "tag": "s1030",
+        "answer": false
+      },
+      {
+        "tag": "s1031",
+        "answer": false
+      },
+      {
+        "tag": "s1032",
+        "answer": false
+      },
+      {
+        "tag": "s1033",
+        "answer": false
+      },
+      {
+        "tag": "s1034",
+        "answer": false
+      },
+      {
+        "tag": "s1035",
+        "answer": false
+      },
+      {
+        "tag": "s1036",
+        "answer": false
+      },
+      {
+        "tag": "s1037",
+        "answer": false
+      },
+      {
+        "tag": "s1038",
+        "answer": false
+      },
+      {
+        "tag": "s1039",
+        "answer": false
+      },
+      {
+        "tag": "s1040",
+        "answer": false
+      }
+    ],
+    "q0028": [
+      {
+        "tag": "s1001",
+        "answer": false
+      },
+      {
+        "tag": "s1002",
+        "answer": false
+      },
+      {
+        "tag": "s1003",
+        "answer": false
+      },
+      {
+        "tag": "s1004",
+        "answer": false
+      },
+      {
+        "tag": "s1005",
+        "answer": false
+      },
+      {
+        "tag": "s1006",
+        "answer": false
+      },
+      {
+        "tag": "s1007",
+        "answer": false
+      },
+      {
+        "tag": "s1008",
+        "answer": false
+      },
+      {
+        "tag": "s1009",
+        "answer": false
+      },
+      {
+        "tag": "s1010",
+        "answer": false
+      },
+      {
+        "tag": "s1011",
+        "answer": false
+      },
+      {
+        "tag": "s1012",
+        "answer": false
+      },
+      {
+        "tag": "s1013",
+        "answer": false
+      },
+      {
+        "tag": "s1014",
+        "answer": false
+      },
+      {
+        "tag": "s1015",
+        "answer": false
+      },
+      {
+        "tag": "s1016",
+        "answer": false
+      },
+      {
+        "tag": "s1017",
+        "answer": false
+      },
+      {
+        "tag": "s1018",
+        "answer": false
+      },
+      {
+        "tag": "s1019",
+        "answer": false
+      },
+      {
+        "tag": "s1020",
+        "answer": false
+      },
+      {
+        "tag": "s1021",
+        "answer": true
+      },
+      {
+        "tag": "s1022",
+        "answer": true
+      },
+      {
+        "tag": "s1023",
+        "answer": false
+      },
+      {
+        "tag": "s1024",
+        "answer": false
+      },
+      {
+        "tag": "s1025",
+        "answer": false
+      },
+      {
+        "tag": "s1026",
+        "answer": true
+      },
+      {
+        "tag": "s1027",
+        "answer": false
+      },
+      {
+        "tag": "s1028",
+        "answer": false
+      },
+      {
+        "tag": "s1029",
+        "answer": false
+      },
+      {
+        "tag": "s1030",
+        "answer": false
+      },
+      {
+        "tag": "s1031",
+        "answer": false
+      },
+      {
+        "tag": "s1032",
+        "answer": false
+      },
+      {
+        "tag": "s1033",
+        "answer": false
+      },
+      {
+        "tag": "s1034",
+        "answer": false
+      },
+      {
+        "tag": "s1035",
+        "answer": false
+      },
+      {
+        "tag": "s1036",
+        "answer": false
+      },
+      {
+        "tag": "s1037",
+        "answer": false
+      },
+      {
+        "tag": "s1038",
+        "answer": false
+      },
+      {
+        "tag": "s1039",
+        "answer": false
+      },
+      {
+        "tag": "s1040",
+        "answer": false
+      }
+    ],
+    "q0029": [
+      {
+        "tag": "s1001",
+        "answer": false
+      },
+      {
+        "tag": "s1002",
+        "answer": true
+      },
+      {
+        "tag": "s1003",
+        "answer": false
+      },
+      {
+        "tag": "s1004",
+        "answer": false
+      },
+      {
+        "tag": "s1005",
+        "answer": false
+      },
+      {
+        "tag": "s1006",
+        "answer": false
+      },
+      {
+        "tag": "s1007",
+        "answer": false
+      },
+      {
+        "tag": "s1008",
+        "answer": false
+      },
+      {
+        "tag": "s1009",
+        "answer": true
+      },
+      {
+        "tag": "s1010",
+        "answer": false
+      },
+      {
+        "tag": "s1011",
+        "answer": false
+      },
+      {
+        "tag": "s1012",
+        "answer": true
+      },
+      {
+        "tag": "s1013",
+        "answer": true
+      },
+      {
+        "tag": "s1014",
+        "answer": false
+      },
+      {
+        "tag": "s1015",
+        "answer": false
+      },
+      {
+        "tag": "s1016",
+        "answer": true
+      },
+      {
+        "tag": "s1017",
+        "answer": false
+      },
+      {
+        "tag": "s1018",
+        "answer": false
+      },
+      {
+        "tag": "s1019",
+        "answer": true
+      },
+      {
+        "tag": "s1020",
+        "answer": false
+      },
+      {
+        "tag": "s1021",
+        "answer": false
+      },
+      {
+        "tag": "s1022",
+        "answer": false
+      },
+      {
+        "tag": "s1023",
+        "answer": false
+      },
+      {
+        "tag": "s1024",
+        "answer": true
+      },
+      {
+        "tag": "s1025",
+        "answer": true
+      },
+      {
+        "tag": "s1026",
+        "answer": false
+      },
+      {
+        "tag": "s1027",
+        "answer": false
+      },
+      {
+        "tag": "s1028",
+        "answer": false
+      },
+      {
+        "tag": "s1029",
+        "answer": false
+      },
+      {
+        "tag": "s1030",
+        "answer": false
+      },
+      {
+        "tag": "s1031",
+        "answer": true
+      },
+      {
+        "tag": "s1032",
+        "answer": false
+      },
+      {
+        "tag": "s1033",
+        "answer": false
+      },
+      {
+        "tag": "s1034",
+        "answer": false
+      },
+      {
+        "tag": "s1035",
+        "answer": false
+      },
+      {
+        "tag": "s1036",
+        "answer": false
+      },
+      {
+        "tag": "s1037",
+        "answer": false
+      },
+      {
+        "tag": "s1038",
+        "answer": false
+      },
+      {
+        "tag": "s1039",
+        "answer": true
+      },
+      {
+        "tag": "s1040",
+        "answer": false
+      }
+    ],
+    "q0030": [
+      {
+        "tag": "s1001",
+        "answer": true
+      },
+      {
+        "tag": "s1002",
+        "answer": true
+      },
+      {
+        "tag": "s1003",
+        "answer": true
+      },
+      {
+        "tag": "s1004",
+        "answer": true
+      },
+      {
+        "tag": "s1005",
+        "answer": true
+      },
+      {
+        "tag": "s1006",
+        "answer": true
+      },
+      {
+        "tag": "s1007",
+        "answer": true
+      },
+      {
+        "tag": "s1008",
+        "answer": true
+      },
+      {
+        "tag": "s1009",
+        "answer": true
+      },
+      {
+        "tag": "s1010",
+        "answer": true
+      },
+      {
+        "tag": "s1011",
+        "answer": true
+      },
+      {
+        "tag": "s1012",
+        "answer": true
+      },
+      {
+        "tag": "s1013",
+        "answer": true
+      },
+      {
+        "tag": "s1014",
+        "answer": true
+      },
+      {
+        "tag": "s1015",
+        "answer": true
+      },
+      {
+        "tag": "s1016",
+        "answer": true
+      },
+      {
+        "tag": "s1017",
+        "answer": false
+      },
+      {
+        "tag": "s1018",
+        "answer": true
+      },
+      {
+        "tag": "s1019",
+        "answer": true
+      },
+      {
+        "tag": "s1020",
+        "answer": true
+      },
+      {
+        "tag": "s1021",
+        "answer": true
+      },
+      {
+        "tag": "s1022",
+        "answer": true
+      },
+      {
+        "tag": "s1023",
+        "answer": true
+      },
+      {
+        "tag": "s1024",
+        "answer": true
+      },
+      {
+        "tag": "s1025",
+        "answer": true
+      },
+      {
+        "tag": "s1026",
+        "answer": true
+      },
+      {
+        "tag": "s1027",
+        "answer": true
+      },
+      {
+        "tag": "s1028",
+        "answer": true
+      },
+      {
+        "tag": "s1029",
+        "answer": true
+      },
+      {
+        "tag": "s1030",
+        "answer": true
+      },
+      {
+        "tag": "s1031",
+        "answer": true
+      },
+      {
+        "tag": "s1032",
+        "answer": true
+      },
+      {
+        "tag": "s1033",
+        "answer": false
+      },
+      {
+        "tag": "s1034",
+        "answer": true
+      },
+      {
+        "tag": "s1035",
+        "answer": true
+      },
+      {
+        "tag": "s1036",
+        "answer": true
+      },
+      {
+        "tag": "s1037",
+        "answer": true
+      },
+      {
+        "tag": "s1038",
+        "answer": true
+      },
+      {
+        "tag": "s1039",
+        "answer": true
+      },
+      {
+        "tag": "s1040",
+        "answer": true
+      }
+    ],
+    "q0031": [
+      {
+        "tag": "s1001",
+        "answer": false
+      },
+      {
+        "tag": "s1002",
+        "answer": true
+      },
+      {
+        "tag": "s1003",
+        "answer": false
+      },
+      {
+        "tag": "s1004",
+        "answer": false
+      },
+      {
+        "tag": "s1005",
+        "answer": true
+      },
+      {
+        "tag": "s1006",
+        "answer": false
+      },
+      {
+        "tag": "s1007",
+        "answer": false
+      },
+      {
+        "tag": "s1008",
+        "answer": false
+      },
+      {
+        "tag": "s1009",
+        "answer": true
+      },
+      {
+        "tag": "s1010",
+        "answer": true
+      },
+      {
+        "tag": "s1011",
+        "answer": true
+      },
+      {
+        "tag": "s1012",
+        "answer": true
+      },
+      {
+        "tag": "s1013",
+        "answer": false
+      },
+      {
+        "tag": "s1014",
+        "answer": true
+      },
+      {
+        "tag": "s1015",
+        "answer": false
+      },
+      {
+        "tag": "s1016",
+        "answer": false
+      },
+      {
+        "tag": "s1017",
+        "answer": false
+      },
+      {
+        "tag": "s1018",
+        "answer": true
+      },
+      {
+        "tag": "s1019",
+        "answer": true
+      },
+      {
+        "tag": "s1020",
+        "answer": false
+      },
+      {
+        "tag": "s1021",
+        "answer": true
+      },
+      {
+        "tag": "s1022",
+        "answer": false
+      },
+      {
+        "tag": "s1023",
+        "answer": false
+      },
+      {
+        "tag": "s1024",
+        "answer": false
+      },
+      {
+        "tag": "s1025",
+        "answer": false
+      },
+      {
+        "tag": "s1026",
+        "answer": false
+      },
+      {
+        "tag": "s1027",
+        "answer": true
+      },
+      {
+        "tag": "s1028",
+        "answer": false
+      },
+      {
+        "tag": "s1029",
+        "answer": false
+      },
+      {
+        "tag": "s1030",
+        "answer": false
+      },
+      {
+        "tag": "s1031",
+        "answer": true
+      },
+      {
+        "tag": "s1032",
+        "answer": true
+      },
+      {
+        "tag": "s1033",
+        "answer": false
+      },
+      {
+        "tag": "s1034",
+        "answer": true
+      },
+      {
+        "tag": "s1035",
+        "answer": true
+      },
+      {
+        "tag": "s1036",
+        "answer": false
+      },
+      {
+        "tag": "s1037",
+        "answer": false
+      },
+      {
+        "tag": "s1038",
+        "answer": true
+      },
+      {
+        "tag": "s1039",
+        "answer": true
+      },
+      {
+        "tag": "s1040",
+        "answer": false
+      }
+    ],
+    "q0032": [
+      {
+        "tag": "s1001",
+        "answer": false
+      },
+      {
+        "tag": "s1002",
+        "answer": false
+      },
+      {
+        "tag": "s1003",
+        "answer": false
+      },
+      {
+        "tag": "s1004",
+        "answer": true
+      },
+      {
+        "tag": "s1005",
+        "answer": true
+      },
+      {
+        "tag": "s1006",
+        "answer": false
+      },
+      {
+        "tag": "s1007",
+        "answer": false
+      },
+      {
+        "tag": "s1008",
+        "answer": true
+      },
+      {
+        "tag": "s1009",
+        "answer": true
+      },
+      {
+        "tag": "s1010",
+        "answer": true
+      },
+      {
+        "tag": "s1011",
+        "answer": false
+      },
+      {
+        "tag": "s1012",
+        "answer": true
+      },
+      {
+        "tag": "s1013",
+        "answer": false
+      },
+      {
+        "tag": "s1014",
+        "answer": false
+      },
+      {
+        "tag": "s1015",
+        "answer": false
+      },
+      {
+        "tag": "s1016",
+        "answer": false
+      },
+      {
+        "tag": "s1017",
+        "answer": true
+      },
+      {
+        "tag": "s1018",
+        "answer": false
+      },
+      {
+        "tag": "s1019",
+        "answer": true
+      },
+      {
+        "tag": "s1020",
+        "answer": false
+      },
+      {
+        "tag": "s1021",
+        "answer": true
+      },
+      {
+        "tag": "s1022",
+        "answer": false
+      },
+      {
+        "tag": "s1023",
+        "answer": false
+      },
+      {
+        "tag": "s1024",
+        "answer": false
+      },
+      {
+        "tag": "s1025",
+        "answer": false
+      },
+      {
+        "tag": "s1026",
+        "answer": false
+      },
+      {
+        "tag": "s1027",
+        "answer": false
+      },
+      {
+        "tag": "s1028",
+        "answer": true
+      },
+      {
+        "tag": "s1029",
+        "answer": false
+      },
+      {
+        "tag": "s1030",
+        "answer": false
+      },
+      {
+        "tag": "s1031",
+        "answer": false
+      },
+      {
+        "tag": "s1032",
+        "answer": true
+      },
+      {
+        "tag": "s1033",
+        "answer": false
+      },
+      {
+        "tag": "s1034",
+        "answer": false
+      },
+      {
+        "tag": "s1035",
+        "answer": false
+      },
+      {
+        "tag": "s1036",
+        "answer": false
+      },
+      {
+        "tag": "s1037",
+        "answer": true
+      },
+      {
+        "tag": "s1038",
+        "answer": false
+      },
+      {
+        "tag": "s1039",
+        "answer": false
+      },
+      {
+        "tag": "s1040",
+        "answer": false
+      }
+    ],
+    "q0033": [
+      {
+        "tag": "s1001",
+        "answer": true
+      },
+      {
+        "tag": "s1002",
+        "answer": true
+      },
+      {
+        "tag": "s1003",
+        "answer": true
+      },
+      {
+        "tag": "s1004",
+        "answer": true
+      },
+      {
+        "tag": "s1005",
+        "answer": true
+      },
+      {
+        "tag": "s1006",
+        "answer": true
+      },
+      {
+        "tag": "s1007",
+        "answer": true
+      },
+      {
+        "tag": "s1008",
+        "answer": true
+      },
+      {
+        "tag": "s1009",
+        "answer": true
+      },
+      {
+        "tag": "s1010",
+        "answer": true
+      },
+      {
+        "tag": "s1011",
+        "answer": true
+      },
+      {
+        "tag": "s1012",
+        "answer": true
+      },
+      {
+        "tag": "s1013",
+        "answer": true
+      },
+      {
+        "tag": "s1014",
+        "answer": true
+      },
+      {
+        "tag": "s1015",
+        "answer": true
+      },
+      {
+        "tag": "s1016",
+        "answer": true
+      },
+      {
+        "tag": "s1017",
+        "answer": true
+      },
+      {
+        "tag": "s1018",
+        "answer": true
+      },
+      {
+        "tag": "s1019",
+        "answer": true
+      },
+      {
+        "tag": "s1020",
+        "answer": true
+      },
+      {
+        "tag": "s1021",
+        "answer": true
+      },
+      {
+        "tag": "s1022",
+        "answer": true
+      },
+      {
+        "tag": "s1023",
+        "answer": true
+      },
+      {
+        "tag": "s1024",
+        "answer": true
+      },
+      {
+        "tag": "s1025",
+        "answer": true
+      },
+      {
+        "tag": "s1026",
+        "answer": true
+      },
+      {
+        "tag": "s1027",
+        "answer": true
+      },
+      {
+        "tag": "s1028",
+        "answer": true
+      },
+      {
+        "tag": "s1029",
+        "answer": true
+      },
+      {
+        "tag": "s1030",
+        "answer": true
+      },
+      {
+        "tag": "s1031",
+        "answer": true
+      },
+      {
+        "tag": "s1032",
+        "answer": true
+      },
+      {
+        "tag": "s1033",
+        "answer": true
+      },
+      {
+        "tag": "s1034",
+        "answer": true
+      },
+      {
+        "tag": "s1035",
+        "answer": true
+      },
+      {
+        "tag": "s1036",
+        "answer": true
+      },
+      {
+        "tag": "s1037",
+        "answer": true
+      },
+      {
+        "tag": "s1038",
+        "answer": true
+      },
+      {
+        "tag": "s1039",
+        "answer": true
+      },
+      {
+        "tag": "s1040",
+        "answer": true
+      }
+    ],
+    "q0034": [
+      {
+        "tag": "s1001",
+        "answer": true
+      },
+      {
+        "tag": "s1002",
+        "answer": true
+      },
+      {
+        "tag": "s1003",
+        "answer": true
+      },
+      {
+        "tag": "s1004",
+        "answer": false
+      },
+      {
+        "tag": "s1005",
+        "answer": false
+      },
+      {
+        "tag": "s1006",
+        "answer": true
+      },
+      {
+        "tag": "s1007",
+        "answer": false
+      },
+      {
+        "tag": "s1008",
+        "answer": true
+      },
+      {
+        "tag": "s1009",
+        "answer": false
+      },
+      {
+        "tag": "s1010",
+        "answer": true
+      },
+      {
+        "tag": "s1011",
+        "answer": true
+      },
+      {
+        "tag": "s1012",
+        "answer": false
+      },
+      {
+        "tag": "s1013",
+        "answer": true
+      },
+      {
+        "tag": "s1014",
+        "answer": false
+      },
+      {
+        "tag": "s1015",
+        "answer": true
+      },
+      {
+        "tag": "s1016",
+        "answer": true
+      },
+      {
+        "tag": "s1017",
+        "answer": false
+      },
+      {
+        "tag": "s1018",
+        "answer": true
+      },
+      {
+        "tag": "s1019",
+        "answer": false
+      },
+      {
+        "tag": "s1020",
+        "answer": true
+      },
+      {
+        "tag": "s1021",
+        "answer": false
+      },
+      {
+        "tag": "s1022",
+        "answer": false
+      },
+      {
+        "tag": "s1023",
+        "answer": false
+      },
+      {
+        "tag": "s1024",
+        "answer": true
+      },
+      {
+        "tag": "s1025",
+        "answer": false
+      },
+      {
+        "tag": "s1026",
+        "answer": true
+      },
+      {
+        "tag": "s1027",
+        "answer": true
+      },
+      {
+        "tag": "s1028",
+        "answer": true
+      },
+      {
+        "tag": "s1029",
+        "answer": true
+      },
+      {
+        "tag": "s1030",
+        "answer": false
+      },
+      {
+        "tag": "s1031",
+        "answer": false
+      },
+      {
+        "tag": "s1032",
+        "answer": true
+      },
+      {
+        "tag": "s1033",
+        "answer": true
+      },
+      {
+        "tag": "s1034",
+        "answer": true
+      },
+      {
+        "tag": "s1035",
+        "answer": true
+      },
+      {
+        "tag": "s1036",
+        "answer": false
+      },
+      {
+        "tag": "s1037",
+        "answer": true
+      },
+      {
+        "tag": "s1038",
+        "answer": true
+      },
+      {
+        "tag": "s1039",
+        "answer": true
+      },
+      {
+        "tag": "s1040",
+        "answer": true
+      }
+    ],
+    "q0035": [
+      {
+        "tag": "s1001",
+        "answer": true
+      },
+      {
+        "tag": "s1002",
+        "answer": true
+      },
+      {
+        "tag": "s1003",
+        "answer": true
+      },
+      {
+        "tag": "s1004",
+        "answer": true
+      },
+      {
+        "tag": "s1005",
+        "answer": true
+      },
+      {
+        "tag": "s1006",
+        "answer": true
+      },
+      {
+        "tag": "s1007",
+        "answer": true
+      },
+      {
+        "tag": "s1008",
+        "answer": true
+      },
+      {
+        "tag": "s1009",
+        "answer": true
+      },
+      {
+        "tag": "s1010",
+        "answer": true
+      },
+      {
+        "tag": "s1011",
+        "answer": true
+      },
+      {
+        "tag": "s1012",
+        "answer": true
+      },
+      {
+        "tag": "s1013",
+        "answer": true
+      },
+      {
+        "tag": "s1014",
+        "answer": true
+      },
+      {
+        "tag": "s1015",
+        "answer": true
+      },
+      {
+        "tag": "s1016",
+        "answer": true
+      },
+      {
+        "tag": "s1017",
+        "answer": true
+      },
+      {
+        "tag": "s1018",
+        "answer": true
+      },
+      {
+        "tag": "s1019",
+        "answer": true
+      },
+      {
+        "tag": "s1020",
+        "answer": true
+      },
+      {
+        "tag": "s1021",
+        "answer": true
+      },
+      {
+        "tag": "s1022",
+        "answer": true
+      },
+      {
+        "tag": "s1023",
+        "answer": true
+      },
+      {
+        "tag": "s1024",
+        "answer": true
+      },
+      {
+        "tag": "s1025",
+        "answer": true
+      },
+      {
+        "tag": "s1026",
+        "answer": true
+      },
+      {
+        "tag": "s1027",
+        "answer": true
+      },
+      {
+        "tag": "s1028",
+        "answer": true
+      },
+      {
+        "tag": "s1029",
+        "answer": true
+      },
+      {
+        "tag": "s1030",
+        "answer": true
+      },
+      {
+        "tag": "s1031",
+        "answer": true
+      },
+      {
+        "tag": "s1032",
+        "answer": true
+      },
+      {
+        "tag": "s1033",
+        "answer": true
+      },
+      {
+        "tag": "s1034",
+        "answer": true
+      },
+      {
+        "tag": "s1035",
+        "answer": true
+      },
+      {
+        "tag": "s1036",
+        "answer": true
+      },
+      {
+        "tag": "s1037",
+        "answer": true
+      },
+      {
+        "tag": "s1038",
+        "answer": true
+      },
+      {
+        "tag": "s1039",
+        "answer": true
+      },
+      {
+        "tag": "s1040",
+        "answer": true
+      }
+    ],
+    "q0036": [
+      {
+        "tag": "s1001",
+        "answer": false
+      },
+      {
+        "tag": "s1002",
+        "answer": true
+      },
+      {
+        "tag": "s1003",
+        "answer": false
+      },
+      {
+        "tag": "s1004",
+        "answer": false
+      },
+      {
+        "tag": "s1005",
+        "answer": true
+      },
+      {
+        "tag": "s1006",
+        "answer": false
+      },
+      {
+        "tag": "s1007",
+        "answer": false
+      },
+      {
+        "tag": "s1008",
+        "answer": true
+      },
+      {
+        "tag": "s1009",
+        "answer": true
+      },
+      {
+        "tag": "s1010",
+        "answer": true
+      },
+      {
+        "tag": "s1011",
+        "answer": false
+      },
+      {
+        "tag": "s1012",
+        "answer": false
+      },
+      {
+        "tag": "s1013",
+        "answer": false
+      },
+      {
+        "tag": "s1014",
+        "answer": true
+      },
+      {
+        "tag": "s1015",
+        "answer": false
+      },
+      {
+        "tag": "s1016",
+        "answer": false
+      },
+      {
+        "tag": "s1017",
+        "answer": false
+      },
+      {
+        "tag": "s1018",
+        "answer": true
+      },
+      {
+        "tag": "s1019",
+        "answer": false
+      },
+      {
+        "tag": "s1020",
+        "answer": false
+      },
+      {
+        "tag": "s1021",
+        "answer": false
+      },
+      {
+        "tag": "s1022",
+        "answer": false
+      },
+      {
+        "tag": "s1023",
+        "answer": true
+      },
+      {
+        "tag": "s1024",
+        "answer": false
+      },
+      {
+        "tag": "s1025",
+        "answer": false
+      },
+      {
+        "tag": "s1026",
+        "answer": true
+      },
+      {
+        "tag": "s1027",
+        "answer": true
+      },
+      {
+        "tag": "s1028",
+        "answer": false
+      },
+      {
+        "tag": "s1029",
+        "answer": false
+      },
+      {
+        "tag": "s1030",
+        "answer": false
+      },
+      {
+        "tag": "s1031",
+        "answer": false
+      },
+      {
+        "tag": "s1032",
+        "answer": true
+      },
+      {
+        "tag": "s1033",
+        "answer": false
+      },
+      {
+        "tag": "s1034",
+        "answer": true
+      },
+      {
+        "tag": "s1035",
+        "answer": true
+      },
+      {
+        "tag": "s1036",
+        "answer": false
+      },
+      {
+        "tag": "s1037",
+        "answer": false
+      },
+      {
+        "tag": "s1038",
+        "answer": true
+      },
+      {
+        "tag": "s1039",
+        "answer": true
+      },
+      {
+        "tag": "s1040",
+        "answer": true
+      }
+    ],
+    "q0037": [
+      {
+        "tag": "s1001",
+        "answer": true
+      },
+      {
+        "tag": "s1002",
+        "answer": true
+      },
+      {
+        "tag": "s1003",
+        "answer": false
+      },
+      {
+        "tag": "s1004",
+        "answer": false
+      },
+      {
+        "tag": "s1005",
+        "answer": false
+      },
+      {
+        "tag": "s1006",
+        "answer": false
+      },
+      {
+        "tag": "s1007",
+        "answer": false
+      },
+      {
+        "tag": "s1008",
+        "answer": false
+      },
+      {
+        "tag": "s1009",
+        "answer": false
+      },
+      {
+        "tag": "s1010",
+        "answer": false
+      },
+      {
+        "tag": "s1011",
+        "answer": true
+      },
+      {
+        "tag": "s1012",
+        "answer": true
+      },
+      {
+        "tag": "s1013",
+        "answer": false
+      },
+      {
+        "tag": "s1014",
+        "answer": true
+      },
+      {
+        "tag": "s1015",
+        "answer": false
+      },
+      {
+        "tag": "s1016",
+        "answer": true
+      },
+      {
+        "tag": "s1017",
+        "answer": true
+      },
+      {
+        "tag": "s1018",
+        "answer": false
+      },
+      {
+        "tag": "s1019",
+        "answer": true
+      },
+      {
+        "tag": "s1020",
+        "answer": false
+      },
+      {
+        "tag": "s1021",
+        "answer": false
+      },
+      {
+        "tag": "s1022",
+        "answer": true
+      },
+      {
+        "tag": "s1023",
+        "answer": false
+      },
+      {
+        "tag": "s1024",
+        "answer": true
+      },
+      {
+        "tag": "s1025",
+        "answer": false
+      },
+      {
+        "tag": "s1026",
+        "answer": false
+      },
+      {
+        "tag": "s1027",
+        "answer": true
+      },
+      {
+        "tag": "s1028",
+        "answer": false
+      },
+      {
+        "tag": "s1029",
+        "answer": true
+      },
+      {
+        "tag": "s1030",
+        "answer": true
+      },
+      {
+        "tag": "s1031",
+        "answer": false
+      },
+      {
+        "tag": "s1032",
+        "answer": true
+      },
+      {
+        "tag": "s1033",
+        "answer": true
+      },
+      {
+        "tag": "s1034",
+        "answer": true
+      },
+      {
+        "tag": "s1035",
+        "answer": false
+      },
+      {
+        "tag": "s1036",
+        "answer": true
+      },
+      {
+        "tag": "s1037",
+        "answer": false
+      },
+      {
+        "tag": "s1038",
+        "answer": true
+      },
+      {
+        "tag": "s1039",
+        "answer": false
+      },
+      {
+        "tag": "s1040",
+        "answer": true
+      }
+    ],
+    "q0038": [
+      {
+        "tag": "s1001",
+        "answer": true
+      },
+      {
+        "tag": "s1002",
+        "answer": false
+      },
+      {
+        "tag": "s1003",
+        "answer": false
+      },
+      {
+        "tag": "s1004",
+        "answer": false
+      },
+      {
+        "tag": "s1005",
+        "answer": false
+      },
+      {
+        "tag": "s1006",
+        "answer": false
+      },
+      {
+        "tag": "s1007",
+        "answer": false
+      },
+      {
+        "tag": "s1008",
+        "answer": false
+      },
+      {
+        "tag": "s1009",
+        "answer": true
+      },
+      {
+        "tag": "s1010",
+        "answer": false
+      },
+      {
+        "tag": "s1011",
+        "answer": false
+      },
+      {
+        "tag": "s1012",
+        "answer": false
+      },
+      {
+        "tag": "s1013",
+        "answer": true
+      },
+      {
+        "tag": "s1014",
+        "answer": false
+      },
+      {
+        "tag": "s1015",
+        "answer": false
+      },
+      {
+        "tag": "s1016",
+        "answer": true
+      },
+      {
+        "tag": "s1017",
+        "answer": false
+      },
+      {
+        "tag": "s1018",
+        "answer": false
+      },
+      {
+        "tag": "s1019",
+        "answer": true
+      },
+      {
+        "tag": "s1020",
+        "answer": false
+      },
+      {
+        "tag": "s1021",
+        "answer": false
+      },
+      {
+        "tag": "s1022",
+        "answer": false
+      },
+      {
+        "tag": "s1023",
+        "answer": false
+      },
+      {
+        "tag": "s1024",
+        "answer": false
+      },
+      {
+        "tag": "s1025",
+        "answer": false
+      },
+      {
+        "tag": "s1026",
+        "answer": false
+      },
+      {
+        "tag": "s1027",
+        "answer": false
+      },
+      {
+        "tag": "s1028",
+        "answer": false
+      },
+      {
+        "tag": "s1029",
+        "answer": false
+      },
+      {
+        "tag": "s1030",
+        "answer": false
+      },
+      {
+        "tag": "s1031",
+        "answer": false
+      },
+      {
+        "tag": "s1032",
+        "answer": false
+      },
+      {
+        "tag": "s1033",
+        "answer": false
+      },
+      {
+        "tag": "s1034",
+        "answer": false
+      },
+      {
+        "tag": "s1035",
+        "answer": false
+      },
+      {
+        "tag": "s1036",
+        "answer": false
+      },
+      {
+        "tag": "s1037",
+        "answer": false
+      },
+      {
+        "tag": "s1038",
+        "answer": false
+      },
+      {
+        "tag": "s1039",
+        "answer": false
+      },
+      {
+        "tag": "s1040",
+        "answer": false
+      }
+    ],
+    "q0039": [
+      {
+        "tag": "s1001",
+        "answer": true
+      },
+      {
+        "tag": "s1002",
+        "answer": true
+      },
+      {
+        "tag": "s1003",
+        "answer": true
+      },
+      {
+        "tag": "s1004",
+        "answer": true
+      },
+      {
+        "tag": "s1005",
+        "answer": true
+      },
+      {
+        "tag": "s1006",
+        "answer": true
+      },
+      {
+        "tag": "s1007",
+        "answer": false
+      },
+      {
+        "tag": "s1008",
+        "answer": true
+      },
+      {
+        "tag": "s1009",
+        "answer": true
+      },
+      {
+        "tag": "s1010",
+        "answer": true
+      },
+      {
+        "tag": "s1011",
+        "answer": true
+      },
+      {
+        "tag": "s1012",
+        "answer": false
+      },
+      {
+        "tag": "s1013",
+        "answer": true
+      },
+      {
+        "tag": "s1014",
+        "answer": true
+      },
+      {
+        "tag": "s1015",
+        "answer": true
+      },
+      {
+        "tag": "s1016",
+        "answer": true
+      },
+      {
+        "tag": "s1017",
+        "answer": true
+      },
+      {
+        "tag": "s1018",
+        "answer": true
+      },
+      {
+        "tag": "s1019",
+        "answer": true
+      },
+      {
+        "tag": "s1020",
+        "answer": true
+      },
+      {
+        "tag": "s1021",
+        "answer": true
+      },
+      {
+        "tag": "s1022",
+        "answer": true
+      },
+      {
+        "tag": "s1023",
+        "answer": true
+      },
+      {
+        "tag": "s1024",
+        "answer": true
+      },
+      {
+        "tag": "s1025",
+        "answer": true
+      },
+      {
+        "tag": "s1026",
+        "answer": true
+      },
+      {
+        "tag": "s1027",
+        "answer": false
+      },
+      {
+        "tag": "s1028",
+        "answer": true
+      },
+      {
+        "tag": "s1029",
+        "answer": true
+      },
+      {
+        "tag": "s1030",
+        "answer": true
+      },
+      {
+        "tag": "s1031",
+        "answer": true
+      },
+      {
+        "tag": "s1032",
+        "answer": true
+      },
+      {
+        "tag": "s1033",
+        "answer": true
+      },
+      {
+        "tag": "s1034",
+        "answer": true
+      },
+      {
+        "tag": "s1035",
+        "answer": true
+      },
+      {
+        "tag": "s1036",
+        "answer": true
+      },
+      {
+        "tag": "s1037",
+        "answer": true
+      },
+      {
+        "tag": "s1038",
+        "answer": true
+      },
+      {
+        "tag": "s1039",
+        "answer": true
+      },
+      {
+        "tag": "s1040",
+        "answer": true
+      }
+    ],
+    "q0040": [
+      {
+        "tag": "s1001",
+        "answer": false
+      },
+      {
+        "tag": "s1002",
+        "answer": false
+      },
+      {
+        "tag": "s1003",
+        "answer": false
+      },
+      {
+        "tag": "s1004",
+        "answer": false
+      },
+      {
+        "tag": "s1005",
+        "answer": false
+      },
+      {
+        "tag": "s1006",
+        "answer": false
+      },
+      {
+        "tag": "s1007",
+        "answer": false
+      },
+      {
+        "tag": "s1008",
+        "answer": false
+      },
+      {
+        "tag": "s1009",
+        "answer": false
+      },
+      {
+        "tag": "s1010",
+        "answer": false
+      },
+      {
+        "tag": "s1011",
+        "answer": false
+      },
+      {
+        "tag": "s1012",
+        "answer": false
+      },
+      {
+        "tag": "s1013",
+        "answer": false
+      },
+      {
+        "tag": "s1014",
+        "answer": false
+      },
+      {
+        "tag": "s1015",
+        "answer": false
+      },
+      {
+        "tag": "s1016",
+        "answer": false
+      },
+      {
+        "tag": "s1017",
+        "answer": false
+      },
+      {
+        "tag": "s1018",
+        "answer": false
+      },
+      {
+        "tag": "s1019",
+        "answer": false
+      },
+      {
+        "tag": "s1020",
+        "answer": false
+      },
+      {
+        "tag": "s1021",
+        "answer": false
+      },
+      {
+        "tag": "s1022",
+        "answer": false
+      },
+      {
+        "tag": "s1023",
+        "answer": false
+      },
+      {
+        "tag": "s1024",
+        "answer": false
+      },
+      {
+        "tag": "s1025",
+        "answer": false
+      },
+      {
+        "tag": "s1026",
+        "answer": false
+      },
+      {
+        "tag": "s1027",
+        "answer": true
+      },
+      {
+        "tag": "s1028",
+        "answer": false
+      },
+      {
+        "tag": "s1029",
+        "answer": false
+      },
+      {
+        "tag": "s1030",
+        "answer": false
+      },
+      {
+        "tag": "s1031",
+        "answer": false
+      },
+      {
+        "tag": "s1032",
+        "answer": false
+      },
+      {
+        "tag": "s1033",
+        "answer": false
+      },
+      {
+        "tag": "s1034",
+        "answer": true
+      },
+      {
+        "tag": "s1035",
+        "answer": false
+      },
+      {
+        "tag": "s1036",
+        "answer": false
+      },
+      {
+        "tag": "s1037",
+        "answer": false
+      },
+      {
+        "tag": "s1038",
+        "answer": false
+      },
+      {
+        "tag": "s1039",
+        "answer": false
+      },
+      {
+        "tag": "s1040",
+        "answer": false
+      }
+    ],
+    "q0041": [
+      {
+        "tag": "s1001",
+        "answer": true
+      },
+      {
+        "tag": "s1002",
+        "answer": true
+      },
+      {
+        "tag": "s1003",
+        "answer": true
+      },
+      {
+        "tag": "s1004",
+        "answer": true
+      },
+      {
+        "tag": "s1005",
+        "answer": true
+      },
+      {
+        "tag": "s1006",
+        "answer": true
+      },
+      {
+        "tag": "s1007",
+        "answer": true
+      },
+      {
+        "tag": "s1008",
+        "answer": true
+      },
+      {
+        "tag": "s1009",
+        "answer": true
+      },
+      {
+        "tag": "s1010",
+        "answer": true
+      },
+      {
+        "tag": "s1011",
+        "answer": true
+      },
+      {
+        "tag": "s1012",
+        "answer": true
+      },
+      {
+        "tag": "s1013",
+        "answer": true
+      },
+      {
+        "tag": "s1014",
+        "answer": true
+      },
+      {
+        "tag": "s1015",
+        "answer": true
+      },
+      {
+        "tag": "s1016",
+        "answer": true
+      },
+      {
+        "tag": "s1017",
+        "answer": true
+      },
+      {
+        "tag": "s1018",
+        "answer": true
+      },
+      {
+        "tag": "s1019",
+        "answer": true
+      },
+      {
+        "tag": "s1020",
+        "answer": true
+      },
+      {
+        "tag": "s1021",
+        "answer": true
+      },
+      {
+        "tag": "s1022",
+        "answer": true
+      },
+      {
+        "tag": "s1023",
+        "answer": true
+      },
+      {
+        "tag": "s1024",
+        "answer": true
+      },
+      {
+        "tag": "s1025",
+        "answer": true
+      },
+      {
+        "tag": "s1026",
+        "answer": true
+      },
+      {
+        "tag": "s1027",
+        "answer": true
+      },
+      {
+        "tag": "s1028",
+        "answer": true
+      },
+      {
+        "tag": "s1029",
+        "answer": true
+      },
+      {
+        "tag": "s1030",
+        "answer": true
+      },
+      {
+        "tag": "s1031",
+        "answer": true
+      },
+      {
+        "tag": "s1032",
+        "answer": true
+      },
+      {
+        "tag": "s1033",
+        "answer": true
+      },
+      {
+        "tag": "s1034",
+        "answer": true
+      },
+      {
+        "tag": "s1035",
+        "answer": true
+      },
+      {
+        "tag": "s1036",
+        "answer": true
+      },
+      {
+        "tag": "s1037",
+        "answer": true
+      },
+      {
+        "tag": "s1038",
+        "answer": true
+      },
+      {
+        "tag": "s1039",
+        "answer": true
+      },
+      {
+        "tag": "s1040",
+        "answer": true
+      }
+    ],
+    "q0042": [
+      {
+        "tag": "s1001",
+        "answer": true
+      },
+      {
+        "tag": "s1002",
+        "answer": true
+      },
+      {
+        "tag": "s1003",
+        "answer": true
+      },
+      {
+        "tag": "s1004",
+        "answer": false
+      },
+      {
+        "tag": "s1005",
+        "answer": true
+      },
+      {
+        "tag": "s1006",
+        "answer": true
+      },
+      {
+        "tag": "s1007",
+        "answer": false
+      },
+      {
+        "tag": "s1008",
+        "answer": true
+      },
+      {
+        "tag": "s1009",
+        "answer": true
+      },
+      {
+        "tag": "s1010",
+        "answer": false
+      },
+      {
+        "tag": "s1011",
+        "answer": true
+      },
+      {
+        "tag": "s1012",
+        "answer": false
+      },
+      {
+        "tag": "s1013",
+        "answer": false
+      },
+      {
+        "tag": "s1014",
+        "answer": true
+      },
+      {
+        "tag": "s1015",
+        "answer": false
+      },
+      {
+        "tag": "s1016",
+        "answer": false
+      },
+      {
+        "tag": "s1017",
+        "answer": true
+      },
+      {
+        "tag": "s1018",
+        "answer": false
+      },
+      {
+        "tag": "s1019",
+        "answer": false
+      },
+      {
+        "tag": "s1020",
+        "answer": false
+      },
+      {
+        "tag": "s1021",
+        "answer": true
+      },
+      {
+        "tag": "s1022",
+        "answer": true
+      },
+      {
+        "tag": "s1023",
+        "answer": false
+      },
+      {
+        "tag": "s1024",
+        "answer": false
+      },
+      {
+        "tag": "s1025",
+        "answer": false
+      },
+      {
+        "tag": "s1026",
+        "answer": true
+      },
+      {
+        "tag": "s1027",
+        "answer": true
+      },
+      {
+        "tag": "s1028",
+        "answer": false
+      },
+      {
+        "tag": "s1029",
+        "answer": false
+      },
+      {
+        "tag": "s1030",
+        "answer": false
+      },
+      {
+        "tag": "s1031",
+        "answer": true
+      },
+      {
+        "tag": "s1032",
+        "answer": true
+      },
+      {
+        "tag": "s1033",
+        "answer": true
+      },
+      {
+        "tag": "s1034",
+        "answer": true
+      },
+      {
+        "tag": "s1035",
+        "answer": true
+      },
+      {
+        "tag": "s1036",
+        "answer": false
+      },
+      {
+        "tag": "s1037",
+        "answer": true
+      },
+      {
+        "tag": "s1038",
+        "answer": false
+      },
+      {
+        "tag": "s1039",
+        "answer": false
+      },
+      {
+        "tag": "s1040",
+        "answer": true
+      }
+    ],
+    "q0043": [
+      {
+        "tag": "s1001",
+        "answer": true
+      },
+      {
+        "tag": "s1002",
+        "answer": false
+      },
+      {
+        "tag": "s1003",
+        "answer": true
+      },
+      {
+        "tag": "s1004",
+        "answer": true
+      },
+      {
+        "tag": "s1005",
+        "answer": false
+      },
+      {
+        "tag": "s1006",
+        "answer": true
+      },
+      {
+        "tag": "s1007",
+        "answer": true
+      },
+      {
+        "tag": "s1008",
+        "answer": false
+      },
+      {
+        "tag": "s1009",
+        "answer": true
+      },
+      {
+        "tag": "s1010",
+        "answer": false
+      },
+      {
+        "tag": "s1011",
+        "answer": false
+      },
+      {
+        "tag": "s1012",
+        "answer": true
+      },
+      {
+        "tag": "s1013",
+        "answer": false
+      },
+      {
+        "tag": "s1014",
+        "answer": true
+      },
+      {
+        "tag": "s1015",
+        "answer": false
+      },
+      {
+        "tag": "s1016",
+        "answer": false
+      },
+      {
+        "tag": "s1017",
+        "answer": false
+      },
+      {
+        "tag": "s1018",
+        "answer": false
+      },
+      {
+        "tag": "s1019",
+        "answer": true
+      },
+      {
+        "tag": "s1020",
+        "answer": true
+      },
+      {
+        "tag": "s1021",
+        "answer": false
+      },
+      {
+        "tag": "s1022",
+        "answer": false
+      },
+      {
+        "tag": "s1023",
+        "answer": true
+      },
+      {
+        "tag": "s1024",
+        "answer": false
+      },
+      {
+        "tag": "s1025",
+        "answer": false
+      },
+      {
+        "tag": "s1026",
+        "answer": true
+      },
+      {
+        "tag": "s1027",
+        "answer": false
+      },
+      {
+        "tag": "s1028",
+        "answer": false
+      },
+      {
+        "tag": "s1029",
+        "answer": true
+      },
+      {
+        "tag": "s1030",
+        "answer": false
+      },
+      {
+        "tag": "s1031",
+        "answer": false
+      },
+      {
+        "tag": "s1032",
+        "answer": false
+      },
+      {
+        "tag": "s1033",
+        "answer": true
+      },
+      {
+        "tag": "s1034",
+        "answer": false
+      },
+      {
+        "tag": "s1035",
+        "answer": false
+      },
+      {
+        "tag": "s1036",
+        "answer": false
+      },
+      {
+        "tag": "s1037",
+        "answer": false
+      },
+      {
+        "tag": "s1038",
+        "answer": false
+      },
+      {
+        "tag": "s1039",
+        "answer": false
+      },
+      {
+        "tag": "s1040",
+        "answer": false
+      }
+    ],
+    "q0044": [
+      {
+        "tag": "s1001",
+        "answer": true
+      },
+      {
+        "tag": "s1002",
+        "answer": true
+      },
+      {
+        "tag": "s1003",
+        "answer": true
+      },
+      {
+        "tag": "s1004",
+        "answer": true
+      },
+      {
+        "tag": "s1005",
+        "answer": true
+      },
+      {
+        "tag": "s1006",
+        "answer": true
+      },
+      {
+        "tag": "s1007",
+        "answer": true
+      },
+      {
+        "tag": "s1008",
+        "answer": true
+      },
+      {
+        "tag": "s1009",
+        "answer": true
+      },
+      {
+        "tag": "s1010",
+        "answer": true
+      },
+      {
+        "tag": "s1011",
+        "answer": true
+      },
+      {
+        "tag": "s1012",
+        "answer": true
+      },
+      {
+        "tag": "s1013",
+        "answer": true
+      },
+      {
+        "tag": "s1014",
+        "answer": true
+      },
+      {
+        "tag": "s1015",
+        "answer": true
+      },
+      {
+        "tag": "s1016",
+        "answer": true
+      },
+      {
+        "tag": "s1017",
+        "answer": true
+      },
+      {
+        "tag": "s1018",
+        "answer": true
+      },
+      {
+        "tag": "s1019",
+        "answer": true
+      },
+      {
+        "tag": "s1020",
+        "answer": true
+      },
+      {
+        "tag": "s1021",
+        "answer": true
+      },
+      {
+        "tag": "s1022",
+        "answer": true
+      },
+      {
+        "tag": "s1023",
+        "answer": true
+      },
+      {
+        "tag": "s1024",
+        "answer": true
+      },
+      {
+        "tag": "s1025",
+        "answer": true
+      },
+      {
+        "tag": "s1026",
+        "answer": true
+      },
+      {
+        "tag": "s1027",
+        "answer": true
+      },
+      {
+        "tag": "s1028",
+        "answer": true
+      },
+      {
+        "tag": "s1029",
+        "answer": true
+      },
+      {
+        "tag": "s1030",
+        "answer": true
+      },
+      {
+        "tag": "s1031",
+        "answer": true
+      },
+      {
+        "tag": "s1032",
+        "answer": true
+      },
+      {
+        "tag": "s1033",
+        "answer": true
+      },
+      {
+        "tag": "s1034",
+        "answer": true
+      },
+      {
+        "tag": "s1035",
+        "answer": true
+      },
+      {
+        "tag": "s1036",
+        "answer": true
+      },
+      {
+        "tag": "s1037",
+        "answer": true
+      },
+      {
+        "tag": "s1038",
+        "answer": true
+      },
+      {
+        "tag": "s1039",
+        "answer": true
+      },
+      {
+        "tag": "s1040",
+        "answer": true
+      }
+    ],
+    "q0045": [
+      {
+        "tag": "s1001",
+        "answer": true
+      },
+      {
+        "tag": "s1002",
+        "answer": true
+      },
+      {
+        "tag": "s1003",
+        "answer": true
+      },
+      {
+        "tag": "s1004",
+        "answer": true
+      },
+      {
+        "tag": "s1005",
+        "answer": true
+      },
+      {
+        "tag": "s1006",
+        "answer": true
+      },
+      {
+        "tag": "s1007",
+        "answer": true
+      },
+      {
+        "tag": "s1008",
+        "answer": true
+      },
+      {
+        "tag": "s1009",
+        "answer": true
+      },
+      {
+        "tag": "s1010",
+        "answer": true
+      },
+      {
+        "tag": "s1011",
+        "answer": true
+      },
+      {
+        "tag": "s1012",
+        "answer": true
+      },
+      {
+        "tag": "s1013",
+        "answer": true
+      },
+      {
+        "tag": "s1014",
+        "answer": true
+      },
+      {
+        "tag": "s1015",
+        "answer": true
+      },
+      {
+        "tag": "s1016",
+        "answer": true
+      },
+      {
+        "tag": "s1017",
+        "answer": true
+      },
+      {
+        "tag": "s1018",
+        "answer": true
+      },
+      {
+        "tag": "s1019",
+        "answer": true
+      },
+      {
+        "tag": "s1020",
+        "answer": true
+      },
+      {
+        "tag": "s1021",
+        "answer": true
+      },
+      {
+        "tag": "s1022",
+        "answer": true
+      },
+      {
+        "tag": "s1023",
+        "answer": true
+      },
+      {
+        "tag": "s1024",
+        "answer": true
+      },
+      {
+        "tag": "s1025",
+        "answer": true
+      },
+      {
+        "tag": "s1026",
+        "answer": true
+      },
+      {
+        "tag": "s1027",
+        "answer": true
+      },
+      {
+        "tag": "s1028",
+        "answer": true
+      },
+      {
+        "tag": "s1029",
+        "answer": true
+      },
+      {
+        "tag": "s1030",
+        "answer": true
+      },
+      {
+        "tag": "s1031",
+        "answer": true
+      },
+      {
+        "tag": "s1032",
+        "answer": true
+      },
+      {
+        "tag": "s1033",
+        "answer": true
+      },
+      {
+        "tag": "s1034",
+        "answer": true
+      },
+      {
+        "tag": "s1035",
+        "answer": true
+      },
+      {
+        "tag": "s1036",
+        "answer": true
+      },
+      {
+        "tag": "s1037",
+        "answer": true
+      },
+      {
+        "tag": "s1038",
+        "answer": true
+      },
+      {
+        "tag": "s1039",
+        "answer": true
+      },
+      {
+        "tag": "s1040",
+        "answer": true
+      }
+    ],
+    "q0046": [
+      {
+        "tag": "s1001",
+        "answer": true
+      },
+      {
+        "tag": "s1002",
+        "answer": false
+      },
+      {
+        "tag": "s1003",
+        "answer": false
+      },
+      {
+        "tag": "s1004",
+        "answer": true
+      },
+      {
+        "tag": "s1005",
+        "answer": true
+      },
+      {
+        "tag": "s1006",
+        "answer": true
+      },
+      {
+        "tag": "s1007",
+        "answer": true
+      },
+      {
+        "tag": "s1008",
+        "answer": true
+      },
+      {
+        "tag": "s1009",
+        "answer": true
+      },
+      {
+        "tag": "s1010",
+        "answer": true
+      },
+      {
+        "tag": "s1011",
+        "answer": true
+      },
+      {
+        "tag": "s1012",
+        "answer": true
+      },
+      {
+        "tag": "s1013",
+        "answer": false
+      },
+      {
+        "tag": "s1014",
+        "answer": true
+      },
+      {
+        "tag": "s1015",
+        "answer": true
+      },
+      {
+        "tag": "s1016",
+        "answer": false
+      },
+      {
+        "tag": "s1017",
+        "answer": true
+      },
+      {
+        "tag": "s1018",
+        "answer": false
+      },
+      {
+        "tag": "s1019",
+        "answer": true
+      },
+      {
+        "tag": "s1020",
+        "answer": false
+      },
+      {
+        "tag": "s1021",
+        "answer": true
+      },
+      {
+        "tag": "s1022",
+        "answer": false
+      },
+      {
+        "tag": "s1023",
+        "answer": true
+      },
+      {
+        "tag": "s1024",
+        "answer": false
+      },
+      {
+        "tag": "s1025",
+        "answer": false
+      },
+      {
+        "tag": "s1026",
+        "answer": true
+      },
+      {
+        "tag": "s1027",
+        "answer": false
+      },
+      {
+        "tag": "s1028",
+        "answer": true
+      },
+      {
+        "tag": "s1029",
+        "answer": true
+      },
+      {
+        "tag": "s1030",
+        "answer": true
+      },
+      {
+        "tag": "s1031",
+        "answer": false
+      },
+      {
+        "tag": "s1032",
+        "answer": true
+      },
+      {
+        "tag": "s1033",
+        "answer": false
+      },
+      {
+        "tag": "s1034",
+        "answer": true
+      },
+      {
+        "tag": "s1035",
+        "answer": true
+      },
+      {
+        "tag": "s1036",
+        "answer": false
+      },
+      {
+        "tag": "s1037",
+        "answer": true
+      },
+      {
+        "tag": "s1038",
+        "answer": true
+      },
+      {
+        "tag": "s1039",
+        "answer": false
+      },
+      {
+        "tag": "s1040",
+        "answer": true
+      }
+    ],
+    "q0047": [
+      {
+        "tag": "s1001",
+        "answer": true
+      },
+      {
+        "tag": "s1002",
+        "answer": true
+      },
+      {
+        "tag": "s1003",
+        "answer": true
+      },
+      {
+        "tag": "s1004",
+        "answer": true
+      },
+      {
+        "tag": "s1005",
+        "answer": true
+      },
+      {
+        "tag": "s1006",
+        "answer": true
+      },
+      {
+        "tag": "s1007",
+        "answer": true
+      },
+      {
+        "tag": "s1008",
+        "answer": true
+      },
+      {
+        "tag": "s1009",
+        "answer": true
+      },
+      {
+        "tag": "s1010",
+        "answer": true
+      },
+      {
+        "tag": "s1011",
+        "answer": true
+      },
+      {
+        "tag": "s1012",
+        "answer": true
+      },
+      {
+        "tag": "s1013",
+        "answer": true
+      },
+      {
+        "tag": "s1014",
+        "answer": true
+      },
+      {
+        "tag": "s1015",
+        "answer": true
+      },
+      {
+        "tag": "s1016",
+        "answer": true
+      },
+      {
+        "tag": "s1017",
+        "answer": true
+      },
+      {
+        "tag": "s1018",
+        "answer": true
+      },
+      {
+        "tag": "s1019",
+        "answer": true
+      },
+      {
+        "tag": "s1020",
+        "answer": true
+      },
+      {
+        "tag": "s1021",
+        "answer": true
+      },
+      {
+        "tag": "s1022",
+        "answer": true
+      },
+      {
+        "tag": "s1023",
+        "answer": true
+      },
+      {
+        "tag": "s1024",
+        "answer": true
+      },
+      {
+        "tag": "s1025",
+        "answer": true
+      },
+      {
+        "tag": "s1026",
+        "answer": true
+      },
+      {
+        "tag": "s1027",
+        "answer": true
+      },
+      {
+        "tag": "s1028",
+        "answer": true
+      },
+      {
+        "tag": "s1029",
+        "answer": true
+      },
+      {
+        "tag": "s1030",
+        "answer": true
+      },
+      {
+        "tag": "s1031",
+        "answer": true
+      },
+      {
+        "tag": "s1032",
+        "answer": true
+      },
+      {
+        "tag": "s1033",
+        "answer": true
+      },
+      {
+        "tag": "s1034",
+        "answer": true
+      },
+      {
+        "tag": "s1035",
+        "answer": true
+      },
+      {
+        "tag": "s1036",
+        "answer": true
+      },
+      {
+        "tag": "s1037",
+        "answer": true
+      },
+      {
+        "tag": "s1038",
+        "answer": true
+      },
+      {
+        "tag": "s1039",
+        "answer": true
+      },
+      {
+        "tag": "s1040",
+        "answer": true
+      }
+    ],
+    "q0048": [
+      {
+        "tag": "s1001",
+        "answer": false
+      },
+      {
+        "tag": "s1002",
+        "answer": false
+      },
+      {
+        "tag": "s1003",
+        "answer": false
+      },
+      {
+        "tag": "s1004",
+        "answer": false
+      },
+      {
+        "tag": "s1005",
+        "answer": false
+      },
+      {
+        "tag": "s1006",
+        "answer": false
+      },
+      {
+        "tag": "s1007",
+        "answer": false
+      },
+      {
+        "tag": "s1008",
+        "answer": false
+      },
+      {
+        "tag": "s1009",
+        "answer": false
+      },
+      {
+        "tag": "s1010",
+        "answer": false
+      },
+      {
+        "tag": "s1011",
+        "answer": false
+      },
+      {
+        "tag": "s1012",
+        "answer": false
+      },
+      {
+        "tag": "s1013",
+        "answer": false
+      },
+      {
+        "tag": "s1014",
+        "answer": false
+      },
+      {
+        "tag": "s1015",
+        "answer": false
+      },
+      {
+        "tag": "s1016",
+        "answer": false
+      },
+      {
+        "tag": "s1017",
+        "answer": false
+      },
+      {
+        "tag": "s1018",
+        "answer": false
+      },
+      {
+        "tag": "s1019",
+        "answer": false
+      },
+      {
+        "tag": "s1020",
+        "answer": false
+      },
+      {
+        "tag": "s1021",
+        "answer": false
+      },
+      {
+        "tag": "s1022",
+        "answer": false
+      },
+      {
+        "tag": "s1023",
+        "answer": false
+      },
+      {
+        "tag": "s1024",
+        "answer": false
+      },
+      {
+        "tag": "s1025",
+        "answer": false
+      },
+      {
+        "tag": "s1026",
+        "answer": false
+      },
+      {
+        "tag": "s1027",
+        "answer": false
+      },
+      {
+        "tag": "s1028",
+        "answer": false
+      },
+      {
+        "tag": "s1029",
+        "answer": false
+      },
+      {
+        "tag": "s1030",
+        "answer": false
+      },
+      {
+        "tag": "s1031",
+        "answer": false
+      },
+      {
+        "tag": "s1032",
+        "answer": false
+      },
+      {
+        "tag": "s1033",
+        "answer": false
+      },
+      {
+        "tag": "s1034",
+        "answer": false
+      },
+      {
+        "tag": "s1035",
+        "answer": false
+      },
+      {
+        "tag": "s1036",
+        "answer": false
+      },
+      {
+        "tag": "s1037",
+        "answer": false
+      },
+      {
+        "tag": "s1038",
+        "answer": false
+      },
+      {
+        "tag": "s1039",
+        "answer": false
+      },
+      {
+        "tag": "s1040",
+        "answer": false
+      }
+    ],
+    "q0049": [
+      {
+        "tag": "s1001",
+        "answer": false
+      },
+      {
+        "tag": "s1002",
+        "answer": false
+      },
+      {
+        "tag": "s1003",
+        "answer": false
+      },
+      {
+        "tag": "s1004",
+        "answer": false
+      },
+      {
+        "tag": "s1005",
+        "answer": false
+      },
+      {
+        "tag": "s1006",
+        "answer": false
+      },
+      {
+        "tag": "s1007",
+        "answer": false
+      },
+      {
+        "tag": "s1008",
+        "answer": false
+      },
+      {
+        "tag": "s1009",
+        "answer": true
+      },
+      {
+        "tag": "s1010",
+        "answer": false
+      },
+      {
+        "tag": "s1011",
+        "answer": false
+      },
+      {
+        "tag": "s1012",
+        "answer": false
+      },
+      {
+        "tag": "s1013",
+        "answer": false
+      },
+      {
+        "tag": "s1014",
+        "answer": true
+      },
+      {
+        "tag": "s1015",
+        "answer": true
+      },
+      {
+        "tag": "s1016",
+        "answer": false
+      },
+      {
+        "tag": "s1017",
+        "answer": false
+      },
+      {
+        "tag": "s1018",
+        "answer": false
+      },
+      {
+        "tag": "s1019",
+        "answer": false
+      },
+      {
+        "tag": "s1020",
+        "answer": false
+      },
+      {
+        "tag": "s1021",
+        "answer": true
+      },
+      {
+        "tag": "s1022",
+        "answer": false
+      },
+      {
+        "tag": "s1023",
+        "answer": false
+      },
+      {
+        "tag": "s1024",
+        "answer": false
+      },
+      {
+        "tag": "s1025",
+        "answer": false
+      },
+      {
+        "tag": "s1026",
+        "answer": true
+      },
+      {
+        "tag": "s1027",
+        "answer": false
+      },
+      {
+        "tag": "s1028",
+        "answer": false
+      },
+      {
+        "tag": "s1029",
+        "answer": true
+      },
+      {
+        "tag": "s1030",
+        "answer": false
+      },
+      {
+        "tag": "s1031",
+        "answer": false
+      },
+      {
+        "tag": "s1032",
+        "answer": false
+      },
+      {
+        "tag": "s1033",
+        "answer": false
+      },
+      {
+        "tag": "s1034",
+        "answer": true
+      },
+      {
+        "tag": "s1035",
+        "answer": false
+      },
+      {
+        "tag": "s1036",
+        "answer": false
+      },
+      {
+        "tag": "s1037",
+        "answer": false
+      },
+      {
+        "tag": "s1038",
+        "answer": false
+      },
+      {
+        "tag": "s1039",
+        "answer": false
+      },
+      {
+        "tag": "s1040",
+        "answer": true
+      }
+    ],
+    "q0050": [
+      {
+        "tag": "s1001",
+        "answer": false
+      },
+      {
+        "tag": "s1002",
+        "answer": false
+      },
+      {
+        "tag": "s1003",
+        "answer": false
+      },
+      {
+        "tag": "s1004",
+        "answer": false
+      },
+      {
+        "tag": "s1005",
+        "answer": false
+      },
+      {
+        "tag": "s1006",
+        "answer": false
+      },
+      {
+        "tag": "s1007",
+        "answer": false
+      },
+      {
+        "tag": "s1008",
+        "answer": false
+      },
+      {
+        "tag": "s1009",
+        "answer": false
+      },
+      {
+        "tag": "s1010",
+        "answer": false
+      },
+      {
+        "tag": "s1011",
+        "answer": false
+      },
+      {
+        "tag": "s1012",
+        "answer": false
+      },
+      {
+        "tag": "s1013",
+        "answer": false
+      },
+      {
+        "tag": "s1014",
+        "answer": false
+      },
+      {
+        "tag": "s1015",
+        "answer": false
+      },
+      {
+        "tag": "s1016",
+        "answer": false
+      },
+      {
+        "tag": "s1017",
+        "answer": false
+      },
+      {
+        "tag": "s1018",
+        "answer": false
+      },
+      {
+        "tag": "s1019",
+        "answer": false
+      },
+      {
+        "tag": "s1020",
+        "answer": false
+      },
+      {
+        "tag": "s1021",
+        "answer": false
+      },
+      {
+        "tag": "s1022",
+        "answer": false
+      },
+      {
+        "tag": "s1023",
+        "answer": false
+      },
+      {
+        "tag": "s1024",
+        "answer": false
+      },
+      {
+        "tag": "s1025",
+        "answer": false
+      },
+      {
+        "tag": "s1026",
+        "answer": false
+      },
+      {
+        "tag": "s1027",
+        "answer": false
+      },
+      {
+        "tag": "s1028",
+        "answer": false
+      },
+      {
+        "tag": "s1029",
+        "answer": false
+      },
+      {
+        "tag": "s1030",
+        "answer": false
+      },
+      {
+        "tag": "s1031",
+        "answer": false
+      },
+      {
+        "tag": "s1032",
+        "answer": false
+      },
+      {
+        "tag": "s1033",
+        "answer": false
+      },
+      {
+        "tag": "s1034",
+        "answer": false
+      },
+      {
+        "tag": "s1035",
+        "answer": false
+      },
+      {
+        "tag": "s1036",
+        "answer": false
+      },
+      {
+        "tag": "s1037",
+        "answer": false
+      },
+      {
+        "tag": "s1038",
+        "answer": false
+      },
+      {
+        "tag": "s1039",
+        "answer": false
+      },
+      {
+        "tag": "s1040",
+        "answer": false
+      }
+    ],
+    "q0051": [
+      {
+        "tag": "s1001",
+        "answer": true
+      },
+      {
+        "tag": "s1002",
+        "answer": true
+      },
+      {
+        "tag": "s1003",
+        "answer": false
+      },
+      {
+        "tag": "s1004",
+        "answer": true
+      },
+      {
+        "tag": "s1005",
+        "answer": false
+      },
+      {
+        "tag": "s1006",
+        "answer": false
+      },
+      {
+        "tag": "s1007",
+        "answer": true
+      },
+      {
+        "tag": "s1008",
+        "answer": true
+      },
+      {
+        "tag": "s1009",
+        "answer": true
+      },
+      {
+        "tag": "s1010",
+        "answer": false
+      },
+      {
+        "tag": "s1011",
+        "answer": false
+      },
+      {
+        "tag": "s1012",
+        "answer": true
+      },
+      {
+        "tag": "s1013",
+        "answer": false
+      },
+      {
+        "tag": "s1014",
+        "answer": true
+      },
+      {
+        "tag": "s1015",
+        "answer": true
+      },
+      {
+        "tag": "s1016",
+        "answer": true
+      },
+      {
+        "tag": "s1017",
+        "answer": true
+      },
+      {
+        "tag": "s1018",
+        "answer": true
+      },
+      {
+        "tag": "s1019",
+        "answer": true
+      },
+      {
+        "tag": "s1020",
+        "answer": true
+      },
+      {
+        "tag": "s1021",
+        "answer": true
+      },
+      {
+        "tag": "s1022",
+        "answer": false
+      },
+      {
+        "tag": "s1023",
+        "answer": true
+      },
+      {
+        "tag": "s1024",
+        "answer": true
+      },
+      {
+        "tag": "s1025",
+        "answer": false
+      },
+      {
+        "tag": "s1026",
+        "answer": false
+      },
+      {
+        "tag": "s1027",
+        "answer": true
+      },
+      {
+        "tag": "s1028",
+        "answer": false
+      },
+      {
+        "tag": "s1029",
+        "answer": true
+      },
+      {
+        "tag": "s1030",
+        "answer": true
+      },
+      {
+        "tag": "s1031",
+        "answer": true
+      },
+      {
+        "tag": "s1032",
+        "answer": false
+      },
+      {
+        "tag": "s1033",
+        "answer": true
+      },
+      {
+        "tag": "s1034",
+        "answer": false
+      },
+      {
+        "tag": "s1035",
+        "answer": false
+      },
+      {
+        "tag": "s1036",
+        "answer": false
+      },
+      {
+        "tag": "s1037",
+        "answer": true
+      },
+      {
+        "tag": "s1038",
+        "answer": true
+      },
+      {
+        "tag": "s1039",
+        "answer": false
+      },
+      {
+        "tag": "s1040",
+        "answer": true
+      }
+    ],
+    "q0052": [
+      {
+        "tag": "s1001",
+        "answer": false
+      },
+      {
+        "tag": "s1002",
+        "answer": false
+      },
+      {
+        "tag": "s1003",
+        "answer": false
+      },
+      {
+        "tag": "s1004",
+        "answer": false
+      },
+      {
+        "tag": "s1005",
+        "answer": false
+      },
+      {
+        "tag": "s1006",
+        "answer": false
+      },
+      {
+        "tag": "s1007",
+        "answer": false
+      },
+      {
+        "tag": "s1008",
+        "answer": false
+      },
+      {
+        "tag": "s1009",
+        "answer": false
+      },
+      {
+        "tag": "s1010",
+        "answer": false
+      },
+      {
+        "tag": "s1011",
+        "answer": false
+      },
+      {
+        "tag": "s1012",
+        "answer": false
+      },
+      {
+        "tag": "s1013",
+        "answer": false
+      },
+      {
+        "tag": "s1014",
+        "answer": false
+      },
+      {
+        "tag": "s1015",
+        "answer": false
+      },
+      {
+        "tag": "s1016",
+        "answer": false
+      },
+      {
+        "tag": "s1017",
+        "answer": false
+      },
+      {
+        "tag": "s1018",
+        "answer": false
+      },
+      {
+        "tag": "s1019",
+        "answer": false
+      },
+      {
+        "tag": "s1020",
+        "answer": false
+      },
+      {
+        "tag": "s1021",
+        "answer": false
+      },
+      {
+        "tag": "s1022",
+        "answer": false
+      },
+      {
+        "tag": "s1023",
+        "answer": false
+      },
+      {
+        "tag": "s1024",
+        "answer": false
+      },
+      {
+        "tag": "s1025",
+        "answer": false
+      },
+      {
+        "tag": "s1026",
+        "answer": false
+      },
+      {
+        "tag": "s1027",
+        "answer": false
+      },
+      {
+        "tag": "s1028",
+        "answer": false
+      },
+      {
+        "tag": "s1029",
+        "answer": false
+      },
+      {
+        "tag": "s1030",
+        "answer": false
+      },
+      {
+        "tag": "s1031",
+        "answer": false
+      },
+      {
+        "tag": "s1032",
+        "answer": false
+      },
+      {
+        "tag": "s1033",
+        "answer": false
+      },
+      {
+        "tag": "s1034",
+        "answer": false
+      },
+      {
+        "tag": "s1035",
+        "answer": false
+      },
+      {
+        "tag": "s1036",
+        "answer": false
+      },
+      {
+        "tag": "s1037",
+        "answer": false
+      },
+      {
+        "tag": "s1038",
+        "answer": false
+      },
+      {
+        "tag": "s1039",
+        "answer": false
+      },
+      {
+        "tag": "s1040",
+        "answer": false
+      }
+    ],
+    "q0053": [
+      {
+        "tag": "s1001",
+        "answer": false
+      },
+      {
+        "tag": "s1002",
+        "answer": true
+      },
+      {
+        "tag": "s1003",
+        "answer": true
+      },
+      {
+        "tag": "s1004",
+        "answer": true
+      },
+      {
+        "tag": "s1005",
+        "answer": true
+      },
+      {
+        "tag": "s1006",
+        "answer": true
+      },
+      {
+        "tag": "s1007",
+        "answer": true
+      },
+      {
+        "tag": "s1008",
+        "answer": true
+      },
+      {
+        "tag": "s1009",
+        "answer": true
+      },
+      {
+        "tag": "s1010",
+        "answer": true
+      },
+      {
+        "tag": "s1011",
+        "answer": true
+      },
+      {
+        "tag": "s1012",
+        "answer": true
+      },
+      {
+        "tag": "s1013",
+        "answer": true
+      },
+      {
+        "tag": "s1014",
+        "answer": true
+      },
+      {
+        "tag": "s1015",
+        "answer": true
+      },
+      {
+        "tag": "s1016",
+        "answer": true
+      },
+      {
+        "tag": "s1017",
+        "answer": true
+      },
+      {
+        "tag": "s1018",
+        "answer": false
+      },
+      {
+        "tag": "s1019",
+        "answer": true
+      },
+      {
+        "tag": "s1020",
+        "answer": false
+      },
+      {
+        "tag": "s1021",
+        "answer": true
+      },
+      {
+        "tag": "s1022",
+        "answer": true
+      },
+      {
+        "tag": "s1023",
+        "answer": true
+      },
+      {
+        "tag": "s1024",
+        "answer": true
+      },
+      {
+        "tag": "s1025",
+        "answer": true
+      },
+      {
+        "tag": "s1026",
+        "answer": true
+      },
+      {
+        "tag": "s1027",
+        "answer": false
+      },
+      {
+        "tag": "s1028",
+        "answer": true
+      },
+      {
+        "tag": "s1029",
+        "answer": true
+      },
+      {
+        "tag": "s1030",
+        "answer": true
+      },
+      {
+        "tag": "s1031",
+        "answer": true
+      },
+      {
+        "tag": "s1032",
+        "answer": false
+      },
+      {
+        "tag": "s1033",
+        "answer": false
+      },
+      {
+        "tag": "s1034",
+        "answer": true
+      },
+      {
+        "tag": "s1035",
+        "answer": true
+      },
+      {
+        "tag": "s1036",
+        "answer": true
+      },
+      {
+        "tag": "s1037",
+        "answer": false
+      },
+      {
+        "tag": "s1038",
+        "answer": true
+      },
+      {
+        "tag": "s1039",
+        "answer": true
+      },
+      {
+        "tag": "s1040",
+        "answer": true
+      }
+    ],
+    "q0054": [
+      {
+        "tag": "s1001",
+        "answer": false
+      },
+      {
+        "tag": "s1002",
+        "answer": false
+      },
+      {
+        "tag": "s1003",
+        "answer": false
+      },
+      {
+        "tag": "s1004",
+        "answer": false
+      },
+      {
+        "tag": "s1005",
+        "answer": false
+      },
+      {
+        "tag": "s1006",
+        "answer": false
+      },
+      {
+        "tag": "s1007",
+        "answer": false
+      },
+      {
+        "tag": "s1008",
+        "answer": false
+      },
+      {
+        "tag": "s1009",
+        "answer": false
+      },
+      {
+        "tag": "s1010",
+        "answer": false
+      },
+      {
+        "tag": "s1011",
+        "answer": false
+      },
+      {
+        "tag": "s1012",
+        "answer": false
+      },
+      {
+        "tag": "s1013",
+        "answer": false
+      },
+      {
+        "tag": "s1014",
+        "answer": false
+      },
+      {
+        "tag": "s1015",
+        "answer": false
+      },
+      {
+        "tag": "s1016",
+        "answer": false
+      },
+      {
+        "tag": "s1017",
+        "answer": false
+      },
+      {
+        "tag": "s1018",
+        "answer": false
+      },
+      {
+        "tag": "s1019",
+        "answer": false
+      },
+      {
+        "tag": "s1020",
+        "answer": false
+      },
+      {
+        "tag": "s1021",
+        "answer": false
+      },
+      {
+        "tag": "s1022",
+        "answer": false
+      },
+      {
+        "tag": "s1023",
+        "answer": false
+      },
+      {
+        "tag": "s1024",
+        "answer": false
+      },
+      {
+        "tag": "s1025",
+        "answer": false
+      },
+      {
+        "tag": "s1026",
+        "answer": false
+      },
+      {
+        "tag": "s1027",
+        "answer": false
+      },
+      {
+        "tag": "s1028",
+        "answer": false
+      },
+      {
+        "tag": "s1029",
+        "answer": false
+      },
+      {
+        "tag": "s1030",
+        "answer": false
+      },
+      {
+        "tag": "s1031",
+        "answer": false
+      },
+      {
+        "tag": "s1032",
+        "answer": false
+      },
+      {
+        "tag": "s1033",
+        "answer": false
+      },
+      {
+        "tag": "s1034",
+        "answer": false
+      },
+      {
+        "tag": "s1035",
+        "answer": false
+      },
+      {
+        "tag": "s1036",
+        "answer": false
+      },
+      {
+        "tag": "s1037",
+        "answer": false
+      },
+      {
+        "tag": "s1038",
+        "answer": false
+      },
+      {
+        "tag": "s1039",
+        "answer": false
+      },
+      {
+        "tag": "s1040",
+        "answer": false
+      }
+    ],
+    "q0055": [
+      {
+        "tag": "s1001",
+        "answer": true
+      },
+      {
+        "tag": "s1002",
+        "answer": false
+      },
+      {
+        "tag": "s1003",
+        "answer": false
+      },
+      {
+        "tag": "s1004",
+        "answer": false
+      },
+      {
+        "tag": "s1005",
+        "answer": false
+      },
+      {
+        "tag": "s1006",
+        "answer": true
+      },
+      {
+        "tag": "s1007",
+        "answer": false
+      },
+      {
+        "tag": "s1008",
+        "answer": false
+      },
+      {
+        "tag": "s1009",
+        "answer": true
+      },
+      {
+        "tag": "s1010",
+        "answer": false
+      },
+      {
+        "tag": "s1011",
+        "answer": false
+      },
+      {
+        "tag": "s1012",
+        "answer": false
+      },
+      {
+        "tag": "s1013",
+        "answer": true
+      },
+      {
+        "tag": "s1014",
+        "answer": false
+      },
+      {
+        "tag": "s1015",
+        "answer": true
+      },
+      {
+        "tag": "s1016",
+        "answer": false
+      },
+      {
+        "tag": "s1017",
+        "answer": true
+      },
+      {
+        "tag": "s1018",
+        "answer": false
+      },
+      {
+        "tag": "s1019",
+        "answer": false
+      },
+      {
+        "tag": "s1020",
+        "answer": true
+      },
+      {
+        "tag": "s1021",
+        "answer": true
+      },
+      {
+        "tag": "s1022",
+        "answer": false
+      },
+      {
+        "tag": "s1023",
+        "answer": true
+      },
+      {
+        "tag": "s1024",
+        "answer": false
+      },
+      {
+        "tag": "s1025",
+        "answer": true
+      },
+      {
+        "tag": "s1026",
+        "answer": true
+      },
+      {
+        "tag": "s1027",
+        "answer": false
+      },
+      {
+        "tag": "s1028",
+        "answer": true
+      },
+      {
+        "tag": "s1029",
+        "answer": true
+      },
+      {
+        "tag": "s1030",
+        "answer": false
+      },
+      {
+        "tag": "s1031",
+        "answer": true
+      },
+      {
+        "tag": "s1032",
+        "answer": false
+      },
+      {
+        "tag": "s1033",
+        "answer": false
+      },
+      {
+        "tag": "s1034",
+        "answer": true
+      },
+      {
+        "tag": "s1035",
+        "answer": true
+      },
+      {
+        "tag": "s1036",
+        "answer": false
+      },
+      {
+        "tag": "s1037",
+        "answer": false
+      },
+      {
+        "tag": "s1038",
+        "answer": false
+      },
+      {
+        "tag": "s1039",
+        "answer": true
+      },
+      {
+        "tag": "s1040",
+        "answer": false
+      }
+    ],
+    "q0056": [
+      {
+        "tag": "s1001",
+        "answer": false
+      },
+      {
+        "tag": "s1002",
+        "answer": false
+      },
+      {
+        "tag": "s1003",
+        "answer": false
+      },
+      {
+        "tag": "s1004",
+        "answer": false
+      },
+      {
+        "tag": "s1005",
+        "answer": false
+      },
+      {
+        "tag": "s1006",
+        "answer": false
+      },
+      {
+        "tag": "s1007",
+        "answer": false
+      },
+      {
+        "tag": "s1008",
+        "answer": false
+      },
+      {
+        "tag": "s1009",
+        "answer": false
+      },
+      {
+        "tag": "s1010",
+        "answer": false
+      },
+      {
+        "tag": "s1011",
+        "answer": false
+      },
+      {
+        "tag": "s1012",
+        "answer": false
+      },
+      {
+        "tag": "s1013",
+        "answer": false
+      },
+      {
+        "tag": "s1014",
+        "answer": false
+      },
+      {
+        "tag": "s1015",
+        "answer": false
+      },
+      {
+        "tag": "s1016",
+        "answer": false
+      },
+      {
+        "tag": "s1017",
+        "answer": false
+      },
+      {
+        "tag": "s1018",
+        "answer": false
+      },
+      {
+        "tag": "s1019",
+        "answer": false
+      },
+      {
+        "tag": "s1020",
+        "answer": false
+      },
+      {
+        "tag": "s1021",
+        "answer": false
+      },
+      {
+        "tag": "s1022",
+        "answer": false
+      },
+      {
+        "tag": "s1023",
+        "answer": false
+      },
+      {
+        "tag": "s1024",
+        "answer": false
+      },
+      {
+        "tag": "s1025",
+        "answer": false
+      },
+      {
+        "tag": "s1026",
+        "answer": false
+      },
+      {
+        "tag": "s1027",
+        "answer": false
+      },
+      {
+        "tag": "s1028",
+        "answer": false
+      },
+      {
+        "tag": "s1029",
+        "answer": false
+      },
+      {
+        "tag": "s1030",
+        "answer": false
+      },
+      {
+        "tag": "s1031",
+        "answer": false
+      },
+      {
+        "tag": "s1032",
+        "answer": false
+      },
+      {
+        "tag": "s1033",
+        "answer": false
+      },
+      {
+        "tag": "s1034",
+        "answer": false
+      },
+      {
+        "tag": "s1035",
+        "answer": false
+      },
+      {
+        "tag": "s1036",
+        "answer": false
+      },
+      {
+        "tag": "s1037",
+        "answer": false
+      },
+      {
+        "tag": "s1038",
+        "answer": false
+      },
+      {
+        "tag": "s1039",
+        "answer": false
+      },
+      {
+        "tag": "s1040",
+        "answer": false
+      }
+    ]
+  },
+  "p_mc": {
+    "q0000": 0.95,
+    "q0001": 0.1,
+    "q0002": 1.0,
+    "q0003": 0.7,
+    "q0004": 0.9,
+    "q0005": 0.95,
+    "q0006": 0.75,
+    "q0007": 0.625,
+    "q0008": 0.925,
+    "q0009": 0.975,
+    "q0010": 0.05,
+    "q0011": 0.85,
+    "q0012": 0.925,
+    "q0013": 0.975,
+    "q0014": 0.025,
+    "q0015": 0.85,
+    "q0016": 0.95,
+    "q0017": 0.5,
+    "q0018": 0.025,
+    "q0019": 0.8,
+    "q0020": 0.675,
+    "q0021": 0.925,
+    "q0022": 0.95,
+    "q0023": 0.625,
+    "q0024": 0.0,
+    "q0025": 0.0,
+    "q0026": 0.925,
+    "q0027": 0.0,
+    "q0028": 0.075,
+    "q0029": 0.25,
+    "q0030": 0.95,
+    "q0031": 0.425,
+    "q0032": 0.3,
+    "q0033": 1.0,
+    "q0034": 0.625,
+    "q0035": 1.0,
+    "q0036": 0.4,
+    "q0037": 0.475,
+    "q0038": 0.125,
+    "q0039": 0.925,
+    "q0040": 0.05,
+    "q0041": 1.0,
+    "q0042": 0.525,
+    "q0043": 0.35,
+    "q0044": 1.0,
+    "q0045": 1.0,
+    "q0046": 0.65,
+    "q0047": 1.0,
+    "q0048": 0.0,
+    "q0049": 0.2,
+    "q0050": 0.0,
+    "q0051": 0.625,
+    "q0052": 0.0,
+    "q0053": 0.825,
+    "q0054": 0.0,
+    "q0055": 0.425,
+    "q0056": 0.0
+  },
+  "rollout_log": [
+    {
+      "tag": "s1001",
+      "ok": true,
+      "final_turn": 91,
+      "n_resolved": 57,
+      "n_true": 33
+    },
+    {
+      "tag": "s1002",
+      "ok": true,
+      "final_turn": 91,
+      "n_resolved": 57,
+      "n_true": 35
+    },
+    {
+      "tag": "s1003",
+      "ok": true,
+      "final_turn": 91,
+      "n_resolved": 57,
+      "n_true": 29
+    },
+    {
+      "tag": "s1004",
+      "ok": true,
+      "final_turn": 91,
+      "n_resolved": 57,
+      "n_true": 29
+    },
+    {
+      "tag": "s1005",
+      "ok": true,
+      "final_turn": 91,
+      "n_resolved": 57,
+      "n_true": 33
+    },
+    {
+      "tag": "s1006",
+      "ok": true,
+      "final_turn": 91,
+      "n_resolved": 57,
+      "n_true": 34
+    },
+    {
+      "tag": "s1007",
+      "ok": true,
+      "final_turn": 91,
+      "n_resolved": 57,
+      "n_true": 32
+    },
+    {
+      "tag": "s1008",
+      "ok": true,
+      "final_turn": 91,
+      "n_resolved": 57,
+      "n_true": 33
+    },
+    {
+      "tag": "s1009",
+      "ok": true,
+      "final_turn": 91,
+      "n_resolved": 57,
+      "n_true": 38
+    },
+    {
+      "tag": "s1010",
+      "ok": true,
+      "final_turn": 91,
+      "n_resolved": 57,
+      "n_true": 34
+    },
+    {
+      "tag": "s1011",
+      "ok": true,
+      "final_turn": 91,
+      "n_resolved": 57,
+      "n_true": 31
+    },
+    {
+      "tag": "s1012",
+      "ok": true,
+      "final_turn": 91,
+      "n_resolved": 57,
+      "n_true": 36
+    },
+    {
+      "tag": "s1013",
+      "ok": true,
+      "final_turn": 91,
+      "n_resolved": 57,
+      "n_true": 33
+    },
+    {
+      "tag": "s1014",
+      "ok": true,
+      "final_turn": 91,
+      "n_resolved": 57,
+      "n_true": 33
+    },
+    {
+      "tag": "s1015",
+      "ok": true,
+      "final_turn": 91,
+      "n_resolved": 57,
+      "n_true": 26
+    },
+    {
+      "tag": "s1016",
+      "ok": true,
+      "final_turn": 91,
+      "n_resolved": 57,
+      "n_true": 29
+    },
+    {
+      "tag": "s1017",
+      "ok": true,
+      "final_turn": 91,
+      "n_resolved": 57,
+      "n_true": 29
+    },
+    {
+      "tag": "s1018",
+      "ok": true,
+      "final_turn": 91,
+      "n_resolved": 57,
+      "n_true": 31
+    },
+    {
+      "tag": "s1019",
+      "ok": true,
+      "final_turn": 91,
+      "n_resolved": 57,
+      "n_true": 31
+    },
+    {
+      "tag": "s1020",
+      "ok": true,
+      "final_turn": 91,
+      "n_resolved": 57,
+      "n_true": 29
+    },
+    {
+      "tag": "s1021",
+      "ok": true,
+      "final_turn": 91,
+      "n_resolved": 57,
+      "n_true": 33
+    },
+    {
+      "tag": "s1022",
+      "ok": true,
+      "final_turn": 91,
+      "n_resolved": 57,
+      "n_true": 27
+    },
+    {
+      "tag": "s1023",
+      "ok": true,
+      "final_turn": 91,
+      "n_resolved": 57,
+      "n_true": 35
+    },
+    {
+      "tag": "s1024",
+      "ok": true,
+      "final_turn": 91,
+      "n_resolved": 57,
+      "n_true": 34
+    },
+    {
+      "tag": "s1025",
+      "ok": true,
+      "final_turn": 91,
+      "n_resolved": 57,
+      "n_true": 30
+    },
+    {
+      "tag": "s1026",
+      "ok": true,
+      "final_turn": 91,
+      "n_resolved": 57,
+      "n_true": 33
+    },
+    {
+      "tag": "s1027",
+      "ok": true,
+      "final_turn": 91,
+      "n_resolved": 57,
+      "n_true": 32
+    },
+    {
+      "tag": "s1028",
+      "ok": true,
+      "final_turn": 91,
+      "n_resolved": 57,
+      "n_true": 33
+    },
+    {
+      "tag": "s1029",
+      "ok": true,
+      "final_turn": 91,
+      "n_resolved": 57,
+      "n_true": 33
+    },
+    {
+      "tag": "s1030",
+      "ok": true,
+      "final_turn": 91,
+      "n_resolved": 57,
+      "n_true": 29
+    },
+    {
+      "tag": "s1031",
+      "ok": true,
+      "final_turn": 91,
+      "n_resolved": 57,
+      "n_true": 35
+    },
+    {
+      "tag": "s1032",
+      "ok": true,
+      "final_turn": 91,
+      "n_resolved": 57,
+      "n_true": 32
+    },
+    {
+      "tag": "s1033",
+      "ok": true,
+      "final_turn": 91,
+      "n_resolved": 57,
+      "n_true": 29
+    },
+    {
+      "tag": "s1034",
+      "ok": true,
+      "final_turn": 91,
+      "n_resolved": 57,
+      "n_true": 36
+    },
+    {
+      "tag": "s1035",
+      "ok": true,
+      "final_turn": 91,
+      "n_resolved": 57,
+      "n_true": 35
+    },
+    {
+      "tag": "s1036",
+      "ok": true,
+      "final_turn": 91,
+      "n_resolved": 57,
+      "n_true": 27
+    },
+    {
+      "tag": "s1037",
+      "ok": true,
+      "final_turn": 91,
+      "n_resolved": 57,
+      "n_true": 31
+    },
+    {
+      "tag": "s1038",
+      "ok": true,
+      "final_turn": 91,
+      "n_resolved": 57,
+      "n_true": 35
+    },
+    {
+      "tag": "s1039",
+      "ok": true,
+      "final_turn": 91,
+      "n_resolved": 57,
+      "n_true": 35
+    },
+    {
+      "tag": "s1040",
+      "ok": true,
+      "final_turn": 91,
+      "n_resolved": 57,
+      "n_true": 33
+    }
+  ],
+  "elapsed_sec": 3309.1517140865326
+}

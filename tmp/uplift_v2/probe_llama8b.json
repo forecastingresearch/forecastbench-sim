@@ -1,0 +1,203 @@
+{
+ "model": "accounts/fireworks/models/llama-v3p1-8b-instruct#accounts/jaeholee/deployments/cb-llama-v3p1-8b-instruct",
+ "config": {
+  "model": "accounts/fireworks/models/llama-v3p1-8b-instruct#accounts/jaeholee/deployments/cb-llama-v3p1-8b-instruct",
+  "records": [
+   "data/training/val.jsonl"
+  ],
+  "mode": "line",
+  "max_tokens": 2048,
+  "limit": 15,
+  "concurrency": 8,
+  "no_think": false,
+  "output": "tmp/uplift_v2/probe_llama8b.json"
+ },
+ "summary": {
+  "n": 15,
+  "n_parsed": 15,
+  "parse_rate": 1.0,
+  "n_retried": 0,
+  "n_errors": 0,
+  "brier_dense": 0.17625333333333332,
+  "brier_hard": 0.32985333333333333,
+  "pred_mean": 0.5506666666666666,
+  "pred_sd": 0.2731658023171194,
+  "ece_hard": 0.3026666666666667,
+  "per_template_brier_dense": {
+   "population_comparative": 0.7225,
+   "score_comparative": 0.0562,
+   "score_rank_1": 0.1325,
+   "tech_comparative": 0.0289,
+   "tech_discovered": 0.06,
+   "treasury_comparative": 0.1042,
+   "wonder_completed": 0.9025
+  }
+ },
+ "rows": [
+  {
+   "qid": "q0023",
+   "game_id": "seed3",
+   "template_id": "treasury_comparative",
+   "p_mc": 0.45,
+   "hard": 0,
+   "pred": 0.95,
+   "retried": false,
+   "error": null,
+   "sec": 1.9
+  },
+  {
+   "qid": "q0004",
+   "game_id": "seed3",
+   "template_id": "score_comparative",
+   "p_mc": 0.85,
+   "hard": 1,
+   "pred": 0.55,
+   "retried": false,
+   "error": null,
+   "sec": 2.2
+  },
+  {
+   "qid": "q0043",
+   "game_id": "seed3",
+   "template_id": "tech_discovered",
+   "p_mc": 0.45,
+   "hard": 0,
+   "pred": 0.65,
+   "retried": false,
+   "error": null,
+   "sec": 2.3
+  },
+  {
+   "qid": "q0022",
+   "game_id": "seed3",
+   "template_id": "treasury_comparative",
+   "p_mc": 0.95,
+   "hard": 1,
+   "pred": 0.75,
+   "retried": false,
+   "error": null,
+   "sec": 2.3
+  },
+  {
+   "qid": "q0002",
+   "game_id": "seed3",
+   "template_id": "tech_comparative",
+   "p_mc": 1.0,
+   "hard": 1,
+   "pred": 0.83,
+   "retried": false,
+   "error": null,
+   "sec": 2.3
+  },
+  {
+   "qid": "q0028",
+   "game_id": "seed3",
+   "template_id": "score_rank_1",
+   "p_mc": 0.1,
+   "hard": 0,
+   "pred": 0.55,
+   "retried": false,
+   "error": null,
+   "sec": 2.7
+  },
+  {
+   "qid": "q0026",
+   "game_id": "seed3",
+   "template_id": "score_rank_1",
+   "p_mc": 0.9,
+   "hard": 1,
+   "pred": 0.65,
+   "retried": false,
+   "error": null,
+   "sec": 2.7
+  },
+  {
+   "qid": "q0011",
+   "game_id": "seed3",
+   "template_id": "population_comparative",
+   "p_mc": 0.9,
+   "hard": 1,
+   "pred": 0.05,
+   "retried": false,
+   "error": null,
+   "sec": 3.0
+  },
+  {
+   "qid": "q0040",
+   "game_id": "seed3",
+   "template_id": "tech_discovered",
+   "p_mc": 0.05,
+   "hard": 0,
+   "pred": 0.15,
+   "retried": false,
+   "error": null,
+   "sec": 1.6
+  },
+  {
+   "qid": "q0044",
+   "game_id": "seed3",
+   "template_id": "wonder_completed",
+   "p_mc": 1.0,
+   "hard": 1,
+   "pred": 0.05,
+   "retried": false,
+   "error": null,
+   "sec": 1.5
+  },
+  {
+   "qid": "q0005",
+   "game_id": "seed3",
+   "template_id": "score_comparative",
+   "p_mc": 1.0,
+   "hard": 1,
+   "pred": 0.85,
+   "retried": false,
+   "error": null,
+   "sec": 1.7
+  },
+  {
+   "qid": "q0037",
+   "game_id": "seed3",
+   "template_id": "tech_discovered",
+   "p_mc": 0.3,
+   "hard": 1,
+   "pred": 0.65,
+   "retried": false,
+   "error": null,
+   "sec": 1.8
+  },
+  {
+   "qid": "q0021",
+   "game_id": "seed3",
+   "template_id": "treasury_comparative",
+   "p_mc": 0.8,
+   "hard": 1,
+   "pred": 0.65,
+   "retried": false,
+   "error": null,
+   "sec": 1.5
+  },
+  {
+   "qid": "q0032",
+   "game_id": "seed3",
+   "template_id": "tech_discovered",
+   "p_mc": 0.4,
+   "hard": 1,
+   "pred": 0.33,
+   "retried": false,
+   "error": null,
+   "sec": 2.1
+  },
+  {
+   "qid": "q0029",
+   "game_id": "seed3",
+   "template_id": "tech_discovered",
+   "p_mc": 0.25,
+   "hard": 0,
+   "pred": 0.6,
+   "retried": false,
+   "error": null,
+   "sec": 1.9
+  }
+ ]
+}
