@@ -231,6 +231,8 @@ class ForkManager:
                 modifier.set_player_government(mod["player_id"], mod["value"])
             elif mod_type == "tech":
                 modifier.grant_player_tech(mod["player_id"], mod["tech_id"])
+            elif mod_type == "rng_seed":
+                modifier.set_rng_from_seed(mod["value"])
             else:
                 raise ValueError(f"Unknown modification type: {mod_type}")
 
@@ -355,6 +357,8 @@ class ForkManager:
                         modifier.set_player_government(mod["player_id"], mod["value"])
                     elif mod_type == "tech":
                         modifier.grant_player_tech(mod["player_id"], mod["tech_id"])
+                    elif mod_type == "rng_seed":
+                        modifier.set_rng_from_seed(mod["value"])
                 modifier.save(str(temp_savegame))
 
                 # Clean up Docker and upload
