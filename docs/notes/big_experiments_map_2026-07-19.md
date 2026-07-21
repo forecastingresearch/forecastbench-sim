@@ -252,6 +252,23 @@ Worlds seed345/350/355 (150 rollouts each, fleets overnight):
   at floor across the board; detection is present; the benchmark's ground-truth
   machinery scales at $0 (150-rollout world overnight on a laptop).
 
+## PRE-REGISTERED: conditional-RFT success criterion (2026-07-22)
+
+Trained model (qwen3-4b + conditional-RFT on 30 train-world natcond cells,
+RunPod verl, both-turn rewards, taxonomy-mixed cells incl. placebos) must, on
+NEVER-TRAINED worlds (seed2/0/345/350/355 cells):
+1. Band CUS above BOTH untrained qwen3-4b (mech +0.00 / robust +0.04 /
+   systemic +0.06) AND forecast-RL qwen3-4b (−0.12 / +0.07 / +0.02), with
+   bootstrap CIs clear of both.
+2. Direction accuracy on substantive effect cells > 50%.
+3. Baseline forecast quality NOT degraded (vs its own pre-training 0.257;
+   ideally ≈ forecast-RL's 0.164 given both-turn rewards).
+Confound control: the forecast-RL row IS the "general forecasting uplift only"
+control — its baselines improved 0.257→0.164 while bands stayed ≈0/negative,
+so band gains beyond it are attributable to the conditional signal.
+Report |update| magnitude + selectivity alongside (untrained's ≈0 bands partly
+reflect timidity).
+
 ## Sanity-check reminders (from goal directive)
 
 - Measure real tokenized prompt lengths before setting any max_prompt/ctx (prompts are
@@ -273,3 +290,17 @@ on resume: check state, then two-cell template eval (base vs final model,
 trained vs held-out templates) per v3 PROOF RUN section.
 
 Zero active billing verified: no deployments, no pods, panel procs dead.
+
+## v3 collapse diagnosis (2026-07-22) — IMPORTANT for all future free-tier RFT
+
+The val-event keys are EPOCH-CHUNK pairs, not epochs. Remapping v3-final:
+val climbed 0.825->0.890 across epoch-0 chunks 0-6 (one clean pass over the
+681 interior rows), then collapsed to 0.085 at epoch-1 chunk-0 — the exact
+moment the data repeated. At r16 / lr 1e-4 / interior-only, a second identical
+pass detonates the policy. The v3-proof run's early "peak at epoch 2" was the
+same phenomenon at coarser eval cadence.
+=> Standing rule: on this config, epochs=1 IS the dose. fbsim-v3-dense-1ep
+(exact rerun, 1 epoch) launched to reproduce the last healthy point as the
+delivered model. For any longer training: new data per epoch beats repeats
+(or drop LR/rank). Fireworks checkpoints remain unyankable — RunPod runs use
+monitor_val HF backup instead.
