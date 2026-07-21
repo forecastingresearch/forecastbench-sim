@@ -194,9 +194,82 @@ hard-s2 .226/.142; dense-s1 .172/.145; dense-s2 .155/.137.
 Gate → **Stage-3 RunPod GRPO replication JUSTIFIED** (awaiting user go).
 Models: rftj-fbsim-v2-{dense,hard}-s{1,2}-*; analysis scripts/uplift_v2/final_a2.py.
 
+## v3 PROOF RUN (launched 2026-07-21, $0 free tier)
+
+Job `fbsim-v3-dense-proof`: the single-run proof of "RL improves vanilla
+forecasting", designed around the template-generalization gap.
+- Data: 681 rows = interior only (0.05<p_mc<0.95) minus 2 held-out templates
+  (wonder_completed, treasury_comparative), fresh shuffle seed 20260721.
+- Config: dense targets, qwen3-4b, 10 epochs, lr 1e-4, LoRA r16, G=8, temp 1.0,
+  ctx 24576, maxOut 8192, chunkSize 100, nodeCount 2 (free, quota-verified),
+  evaluationDataset = 228-row val (ALL templates) -> live per-chunk val curve
+  in outputMetrics.
+- Eval on completion: base + best model on 15 test worlds, split trained-templates
+  vs held-out-templates, Brier vs p_mc (primary) + vs independent hard labels
+  (anti-circularity), raw + calibrated. Success = SIG improvement in BOTH cells.
+- 28h contingency: per-chunk checkpoint GCS paths exist in outputMetrics —
+  verify recoverability early in the run.
+
+## B3 natural-conditional pilot — first results (2026-07-21, seed2, ~$5)
+
+Design (user-specified): NO interventions. Condition on naturally-occurring
+events mined post-hoc from 180 archived rollouts; ground truth = conditioning
+subset endpoints. 16 events (8 specific / 8 vague, windows 60-75/75-90,
+freq .15-.65) x 54 questions = 864 cells (66 resolvable-effect, 798 placebo).
+Multi-turn protocol: model's own baseline forecast stays in context; second
+turn asks "suppose X occurs during turns a-b".
+Metric: CUS = 1 - Brier_cond(model)/Brier_cond(no-update), inv-var pooled,
++ direction accuracy + selectivity ratio; perfect-forecaster ceiling ~+0.92.
+
+| model | pooled CUS [95% CI] | effect-cells CUS | direction | selectivity |
+|---|---|---|---|---|
+| gpt-oss-20b | +0.042 [+0.009,+0.077] | −0.003 | 46% | 1.71 |
+| gpt-oss-120b | +0.016 [−0.025,+0.054] | **−0.089** | 53% | 1.82 |
+
+Reading: models DETECT relevance (selectivity ~1.8: they move ~2x more on
+true-effect conditionals than placebos) but cannot EXECUTE the update
+(direction ~ chance; on true-effect cells the 120B's updates are net-harmful).
+Pooled-positive CUS is a placebo-cell calibration artifact (2nd answers drift
+toward interior). Specific events elicit saner updates than vague classes
+(CUS +0.05..+0.09 vs ~-0.01..-0.02).
+Re prior paper (+36% Brier from conditional framing): with own-anchor
+multi-turn, framing tax appears ~absent (placebo-cell CUS slightly positive)
+— protocol difference matters; direct single-turn comparison TBD.
+Panel (qwen3-4b base + dense-RL) running for ranking sanity check.
+
+## B3 cross-world replication (2026-07-21 night, 3 more worlds, ~$10)
+
+Worlds seed345/350/355 (150 rollouts each, fleets overnight):
+- Selectivity > 1 in ALL 8 world-x-model cells (1.2-3.2): "models detect which
+  conditionals matter" replicates universally.
+- Direction pooled across 4 worlds: oss20b 53%, oss120b 54% — chance-level
+  (world-dependent: seed350 is "legible", 66-71%; others ~chance).
+- CUS: 20B slightly positive everywhere; 120B NEGATIVE on 2 of 4 worlds (-0.06,
+  -0.11) — the bigger model updates more aggressively without more accuracy and
+  is punished for it. CUS ranking is anti-capability at the current floor: the
+  metric rewards knowing-when-you-don't-know (calibration-benchmark dynamics).
+- Conclusion (4 worlds, 4 models, 2 families, 4B-120B): conditional updating is
+  at floor across the board; detection is present; the benchmark's ground-truth
+  machinery scales at $0 (150-rollout world overnight on a laptop).
+
 ## Sanity-check reminders (from goal directive)
 
 - Measure real tokenized prompt lengths before setting any max_prompt/ctx (prompts are
   9.7k-11.2k tok; ASCII tables ≈2.8 chars/token).
 - No arbitrary timeouts; no max_tokens that truncate reasoning (8192 out was OK for RFT).
 - After each result: does this change the plan? Gate before building on it.
+
+## PAUSE CHECKPOINT (2026-07-21 evening, laptop closing)
+
+Killed mid-run (relaunch on resume, ~$30): the 7-model seed2 natcond panel —
+command pattern in this doc's B3 section; keys via Secret Manager fetch
+(scripts flow: scratchpad/panel_keys.env is EPHEMERAL, refetch on resume).
+Roster: gpt-4.1-nano/mini, gpt-5-mini (max_completion_tokens!), gemini-flash-
+lite-latest, gemini-2.5-flash, grok-4-fast, Qwen/Qwen3.5-9B (Together).
+Anthropic key in Secret Manager is DEAD (401) — tell user.
+
+Continues unattended: fbsim-v3-dense-final (3-epoch dose, Fireworks, ~4h) —
+on resume: check state, then two-cell template eval (base vs final model,
+trained vs held-out templates) per v3 PROOF RUN section.
+
+Zero active billing verified: no deployments, no pods, panel procs dead.
