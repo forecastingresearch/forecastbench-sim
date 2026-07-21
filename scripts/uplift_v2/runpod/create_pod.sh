@@ -5,6 +5,7 @@
 set -euo pipefail
 
 GPU_COUNT="${1:?gpu count}"
+GPU_ID="${GPU_ID:-NVIDIA A40}"  # v2 default: A40 48GB community ($0.35/h); override for H100
 HOURS="${2:?max hours}"
 NAME="${3:-fbsim-ab}"
 VOL="${4:-}"
@@ -19,14 +20,14 @@ fi
 
 ARGS=(pod create --name "$NAME"
   --image "runpod/pytorch:2.4.0-py3.11-cuda12.4.1-devel-ubuntu22.04"
-  --gpu-id "NVIDIA H100 80GB HBM3" --gpu-count "$GPU_COUNT"
+  --gpu-id "$GPU_ID" --gpu-count "$GPU_COUNT"
   --cloud-type SECURE --container-disk-in-gb 40
   --stop-after "$STOP_AT" --terminate-after "$TERM_AT"
   --ports "22/tcp"
   --env "PUBLIC_KEY=$(cat ~/.runpod/ssh/runpodctl-ssh-key.pub)")
 [ -n "$VOL" ] && ARGS+=(--network-volume-id "$VOL")
 
-echo "Creating: ${GPU_COUNT}x H100 SXM, platform stop at $STOP_AT, terminate at $TERM_AT"
+echo "Creating: ${GPU_COUNT}x ${GPU_ID}, platform stop at $STOP_AT, terminate at $TERM_AT"
 runpodctl "${ARGS[@]}"
 
 cat <<EOF
