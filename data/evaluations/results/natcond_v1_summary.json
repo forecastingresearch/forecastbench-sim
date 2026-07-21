@@ -1,0 +1,128 @@
+[
+ {
+  "run": "seed2_denserl",
+  "n": 864,
+  "n_quasi": 2,
+  "cus_quasi": 0.9283,
+  "cus_substantive": 0.0143,
+  "cus_substantive_effect": -0.0436,
+  "dir_substantive": "28/65"
+ },
+ {
+  "run": "seed2_gflashlite",
+  "n": 864,
+  "n_quasi": 2,
+  "cus_quasi": 0.9594,
+  "cus_substantive": 0.0264,
+  "cus_substantive_effect": -0.1745,
+  "dir_substantive": "30/65"
+ },
+ {
+  "run": "seed2_gpt41mini",
+  "n": 864,
+  "n_quasi": 2,
+  "cus_quasi": 0.9489,
+  "cus_substantive": 0.1051,
+  "cus_substantive_effect": -0.1653,
+  "dir_substantive": "30/65"
+ },
+ {
+  "run": "seed2_gpt41nano",
+  "n": 864,
+  "n_quasi": 2,
+  "cus_quasi": 0.8434,
+  "cus_substantive": -0.0273,
+  "cus_substantive_effect": -0.2891,
+  "dir_substantive": "30/65"
+ },
+ {
+  "run": "seed2_grok4fast",
+  "n": 788,
+  "n_quasi": 2,
+  "cus_quasi": 0.9547,
+  "cus_substantive": 0.0188,
+  "cus_substantive_effect": -0.1363,
+  "dir_substantive": "29/58"
+ },
+ {
+  "run": "seed2_oss120b",
+  "n": 864,
+  "n_quasi": 2,
+  "cus_quasi": 0.9546,
+  "cus_substantive": 0.014,
+  "cus_substantive_effect": -0.1466,
+  "dir_substantive": "34/65"
+ },
+ {
+  "run": "seed2_oss20b",
+  "n": 844,
+  "n_quasi": 2,
+  "cus_quasi": 0.9612,
+  "cus_substantive": 0.0405,
+  "cus_substantive_effect": -0.0526,
+  "dir_substantive": "29/64"
+ },
+ {
+  "run": "seed2_q4b",
+  "n": 864,
+  "n_quasi": 2,
+  "cus_quasi": 0.9513,
+  "cus_substantive": 0.0142,
+  "cus_substantive_effect": 0.039,
+  "dir_substantive": "33/65"
+ },
+ {
+  "run": "seed345_oss120b",
+  "n": 728,
+  "n_quasi": 9,
+  "cus_quasi": -1.1561,
+  "cus_substantive": -0.0376,
+  "cus_substantive_effect": -0.0228,
+  "dir_substantive": "16/39"
+ },
+ {
+  "run": "seed345_oss20b",
+  "n": 711,
+  "n_quasi": 9,
+  "cus_quasi": -3.9378,
+  "cus_substantive": 0.0437,
+  "cus_substantive_effect": 0.0729,
+  "dir_substantive": "20/39"
+ },
+ {
+  "run": "seed350_oss120b",
+  "n": 513,
+  "n_quasi": 3,
+  "cus_quasi": 0.9552,
+  "cus_substantive": 0.0084,
+  "cus_substantive_effect": 0.0253,
+  "dir_substantive": "24/35"
+ },
+ {
+  "run": "seed350_oss20b",
+  "n": 497,
+  "n_quasi": 3,
+  "cus_quasi": 0.9594,
+  "cus_substantive": 0.04,
+  "cus_substantive_effect": 0.0429,
+  "dir_substantive": "19/32"
+ },
+ {
+  "run": "seed355_oss120b",
+  "n": 605,
+  "n_quasi": 2,
+  "cus_quasi": -6.3941,
+  "cus_substantive": -0.0744,
+  "cus_substantive_effect": -0.1656,
+  "dir_substantive": "5/12"
+ },
+ {
+  "run": "seed355_oss20b",
+  "n": 599,
+  "n_quasi": 2,
+  "cus_quasi": -0.3828,
+  "cus_substantive": 0.0593,
+  "cus_substantive_effect": -0.0876,
+  "dir_substantive": "5/12"
+ }
+]
