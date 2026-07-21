@@ -15,6 +15,7 @@ fi
 cd scaling-forecasting-training
 mkdir -p qgen/config
 [ -f qgen/config/openrouter_key.py ] || echo 'API_KEY = ""' > qgen/config/openrouter_key.py
+mkdir -p /root/.cargo && [ -f /root/.cargo/env ] || echo 'export PATH="$HOME/.local/bin:$PATH"' > /root/.cargo/env
 bash setup.sh < /dev/null
 source forecast/bin/activate
 
