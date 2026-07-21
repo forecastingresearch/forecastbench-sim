@@ -1,4 +1,5 @@
 #!/bin/bash
+# NOTE steps/epoch depends on dataset rows: pass STEPS_PER_EPOCH to monitor_val.
 # v2: Train one A/B arm — Stage-3 replication of the A2 Fireworks result.
 # Changes from v1: Qwen3-4B (match A2 base), v2 data (1682 rows / 30 worlds),
 # 12-epoch ceiling + best-val checkpoint selection (early stop by patience via
@@ -16,6 +17,7 @@ SEED="${SEED:-1}"
 cd /workspace/scaling-forecasting-training
 source forecast/bin/activate
 
+NUM_GPUS="${NUM_GPUS:-8}"
 [ -z "${CUDA_VISIBLE_DEVICES:-}" ] && export CUDA_VISIBLE_DEVICES=$(seq -s, 0 $((NUM_GPUS-1)))
 export CUDA_DEVICE_ORDER=PCI_BUS_ID
 export RAY_DEDUP_LOGS=0
@@ -24,7 +26,6 @@ export RAY_DISABLE_IMPORT_WARNING=1
 export HYDRA_FULL_ERROR=1
 export VLLM_ATTENTION_BACKEND=TRITON_ATTN_VLLM_V1
 
-NUM_GPUS="${NUM_GPUS:-8}"
 clip_ratio_low=0.2
 clip_ratio_high=0.28
 PROJECT_NAME="fbsim-ab"
@@ -69,7 +70,7 @@ data.val_files=/workspace/data/val_${ARM}.parquet \
 data.train_batch_size=64 \
 data.val_batch_size=64 \
 data.shuffle=True \
-+data.seed=$SEED \
+++data.seed=$SEED \
 data.filter_overlong_prompts=True \
 data.max_prompt_length=$MAX_PROMPT_LENGTH \
 data.max_response_length=$MAX_RESPONSE_LENGTH \

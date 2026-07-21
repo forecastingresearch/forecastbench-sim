@@ -48,6 +48,7 @@ python /workspace/patch_of_reward.py \
 python - <<'EOF'
 from huggingface_hub import snapshot_download
 snapshot_download('Qwen/Qwen3-4B', local_dir='/workspace/models/Qwen3-4B')
+snapshot_download('Qwen/Qwen3-4B-Instruct-2507', local_dir='/workspace/models/Qwen3-4B-Instruct-2507')  # judge: resident-but-unused, verl loads its tokenizer
 EOF
 
 touch /workspace/BOOTSTRAP_DONE

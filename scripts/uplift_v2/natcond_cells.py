@@ -86,14 +86,20 @@ def main():
     civs = set()
     for fp in sorted(glob.glob(f"{args.arm_dir}/rollouts/*.json.gz")):
         tag = Path(fp).name.split(".")[0]
-        gd = json.load(gzip.open(fp, "rt"))
+        try:
+            gd = json.load(gzip.open(fp, "rt"))
+        except Exception:
+            print(f"  !! skipping unreadable rollout {tag}")
+            continue
         rollouts[tag] = gd["events"]
         for e in gd["events"]:
             if e["type"] == "tech_discovered" and " discovered " in e["description"]:
                 civs.add(e["description"].split(" discovered ")[0])
     civs = sorted(c for c in civs if c not in ("Pirate",))
     N = len(rollouts)
-    print(f"{args.game_id}: {N} rollouts, civs={civs}")
+    min_nx = max(12, int(0.15 * N))
+    lo = max(lo, min_nx / N)  # keep the freq band consistent with the n_x floor
+    print(f"{args.game_id}: {N} rollouts, civs={civs}, min_nx={min_nx}, band=[{lo:.2f},{hi}]")
 
     events = []  # (kind, name, description, window, member_tags)
     # specific events: exact description within window
@@ -147,7 +153,7 @@ def main():
             tags = list(amap)
             p_y = sum(amap[t] for t in tags) / len(tags)
             sub = [amap[t] for t in tags if t in mem]
-            if len(sub) < 25:
+            if len(sub) < min_nx:
                 continue
             p_yx = sum(sub) / len(sub)
             se = math.sqrt(max(p_yx * (1 - p_yx), 0.25 / len(sub)) / len(sub)

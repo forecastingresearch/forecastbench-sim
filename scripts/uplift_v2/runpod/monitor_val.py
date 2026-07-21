@@ -60,10 +60,12 @@ def checkpoints(d: Path):
 
 
 def prune(ckpt_dir: Path, best_step: int | None):
+    if best_step is None:
+        return  # never prune before the val pipeline has proven itself (#8)
     cks = checkpoints(ckpt_dir)
-    if not cks:
+    if len(cks) < 3:
         return
-    keep_full = {cks[-1].name}                       # resume point
+    keep_full = {cks[-1].name, cks[-2].name}         # resume points (#10)
     keep_model = set(keep_full)
     if len(cks) > 1:
         keep_model.add(cks[-2].name)
@@ -109,24 +111,32 @@ def main():
                 pos = f.tell()
         except FileNotFoundError:
             continue
-        steps = [int(s) for s in STEP_RE.findall(chunk)]
-        if steps:
-            last_seen_step = max(last_seen_step, max(steps))
+        steps_all = [int(x) for x in STEP_RE.findall(chunk)]
+        if steps_all:
+            last_seen_step = max(last_seen_step, max(steps_all))
         for m in VAL_RE.finditer(chunk):
             score = float(m.group(1))
-            vals.append((last_seen_step, score))
+            # attribute the score to the latest step BEFORE the val line (#9)
+            prior = [int(x) for x in STEP_RE.findall(chunk[:m.start()])]
+            step_at = max([last_seen_step] + prior)
+            vals.append((step_at, score))
+            last_seen_step = step_at
             if score > best + 1e-4:
-                best, best_step = score, last_seen_step
-            print(f"[monitor] val at step~{last_seen_step}: {score:.4f} "
+                best, best_step = score, step_at
+            print(f"[monitor] val at step~{step_at}: {score:.4f} "
                   f"(best {best:.4f} @ {best_step})", flush=True)
             json.dump({"vals": vals, "best": best, "best_step": best_step},
                       open(ckpt_dir / "val_history.json", "w"))
             hf_upload(ckpt_dir / "val_history.json",
                       f"{ckpt_dir.name}/val_history.json")
-            if best_step == last_seen_step:  # new best -> back up its weights
-                cand = ckpt_dir / f"global_step_{best_step}"
-                if cand.exists():
-                    hf_upload(cand, f"{ckpt_dir.name}/best_global_step_{best_step}")
+
+        # retrying best-checkpoint backup every cycle until it succeeds (#9)
+        if best_step is not None:
+            cand = ckpt_dir / f"global_step_{best_step}"
+            marker = ckpt_dir / f".uploaded_{best_step}"
+            if cand.exists() and not marker.exists():
+                hf_upload(cand, f"{ckpt_dir.name}/best_global_step_{best_step}")
+                marker.touch()
         prune(ckpt_dir, best_step)
         # stopping rule: no new best for `patience` epochs' worth of steps
         if (best_step is not None and
