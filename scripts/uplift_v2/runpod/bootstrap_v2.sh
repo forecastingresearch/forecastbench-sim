@@ -19,10 +19,10 @@ mkdir -p /root/.cargo && [ -f /root/.cargo/env ] || echo 'export PATH="$HOME/.lo
 bash setup.sh < /dev/null
 source forecast/bin/activate
 # July-13 pins: OF setup.sh drifts torch to 2.11+cu130 which breaks flash-attn ABI
-pip install -q torch==2.7.0 --index-url https://download.pytorch.org/whl/cu126
-pip install -q vllm==0.9.2 transformers==4.52.4
-pip uninstall -q -y torchcodec 2>/dev/null || true
-pip install -q flash-attn==2.7.4.post1 --no-build-isolation
+python -m pip install -q torch==2.7.0 --index-url https://download.pytorch.org/whl/cu126
+python -m pip install -q vllm==0.9.2 transformers==4.52.4
+python -m pip uninstall -q -y torchcodec 2>/dev/null || true
+python -m pip install -q flash-attn==2.7.4.post1 --no-build-isolation
 
 mkdir -p /workspace/data /workspace/logs
 for f in train_hard train_dense val_hard val_dense; do

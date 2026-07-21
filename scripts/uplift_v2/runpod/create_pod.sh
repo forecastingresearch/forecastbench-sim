@@ -24,7 +24,7 @@ ARGS=(pod create --name "$NAME"
   --cloud-type SECURE --container-disk-in-gb 40
   --stop-after "$STOP_AT" --terminate-after "$TERM_AT"
   --ports "22/tcp"
-  --env "PUBLIC_KEY=$(cat ~/.runpod/ssh/runpodctl-ssh-key.pub)")
+  --env "{\"PUBLIC_KEY\":\"$(cat ~/.runpod/ssh/runpodctl-ssh-key.pub | tr -d '\n')\"}")
 [ -n "$VOL" ] && ARGS+=(--network-volume-id "$VOL")
 
 echo "Creating: ${GPU_COUNT}x ${GPU_ID}, platform stop at $STOP_AT, terminate at $TERM_AT"

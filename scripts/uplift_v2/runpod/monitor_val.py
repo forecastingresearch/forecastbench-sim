@@ -26,8 +26,29 @@ import os
 import re
 import shutil
 import signal
+import subprocess
 import time
 from pathlib import Path
+
+HF_REPO = os.environ.get("HF_BACKUP_REPO", "")  # e.g. user/civbench-stage3
+
+
+def hf_upload(local: Path, dest: str):
+    """Best-effort upload to the private HF backup repo. Never raises."""
+    if not HF_REPO:
+        return
+    try:
+        from huggingface_hub import HfApi
+        api = HfApi()
+        if local.is_dir():
+            api.upload_folder(folder_path=str(local), path_in_repo=dest,
+                              repo_id=HF_REPO, repo_type="model")
+        else:
+            api.upload_file(path_or_fileobj=str(local), path_in_repo=dest,
+                            repo_id=HF_REPO, repo_type="model")
+        print(f"[monitor] backed up {local} -> {HF_REPO}/{dest}", flush=True)
+    except Exception as e:  # noqa: BLE001
+        print(f"[monitor] HF upload failed (non-fatal): {e}", flush=True)
 
 VAL_RE = re.compile(r"val/test_score[^:\s]*[:=]\s*([0-9.]+)")
 STEP_RE = re.compile(r"step:(\d+)")
@@ -100,6 +121,12 @@ def main():
                   f"(best {best:.4f} @ {best_step})", flush=True)
             json.dump({"vals": vals, "best": best, "best_step": best_step},
                       open(ckpt_dir / "val_history.json", "w"))
+            hf_upload(ckpt_dir / "val_history.json",
+                      f"{ckpt_dir.name}/val_history.json")
+            if best_step == last_seen_step:  # new best -> back up its weights
+                cand = ckpt_dir / f"global_step_{best_step}"
+                if cand.exists():
+                    hf_upload(cand, f"{ckpt_dir.name}/best_global_step_{best_step}")
         prune(ckpt_dir, best_step)
         # stopping rule: no new best for `patience` epochs' worth of steps
         if (best_step is not None and
@@ -117,12 +144,18 @@ def main():
             json.dump({"vals": vals, "best": best, "best_step": best_step,
                        "early_stopped": True},
                       open(ckpt_dir / "val_history.json", "w"))
+            hf_upload(ckpt_dir / "val_history.json",
+                      f"{ckpt_dir.name}/val_history.json")
+            hf_upload(Path(args.log), f"{ckpt_dir.name}/train.log")
             return
         # training ended on its own?
         try:
             os.killpg(args.pgid, 0)
         except ProcessLookupError:
             print("[monitor] training process gone; exiting.", flush=True)
+            hf_upload(ckpt_dir / "val_history.json",
+                      f"{ckpt_dir.name}/val_history.json")
+            hf_upload(Path(args.log), f"{ckpt_dir.name}/train.log")
             return
 
 

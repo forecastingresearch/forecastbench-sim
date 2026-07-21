@@ -39,11 +39,22 @@ if [ "$SMOKE" = "1" ]; then
   EXTRA+=("+trainer.total_training_steps=3" "trainer.save_freq=2" "trainer.test_freq=2")
   EXP_NAME="smoke-$ARM"
 else
-  EXTRA+=("trainer.save_freq=13" "trainer.test_freq=13" "trainer.total_epochs=12")
+  EXTRA+=("trainer.save_freq=13" "trainer.test_freq=13" "trainer.total_epochs=10")
   EXP_NAME="qwen3-4b-$ARM-seed$SEED"
 fi
 
 mkdir -p /workspace/logs /workspace/ckpts
+# run manifest: everything a reviewer needs to reconstruct the run
+python3 - <<PYEOF
+import json, hashlib, subprocess
+h = {f: hashlib.md5(open(f'/workspace/data/{f}.parquet','rb').read()).hexdigest()
+     for f in ('train_${ARM}','val_${ARM}')}
+json.dump({'arm':'$ARM','seed':$SEED,'epochs':10,'lr':'$LR','kl':'$KL_COEFF',
+           'model':'$MODEL_PATH','batch':64,'mini':16,'K':8,
+           'max_prompt':$MAX_PROMPT_LENGTH,'max_response':$MAX_RESPONSE_LENGTH,
+           'clips':[$clip_ratio_low,$clip_ratio_high],'adv':'mean-only',
+           'data_md5':h}, open('/workspace/ckpts/${EXP_NAME}_manifest.json','w'), indent=1)
+PYEOF
 python3 -m verl.trainer.main_ppo \
 algorithm.adv_estimator=grpo \
 algorithm.norm_adv_by_std_in_grpo=False \
