@@ -9,6 +9,7 @@ import numpy as np
 
 N_AGENTS = 5_000
 N_DAYS = 90
+SIM_START = 2000  # starsim's default start; the timeline runs 2000..2000+N_DAYS
 N_CONTACTS = 6
 P_DEATH = 0.02
 METRICS = ["cumulative_cases", "active_infections", "cumulative_deaths"]
@@ -29,7 +30,13 @@ def run_region(beta: float, vaccinate: bool, vax_efficacy: float,
     )
     if vaccinate:
         vax = ss.simple_vx(efficacy=vax_efficacy, leaky=True)
-        pars["interventions"] = [ss.campaign_vx(product=vax, years=[vax_day], prob=vax_coverage)]
+        # The sim timeline is calendar years SIM_START..SIM_START+N_DAYS (our
+        # "days" are labels on year-steps), so campaign timing must be given
+        # in calendar years. Bare years=[vax_day] predates sim start and made
+        # the campaign fire at t=0 regardless of vax_day.
+        pars["interventions"] = [ss.campaign_vx(product=vax,
+                                                years=[SIM_START + vax_day],
+                                                prob=vax_coverage)]
     sim = ss.Sim(pars)
     sim.run()
     r = sim.results
