@@ -1,0 +1,89 @@
+{
+ "frozen": "2026-08-24T14:10Z",
+ "corpus": "8 anchor worlds x 1,000 t60->t210 replays (8,000 total)",
+ "instrument": "fork oracle, pilot-validated |obs-p_mc|=0.032 (gate <0.05); every replay coverage-gated at publish",
+ "substitutions": "5 deterministic-crasher seeds replaced (see SUBSTITUTIONS.md); 3 earlier s6001 substitutions documented in v1 notes",
+ "product_A_natcond": {
+  "effect_cells": 300,
+  "matched_placebos": 300,
+  "quasi_excluded": 7,
+  "certified_pool": 1048,
+  "by_horizon": {
+   "H5": 41,
+   "H4": 42,
+   "H3": 43,
+   "H2": 41,
+   "H1": 133
+  },
+  "by_world": {
+   "seed1000": 28,
+   "seed1": 45,
+   "seed345": 37,
+   "seed355": 34,
+   "seed0": 29,
+   "seed3": 44,
+   "seed2": 45,
+   "seed350": 38
+  },
+  "z_median": 3.6,
+  "truth": "held-out half-B p(Y), p(Y|X) over ~499 replays; reserved continuation per world for Brier-single"
+ },
+ "product_B_oracle_tail": {
+  "tail": 236,
+  "mirror": 242,
+  "bands": {
+   "tail": [
+    0,
+    0.05
+   ],
+   "mirror": [
+    0.95,
+    1
+   ]
+  },
+  "pool_sizes": {
+   "questions_total": 2255,
+   "tail_pool": 236,
+   "mirror_pool": 242,
+   "excluded_p_y_zero": 154,
+   "excluded_p_y_one": 299
+  },
+  "by_horizon": {
+   "H2": 55,
+   "H3": 52,
+   "H4": 39,
+   "H1": 63,
+   "H5": 27
+  },
+  "by_anchor": {
+   "seed0": 38,
+   "seed1": 31,
+   "seed1000": 28,
+   "seed2": 24,
+   "seed3": 28,
+   "seed345": 26,
+   "seed350": 35,
+   "seed355": 26
+  },
+  "p_y_quantiles": {
+   "p10": 0.002,
+   "p50": 0.012,
+   "p90": 0.0381
+  },
+  "mean_split_half_gap": 0.0053,
+  "histogram": {
+   "0-0.005": 60,
+   "0.005-0.01": 44,
+   "0.01-0.02": 54,
+   "0.02-0.03": 28,
+   "0.03-0.04": 27,
+   "0.04-0.05": 23
+  }
+ },
+ "prompt_surface": "v4-honest (proper-scoring language, per-template resolver-verified criteria, reveal/single-turn/no-news arms); 115 conformance tests",
+ "paused_module": "300-world cross-world tail bank (16 classes/5,470 instances) retained, not scored",
+ "file_sha256_16": {
+  "oracle_tail.json": "a2c6e50182c926f6",
+  "natcond_curated.json": "536c7e9bf425ed55"
+ }
+}
