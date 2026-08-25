@@ -1,32 +1,43 @@
 {
- "frozen": "2026-08-24T14:10Z",
+ "frozen": "2026-08-25 (v3 curation)",
  "corpus": "8 anchor worlds x 1,000 t60->t210 replays (8,000 total)",
  "instrument": "fork oracle, pilot-validated |obs-p_mc|=0.032 (gate <0.05); every replay coverage-gated at publish",
  "substitutions": "5 deterministic-crasher seeds replaced (see SUBSTITUTIONS.md); 3 earlier s6001 substitutions documented in v1 notes",
  "product_A_natcond": {
-  "effect_cells": 300,
-  "matched_placebos": 300,
+  "design": "horizon-balanced (90/horizon), |delta|-weighted within horizon; caps per-horizon",
+  "effect_cells": 450,
+  "matched_placebos": 450,
+  "certified_pool": 1055,
   "quasi_excluded": 7,
-  "certified_pool": 1048,
+  "malformed_excluded": 2,
   "by_horizon": {
-   "H5": 41,
-   "H4": 42,
-   "H3": 43,
-   "H2": 41,
-   "H1": 133
+   "H1": 90,
+   "H2": 90,
+   "H3": 90,
+   "H4": 90,
+   "H5": 90
   },
   "by_world": {
+   "seed0": 47,
+   "seed1": 80,
    "seed1000": 28,
-   "seed1": 45,
-   "seed345": 37,
-   "seed355": 34,
-   "seed0": 29,
-   "seed3": 44,
-   "seed2": 45,
-   "seed350": 38
+   "seed2": 49,
+   "seed3": 85,
+   "seed345": 77,
+   "seed350": 30,
+   "seed355": 54
   },
-  "z_median": 3.6,
-  "truth": "held-out half-B p(Y), p(Y|X) over ~499 replays; reserved continuation per world for Brier-single"
+  "abs_delta": {
+   "p10": 0.0315,
+   "p50": 0.1114,
+   "p90": 0.2578,
+   "max": 0.6485
+  },
+  "split_half_r_delta": 0.966,
+  "mean_abs_delta_effect": 0.134,
+  "mean_abs_delta_placebo": 0.014,
+  "direction_split": "220 up / 230 down",
+  "truth": "held-out half-B p(Y), p(Y|X) over ~499 replays"
  },
  "product_B_oracle_tail": {
   "tail": 236,
@@ -84,6 +95,7 @@
  "paused_module": "300-world cross-world tail bank (16 classes/5,470 instances) retained, not scored",
  "file_sha256_16": {
   "oracle_tail.json": "a2c6e50182c926f6",
-  "natcond_curated.json": "536c7e9bf425ed55"
+  "natcond_curated.json": "c039f64b00dd5900",
+  "FREEZE_MANIFEST.json": "49075a3036b5db85"
  }
 }
