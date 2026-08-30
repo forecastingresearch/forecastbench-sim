@@ -1,12 +1,12 @@
 {
- "frozen": "2026-08-25 (v3 curation)",
+ "frozen": "2026-08-30 (v5: half-A-only selection)",
  "corpus": "8 anchor worlds x 1,000 t60->t210 replays (8,000 total)",
  "instrument": "fork oracle, pilot-validated |obs-p_mc|=0.032 (gate <0.05); every replay coverage-gated at publish",
  "substitutions": "5 deterministic-crasher seeds replaced (see SUBSTITUTIONS.md); 3 earlier s6001 substitutions documented in v1 notes",
  "product_A_natcond": {
-  "design": "horizon-balanced (90/horizon), |delta|-weighted within horizon; caps per-horizon",
+  "design": "horizon-balanced (90/horizon); selection weighted by |delta| on HALF A ONLY (half B is scoring truth, never used for selection or banding); caps per-horizon",
   "effect_cells": 450,
-  "matched_placebos": 450,
+  "matched_placebos": 180,
   "certified_pool": 1055,
   "quasi_excluded": 7,
   "malformed_excluded": 2,
@@ -37,7 +37,8 @@
   "mean_abs_delta_effect": 0.134,
   "mean_abs_delta_placebo": 0.014,
   "direction_split": "220 up / 230 down",
-  "truth": "held-out half-B p(Y), p(Y|X) over ~499 replays"
+  "truth": "held-out half-B p(Y), p(Y|X) over ~499 replays",
+  "selection_leakage_fix": "v4 weighted selection on half B (the scoring half). Audited: no model-ranking inversion on this corpus, but band membership shifted up to 2x. v5 selects on half A only."
  },
  "product_B_oracle_tail": {
   "tail": 236,
@@ -95,7 +96,7 @@
  "paused_module": "300-world cross-world tail bank (16 classes/5,470 instances) retained, not scored",
  "file_sha256_16": {
   "oracle_tail.json": "a2c6e50182c926f6",
-  "natcond_curated.json": "c039f64b00dd5900",
-  "FREEZE_MANIFEST.json": "49075a3036b5db85"
+  "natcond_curated.json": "052b57637e794437",
+  "FREEZE_MANIFEST.json": "03592a60ec86cb65"
  }
 }

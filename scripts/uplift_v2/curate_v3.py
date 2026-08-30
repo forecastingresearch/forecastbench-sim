@@ -45,7 +45,16 @@ def tfam(q):
         if k in ql: return k
     return "other"
 
-def dB(c): return abs(c.get("half_b", {}).get("delta", 0.0))
+def dA(c):
+    """Selection weight uses half A ONLY. Half B is the scoring truth; selecting
+    (or banding) on it lets half-B noise into the target and can bias which
+    forecasters look good — band membership shifted up to 2x in testing."""
+    return abs(c.get("half_a", {}).get("delta", 0.0))
+
+
+def dB(c):
+    """Half-B |delta| — REPORTING ONLY, never selection."""
+    return abs(c.get("half_b", {}).get("delta", 0.0))
 
 def pick(pool, per_horizon, seed=11):
     rng = random.Random(seed)
@@ -56,7 +65,7 @@ def pick(pool, per_horizon, seed=11):
         cand = by_h[hz]
         w_ct, e_ct, t_ct = Counter(), Counter(), Counter()   # reset per horizon
         # weighted shuffle: weight ~ |delta| (floored so small effects still appear)
-        keyed = sorted(cand, key=lambda c: -(dB(c) + 0.02) * rng.random())
+        keyed = sorted(cand, key=lambda c: -(dA(c) + 0.02) * rng.random())
         n = 0
         for c in keyed:
             if n >= per_horizon: break
@@ -66,8 +75,19 @@ def pick(pool, per_horizon, seed=11):
             chosen.append(c); w_ct[w]+=1; e_ct[e]+=1; t_ct[t]+=1; n+=1
     return chosen
 
-def matched_placebos(cells, chosen):
+def matched_placebos(cells, chosen, target=None):
+    """Placebos stratified to mirror the effect set's world x horizon shape.
+    `target` optionally downsamples (proportionally) — selectivity needs fewer
+    cells than the dose-response curve does."""
     strata = Counter((c["game_id"], c.get("horizon","H1")) for c in chosen)
+    if target and target < sum(strata.values()):
+        scale = target / sum(strata.values())
+        scaled = {k: max(1, round(v*scale)) for k, v in strata.items()}
+        # trim/pad to hit target exactly, largest strata first
+        while sum(scaled.values()) > target:
+            k = max(scaled, key=lambda k: scaled[k]); scaled[k] -= 1
+            if scaled[k] == 0: del scaled[k]
+        strata = Counter(scaled)
     pool = defaultdict(list)
     for c in cells:
         if c.get("cls")=="placebo" and c.get("half_b"): pool[(c["game_id"], c.get("horizon","H1"))].append(c)
@@ -89,6 +109,7 @@ def table(rows):
 def main():
     ap=argparse.ArgumentParser()
     ap.add_argument("--cells",required=True); ap.add_argument("--per-horizon",type=int,default=90)
+    ap.add_argument("--placebo-n",type=int,default=None)
     ap.add_argument("--seed",type=int,default=11); ap.add_argument("--out",required=True)
     a=ap.parse_args()
     payload=json.load(open(a.cells))
@@ -98,7 +119,7 @@ def main():
     eff=[c for c in eff_all if not is_quasi(c) and not malformed(c)]
     malformed_n=sum(1 for c in eff_all if malformed(c))
     chosen=pick(eff,a.per_horizon,a.seed)
-    plac=[c for c in matched_placebos([x for x in cells if not malformed(x)],chosen)]
+    plac=[c for c in matched_placebos([x for x in cells if not malformed(x)],chosen,a.placebo_n)]
     out={"meta":{"design":"horizon-balanced, |delta|-weighted within horizon",
                  "per_horizon_target":a.per_horizon,"seed":a.seed,
                  "certified_pool":len(eff_all),"quasi_excluded":len(quasi),"malformed_excluded":malformed_n,
