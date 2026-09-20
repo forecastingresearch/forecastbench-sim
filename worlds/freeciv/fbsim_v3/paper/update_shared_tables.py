@@ -34,7 +34,7 @@ import numpy as np
 import pandas as pd
 from scipy.stats import spearmanr
 
-from _common import (DATA, MODELS_V1, N_BOOT, PAPER_DATA, REPO, RESULTS_MD, SCORE_ITEMS, SEED, TABLES, WIDE,
+from _common import (DATA, MODELS_FILE, N_BOOT, RUN, PAPER_DATA, REPO, RESULTS_MD, SCORE_ITEMS, SEED, TABLES, WIDE,
                      display_name, load_capability, load_items, load_wide, tex, rel)
 
 FINAL = "--final" in sys.argv[1:]
@@ -197,9 +197,13 @@ def update_validation(rows):
 
 def freeciv_run_records():
     """Per model: display name, host pin, reasoning setting, calls, cost, from models_v1.csv and the results table."""
-    fc = pd.read_csv(MODELS_V1)
+    fc = pd.read_csv(MODELS_FILE)
     assert len(fc) == 24, len(fc)
     fc["dname"] = fc["name"].map(display_name)
+    if "provider" not in fc.columns:      # run 2: Micropolis-registry endpoint slugs
+        HOST = {"anthropic": "Anthropic", "openai": "OpenAI", "openai/default": "OpenAI", "google-ai-studio": "Google AI Studio",
+                "alibaba": "Alibaba", "deepinfra": "DeepInfra", "novita": "Novita", "streamlake": "StreamLake", "deepseek": "DeepSeek"}
+        fc["provider"] = [HOST.get(e, e) + (f" ({q})" if isinstance(q, str) and q else "") for e, q in zip(fc["endpoint"], fc.get("quantizations", [""] * len(fc)))]
 
     def setting(row):
         mode = row["reasoning_mode"]
@@ -212,7 +216,7 @@ def freeciv_run_records():
         raise ValueError(mode)
 
     fc["setting"] = fc.apply(setting, axis=1)
-    fc["host"] = (fc["provider"].fillna("").str.replace("|", " / ", regex=False)
+    fc["host"] = (fc["provider"].fillna("").astype(str).str.replace("|", " / ", regex=False)
                   .str.replace("Google AI Studio / Google", "Google AI Studio"))
     calls, cost = {}, {}
     for line in RESULTS_MD.read_text().splitlines():
@@ -273,11 +277,18 @@ def update_roster(fc):
     write_lines(path, lines, old)
 
 
+RUN2_ROWS = [("Binary bank", 750, "bank"), ("Tail set", 300, "tails"), ("Mirror set", 50, "mirrors"), ("Continuous set", 300, "continuous"),
+             ("Natural conditionals, turn 1 (one question per prompt)", 355, "t1nc"), ("Natural conditionals, turn 2", 400, "t2"), ("No-news control", 99, "nonews")]
+
+
 def update_cost_per_item(fc, w):
-    """The FreeCiv block of cost_per_item.tex.  Until a run carries per-set cost columns (cost_<set>_usd in the
-    wide file, written by the batched harness), every FreeCiv row is the run's mean cost per call times the set's
-    calls, and the two estimated cells stay dark yellow (\\yellow{}) so the reader sees they are estimates.  Calls
-    per model are the design counts of the draw (one call per item; one per cell at turn 2)."""
+    """The FreeCiv block of cost_per_item.tex.
+
+    Run 1 (no per-set cost columns): every row is the run's mean cost per call times the set's calls, the two estimated
+    cells in dark yellow.  Run 2 (cost_bank_usd etc. present): exact per-set costs; a batched call's cost is split pro rata
+    over the questions it asked, so a set's cost is its share of the prompts that carried its questions, and "Calls/model"
+    for a batched set is the number of prompts that carried at least one of its questions.  The natural-conditional rows
+    of the 22 models that reuse run 1 carry run 1's costs (results_table_v2.py --natcond-cost-from)."""
     path = TABLES / "cost_per_item.tex"
     old = path.read_text()
     lines = read_lines(path)
@@ -287,26 +298,22 @@ def update_cost_per_item(fc, w):
         end += 1
     n_models = len(w)
     total_calls, total_cost = int(w["total_calls"].sum()), float(w["total_cost_usd"].sum())
-    per_call = total_cost / total_calls
-    per_set_cols = {"Binary bank": "bank", "Tail set": "tails", "Mirror set": "mirrors",
-                    "Extra value questions (seed conditionals)": "extra", "Continuous set": "continuous",
-                    "Natural conditionals, turn 2": "t2", "No-news control": "nonews"}
-    # exact per-set records only when the run carries them for every set (the batched harness writes them);
-    # run 1 has cost_t2_usd and cost_nonews_usd only, so every row of run 1 is the estimate, as printed
-    exact = all(f"cost_{s}_usd" in w.columns and f"calls_{s}" in w.columns for s in per_set_cols.values())
     new = []
-    for k, (lab, n) in enumerate(FC_SETS_COST):
-        ccol, kcol = f"cost_{per_set_cols[lab]}_usd", f"calls_{per_set_cols[lab]}"
-        if exact:                                            # exact per-set records (batched harness)
-            cpm, calls = float(w[ccol].sum()) / n_models, int(round(w[kcol].sum() / n_models))
-            cells = [f"{cpm:.2f}", f"{100 * cpm / n:.1f}"]
-        else:                                                # estimate at the run's mean cost per call
-            calls = n
-            cpm = calls * per_call
-            cells = [f"\\yellow{{{cpm:.2f}}}", f"\\yellow{{{100 * per_call:.1f}}}"]
-        new.append(join_cells(["FreeCiv" if k == 0 else "", lab, f"{n:,}", f"{calls:,}"] + cells))
-    design = sum(n for _, n in FC_SETS_COST)
-    new.append(join_cells(["", "\\emph{all sets}", f"{design:,}", f"{design:,}", f"{total_cost / n_models:.2f}", f"{100 * per_call:.1f}"]))
+    if "cost_bank_usd" in w.columns:
+        for k, (lab, n, key) in enumerate(RUN2_ROWS):
+            ccol = f"cost_{key}_usd"
+            cpm = float(w[ccol].sum()) / n_models
+            calls = int(round(w[f"calls_{key}"].sum() / n_models))
+            new.append(join_cells(["FreeCiv" if k == 0 else "", lab, f"{n:,}", f"{calls:,}", f"{cpm:.2f}", f"{100 * cpm / n:.1f}"]))
+        items = sum(n for _, n, _ in RUN2_ROWS)
+        new.append(join_cells(["", "\\emph{all sets}", f"{items:,}", f"{int(round(total_calls / n_models)):,}", f"{total_cost / n_models:.2f}", f"{100 * total_cost / n_models / items:.1f}"]))
+    else:
+        per_call = total_cost / total_calls
+        for k, (lab, n) in enumerate(FC_SETS_COST):
+            cpm = n * per_call
+            new.append(join_cells(["FreeCiv" if k == 0 else "", lab, f"{n:,}", f"{n:,}", f"\\yellow{{{cpm:.2f}}}", f"\\yellow{{{100 * per_call:.1f}}}"]))
+        design = sum(n for _, n in FC_SETS_COST)
+        new.append(join_cells(["", "\\emph{all sets}", f"{design:,}", f"{design:,}", f"{total_cost / n_models:.2f}", f"{100 * per_call:.1f}"]))
     lines[start:end] = new
     write_lines(path, lines, old)
 
@@ -324,7 +331,7 @@ def main():
     rng = np.random.default_rng(SEED)
     out = dict(generated=str(date.today()), script="data/freeciv/scripts/update_shared_tables.py", seed=SEED, n_boot=N_BOOT,
                final=FINAL, sources={"wide": rel(WIDE), "score_items": rel(SCORE_ITEMS),
-                                     "results_md": rel(RESULTS_MD), "models_v1": rel(MODELS_V1)},
+                                     "results_md": rel(RESULTS_MD), "models_file": rel(MODELS_FILE), "run": RUN},
                sign_convention="rho between the capability score and (-1 x score); positive = more capable models score better",
                model_bootstrap=f"percentile bootstrap over the (capability, score) model pairs, {N_BOOT:,} resamples, "
                                f"numpy default_rng({SEED}) re-seeded per row and axis",

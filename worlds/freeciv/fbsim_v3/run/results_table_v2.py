@@ -28,6 +28,7 @@ ap.add_argument("--out", required=True)
 ap.add_argument("--models-file", default=os.path.join(HERE, "models_v2.csv"))
 ap.add_argument("--capability", default=os.path.join(HERE, "..", "results", "run1_2026-09-09", "model_scores.csv"))
 ap.add_argument("--impute-binary", default="0.5")
+ap.add_argument("--natcond-cost-from", default="", help="run-1 wide table: natural-conditional costs for models whose natcond rows carry no cost (reused run-1 forecasts)")
 a = ap.parse_args()
 out = a.out
 os.makedirs(out, exist_ok=True)
@@ -37,6 +38,8 @@ S, C, N = sv.load_sets()
 R = sv.load_results(a.results)
 rows = sv.score_items(R, S, C, N, impute=impute)
 models_meta = {m["openrouter_id"]: m for m in csv.DictReader(open(a.models_file))}
+import pandas as pd
+run1 = pd.read_csv(a.natcond_cost_from).set_index("model") if a.natcond_cost_from else None
 try:
     fb = {r["OpenRouterName"]: r for r in csv.DictReader(open(a.capability))}
     fb_by_id = {mid: fb.get(m["name"]) for mid, m in models_meta.items()}
@@ -136,6 +139,16 @@ for m in models:
     for arm in ("t1", "t1nc", "t2", "nonews"):
         W[f"calls_{arm}"] = calls[m][arm]
         W[f"cost_{arm}_usd"] = round(cost[m][arm], 4)
+    if run1 is not None and m in run1.index and cost[m]["t2"] == 0 and calls[m]["t2"] > 0:
+        # reused run-1 natural conditionals: their cost is run 1's (turn-1 share = 355 of 1,524 turn-1 calls, an estimate)
+        W["cost_t2_usd"] = round(float(run1.loc[m, "cost_t2_usd"]), 4)
+        W["cost_nonews_usd"] = round(float(run1.loc[m, "cost_nonews_usd"]), 4)
+        W["cost_t1nc_usd"] = round(float(run1.loc[m, "cost_t1_usd"]) * 355 / 1524, 4)
+        W["cost_natcond_t1_usd"] = W["cost_t1nc_usd"]
+        W["natcond_cost_source"] = "run1"
+        W["total_cost_usd"] = round(W["total_cost_usd"] + W["cost_t2_usd"] + W["cost_nonews_usd"] + W["cost_t1nc_usd"], 4)
+    else:
+        W["natcond_cost_source"] = "run2" if calls[m]["t2"] else ""
     for s in ("bank", "tails", "mirrors", "continuous", "natcond_t1"):
         W[f"calls_{s}"] = len(set_calls[m][s])          # distinct calls that carried at least one question of the set
         W[f"cost_{s}_usd"] = round(set_cost[m][s], 4)  # the set's share of those calls' cost

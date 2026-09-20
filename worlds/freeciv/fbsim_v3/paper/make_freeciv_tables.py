@@ -26,7 +26,7 @@ from datetime import date
 import numpy as np
 import pandas as pd
 
-from _common import (DATA, REPO, SCORES_MD, SCORE_ITEMS, TABLES, WIDE, fmt, load_capability, load_items,
+from _common import (DATA, REPO, RUN, SCORES_MD, SCORE_ITEMS, TABLES, WIDE, fmt, load_capability, load_items,
                      load_wide, models_by_eci, name, parse_md_tables, spearman_signed, write_tabular, rel)
 
 TABLES.mkdir(parents=True, exist_ok=True)
@@ -63,7 +63,7 @@ write_tabular(TABLES / "freeciv_models.tex", "lrrrrrrrrr",
               ["Model & ECI & Bank & Tails & \\multicolumn{2}{c}{Continuous} & \\multicolumn{2}{c}{Natural conditional} & Parsed & Cost",
                "\\cmidrule(lr){5-6}\\cmidrule(lr){7-8}",
                " & & excess Brier & bits & nCRPS & excess & excess Brier & gain & (\\%) & (\\$)"],
-              rows, comment="FreeCiv per model (provisional, one question per prompt). Source: freeciv_results_wide.csv, columns "
+              rows, comment=("FreeCiv per model (provisional, one question per prompt). Source: " if RUN.startswith("run1") else "FreeCiv per model (run 2: batched at up to 50 binary / 20 continuous questions per prompt; natural conditionals one per prompt). Source: ") + " freeciv_results_wide.csv, columns "
                             "bank_all_excess_brier, tails_all_excess_bits, continuous_all_ncrps_global, continuous_all_excess_ncrps_global, "
                             "natcond_all_excess_t2, natcond_all_gain, *_all_n_valid / *_all_n_items over the five scored sets, total_cost_usd.")
 NUMBERS["freeciv"] = {"per_model": f_rec, "n_models": 24, "total_cost_usd": float(fw["total_cost_usd"].sum()),

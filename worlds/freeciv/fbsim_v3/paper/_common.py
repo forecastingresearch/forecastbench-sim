@@ -58,12 +58,14 @@ FAMILY_HORIZON = RESULTS / "family_horizon_scores.csv"
 RELIABILITY = RESULTS / "reliability_bands.csv"
 MODEL_SCORES = RESULTS / "model_scores.csv"               # 24 shared models: ECI, ForecastBench overall
 SLUG_MAP = RESULTS / "model_scores_with_slugs.csv"        # Fabio's copy with OpenRouter slugs (26 rows)
-MODELS_V1 = FBSIM_V3 / "run" / "models_v1.csv"            # the run's per-model settings and provider pins
+MODELS_V1 = FBSIM_V3 / "run" / "models_v1.csv"            # run 1's per-model settings and provider pins
+MODELS_V2 = FBSIM_V3 / "run" / "models_v2.csv"            # run 2's (pins as in the Micropolis registry)
+MODELS_FILE = MODELS_V1 if RUN.startswith("run1") else MODELS_V2
 NORM_CONSTANTS = FBSIM_V3 / "sets" / "draw_v1" / "continuous_norm_constants.json"
 COMPOSITION = FBSIM_V3 / "sets" / "draw_v1" / "COMPOSITION.md"
 
 # The backing files copied into the paper's data/freeciv/ so that every number there traces to a file.
-BACKING_FILES = [WIDE, RESULTS_MD, SCORES_MD, FAMILY_HORIZON, RELIABILITY, MODEL_SCORES, MODELS_V1, NORM_CONSTANTS, COMPOSITION]
+BACKING_FILES = [WIDE, RESULTS_MD, SCORES_MD, FAMILY_HORIZON, RELIABILITY, MODEL_SCORES, MODELS_FILE, NORM_CONSTANTS, COMPOSITION]
 
 SEED = 2026
 N_BOOT = 10_000

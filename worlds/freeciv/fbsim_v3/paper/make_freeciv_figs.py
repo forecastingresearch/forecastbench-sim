@@ -37,7 +37,8 @@ GREEN = "#102B23"
 ORANGE = "#E8632C"
 GREY = "#8C8C8C"
 LGREY = "#D0D0D0"
-PROV = "provisional: one question per prompt; batched rerun pending"
+from _common import RUN  # noqa: E402
+PROV = "provisional: one question per prompt; batched rerun pending" if RUN.startswith("run1") else ""
 N_BOOT = 5000
 RNG = np.random.default_rng(20260916)
 
