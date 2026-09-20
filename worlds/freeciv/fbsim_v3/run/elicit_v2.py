@@ -275,7 +275,7 @@ def reasoning_param(model):
     return None
 
 
-def build_body(model, messages, max_tokens_default=16384):
+def build_body(model, messages, max_tokens_default=32768):
     body = {"model": model["openrouter_id"], "messages": messages, "usage": {"include": True}}
     rp = reasoning_param(model)
     if rp:
@@ -296,30 +296,69 @@ def build_body(model, messages, max_tokens_default=16384):
     return body
 
 
+STREAM = True          # --no-stream turns it off
+IDLE_TIMEOUT = 180     # seconds without a byte from the server before the attempt is abandoned and retried
+
+
 def call(model, messages):
+    """One OpenRouter chat completion.  Streamed by default: the socket timeout then applies to every read, so a
+    connection that goes silent is abandoned after IDLE_TIMEOUT seconds and retried, while a long but live generation
+    keeps arriving (OpenRouter also sends ': OPENROUTER PROCESSING' keep-alive comments).  The smoke of 2026-09-19 saw
+    non-streamed calls hang for over 20 minutes with the connection established and nothing coming back."""
     body = build_body(model, messages)
+    if STREAM:
+        body["stream"] = True
     req = urllib.request.Request("https://openrouter.ai/api/v1/chat/completions", data=json.dumps(body).encode(),
-                                 headers={"Authorization": f"Bearer {KEY}", "Content-Type": "application/json",
+                                 headers={"Authorization": f"Bearer {KEY}", "Content-Type": "application/json", "Accept": "text/event-stream" if STREAM else "application/json",
                                           "HTTP-Referer": "https://forecastingresearch.org", "X-Title": "fbsim-v3-run2"})
     err, transient, t0 = None, [], time.time()
-    for attempt in range(8):
+    for attempt in range(6):
         try:
-            with urllib.request.urlopen(req, timeout=900) as r:
-                resp = json.load(r)
-            if "error" in resp and not resp.get("choices"):
-                raise RuntimeError(json.dumps(resp["error"])[:300])
-            ch = resp.get("choices", [{}])[0]
-            msg = ch.get("message") or {}
-            u = resp.get("usage") or {}
+            with urllib.request.urlopen(req, timeout=IDLE_TIMEOUT if STREAM else 900) as r:
+                if not STREAM:
+                    resp = json.load(r)
+                    if "error" in resp and not resp.get("choices"):
+                        raise RuntimeError(json.dumps(resp["error"])[:300])
+                    ch = resp.get("choices", [{}])[0]
+                    msg = ch.get("message") or {}
+                    txt, rtxt, fin, u, prov = msg.get("content") or "", msg.get("reasoning"), ch.get("finish_reason"), resp.get("usage") or {}, resp.get("provider")
+                else:
+                    text, reasoning, fin, u, prov, n_chunks = [], [], None, None, None, 0
+                    for raw in r:
+                        line = raw.decode("utf-8", errors="replace").strip()
+                        if not line or line.startswith(":") or not line.startswith("data:"):
+                            continue
+                        data = line[5:].strip()
+                        if data == "[DONE]":
+                            break
+                        try:
+                            j = json.loads(data)
+                        except Exception:
+                            continue
+                        n_chunks += 1
+                        if "error" in j and not j.get("choices"):
+                            raise RuntimeError(json.dumps(j["error"])[:300])
+                        prov = j.get("provider") or prov
+                        for ch in j.get("choices", []):
+                            d = ch.get("delta") or {}
+                            if d.get("content"):
+                                text.append(d["content"])
+                            if d.get("reasoning"):
+                                reasoning.append(d["reasoning"])
+                            fin = ch.get("finish_reason") or fin
+                        if j.get("usage"):
+                            u = j["usage"]
+                    txt, rtxt, u = "".join(text), "".join(reasoning) or None, u or {}
+                    if not txt and fin is None:
+                        raise RuntimeError(f"stream ended after {n_chunks} chunks with no content and no finish_reason")
             cost = float(u.get("cost") or 0)
             with lock:
                 spent[model["openrouter_id"]] += cost
-            return dict(text=msg.get("content") or "", reasoning_text=msg.get("reasoning"), tokens_in=u.get("prompt_tokens"),
-                        tokens_out=u.get("completion_tokens"), tokens_reasoning=(u.get("completion_tokens_details") or {}).get("reasoning_tokens"),
-                        tokens_cached=(u.get("prompt_tokens_details") or {}).get("cached_tokens"), usage_raw=u, cost=cost,
-                        finish=ch.get("finish_reason"), provider=resp.get("provider"), reasoning_param=body.get("reasoning"),
-                        max_tokens=body.get("max_tokens"), provider_pref=body["provider"], error=None, http_retries=transient,
-                        secs=round(time.time() - t0, 1))
+            return dict(text=txt, reasoning_text=rtxt, tokens_in=u.get("prompt_tokens"), tokens_out=u.get("completion_tokens"),
+                        tokens_reasoning=(u.get("completion_tokens_details") or {}).get("reasoning_tokens"),
+                        tokens_cached=(u.get("prompt_tokens_details") or {}).get("cached_tokens"), usage_raw=u, cost=cost, finish=fin,
+                        provider=prov, reasoning_param=body.get("reasoning"), max_tokens=body.get("max_tokens"), provider_pref=body["provider"],
+                        stream=STREAM, error=None, http_retries=transient, attempts_http=attempt + 1, secs=round(time.time() - t0, 1))
         except urllib.error.HTTPError as e:
             err = f"HTTP {e.code}: " + e.read().decode(errors="replace")[:300]
             transient.append(e.code)
@@ -329,10 +368,10 @@ def call(model, messages):
                 time.sleep(15 + 10 * attempt + 10 * random.random())
                 continue
         except Exception as e:
-            err = str(e)[:300]
+            err = f"{type(e).__name__}: {str(e)[:250]}"
             transient.append(type(e).__name__)
         time.sleep(min(60, 3 * 2 ** attempt) + random.random())
-    return dict(text="", cost=0, error=err, reasoning_param=body.get("reasoning"), http_retries=transient, secs=round(time.time() - t0, 1))
+    return dict(text="", cost=0, error=err, reasoning_param=body.get("reasoning"), http_retries=transient, stream=STREAM, secs=round(time.time() - t0, 1))
 
 
 # ---------------------------------------------------------------- main
@@ -350,7 +389,11 @@ def main():
     ap.add_argument("--smoke", action="store_true", help="one binary and one continuous batch of one world, with follow-ups")
     ap.add_argument("--dry-run", action="store_true", help="build the jobs, print counts and write PREFLIGHT_v2.md, make no calls")
     ap.add_argument("--env-file", default="", help="file with OPENROUTER_API_KEY=...; kept outside the repository")
+    ap.add_argument("--no-stream", action="store_true", help="plain (non-streamed) completions")
+    ap.add_argument("--idle-timeout", type=int, default=180, help="seconds without data before a streamed attempt is retried")
     a = ap.parse_args()
+    global STREAM, IDLE_TIMEOUT
+    STREAM, IDLE_TIMEOUT = not a.no_stream, a.idle_timeout
     KEY = os.environ.get("OPENROUTER_API_KEY")
     if not KEY and a.env_file:
         for l in open(os.path.expanduser(a.env_file)):
@@ -445,6 +488,8 @@ def main():
             rec = dict(model=mid, call_id=call_id, arm=arm, kind=kind, n_asked=n, complete=len(best_parsed) == n, attempts=best_attempt,
                        parse_mode=best_mode, ts=time.time(), messages=messages, **{k: v for k, v in best.items()}, **meta)
             emit_call(rec)
+            print(f"  [{time.strftime('%H:%M:%S')}] {mid} {call_id} {best.get('secs')}s out={best.get('tokens_out')} reas={best.get('tokens_reasoning')} "
+                  f"cost=${best.get('cost') or 0:.4f} parsed={len(best_parsed)}/{n} finish={best.get('finish')} retries={best.get('http_retries')} err={best.get('error')}", flush=True)
             rows = []
             for k, item in asked.items():
                 v = best_parsed.get(k)

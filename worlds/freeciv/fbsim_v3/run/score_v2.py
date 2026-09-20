@@ -77,7 +77,7 @@ def score_items(R, S, C, N, impute):
     models = sorted({m for (m, _, _) in R})
     for m in models:
         for iid, it in S.items():
-            r = R.get((m, iid, 't1')) or R.get((m, iid, 't1nc')); q = it['qAll']; p = r.get('value') if r else None; parsed = p is not None   # v2: unbatched row stands in where no batched row exists (the extra questions)
+            r = R.get((m, iid, 't1')) or (R.get((m, iid, 't1nc')) if it['set'] == 'extra' else None); q = it['qAll']; p = r.get('value') if r else None; parsed = p is not None   # v2: the extra questions exist only unbatched (t1nc); a bank item with no batched row stays missing
             if not parsed:
                 if impute is None: continue
                 p = impute

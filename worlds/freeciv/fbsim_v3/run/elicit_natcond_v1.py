@@ -167,7 +167,9 @@ def main():
                            attempts=attempt + 1, ts=time.time(), source="run2:natcond_v1", **extra, **{k: v for k, v in r.items() if k != "usage_raw"})
                 if value is not None or r.get("error"):
                     break
-            emit(row); return row
+            emit(row)
+            print(f"  [{time.strftime('%H:%M:%S')}] {mid} {arm} {job['item']} {row.get('secs')}s out={row.get('tokens_out')} reas={row.get('tokens_reasoning')} value={value} mode={pmode} finish={row.get('finish')} err={row.get('error')}", flush=True)
+            return row
 
         t1_by = {j["item"]: j for j in jobs["t1"]}
         t1_msgs = lambda j: (lambda: [{"role": "user", "content": user_content(j["prefix"], j["tail"], mid)}])
