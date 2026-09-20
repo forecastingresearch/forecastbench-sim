@@ -1,0 +1,52 @@
+{
+ "n_prompts": 44,
+ "n_bin_prompts": 26,
+ "bin_lo": 36,
+ "bin_hi": 50,
+ "n_cont_prompts": 18,
+ "cont_lo": 13,
+ "cont_hi": 20,
+ "prompt_tokens_lo": "8,759",
+ "prompt_tokens_hi": "17,575",
+ "parse_min": "98.8",
+ "parse_mean": "99.9",
+ "parse_worst_model": "qwen/qwen3-235b-a22b",
+ "parse_note": "1 prompts returned no readable answer at all (o4-mini).",
+ "dsv4_reasoning": "13,275",
+ "cost_batched": "26.10",
+ "cost_natcond": "2.93",
+ "natcond_rerun_rows": 1708,
+ "natcond_rerun_unparsed": 10,
+ "per_model_parse": {
+  "anthropic/claude-fable-5": 100.0,
+  "anthropic/claude-haiku-4.5": 100.0,
+  "anthropic/claude-opus-5": 99.93,
+  "anthropic/claude-sonnet-5": 100.0,
+  "deepseek/deepseek-chat": 100.0,
+  "deepseek/deepseek-v4-flash-0731": 100.0,
+  "google/gemini-2.5-flash": 99.93,
+  "google/gemini-3-flash-preview": 100.0,
+  "google/gemini-3.1-flash-lite-preview": 100.0,
+  "google/gemini-3.7-flash": 100.0,
+  "meta-llama/llama-4-scout": 100.0,
+  "moonshotai/kimi-k2": 100.0,
+  "openai/gpt-4.1": 100.0,
+  "openai/gpt-5": 99.93,
+  "openai/gpt-5-mini": 100.0,
+  "openai/gpt-5-nano": 100.0,
+  "openai/gpt-5.4-nano": 100.0,
+  "openai/gpt-5.5": 100.0,
+  "openai/gpt-5.6-luna": 99.93,
+  "openai/gpt-5.6-sol": 100.0,
+  "openai/o3": 100.0,
+  "openai/o4-mini": 99.0,
+  "qwen/qwen3-235b-a22b": 98.79,
+  "qwen/qwen3.5-flash-02-23": 99.79
+ },
+ "refusals": [
+  [
+   "openai/o4-mini",
+   "t1:seed7005_cont_c1of3"
+  ]
+ ]
+}

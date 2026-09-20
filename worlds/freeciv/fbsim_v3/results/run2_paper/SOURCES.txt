@@ -1,0 +1,3 @@
+batched: /private/tmp/claude-503/-Users-jaeholee-Library-Application-Support-Claude-scratch-workspaces-db7d4697-1736-44a1-9c1f-950cbbc78e08-f3232c27-1d33-4f2b-9461-efecb09f3423-scratch-2026-09-19-7cb1ef/ced37838-91c6-436f-92ba-c733287b9ebb/scratchpad/fbsim-dev/worlds/freeciv/fbsim_v3/run/../results/run2b_2026-09-20/batched
+natcond: /private/tmp/claude-503/-Users-jaeholee-Library-Application-Support-Claude-scratch-workspaces-db7d4697-1736-44a1-9c1f-950cbbc78e08-f3232c27-1d33-4f2b-9461-efecb09f3423-scratch-2026-09-19-7cb1ef/ced37838-91c6-436f-92ba-c733287b9ebb/scratchpad/fbsim-dev/worlds/freeciv/fbsim_v3/run/../results/run2_2026-09-20/natcond
+built: 2026-09-20T05:15:42Z

@@ -1,0 +1,25 @@
+ECI,OpenRouterName,LiteLLMSlug,FBName,FBOverall,FBOverallCILo,FBOverallCIHi
+130.52,Meta: Llama 4 Scout,,llama-4-scout-17b-16e-instruct,56.6,56.0,57.2
+133.03,DeepSeek: DeepSeek V3,,deepseek-v3,57.6,57.0,58.2
+137.52,OpenAI: GPT-4.1,openai/gpt-4.1,gpt-4.1-2025-04-14,58.5,57.9,59.1
+139.61,Qwen: Qwen3 235B A22B,,qwen3-235b-a22b-fp8-tput,58.6,57.8,59.4
+140.31,Google: Gemini 2.5 Flash,google/gemini-2.5-flash,gemini-2.5-flash,58.2,57.3,59.0
+140.42,MoonshotAI: Kimi K2,,kimi-k2-instruct,57.6,56.7,58.4
+140.85,OpenAI: GPT-5 Nano,openai/gpt-5-nano,gpt-5-nano-2025-08-07,58.0,57.5,58.6
+142.91,Anthropic: Claude Haiku 4.5,anthropic/claude-haiku-4-5-20251001,claude-haiku-4-5-20251001-1024,59.7,59.1,60.3
+144.12,Qwen: Qwen3.5-Flash,,,,,
+144.66,Google: Gemini 3.1 Flash Lite Preview,google/gemini-3.1-flash-lite-preview,gemini-3.1-flash-lite-preview,54.6,53.2,55.9
+145.83,OpenAI: GPT-5 Mini,openai/gpt-5-mini,gpt-5-mini-2025-08-07,59.7,59.1,60.3
+146.53,OpenAI: o4 Mini,openai/o4-mini,o4-mini-2025-04-16,60.9,60.0,61.8
+146.54,OpenAI: GPT-5.4 Nano,openai/gpt-5.4-nano,gpt-5.4-nano-2026-03-17,55.9,54.9,56.8
+147.1,OpenAI: o3,openai/o3,o3-2025-04-16,60.6,59.9,61.4
+150,OpenAI: GPT-5,openai/gpt-5,gpt-5-2025-08-07,60.5,59.5,61.5
+150.71,Google: Gemini 3 Flash Preview,google/gemini-3-flash-preview,gemini-3-flash-preview,59.1,58.2,59.9
+154.43,DeepSeek: DeepSeek V4 Flash 0731,,,,,
+155.9,Anthropic: Claude Sonnet 5,anthropic/claude-sonnet-5,claude-sonnet-5-adaptive-thinking-16000,59.9,57.1,62.7
+156.22,OpenAI: GPT-5.6 Luna,openai/gpt-5.6-luna,,,,
+156.85,Google: Gemini 3.7 Flash,,,,,
+158.63,OpenAI: GPT-5.5,openai/gpt-5.5,gpt-5.5-2026-04-23,61.1,59.9,62.2
+161.08,OpenAI: GPT-5.6 Sol,openai/gpt-5.6-sol,,,,
+161.54,Claude Opus 5,anthropic/claude-opus-5,,,,
+162.49,Anthropic: Claude Fable,anthropic/claude-fable-5,,,,
