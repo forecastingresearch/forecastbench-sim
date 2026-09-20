@@ -89,3 +89,16 @@ answer stays missing and is reported in the parse rate), the same answer blocks 
 the run-1 wording (no persona, scoring rule unnamed), resolution criteria, percentiles p5 to p95, sorting of
 non-monotone percentiles (flagged), the 32,768-token output cap, cached report prefixes on first-party hosts,
 streamed transport. The natural-conditional arm is unchanged (results/run2_2026-09-20/natcond).
+
+## G. Run 2b as run (2026-09-20, 04:29 to 04:44 UTC)
+
+24 models x 44 prompts = 1,056 calls, all finished normally, no HTTP retries, none at the output cap; 33,562 of 33,600
+answers parsed (99.89 percent). Two prompts returned no readable answer: o4-mini refused one continuous prompt of 14
+questions ("I'm sorry, but I can't provide percentile forecasts for these questions"), and Qwen3 235B answered only the
+first of 18 continuous questions in one prompt. Single answers lost to the model's own typo: Opus 5 skipped one line,
+Gemini 2.5 Flash wrote p55 for p50, GPT-5 and GPT-5.6 Luna wrote a number as a word, Qwen3.5 Flash skipped three lines.
+Parser fallbacks taken from Micropolis (five bare numbers on a line; numbered lines outside the block; percentiles on the
+line after a restated question) recovered three prompts of GPT-5 Nano and Qwen3.5 Flash. Cost $26.10 (Fable $8.28,
+Opus 5 $3.67, GPT-5.5 $2.70; the rest under $2 each). Wall time 15 minutes; DeepSeek V4 Flash on StreamLake took
+435 s per call. The first batched attempt (run2_2026-09-20/batched, seeded shuffle, cap 50 for both kinds) is complete
+for all 24 models and is kept as an ablation of order and cap.
