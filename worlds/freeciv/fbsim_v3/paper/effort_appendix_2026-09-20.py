@@ -28,6 +28,14 @@ try:
 except Exception:
     pass
 rho = J["rho_eci"]
+RUN1_SENT = ""
+if "run1_check" in J:
+    R1 = J["run1_check"]; M1 = R1["models"]
+    c1 = {r["name"]: r["next"]["excess"] - r["low"]["excess"] for r in M1.values()}
+    lo1, hi1 = min(c1, key=c1.get), max(c1, key=c1.get)
+    b1 = [r[l]["bias"] for r in M1.values() for l in ("low", "next")]
+    RUN1_SENT = (f"A first check on the one-question run of 9 September, at the same levels, drew its 200 questions in turn from each family without stratifying by horizon ({R1['in_common']} of them are in this sample); "
+                 f"it moved excess Brier by between ${c1[lo1]:+.3f}$ ({lo1}) and ${c1[hi1]:+.3f}$ ({hi1}), left the bias between ${min(b1):+.2f}$ and ${max(b1):+.2f}$, and put the correlation of excess Brier with ECI at ${R1['rho_eci']['excess']['low']:+.2f}$ and ${R1['rho_eci']['excess']['next']:+.2f}$. ")
 PARA = (f"The FreeCiv runs set every model to its lowest reasoning effort (\\cref{{sec:freeciv}}). Because the binary forecasts are compressed and biased low, we checked whether more reasoning changes them. "
         f"We drew 200 bank questions, 40 per horizon in turn from each family, and asked them again of seven models at the next level: effort medium where the provider exposes a level, and a 2,048-token budget for Haiku 4.5 and Qwen3 235B. "
         f"The questions went in grouped prompts of the main run's kind, one game per prompt" + (f" with {sizes[0]} to {sizes[-1]} questions" if sizes else "") + f". The check cost \\${cost:.2f}" + (" and every answer parsed" if unparsed == 0 else f" and {unparsed} answers did not parse") + ". "
@@ -36,8 +44,8 @@ PARA = (f"The FreeCiv runs set every model to its lowest reasoning effort (\\cre
         f"The mean of forecast minus truth stayed between ${min(bias_all):+.2f}$ and ${max(bias_all):+.2f}$ at both levels, and every model stayed above the {J['flat_excess']:.3f} that a constant forecast of 0.5 scores on these questions. "
         f"The slope of forecast on truth rose for {slope_up} of the seven models (Fable from {fable['low']['slope']:.2f} to {fable['next']['slope']:.2f}, o3 from {o3['low']['slope']:.2f} to {o3['next']['slope']:.2f}), and discrimination changed by ${min(disc_d):+.2f}$ to ${max(disc_d):+.2f}$. "
         f"Across the seven models the correlation of excess Brier with ECI was ${rho['excess']['low']:+.2f}$ at the lowest level and ${rho['excess']['next']:+.2f}$ at the next, and that of discrimination ${rho['disc']['low']:+.2f}$ and ${rho['disc']['next']:+.2f}$. "
-        f"The same check on the one-question run of 9 September, at the same levels and with the same rule for the sample, moved excess Brier by at most 0.015 and left the bias between $-0.07$ and $-0.21$. "
-        f"At these levels the effort setting does not produce the compression.")
+        + RUN1_SENT
+        + "At these levels the effort setting does not produce the compression.")
 CAPTION = (r"\caption{\green{Excess Brier score on the same 200 FreeCiv bank questions at the lowest reasoning effort of the main run and at the next level (effort medium, or a 2,048-token budget for Haiku 4.5 and Qwen3 235B), "
            r"asked in grouped prompts of the main run's kind; lower is better. Bias is the mean of forecast minus truth; reasoning tokens are per question, a prompt's reasoning tokens divided by its questions. "
            f"A constant forecast of 0.5 scores {J['flat_excess']:.3f} on these questions. Source: \\texttt{{freeciv\\_effort\\_check.json}}.}}}}")

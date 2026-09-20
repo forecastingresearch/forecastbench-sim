@@ -18,6 +18,7 @@ from scipy.stats import pearsonr, spearmanr
 ap = argparse.ArgumentParser()
 ap.add_argument("run2_paper"); ap.add_argument("effort_dir"); ap.add_argument("batched_dir")
 ap.add_argument("--out", required=True); ap.add_argument("--tex", default="")
+ap.add_argument("--run1", default="", help="results/run1_2026-09-09, with scores_v1/ and elicit_medium/ (the check of 9 September)")
 a = ap.parse_args()
 P, E, B = Path(a.run2_paper), Path(a.effort_dir), Path(a.batched_dir)
 NAMES = {"anthropic/claude-fable-5": "Fable", "anthropic/claude-sonnet-5": "Sonnet 5", "qwen/qwen3-235b-a22b": "Qwen3 235B", "openai/gpt-5": "GPT-5",
@@ -75,6 +76,34 @@ M = out["models"]
 if len(M) >= 4:
     e = [M[m]["eci"] for m in M]
     out["rho_eci"] = {k: {lvl: float(spearmanr(e, [sgn * M[m][lvl][k] for m in M])[0]) for lvl in ("low", "next")} for k, sgn in [("excess", -1), ("slope", 1), ("disc", 1), ("bias", 1)]}
+# the check of 9 September on the one-question run (results/run1_2026-09-09: scores_v1 for the lowest level, elicit_medium for the next)
+if a.run1:
+    R1 = Path(a.run1)
+    si1 = pd.read_csv(next(R1.glob("scores_v1/score_items.csv*")), low_memory=False)
+    med_rows = {}
+    for f in R1.glob("elicit_medium/*/results.jsonl"):
+        for r in read_rows(f):
+            med_rows.setdefault(r["model"], {})[r["item"]] = r
+    items1 = sorted({i for rows in med_rows.values() for i in rows})
+    b1 = si1[(si1.set == "bank") & si1.item.isin(items1)].set_index(["model", "item"])
+    q1 = si1[(si1.set == "bank") & si1.item.isin(items1)].drop_duplicates("item").set_index("item").q
+    T1 = si1[(si1.set == "bank") & si1.item.isin(items1)].drop_duplicates("item").set_index("item")["T"]
+    r1 = {"items": len(items1), "in_common": len(set(items1) & set(items)), "per_horizon": {int(k): int(v) for k, v in T1.value_counts().sort_index().items()},
+          "flat_excess": float(((0.5 - q1) ** 2).mean()), "models": {}}
+    for mid, rows in med_rows.items():
+        low = [(q1[i], b1.loc[(mid, i)].p if (mid, i) in b1.index and pd.notna(b1.loc[(mid, i)].p) else None) for i in items1]
+        nxt = [(q1[i], rows[i].get("value")) for i in items1 if i in rows]
+        def st1(pairs, rr):
+            g = [(q, p) for q, p in pairs if p is not None]; q = np.array([x[0] for x in g]); p = np.array([x[1] for x in g])
+            return dict(n=len(g), excess=float(np.mean((p - q) ** 2)), bias=float(np.mean(p - q)), slope=float(np.polyfit(q, p, 1)[0]), disc=float(pearsonr(p, q)[0]),
+                        reas_per_q=float(np.mean([r.get("tokens_reasoning") or 0 for r in rr])) if rr else None, cost=float(sum(r.get("cost") or 0 for r in rr)))
+        r1["models"][mid] = dict(name=NAMES.get(mid, mid), eci=float(w.loc[mid, "eci"]), low=st1(low, []), next=st1(nxt, list(rows.values())))
+    M1 = r1["models"]; e1 = [M1[m]["eci"] for m in M1]
+    r1["rho_eci"] = {k: {lvl: float(spearmanr(e1, [sgn * M1[m][lvl][k] for m in M1])[0]) for lvl in ("low", "next")} for k, sgn in [("excess", -1), ("disc", 1)]}
+    out["run1_check"] = r1
+    print(f"9 September check: {r1['items']} questions ({r1['in_common']} in common with this sample), per horizon {r1['per_horizon']}, constant 0.5 {r1['flat_excess']:.4f}")
+    for m, r in sorted(M1.items(), key=lambda kv: -kv[1]["eci"]):
+        print(f"  {r['name']:14s} excess {r['low']['excess']:.3f} -> {r['next']['excess']:.3f} ({r['next']['excess'] - r['low']['excess']:+.3f}); bias {r['low']['bias']:+.2f} -> {r['next']['bias']:+.2f}; reasoning/q {r['next']['reas_per_q']:.0f}; ${r['next']['cost']:.2f}")
 json.dump(out, open(a.out, "w"), indent=1)
 print(f"{len(items)} bank questions; constant 0.5 scores {flat:.4f}")
 print(f"{'model':14s} {'ECI':>6s} | {'excess L':>8s} {'excess N':>8s} {'chg':>7s} | {'bias L':>7s} {'bias N':>7s} | {'slope L':>7s} {'slope N':>7s} | {'disc L':>6s} {'disc N':>6s} | {'reas/q L':>8s} {'reas/q N':>8s} | {'$ N':>5s} {'unp':>3s}")
