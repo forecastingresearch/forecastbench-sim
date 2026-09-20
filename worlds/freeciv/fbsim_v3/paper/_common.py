@@ -23,7 +23,7 @@ import pandas as pd
 from scipy.stats import spearmanr
 
 FBSIM_V3 = Path(__file__).resolve().parents[1]           # worlds/freeciv/fbsim_v3
-REPO_DEV = FBSIM_V3.parents[1]                             # the forecastbench-sim checkout
+REPO_DEV = FBSIM_V3.parents[2]                             # the forecastbench-sim checkout root
 RUN = os.environ.get("FBSIM_RUN", "run1_2026-09-09")
 RESULTS = FBSIM_V3 / "results" / RUN
 
