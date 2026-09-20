@@ -28,6 +28,7 @@ try:
 except Exception:
     pass
 rho = J["rho_eci"]
+WORDS = {0: 'none', 1: 'one', 2: 'two', 3: 'three', 4: 'four', 5: 'five', 6: 'six', 7: 'seven'}
 RUN1_SENT = ""
 if "run1_check" in J:
     R1 = J["run1_check"]; M1 = R1["models"]
@@ -39,10 +40,10 @@ if "run1_check" in J:
 PARA = (f"The FreeCiv runs set every model to its lowest reasoning effort (\\cref{{sec:freeciv}}). Because the binary forecasts are compressed and biased low, we checked whether more reasoning changes them. "
         f"We drew 200 bank questions, 40 per horizon in turn from each family, and asked them again of seven models at the next level: effort medium where the provider exposes a level, and a 2,048-token budget for Haiku 4.5 and Qwen3 235B. "
         f"The questions went in grouped prompts of the main run's kind, one game per prompt" + (f" with {sizes[0]} to {sizes[-1]} questions" if sizes else "") + f". The check cost \\${cost:.2f}" + (" and every answer parsed" if unparsed == 0 else f" and {unparsed} answers did not parse") + ". "
-        f"\\Cref{{tab:effort}} gives the result. Excess Brier moved by between ${chg[best]:+.3f}$ ({best}) and ${chg[worst]:+.3f}$ ({worst}); {n_better} of the seven models improved. "
+        f"\\Cref{{tab:effort}} gives the result. Excess Brier moved by between ${chg[best]:+.3f}$ ({best}) and ${chg[worst]:+.3f}$ ({worst}); {WORDS[n_better]} of the seven models improved. "
         f"Reasoning tokens per question rose from {min(reas_low):.0f} to {max(reas_low):.0f} at the lowest level to {min(reas_next):.0f} to {max(reas_next):.0f} at the next; GPT-5, which the main run had at effort minimal, went from {gpt5['low']['reas_per_q']:.0f} to {gpt5['next']['reas_per_q']:.0f}. "
         f"The mean of forecast minus truth stayed between ${min(bias_all):+.2f}$ and ${max(bias_all):+.2f}$ at both levels, and every model stayed above the {J['flat_excess']:.3f} that a constant forecast of 0.5 scores on these questions. "
-        f"The slope of forecast on truth rose for {slope_up} of the seven models (Fable from {fable['low']['slope']:.2f} to {fable['next']['slope']:.2f}, o3 from {o3['low']['slope']:.2f} to {o3['next']['slope']:.2f}), and discrimination changed by ${min(disc_d):+.2f}$ to ${max(disc_d):+.2f}$. "
+        f"The slope of forecast on truth rose for {'every model' if slope_up == 7 else WORDS[slope_up] + ' of the seven models'} (Fable from {fable['low']['slope']:.2f} to {fable['next']['slope']:.2f}, o3 from {o3['low']['slope']:.2f} to {o3['next']['slope']:.2f}), and discrimination changed by ${min(disc_d):+.2f}$ to ${max(disc_d):+.2f}$. "
         f"Across the seven models the correlation of excess Brier with ECI was ${rho['excess']['low']:+.2f}$ at the lowest level and ${rho['excess']['next']:+.2f}$ at the next, and that of discrimination ${rho['disc']['low']:+.2f}$ and ${rho['disc']['next']:+.2f}$. "
         + RUN1_SENT
         + "At these levels the effort setting does not produce the compression.")
