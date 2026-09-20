@@ -109,6 +109,8 @@ def cluster_bootstrap(tab, cap_axis, sign, rng):
     axis = cap_axis.reindex(models)
     keep = axis.notna().values
     Sv, Cv, ax = S.values[keep], C.values[keep], axis.values[keep]
+    empty = [m for m, c in zip(np.array(models)[keep], Cv.sum(1)) if c == 0]
+    assert not empty, f"no scored items in this set for {empty}: the run is incomplete"
     k = len(worlds)
     boots = np.empty(N_BOOT)
     for i in range(N_BOOT):
