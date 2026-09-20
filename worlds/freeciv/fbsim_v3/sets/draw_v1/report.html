@@ -1,0 +1,1998 @@
+<title>FreeCiv Draw v1</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--bg:#F3F5F7;--surface:#FFFFFF;--ink:#1C2430;--muted:#5B6774;--line:#D6DDE3;--accent:#0E6E73;--accent-soft:#D9EEEF;--head:#22303D}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#121A21;--surface:#1A242D;--ink:#E6ECF0;--muted:#9AA8B4;--line:#2C3944;--accent:#4FB8BD;--accent-soft:#173A3D;--head:#F2F6F8}}
+:root[data-theme="dark"]{--bg:#121A21;--surface:#1A242D;--ink:#E6ECF0;--muted:#9AA8B4;--line:#2C3944;--accent:#4FB8BD;--accent-soft:#173A3D;--head:#F2F6F8}
+body{background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:15px;line-height:1.5;margin:0}
+main{max-width:920px;margin:0 auto;padding:40px 24px 80px}
+header{margin-bottom:36px}.eyebrow{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+h1{font-family:Bitter,Georgia,serif;font-weight:700;font-size:40px;line-height:1.1;margin:0 0 14px;color:var(--head);text-wrap:balance}
+h2{font-family:Bitter,Georgia,serif;font-weight:700;font-size:26px;margin:48px 0 8px;color:var(--head);text-wrap:balance}
+h3{font-family:Bitter,Georgia,serif;font-weight:500;font-size:18px;margin:26px 0 8px;color:var(--head)}
+h4{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-weight:500;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--accent);margin:0 0 6px}
+.lede{font-size:17px;max-width:66ch;color:var(--ink);margin:0 0 22px}
+p{max-width:70ch}.note{color:var(--muted);font-size:14px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:0 0 22px}
+.cards div{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:14px 16px;display:flex;flex-direction:column;gap:2px}
+.cards b{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:26px;font-weight:500;color:var(--accent);font-variant-numeric:tabular-nums}
+.cards span{font-size:13px;color:var(--muted)}
+nav{display:flex;gap:18px;flex-wrap:wrap;font-size:14px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0}
+nav a{color:var(--accent);text-decoration:none;font-weight:500}nav a:hover,nav a:focus-visible{text-decoration:underline;outline:none}
+.tw{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:6px;margin:0 0 18px}
+table.num{border-collapse:collapse;font-size:13.5px;font-variant-numeric:tabular-nums;min-width:100%}
+table.num th,table.num td{padding:6px 12px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+table.num th{font-weight:600;color:var(--muted);font-size:12px;letter-spacing:.03em}table.num tbody th{text-align:left;color:var(--ink);font-weight:500}
+table.num tr:last-child td,table.num tr:last-child th{border-bottom:none}table.num tbody tr:last-child{background:var(--accent-soft)}
+.cell{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:12px 16px;margin:0 0 10px}
+.cell ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.cell li{display:grid;grid-template-columns:1fr auto;grid-template-areas:"q val" "rev val" "meta val";column-gap:16px;align-items:start;padding-top:8px;border-top:1px dashed var(--line)}
+.cell li:first-child{border-top:none;padding-top:0}
+.q{grid-area:q}.rev{grid-area:rev;color:var(--accent);font-size:14px}.meta{grid-area:meta;color:var(--muted);font-size:12.5px}
+.val{grid-area:val;font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:14px;color:var(--head);text-align:right;font-variant-numeric:tabular-nums}
+.val.small{font-size:12.5px;max-width:200px;white-space:normal}.val em{color:var(--muted);font-style:normal}
+.cell li{grid-template-columns:1fr auto;grid-template-areas:"q val" "rev val" "meta val" "crit crit" "ctl ctl"}
+.crit{grid-area:crit;font-size:12.5px;color:var(--muted);line-height:1.4;max-width:80ch}
+.ctl{grid-area:ctl;display:flex;gap:10px;align-items:center;margin-top:2px}
+.flag{font-size:12.5px;color:var(--muted);display:inline-flex;gap:6px;align-items:center;white-space:nowrap}
+.flag input{accent-color:var(--accent);width:15px;height:15px}
+.why{flex:1;min-width:120px;font:inherit;font-size:13px;padding:4px 8px;border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--ink)}
+.why:disabled{opacity:.5}.why:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+li.flagged{background:color-mix(in srgb,var(--accent-soft) 60%,transparent);border-radius:4px;padding-left:6px;padding-right:6px}
+#qcstatus b{color:var(--accent)}
+footer{margin-top:48px;padding-top:16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted);font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace}
+@media (prefers-reduced-motion: reduce){*{scroll-behavior:auto}}
+</style><main><header><p class="eyebrow">FreeCiv arm · fbsim v3 corpus · draw v1 · 2026-09-07</p><h1>FreeCiv Draw v1</h1>
+<p class="lede">Stratified random draws from the 8 × 1,000 rerun corpus. Truth for every item is the frequency over all 1,000 replays. Strata are structural (horizon, probability band, family, reveal type, relation); no item was chosen by its measured effect.</p>
+<div class="cards"><div><b>750</b><span>binary bank</span></div><div><b>300</b><span>tails q ≤ .05</span></div><div><b>50</b><span>mirrors q ≥ .95</span></div><div><b>300</b><span>continuous</span></div><div><b>400</b><span>natural conditionals</span></div></div>
+<nav><a href="#bank">Bank</a><a href="#tails">Tails</a><a href="#mirrors">Mirrors</a><a href="#cont">Continuous</a><a href="#nc">Conditionals</a><a href="#qc">QC samples</a></nav></header>
+<section id="bank"><h2>Binary bank · 750</h2><p>150 per horizon = 5 probability bands over (0.05, 0.95) × 30. Caps: ≤ 6 per world and ≤ 6 per family in each band-cell, one item per subject per family per horizon, ≤ 150 per family overall.</p>
+<h3>Family × horizon</h3><div class="tw"><table class="dataframe num">
+  <thead>
+    <tr style="text-align: right;">
+      <th>T</th>
+      <th>90</th>
+      <th>120</th>
+      <th>150</th>
+      <th>180</th>
+      <th>210</th>
+      <th>all</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>comparative (pop/cities/territory/score)</th>
+      <td>9</td>
+      <td>11</td>
+      <td>10</td>
+      <td>12</td>
+      <td>11</td>
+      <td>53</td>
+    </tr>
+    <tr>
+      <th>government at T</th>
+      <td>7</td>
+      <td>10</td>
+      <td>9</td>
+      <td>10</td>
+      <td>10</td>
+      <td>46</td>
+    </tr>
+    <tr>
+      <th>tech discovered</th>
+      <td>10</td>
+      <td>9</td>
+      <td>10</td>
+      <td>10</td>
+      <td>11</td>
+      <td>50</td>
+    </tr>
+    <tr>
+      <th>tech threshold</th>
+      <td>8</td>
+      <td>9</td>
+      <td>11</td>
+      <td>10</td>
+      <td>10</td>
+      <td>48</td>
+    </tr>
+    <tr>
+      <th>value threshold (score/treasury/pop/cities/territory/military)</th>
+      <td>10</td>
+      <td>9</td>
+      <td>11</td>
+      <td>11</td>
+      <td>10</td>
+      <td>51</td>
+    </tr>
+    <tr>
+      <th>drawdown</th>
+      <td>4</td>
+      <td>7</td>
+      <td>11</td>
+      <td>11</td>
+      <td>11</td>
+      <td>44</td>
+    </tr>
+    <tr>
+      <th>world conquest count</th>
+      <td>5</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>civil war by T</th>
+      <td>0</td>
+      <td>2</td>
+      <td>4</td>
+      <td>5</td>
+      <td>6</td>
+      <td>17</td>
+    </tr>
+    <tr>
+      <th>war at T</th>
+      <td>7</td>
+      <td>10</td>
+      <td>10</td>
+      <td>11</td>
+      <td>11</td>
+      <td>49</td>
+    </tr>
+    <tr>
+      <th>diplomatic state reached</th>
+      <td>8</td>
+      <td>8</td>
+      <td>8</td>
+      <td>11</td>
+      <td>9</td>
+      <td>44</td>
+    </tr>
+    <tr>
+      <th>wonder completed (any)</th>
+      <td>6</td>
+      <td>7</td>
+      <td>5</td>
+      <td>8</td>
+      <td>8</td>
+      <td>34</td>
+    </tr>
+    <tr>
+      <th>wars at T</th>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>gov-change count</th>
+      <td>10</td>
+      <td>8</td>
+      <td>5</td>
+      <td>4</td>
+      <td>5</td>
+      <td>32</td>
+    </tr>
+    <tr>
+      <th>civ wonders ≥ k</th>
+      <td>8</td>
+      <td>8</td>
+      <td>10</td>
+      <td>9</td>
+      <td>8</td>
+      <td>43</td>
+    </tr>
+    <tr>
+      <th>city founding ≥ k</th>
+      <td>7</td>
+      <td>8</td>
+      <td>7</td>
+      <td>6</td>
+      <td>6</td>
+      <td>34</td>
+    </tr>
+    <tr>
+      <th>any city razed</th>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>wonder race</th>
+      <td>7</td>
+      <td>6</td>
+      <td>7</td>
+      <td>8</td>
+      <td>8</td>
+      <td>36</td>
+    </tr>
+    <tr>
+      <th>directed conquest</th>
+      <td>9</td>
+      <td>9</td>
+      <td>11</td>
+      <td>10</td>
+      <td>10</td>
+      <td>49</td>
+    </tr>
+    <tr>
+      <th>captures ≥ k</th>
+      <td>8</td>
+      <td>9</td>
+      <td>9</td>
+      <td>6</td>
+      <td>6</td>
+      <td>38</td>
+    </tr>
+    <tr>
+      <th>losses ≥ k</th>
+      <td>9</td>
+      <td>9</td>
+      <td>7</td>
+      <td>5</td>
+      <td>5</td>
+      <td>35</td>
+    </tr>
+    <tr>
+      <th>tech lead</th>
+      <td>6</td>
+      <td>6</td>
+      <td>4</td>
+      <td>3</td>
+      <td>4</td>
+      <td>23</td>
+    </tr>
+    <tr>
+      <th>peace at T</th>
+      <td>7</td>
+      <td>3</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <th>all</th>
+      <td>150</td>
+      <td>150</td>
+      <td>150</td>
+      <td>150</td>
+      <td>150</td>
+      <td>750</td>
+    </tr>
+  </tbody>
+</table></div>
+<h3>Band × horizon</h3><div class="tw"><table class="dataframe num">
+  <thead>
+    <tr style="text-align: right;">
+      <th>T</th>
+      <th>90</th>
+      <th>120</th>
+      <th>150</th>
+      <th>180</th>
+      <th>210</th>
+      <th>all</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0.05–0.23</th>
+      <td>30</td>
+      <td>30</td>
+      <td>30</td>
+      <td>30</td>
+      <td>30</td>
+      <td>150</td>
+    </tr>
+    <tr>
+      <th>0.23–0.41</th>
+      <td>30</td>
+      <td>30</td>
+      <td>30</td>
+      <td>30</td>
+      <td>30</td>
+      <td>150</td>
+    </tr>
+    <tr>
+      <th>0.41–0.59</th>
+      <td>30</td>
+      <td>30</td>
+      <td>30</td>
+      <td>30</td>
+      <td>30</td>
+      <td>150</td>
+    </tr>
+    <tr>
+      <th>0.59–0.77</th>
+      <td>30</td>
+      <td>30</td>
+      <td>30</td>
+      <td>30</td>
+      <td>30</td>
+      <td>150</td>
+    </tr>
+    <tr>
+      <th>0.77–0.95</th>
+      <td>30</td>
+      <td>30</td>
+      <td>30</td>
+      <td>30</td>
+      <td>30</td>
+      <td>150</td>
+    </tr>
+    <tr>
+      <th>all</th>
+      <td>150</td>
+      <td>150</td>
+      <td>150</td>
+      <td>150</td>
+      <td>150</td>
+      <td>750</td>
+    </tr>
+  </tbody>
+</table></div>
+<h3>World × horizon</h3><div class="tw"><table class="dataframe num">
+  <thead>
+    <tr style="text-align: right;">
+      <th>T</th>
+      <th>90</th>
+      <th>120</th>
+      <th>150</th>
+      <th>180</th>
+      <th>210</th>
+      <th>all</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>seed7001</th>
+      <td>18</td>
+      <td>22</td>
+      <td>12</td>
+      <td>6</td>
+      <td>8</td>
+      <td>66</td>
+    </tr>
+    <tr>
+      <th>seed7003</th>
+      <td>20</td>
+      <td>20</td>
+      <td>24</td>
+      <td>24</td>
+      <td>28</td>
+      <td>116</td>
+    </tr>
+    <tr>
+      <th>seed7005</th>
+      <td>24</td>
+      <td>24</td>
+      <td>23</td>
+      <td>24</td>
+      <td>17</td>
+      <td>112</td>
+    </tr>
+    <tr>
+      <th>seed7008</th>
+      <td>20</td>
+      <td>16</td>
+      <td>25</td>
+      <td>25</td>
+      <td>26</td>
+      <td>112</td>
+    </tr>
+    <tr>
+      <th>seed7010</th>
+      <td>17</td>
+      <td>19</td>
+      <td>17</td>
+      <td>24</td>
+      <td>22</td>
+      <td>99</td>
+    </tr>
+    <tr>
+      <th>seed7011</th>
+      <td>19</td>
+      <td>20</td>
+      <td>23</td>
+      <td>23</td>
+      <td>24</td>
+      <td>109</td>
+    </tr>
+    <tr>
+      <th>seed7014</th>
+      <td>22</td>
+      <td>22</td>
+      <td>18</td>
+      <td>15</td>
+      <td>22</td>
+      <td>99</td>
+    </tr>
+    <tr>
+      <th>seed7022</th>
+      <td>10</td>
+      <td>7</td>
+      <td>8</td>
+      <td>9</td>
+      <td>3</td>
+      <td>37</td>
+    </tr>
+    <tr>
+      <th>all</th>
+      <td>150</td>
+      <td>150</td>
+      <td>150</td>
+      <td>150</td>
+      <td>150</td>
+      <td>750</td>
+    </tr>
+  </tbody>
+</table></div></section>
+<section id="tails"><h2>Tails · 300</h2><p>60 per horizon, 0 &lt; q ≤ 0.05, long horizons drawn first. Caps: ≤ 10 per family per horizon, ≤ 45 per family overall, ≤ 12 per world per horizon. Median q 0.013; 10th–90th percentile 0.001–0.048. Scored in bits.</p><div class="tw"><table class="dataframe num">
+  <thead>
+    <tr style="text-align: right;">
+      <th>T</th>
+      <th>90</th>
+      <th>120</th>
+      <th>150</th>
+      <th>180</th>
+      <th>210</th>
+      <th>all</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>comparative (pop/cities/territory/score)</th>
+      <td>4</td>
+      <td>4</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>9</td>
+    </tr>
+    <tr>
+      <th>government at T</th>
+      <td>4</td>
+      <td>4</td>
+      <td>5</td>
+      <td>5</td>
+      <td>4</td>
+      <td>22</td>
+    </tr>
+    <tr>
+      <th>tech discovered</th>
+      <td>3</td>
+      <td>4</td>
+      <td>5</td>
+      <td>5</td>
+      <td>5</td>
+      <td>22</td>
+    </tr>
+    <tr>
+      <th>value threshold (score/treasury/pop/cities/territory/military)</th>
+      <td>2</td>
+      <td>4</td>
+      <td>5</td>
+      <td>4</td>
+      <td>5</td>
+      <td>20</td>
+    </tr>
+    <tr>
+      <th>drawdown</th>
+      <td>3</td>
+      <td>4</td>
+      <td>4</td>
+      <td>4</td>
+      <td>5</td>
+      <td>20</td>
+    </tr>
+    <tr>
+      <th>world conquest count</th>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>civil war by T</th>
+      <td>3</td>
+      <td>4</td>
+      <td>4</td>
+      <td>5</td>
+      <td>4</td>
+      <td>20</td>
+    </tr>
+    <tr>
+      <th>war at T</th>
+      <td>3</td>
+      <td>4</td>
+      <td>3</td>
+      <td>3</td>
+      <td>2</td>
+      <td>15</td>
+    </tr>
+    <tr>
+      <th>diplomatic state reached</th>
+      <td>3</td>
+      <td>4</td>
+      <td>4</td>
+      <td>5</td>
+      <td>5</td>
+      <td>21</td>
+    </tr>
+    <tr>
+      <th>eliminated by T</th>
+      <td>1</td>
+      <td>2</td>
+      <td>5</td>
+      <td>4</td>
+      <td>4</td>
+      <td>16</td>
+    </tr>
+    <tr>
+      <th>wonder completed (any)</th>
+      <td>3</td>
+      <td>4</td>
+      <td>4</td>
+      <td>5</td>
+      <td>5</td>
+      <td>21</td>
+    </tr>
+    <tr>
+      <th>gov-change count</th>
+      <td>4</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>civ wonders ≥ k</th>
+      <td>3</td>
+      <td>4</td>
+      <td>4</td>
+      <td>5</td>
+      <td>5</td>
+      <td>21</td>
+    </tr>
+    <tr>
+      <th>city founding ≥ k</th>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>wonder race</th>
+      <td>4</td>
+      <td>4</td>
+      <td>4</td>
+      <td>4</td>
+      <td>5</td>
+      <td>21</td>
+    </tr>
+    <tr>
+      <th>directed conquest</th>
+      <td>3</td>
+      <td>4</td>
+      <td>4</td>
+      <td>5</td>
+      <td>4</td>
+      <td>20</td>
+    </tr>
+    <tr>
+      <th>captures ≥ k</th>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>losses ≥ k</th>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>tech lead</th>
+      <td>3</td>
+      <td>4</td>
+      <td>4</td>
+      <td>2</td>
+      <td>2</td>
+      <td>15</td>
+    </tr>
+    <tr>
+      <th>peace at T</th>
+      <td>3</td>
+      <td>4</td>
+      <td>4</td>
+      <td>4</td>
+      <td>5</td>
+      <td>20</td>
+    </tr>
+    <tr>
+      <th>all</th>
+      <td>60</td>
+      <td>60</td>
+      <td>60</td>
+      <td>60</td>
+      <td>60</td>
+      <td>300</td>
+    </tr>
+  </tbody>
+</table></div></section>
+<section id="mirrors"><h2>Mirrors · 50</h2><p>10 per horizon, 0.95 ≤ q &lt; 1, same families as the tails; our own top-end calibration probe.</p><div class="tw"><table class="dataframe num">
+  <thead>
+    <tr style="text-align: right;">
+      <th>T</th>
+      <th>90</th>
+      <th>120</th>
+      <th>150</th>
+      <th>180</th>
+      <th>210</th>
+      <th>all</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>comparative (pop/cities/territory/score)</th>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>government at T</th>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>tech discovered</th>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>tech threshold</th>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>value threshold (score/treasury/pop/cities/territory/military)</th>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>drawdown</th>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>world conquest count</th>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>war at T</th>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>diplomatic state reached</th>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>wonder completed (any)</th>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>wars at T</th>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>gov-change count</th>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>civ wonders ≥ k</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>city founding ≥ k</th>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>wonder race</th>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>directed conquest</th>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>captures ≥ k</th>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>losses ≥ k</th>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>all</th>
+      <td>10</td>
+      <td>10</td>
+      <td>10</td>
+      <td>10</td>
+      <td>10</td>
+      <td>50</td>
+    </tr>
+  </tbody>
+</table></div></section>
+<section id="cont"><h2>Continuous · 300</h2><p>240 spread over horizons (6 per family per horizon, 8 families, IQR &gt; 0) plus a 60-item timing block anchored at T210 (time to K techs 40, first capture 15, first wonder 5). Elicited as percentiles, scored by CRPS against the 1,000-replay distribution.</p><div class="tw"><table class="dataframe num">
+  <thead>
+    <tr style="text-align: right;">
+      <th>T</th>
+      <th>90</th>
+      <th>120</th>
+      <th>150</th>
+      <th>180</th>
+      <th>210</th>
+      <th>all</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>world wonders</th>
+      <td>6</td>
+      <td>6</td>
+      <td>6</td>
+      <td>7</td>
+      <td>6</td>
+      <td>31</td>
+    </tr>
+    <tr>
+      <th>NC1_value_at_T</th>
+      <td>12</td>
+      <td>12</td>
+      <td>12</td>
+      <td>12</td>
+      <td>12</td>
+      <td>60</td>
+    </tr>
+    <tr>
+      <th>world captures</th>
+      <td>6</td>
+      <td>6</td>
+      <td>7</td>
+      <td>6</td>
+      <td>7</td>
+      <td>32</td>
+    </tr>
+    <tr>
+      <th>civ captures</th>
+      <td>6</td>
+      <td>6</td>
+      <td>7</td>
+      <td>6</td>
+      <td>6</td>
+      <td>31</td>
+    </tr>
+    <tr>
+      <th>civ losses</th>
+      <td>6</td>
+      <td>6</td>
+      <td>6</td>
+      <td>6</td>
+      <td>7</td>
+      <td>31</td>
+    </tr>
+    <tr>
+      <th>civ founds</th>
+      <td>6</td>
+      <td>6</td>
+      <td>6</td>
+      <td>7</td>
+      <td>6</td>
+      <td>31</td>
+    </tr>
+    <tr>
+      <th>techs at T</th>
+      <td>6</td>
+      <td>6</td>
+      <td>6</td>
+      <td>6</td>
+      <td>7</td>
+      <td>31</td>
+    </tr>
+    <tr>
+      <th>world techs</th>
+      <td>6</td>
+      <td>6</td>
+      <td>3</td>
+      <td>3</td>
+      <td>2</td>
+      <td>20</td>
+    </tr>
+    <tr>
+      <th>world razings</th>
+      <td>6</td>
+      <td>6</td>
+      <td>7</td>
+      <td>7</td>
+      <td>7</td>
+      <td>33</td>
+    </tr>
+    <tr>
+      <th>all</th>
+      <td>60</td>
+      <td>60</td>
+      <td>60</td>
+      <td>60</td>
+      <td>60</td>
+      <td>300</td>
+    </tr>
+  </tbody>
+</table></div>
+<h3>Dispersion (median IQR of the truth distribution, by family)</h3><div class="tw"><table class="dataframe num">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>median IQR</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>world wonders</th>
+      <td>2.0</td>
+    </tr>
+    <tr>
+      <th>NC1_value_at_T</th>
+      <td>22.0</td>
+    </tr>
+    <tr>
+      <th>world captures</th>
+      <td>19.5</td>
+    </tr>
+    <tr>
+      <th>civ captures</th>
+      <td>4.0</td>
+    </tr>
+    <tr>
+      <th>civ losses</th>
+      <td>5.0</td>
+    </tr>
+    <tr>
+      <th>civ founds</th>
+      <td>6.0</td>
+    </tr>
+    <tr>
+      <th>techs at T</th>
+      <td>4.0</td>
+    </tr>
+    <tr>
+      <th>world techs</th>
+      <td>9.6</td>
+    </tr>
+    <tr>
+      <th>world razings</th>
+      <td>8.0</td>
+    </tr>
+  </tbody>
+</table></div></section>
+<section id="nc"><h2>Natural conditionals · 400</h2><p>Second-turn reveals on bank questions at T120–T210. Reveal window is turns 61–90, one uniform sentence, exact turn undisclosed, at least 100 replays where the reveal holds. Blocks are structural; quota per horizon A 30 · B 20 · C1 20 · C2 50 · D 30, template-balanced inside each block, ≤ 2 distinct reveals per question, ≤ 8 cells per revealed event. Effect sizes below are reported after the draw and were never used for it.</p>
+<h3>Block × horizon</h3><div class="tw"><table class="dataframe num">
+  <thead>
+    <tr style="text-align: right;">
+      <th>T</th>
+      <th>120</th>
+      <th>150</th>
+      <th>180</th>
+      <th>210</th>
+      <th>all</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>A · irrelevant news</th>
+      <td>9</td>
+      <td>9</td>
+      <td>9</td>
+      <td>9</td>
+      <td>36</td>
+    </tr>
+    <tr>
+      <th>B · related, weak news</th>
+      <td>9</td>
+      <td>9</td>
+      <td>9</td>
+      <td>9</td>
+      <td>36</td>
+    </tr>
+    <tr>
+      <th>C1 · mechanical, same series</th>
+      <td>15</td>
+      <td>15</td>
+      <td>15</td>
+      <td>11</td>
+      <td>56</td>
+    </tr>
+    <tr>
+      <th>C2 · persistence, cross-series</th>
+      <td>42</td>
+      <td>42</td>
+      <td>42</td>
+      <td>46</td>
+      <td>172</td>
+    </tr>
+    <tr>
+      <th>D · inferential</th>
+      <td>25</td>
+      <td>25</td>
+      <td>25</td>
+      <td>25</td>
+      <td>100</td>
+    </tr>
+    <tr>
+      <th>all</th>
+      <td>100</td>
+      <td>100</td>
+      <td>100</td>
+      <td>100</td>
+      <td>400</td>
+    </tr>
+  </tbody>
+</table></div>
+<h3>Effect size × block (post hoc)</h3><div class="tw"><table class="dataframe num">
+  <thead>
+    <tr style="text-align: right;">
+      <th>stratum</th>
+      <th>null &lt;.03</th>
+      <th>small .03–.08</th>
+      <th>medium .08–.15</th>
+      <th>large ≥.15</th>
+      <th>all</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>A · irrelevant news</th>
+      <td>33</td>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>36</td>
+    </tr>
+    <tr>
+      <th>B · related, weak news</th>
+      <td>31</td>
+      <td>4</td>
+      <td>1</td>
+      <td>0</td>
+      <td>36</td>
+    </tr>
+    <tr>
+      <th>C1 · mechanical, same series</th>
+      <td>7</td>
+      <td>15</td>
+      <td>17</td>
+      <td>17</td>
+      <td>56</td>
+    </tr>
+    <tr>
+      <th>C2 · persistence, cross-series</th>
+      <td>46</td>
+      <td>51</td>
+      <td>47</td>
+      <td>28</td>
+      <td>172</td>
+    </tr>
+    <tr>
+      <th>D · inferential</th>
+      <td>57</td>
+      <td>23</td>
+      <td>2</td>
+      <td>18</td>
+      <td>100</td>
+    </tr>
+    <tr>
+      <th>all</th>
+      <td>174</td>
+      <td>96</td>
+      <td>67</td>
+      <td>63</td>
+      <td>400</td>
+    </tr>
+  </tbody>
+</table></div>
+<h3>Effect size × horizon</h3><div class="tw"><table class="dataframe num">
+  <thead>
+    <tr style="text-align: right;">
+      <th>stratum</th>
+      <th>null &lt;.03</th>
+      <th>small .03–.08</th>
+      <th>medium .08–.15</th>
+      <th>large ≥.15</th>
+      <th>all</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>120</th>
+      <td>34</td>
+      <td>17</td>
+      <td>23</td>
+      <td>26</td>
+      <td>100</td>
+    </tr>
+    <tr>
+      <th>150</th>
+      <td>45</td>
+      <td>28</td>
+      <td>17</td>
+      <td>10</td>
+      <td>100</td>
+    </tr>
+    <tr>
+      <th>180</th>
+      <td>35</td>
+      <td>25</td>
+      <td>18</td>
+      <td>22</td>
+      <td>100</td>
+    </tr>
+    <tr>
+      <th>210</th>
+      <td>60</td>
+      <td>26</td>
+      <td>9</td>
+      <td>5</td>
+      <td>100</td>
+    </tr>
+    <tr>
+      <th>all</th>
+      <td>174</td>
+      <td>96</td>
+      <td>67</td>
+      <td>63</td>
+      <td>400</td>
+    </tr>
+  </tbody>
+</table></div>
+<h3>Question family × block</h3><div class="tw"><table class="dataframe num">
+  <thead>
+    <tr style="text-align: right;">
+      <th>block</th>
+      <th>A</th>
+      <th>B</th>
+      <th>C1</th>
+      <th>C2</th>
+      <th>D</th>
+      <th>all</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>comparative (pop/cities/territory/score)</th>
+      <td>2</td>
+      <td>4</td>
+      <td>19</td>
+      <td>57</td>
+      <td>0</td>
+      <td>82</td>
+    </tr>
+    <tr>
+      <th>government at T</th>
+      <td>2</td>
+      <td>4</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>tech discovered</th>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>tech threshold</th>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>value threshold (score/treasury/pop/cities/territory/military)</th>
+      <td>2</td>
+      <td>4</td>
+      <td>19</td>
+      <td>58</td>
+      <td>0</td>
+      <td>83</td>
+    </tr>
+    <tr>
+      <th>drawdown</th>
+      <td>1</td>
+      <td>4</td>
+      <td>18</td>
+      <td>57</td>
+      <td>0</td>
+      <td>80</td>
+    </tr>
+    <tr>
+      <th>world conquest count</th>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>civil war by T</th>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>18</td>
+      <td>19</td>
+    </tr>
+    <tr>
+      <th>war at T</th>
+      <td>1</td>
+      <td>4</td>
+      <td>0</td>
+      <td>0</td>
+      <td>20</td>
+      <td>25</td>
+    </tr>
+    <tr>
+      <th>diplomatic state reached</th>
+      <td>2</td>
+      <td>4</td>
+      <td>0</td>
+      <td>0</td>
+      <td>20</td>
+      <td>26</td>
+    </tr>
+    <tr>
+      <th>wonder completed (any)</th>
+      <td>4</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>gov-change count</th>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>civ wonders ≥ k</th>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>city founding ≥ k</th>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>wonder race</th>
+      <td>1</td>
+      <td>5</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>directed conquest</th>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>19</td>
+      <td>22</td>
+    </tr>
+    <tr>
+      <th>captures ≥ k</th>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>losses ≥ k</th>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>19</td>
+      <td>20</td>
+    </tr>
+    <tr>
+      <th>tech lead</th>
+      <td>1</td>
+      <td>4</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>peace at T</th>
+      <td>2</td>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>4</td>
+      <td>9</td>
+    </tr>
+    <tr>
+      <th>all</th>
+      <td>36</td>
+      <td>36</td>
+      <td>56</td>
+      <td>172</td>
+      <td>100</td>
+      <td>400</td>
+    </tr>
+  </tbody>
+</table></div>
+<h3>Reveal type × block</h3><div class="tw"><table class="dataframe num">
+  <thead>
+    <tr style="text-align: right;">
+      <th>block</th>
+      <th>A</th>
+      <th>B</th>
+      <th>C1</th>
+      <th>C2</th>
+      <th>D</th>
+      <th>all</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>civ_anarchy</th>
+      <td>1</td>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>civ_captured</th>
+      <td>1</td>
+      <td>4</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>civ_cities_fell2</th>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>7</td>
+      <td>0</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>civ_cities_grew4</th>
+      <td>6</td>
+      <td>4</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>civ_govchange</th>
+      <td>4</td>
+      <td>8</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <th>civ_lost</th>
+      <td>5</td>
+      <td>0</td>
+      <td>0</td>
+      <td>34</td>
+      <td>0</td>
+      <td>39</td>
+    </tr>
+    <tr>
+      <th>civ_lost3</th>
+      <td>3</td>
+      <td>0</td>
+      <td>55</td>
+      <td>119</td>
+      <td>14</td>
+      <td>191</td>
+    </tr>
+    <tr>
+      <th>civ_score_leader</th>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>12</td>
+      <td>0</td>
+      <td>13</td>
+    </tr>
+    <tr>
+      <th>civ_techs_K</th>
+      <td>3</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>civ_wonder</th>
+      <td>2</td>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>pair_ceasefire</th>
+      <td>3</td>
+      <td>9</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <th>pair_contact</th>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>pair_peace</th>
+      <td>2</td>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>pair_war_began</th>
+      <td>4</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>86</td>
+      <td>90</td>
+    </tr>
+    <tr>
+      <th>all</th>
+      <td>36</td>
+      <td>36</td>
+      <td>56</td>
+      <td>172</td>
+      <td>100</td>
+      <td>400</td>
+    </tr>
+  </tbody>
+</table></div>
+<p class="note">Substantive effects (|Δ| ≥ 0.08): 130 of 400 (32%); 74 positive, 56 negative. Controls assigned: no-news 300, single-prompt 300. Blocks C1 and C2 are filled from the bank first and topped up from the value-series pool outside the bank (same bands and caps); those top-up questions get their own turn-1 elicitation and are listed in natcond_extra_turn1.json. Cells from the bank: 276; from the top-up pool: 124.</p></section>
+<section id="qc"><h2>QC samples</h2><p>Two or three items drawn at random from every cell. Numbers are the all-replay truth. Tick <b>issue</b> on anything that looks wrong and say why; your marks are saved as you type and I read them back. <span id="qcstatus" class="note">Connecting to the shared record…</span></p>
+<h3>Bank · band × horizon</h3>
+<div class="cell"><h4>band 0.05–0.23 · T90</h4><ul>
+<li><span class="q">Will American capture at least 2 cities by turn 90?</span><span class="meta">seed7010 · captures ≥ k</span><span class="val">0.188</span></li>
+<li><span class="q">Will Santomean and Guinean be at formal Peace at any point between turns 61 and 90?</span><span class="meta">seed7001 · diplomatic state reached</span><span class="val">0.186</span></li>
+<li><span class="q">Will Marco Polo&#x27;s Embassy be completed by any civilization by turn 90?</span><span class="meta">seed7011 · wonder completed (any)</span><span class="val">0.140</span></li>
+</ul></div>
+<div class="cell"><h4>band 0.05–0.23 · T120</h4><ul>
+<li><span class="q">Will Ostrogothic know strictly more technologies than every other civilization at turn 120?</span><span class="meta">seed7005 · tech lead</span><span class="val">0.113</span></li>
+<li><span class="q">Will Estonian complete at least 1 wonder by turn 120?</span><span class="meta">seed7001 · civ wonders ≥ k</span><span class="val">0.058</span></li>
+<li><span class="q">Will American know strictly more technologies than every other civilization at turn 120?</span><span class="meta">seed7011 · tech lead</span><span class="val">0.175</span></li>
+</ul></div>
+<div class="cell"><h4>band 0.05–0.23 · T150</h4><ul>
+<li><span class="q">Will Crimean Tatar know strictly more technologies than every other civilization at turn 150?</span><span class="meta">seed7003 · tech lead</span><span class="val">0.094</span></li>
+<li><span class="q">Will American&#x27;s government be Democracy at turn 150?</span><span class="meta">seed7010 · government at T</span><span class="val">0.191</span></li>
+<li><span class="q">Will Equatoguinean&#x27;s population be at least 124 at turn 150?</span><span class="meta">seed7011 · value threshold (score/treasury/pop/cities/territory/military)</span><span class="val">0.052</span></li>
+</ul></div>
+<div class="cell"><h4>band 0.05–0.23 · T180</h4><ul>
+<li><span class="q">Will Otomí complete the Great Wall by turn 180?</span><span class="meta">seed7005 · wonder race</span><span class="val">0.058</span></li>
+<li><span class="q">Will Otomí capture at least one city from Ostrogothic by turn 180?</span><span class="meta">seed7005 · directed conquest</span><span class="val">0.058</span></li>
+<li><span class="q">Will Belgian&#x27;s number of technologies be at least 51 at turn 180?</span><span class="meta">seed7008 · tech threshold</span><span class="val">0.146</span></li>
+</ul></div>
+<div class="cell"><h4>band 0.05–0.23 · T210</h4><ul>
+<li><span class="q">Will Trinidadian and Tobagonian complete at least 2 wonders by turn 210?</span><span class="meta">seed7014 · civ wonders ≥ k</span><span class="val">0.216</span></li>
+<li><span class="q">Will Corsican&#x27;s territory size drop below 70% of its turn-60 level at any point up to turn 210?</span><span class="meta">seed7003 · drawdown</span><span class="val">0.085</span></li>
+<li><span class="q">Will Otomí have discovered Amphibious Warfare by turn 210?</span><span class="meta">seed7005 · tech discovered</span><span class="val">0.146</span></li>
+</ul></div>
+<div class="cell"><h4>band 0.23–0.41 · T90</h4><ul>
+<li><span class="q">Will Libyan&#x27;s government be Monarchy at turn 90?</span><span class="meta">seed7011 · government at T</span><span class="val">0.315</span></li>
+<li><span class="q">Will Swazi complete at least 1 wonder by turn 90?</span><span class="meta">seed7014 · civ wonders ≥ k</span><span class="val">0.365</span></li>
+<li><span class="q">Will the Great Wall be completed by any civilization by turn 90?</span><span class="meta">seed7005 · wonder completed (any)</span><span class="val">0.259</span></li>
+</ul></div>
+<div class="cell"><h4>band 0.23–0.41 · T120</h4><ul>
+<li><span class="q">Will Saka&#x27;s government change at least 2 times by turn 120? (Anarchy counts as a form of government, for this question.)</span><span class="meta">seed7005 · gov-change count</span><span class="val">0.381</span></li>
+<li><span class="q">Will American complete the Great Wall by turn 120?</span><span class="meta">seed7010 · wonder race</span><span class="val">0.401</span></li>
+<li><span class="q">Will Ghana&#x27;s government be Democracy at turn 120?</span><span class="meta">seed7003 · government at T</span><span class="val">0.313</span></li>
+</ul></div>
+<div class="cell"><h4>band 0.23–0.41 · T150</h4><ul>
+<li><span class="q">Will Corsican have discovered Sanitation by turn 150?</span><span class="meta">seed7003 · tech discovered</span><span class="val">0.349</span></li>
+<li><span class="q">Will Sammarinese have a higher score than Corsican at turn 150?</span><span class="meta">seed7003 · comparative (pop/cities/territory/score)</span><span class="val">0.363</span></li>
+<li><span class="q">Will Brazzaville-Congolese capture at least one city from Sahrawi by turn 150?</span><span class="meta">seed7001 · directed conquest</span><span class="val">0.371</span></li>
+</ul></div>
+<div class="cell"><h4>band 0.23–0.41 · T180</h4><ul>
+<li><span class="q">Will Sammarinese and Corsican reach a cease-fire or armistice at any point between turns 61 and 180?</span><span class="meta">seed7003 · diplomatic state reached</span><span class="val">0.297</span></li>
+<li><span class="q">Will Rhenish complete Marco Polo&#x27;s Embassy by turn 180?</span><span class="meta">seed7003 · wonder race</span><span class="val">0.313</span></li>
+<li><span class="q">Will Spanish and Somali be at war at turn 180?</span><span class="meta">seed7008 · war at T</span><span class="val">0.365</span></li>
+</ul></div>
+<div class="cell"><h4>band 0.23–0.41 · T210</h4><ul>
+<li><span class="q">Will Sammarinese&#x27;s number of cities be at least 32 at turn 210?</span><span class="meta">seed7003 · value threshold (score/treasury/pop/cities/territory/military)</span><span class="val">0.268</span></li>
+<li><span class="q">Will Ohlone&#x27;s government be Communism at turn 210?</span><span class="meta">seed7011 · government at T</span><span class="val">0.235</span></li>
+<li><span class="q">Will Ohlone and Libyan be at war at turn 210?</span><span class="meta">seed7011 · war at T</span><span class="val">0.241</span></li>
+</ul></div>
+<div class="cell"><h4>band 0.41–0.59 · T90</h4><ul>
+<li><span class="q">Will Spanish&#x27;s government change at least 2 times by turn 90? (Anarchy counts as a form of government, for this question.)</span><span class="meta">seed7008 · gov-change count</span><span class="val">0.472</span></li>
+<li><span class="q">Will Cañari have a higher number of cities than Otomí at turn 90?</span><span class="meta">seed7005 · comparative (pop/cities/territory/score)</span><span class="val">0.556</span></li>
+<li><span class="q">Will Rhenish&#x27;s number of military units be at least 20 at turn 90?</span><span class="meta">seed7003 · value threshold (score/treasury/pop/cities/territory/military)</span><span class="val">0.509</span></li>
+</ul></div>
+<div class="cell"><h4>band 0.41–0.59 · T120</h4><ul>
+<li><span class="q">Will Trinidadian and Tobagonian complete at least 1 wonder by turn 120?</span><span class="meta">seed7014 · civ wonders ≥ k</span><span class="val">0.530</span></li>
+<li><span class="q">Will Swazi&#x27;s number of technologies be at least 33 at turn 120?</span><span class="meta">seed7014 · tech threshold</span><span class="val">0.571</span></li>
+<li><span class="q">Will Greek&#x27;s number of technologies be at least 32 at turn 120?</span><span class="meta">seed7005 · tech threshold</span><span class="val">0.510</span></li>
+</ul></div>
+<div class="cell"><h4>band 0.41–0.59 · T150</h4><ul>
+<li><span class="q">Will Spanish&#x27;s number of technologies be at least 45 at turn 150?</span><span class="meta">seed7008 · tech threshold</span><span class="val">0.512</span></li>
+<li><span class="q">Will Boian capture at least one city from Pelasgian by turn 150?</span><span class="meta">seed7022 · directed conquest</span><span class="val">0.495</span></li>
+<li><span class="q">Will Latvian&#x27;s treasury drop below 25% of its turn-60 level at any point up to turn 150?</span><span class="meta">seed7008 · drawdown</span><span class="val">0.427</span></li>
+</ul></div>
+<div class="cell"><h4>band 0.41–0.59 · T180</h4><ul>
+<li><span class="q">Will Greek complete the Great Library by turn 180?</span><span class="meta">seed7005 · wonder race</span><span class="val">0.561</span></li>
+<li><span class="q">Will Saka found at least 8 new cities by turn 180?</span><span class="meta">seed7005 · city founding ≥ k</span><span class="val">0.573</span></li>
+<li><span class="q">Will American and Fijian be at war at turn 180?</span><span class="meta">seed7010 · war at T</span><span class="val">0.488</span></li>
+</ul></div>
+<div class="cell"><h4>band 0.41–0.59 · T210</h4><ul>
+<li><span class="q">Will Brazzaville-Congolese&#x27;s government change at least 3 times by turn 210? (Anarchy counts as a form of government, for this question.)</span><span class="meta">seed7001 · gov-change count</span><span class="val">0.533</span></li>
+<li><span class="q">Will Saka found at least 8 new cities by turn 210?</span><span class="meta">seed7005 · city founding ≥ k</span><span class="val">0.586</span></li>
+<li><span class="q">Will American capture at least one city from Fijian by turn 210?</span><span class="meta">seed7010 · directed conquest</span><span class="val">0.471</span></li>
+</ul></div>
+<div class="cell"><h4>band 0.59–0.77 · T90</h4><ul>
+<li><span class="q">Will Ohlone complete at least 1 wonder by turn 90?</span><span class="meta">seed7011 · civ wonders ≥ k</span><span class="val">0.751</span></li>
+<li><span class="q">Will Latvian&#x27;s treasury drop below 50% of its turn-60 level at any point up to turn 90?</span><span class="meta">seed7008 · drawdown</span><span class="val">0.594</span></li>
+<li><span class="q">Will Cañari lose at least 2 cities by turn 90?</span><span class="meta">seed7005 · losses ≥ k</span><span class="val">0.688</span></li>
+</ul></div>
+<div class="cell"><h4>band 0.59–0.77 · T120</h4><ul>
+<li><span class="q">Will Ohlone and American reach a cease-fire or armistice at any point between turns 61 and 120?</span><span class="meta">seed7011 · diplomatic state reached</span><span class="val">0.749</span></li>
+<li><span class="q">Will Ostrogothic&#x27;s government change at least 3 times by turn 120? (Anarchy counts as a form of government, for this question.)</span><span class="meta">seed7005 · gov-change count</span><span class="val">0.755</span></li>
+<li><span class="q">Will Pelasgian lose at least 5 cities by turn 120?</span><span class="meta">seed7022 · losses ≥ k</span><span class="val">0.629</span></li>
+</ul></div>
+<div class="cell"><h4>band 0.59–0.77 · T150</h4><ul>
+<li><span class="q">Will Latvian have discovered Physics by turn 150?</span><span class="meta">seed7008 · tech discovered</span><span class="val">0.693</span></li>
+<li><span class="q">Will American capture at least 5 cities by turn 150?</span><span class="meta">seed7011 · captures ≥ k</span><span class="val">0.611</span></li>
+<li><span class="q">Will Otomí&#x27;s treasury drop below 50% of its turn-60 level at any point up to turn 150?</span><span class="meta">seed7005 · drawdown</span><span class="val">0.595</span></li>
+</ul></div>
+<div class="cell"><h4>band 0.59–0.77 · T180</h4><ul>
+<li><span class="q">Will Spanish and Fijian be at war at turn 180?</span><span class="meta">seed7010 · war at T</span><span class="val">0.699</span></li>
+<li><span class="q">Will Sammarinese capture at least one city from Ghana by turn 180?</span><span class="meta">seed7003 · directed conquest</span><span class="val">0.742</span></li>
+<li><span class="q">Will Ohlone complete the Great Library by turn 180?</span><span class="meta">seed7011 · wonder race</span><span class="val">0.737</span></li>
+</ul></div>
+<div class="cell"><h4>band 0.59–0.77 · T210</h4><ul>
+<li><span class="q">Will Trinidadian and Tobagonian capture at least one city from Chinese by turn 210?</span><span class="meta">seed7014 · directed conquest</span><span class="val">0.594</span></li>
+<li><span class="q">Will Spanish and Fijian be at war at turn 210?</span><span class="meta">seed7010 · war at T</span><span class="val">0.698</span></li>
+<li><span class="q">Will Belgian&#x27;s government be Democracy at turn 210?</span><span class="meta">seed7008 · government at T</span><span class="val">0.616</span></li>
+</ul></div>
+<div class="cell"><h4>band 0.77–0.95 · T90</h4><ul>
+<li><span class="q">Will Bissau-Guinean&#x27;s score be at least 64 at turn 90?</span><span class="meta">seed7014 · value threshold (score/treasury/pop/cities/territory/military)</span><span class="val">0.933</span></li>
+<li><span class="q">Will Spanish and Peruvian have a formal peace in effect at turn 90?</span><span class="meta">seed7008 · peace at T</span><span class="val">0.800</span></li>
+<li><span class="q">Will at least 3 cities be conquered (in total) by turn 90?</span><span class="meta">seed7010 · world conquest count</span><span class="val">0.946</span></li>
+</ul></div>
+<div class="cell"><h4>band 0.77–0.95 · T120</h4><ul>
+<li><span class="q">Will Ohlone capture at least one city from American by turn 120?</span><span class="meta">seed7011 · directed conquest</span><span class="val">0.898</span></li>
+<li><span class="q">Will Otomí and Greek be at war at turn 120?</span><span class="meta">seed7005 · war at T</span><span class="val">0.919</span></li>
+<li><span class="q">Will Sahrawi complete at least 1 wonder by turn 120?</span><span class="meta">seed7001 · civ wonders ≥ k</span><span class="val">0.851</span></li>
+</ul></div>
+<div class="cell"><h4>band 0.77–0.95 · T150</h4><ul>
+<li><span class="q">Will Sammarinese have a higher territory size than Ghana at turn 150?</span><span class="meta">seed7003 · comparative (pop/cities/territory/score)</span><span class="val">0.797</span></li>
+<li><span class="q">Will Cañari have discovered Seafaring by turn 150?</span><span class="meta">seed7005 · tech discovered</span><span class="val">0.915</span></li>
+<li><span class="q">Will Corsican&#x27;s territory size be at least 225 at turn 150?</span><span class="meta">seed7003 · value threshold (score/treasury/pop/cities/territory/military)</span><span class="val">0.901</span></li>
+</ul></div>
+<div class="cell"><h4>band 0.77–0.95 · T180</h4><ul>
+<li><span class="q">Will American capture at least one city from Central American by turn 180?</span><span class="meta">seed7010 · directed conquest</span><span class="val">0.877</span></li>
+<li><span class="q">Will Sammarinese&#x27;s score be at least 162 at turn 180?</span><span class="meta">seed7003 · value threshold (score/treasury/pop/cities/territory/military)</span><span class="val">0.901</span></li>
+<li><span class="q">Will Spanish&#x27;s number of cities be at least 14 at turn 180?</span><span class="meta">seed7010 · value threshold (score/treasury/pop/cities/territory/military)</span><span class="val">0.902</span></li>
+</ul></div>
+<div class="cell"><h4>band 0.77–0.95 · T210</h4><ul>
+<li><span class="q">Will Brazzaville-Congolese capture at least 5 cities by turn 210?</span><span class="meta">seed7001 · captures ≥ k</span><span class="val">0.828</span></li>
+<li><span class="q">Will Libyan lose at least 5 cities by turn 210?</span><span class="meta">seed7011 · losses ≥ k</span><span class="val">0.842</span></li>
+<li><span class="q">Will Ghana capture at least 2 cities by turn 210?</span><span class="meta">seed7003 · captures ≥ k</span><span class="val">0.927</span></li>
+</ul></div>
+<h3>Tails · horizon</h3>
+<div class="cell"><h4>T90</h4><ul>
+<li><span class="q">Will Latvian capture at least one city from Somali by turn 90?</span><span class="meta">seed7008 · directed conquest</span><span class="val">0.013</span><span class="crit">Resolves YES if Latvian captures at least one city whose owner at the moment of capture is Somali, on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). Recaptures count. Resolves NO otherwise.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7008_b39" data-set="tails" disabled> issue</label><input class="why" type="text" data-id="seed7008_b39" placeholder="why" disabled></span></li>
+<li><span class="q">Will Estonian and Guinean be at war at turn 90?</span><span class="meta">seed7001 · war at T</span><span class="val">0.026</span><span class="crit">Resolves YES if the diplomatic state between Estonian and Guinean as recorded at the end of turn 90 is War. Cease-fire, armistice, peace, alliance, or never having met all resolve NO.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7001_b81" data-set="tails" disabled> issue</label><input class="why" type="text" data-id="seed7001_b81" placeholder="why" disabled></span></li>
+<li><span class="q">Will Brazzaville-Congolese suffer a civil war (a breakaway civilization splitting off) by turn 90?</span><span class="meta">seed7001 · civil war by T</span><span class="val">0.012</span><span class="crit">Resolves YES if Brazzaville-Congolese splits in a civil war on any turn from 61 through 90 inclusive (an event on turn 90 itself counts), meaning a new civilization is created out of some of Brazzaville-Congolese&#x27;s cities. Anarchy, disorder, or the loss of cities to other players without such a split resolve NO.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7001_b231" data-set="tails" disabled> issue</label><input class="why" type="text" data-id="seed7001_b231" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>T120</h4><ul>
+<li><span class="q">Will Brazzaville-Congolese know strictly more technologies than every other civilization at turn 120?</span><span class="meta">seed7001 · tech lead</span><span class="val">0.034</span><span class="crit">Resolves YES if, as recorded at the end of turn 120, Brazzaville-Congolese knows strictly more technologies than each of the other four civilizations, counting every technology known including those known at turn 60. This is the count the world report calls Techs; FreeCiv&#x27;s initial &#x27;None&#x27; entry is not a technology and is not counted. Any tie for the most resolves NO.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7001_b835" data-set="tails" disabled> issue</label><input class="why" type="text" data-id="seed7001_b835" placeholder="why" disabled></span></li>
+<li><span class="q">Will Swazi complete Sun Tzu&#x27;s War Academy by turn 120?</span><span class="meta">seed7014 · wonder race</span><span class="val">0.001</span><span class="crit">Resolves YES if Swazi completes Sun Tzu&#x27;s War Academy on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). A great wonder can be completed only once per game, so this resolves NO if another civilization completes it, or if it is not completed by the end of turn 120.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7014_b766" data-set="tails" disabled> issue</label><input class="why" type="text" data-id="seed7014_b766" placeholder="why" disabled></span></li>
+<li><span class="q">Will Otomí capture at least one city from Saka by turn 120?</span><span class="meta">seed7005 · directed conquest</span><span class="val">0.005</span><span class="crit">Resolves YES if Otomí captures at least one city whose owner at the moment of capture is Saka, on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). Recaptures count. Resolves NO otherwise.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7005_b590" data-set="tails" disabled> issue</label><input class="why" type="text" data-id="seed7005_b590" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>T150</h4><ul>
+<li><span class="q">Will Boian and Hunnic be at war at turn 150?</span><span class="meta">seed7022 · war at T</span><span class="val">0.003</span><span class="crit">Resolves YES if the diplomatic state between Boian and Hunnic as recorded at the end of turn 150 is War. Cease-fire, armistice, peace, alliance, or never having met all resolve NO.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7022_b864" data-set="tails" disabled> issue</label><input class="why" type="text" data-id="seed7022_b864" placeholder="why" disabled></span></li>
+<li><span class="q">Will Greek and Ostrogothic be at war at turn 150?</span><span class="meta">seed7005 · war at T</span><span class="val">0.023</span><span class="crit">Resolves YES if the diplomatic state between Greek and Ostrogothic as recorded at the end of turn 150 is War. Cease-fire, armistice, peace, alliance, or never having met all resolve NO.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7005_b1359" data-set="tails" disabled> issue</label><input class="why" type="text" data-id="seed7005_b1359" placeholder="why" disabled></span></li>
+<li><span class="q">Will Santomean be eliminated (cease to exist as a civilization) by turn 150?</span><span class="meta">seed7001 · eliminated by T</span><span class="val">0.002</span><span class="crit">Resolves YES if Santomean is eliminated on any turn from 61 through 150 inclusive (an event on turn 150 itself counts), meaning it ceases to exist as a civilization. Losing cities, losing the capital, or a civil war split without elimination resolve NO.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7001_b1526" data-set="tails" disabled> issue</label><input class="why" type="text" data-id="seed7001_b1526" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>T180</h4><ul>
+<li><span class="q">Will Greek have discovered Amphibious Warfare by turn 180?</span><span class="meta">seed7005 · tech discovered</span><span class="val">0.006</span><span class="crit">Resolves YES if Greek discovers Amphibious Warfare on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). Resolves NO if it is not discovered by the end of turn 180.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7005_b2327" data-set="tails" disabled> issue</label><input class="why" type="text" data-id="seed7005_b2327" placeholder="why" disabled></span></li>
+<li><span class="q">Will Brazzaville-Congolese&#x27;s population drop below 75% of its turn-60 level at any point up to turn 180?</span><span class="meta">seed7001 · drawdown</span><span class="val">0.032</span><span class="crit">Resolves YES if, at the end of any turn from 61 through 180 inclusive, Brazzaville-Congolese&#x27;s population is below 75% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 75% does not count. A later recovery does not change the result.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7001_b1886" data-set="tails" disabled> issue</label><input class="why" type="text" data-id="seed7001_b1886" placeholder="why" disabled></span></li>
+<li><span class="q">Will Fijian&#x27;s population drop below 90% of its turn-60 level at any point up to turn 180?</span><span class="meta">seed7010 · drawdown</span><span class="val">0.006</span><span class="crit">Resolves YES if, at the end of any turn from 61 through 180 inclusive, Fijian&#x27;s population is below 90% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 90% does not count. A later recovery does not change the result.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7010_b2408" data-set="tails" disabled> issue</label><input class="why" type="text" data-id="seed7010_b2408" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>T210</h4><ul>
+<li><span class="q">Will Greek suffer a civil war (a breakaway civilization splitting off) by turn 210?</span><span class="meta">seed7005 · civil war by T</span><span class="val">0.032</span><span class="crit">Resolves YES if Greek splits in a civil war on any turn from 61 through 210 inclusive (an event on turn 210 itself counts), meaning a new civilization is created out of some of Greek&#x27;s cities. Anarchy, disorder, or the loss of cities to other players without such a split resolve NO.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7005_b2953" data-set="tails" disabled> issue</label><input class="why" type="text" data-id="seed7005_b2953" placeholder="why" disabled></span></li>
+<li><span class="q">Will Bissau-Guinean and Chinese have a formal peace in effect at turn 210?</span><span class="meta">seed7014 · peace at T</span><span class="val">0.003</span><span class="crit">Resolves YES if the diplomatic state between Bissau-Guinean and Chinese as recorded at the end of turn 210 is Peace. War, cease-fire, armistice, alliance, or never having met all resolve NO.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7014_b2426" data-set="tails" disabled> issue</label><input class="why" type="text" data-id="seed7014_b2426" placeholder="why" disabled></span></li>
+<li><span class="q">Will Chinese&#x27;s number of cities drop below 70% of its turn-60 level at any point up to turn 210?</span><span class="meta">seed7014 · drawdown</span><span class="val">0.042</span><span class="crit">Resolves YES if, at the end of any turn from 61 through 210 inclusive, Chinese&#x27;s number of cities is below 70% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 70% does not count. A later recovery does not change the result.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7014_b2955" data-set="tails" disabled> issue</label><input class="why" type="text" data-id="seed7014_b2955" placeholder="why" disabled></span></li>
+</ul></div>
+<h3>Mirrors · horizon</h3>
+<div class="cell"><h4>T90</h4><ul>
+<li><span class="q">Will Cañari capture at least 1 city by turn 90?</span><span class="meta">seed7005 · captures ≥ k</span><span class="val">0.991</span><span class="crit">Resolves YES if Cañari captures at least 1 city on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). A capture is a city changing owner by force. Captures of cities held by barbarians count. Each capture event counts separately, so a city captured, lost and captured again counts twice. Cities that change hands when a civilization splits in a civil war are not captures. Exactly 1 counts.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7005_b478" data-set="mirrors" disabled> issue</label><input class="why" type="text" data-id="seed7005_b478" placeholder="why" disabled></span></li>
+<li><span class="q">Will American have a higher number of cities than Central American at turn 90?</span><span class="meta">seed7010 · comparative (pop/cities/territory/score)</span><span class="val">0.958</span><span class="crit">Resolves YES if American&#x27;s number of cities as recorded at the end of turn 90 is strictly greater than Central American&#x27;s. Equal values resolve NO. The quantity is the same quantity the world report calls Cities.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7010_b5" data-set="mirrors" disabled> issue</label><input class="why" type="text" data-id="seed7010_b5" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>T120</h4><ul>
+<li><span class="q">Will Belgian have discovered Trade by turn 120?</span><span class="meta">seed7008 · tech discovered</span><span class="val">0.999</span><span class="crit">Resolves YES if Belgian discovers Trade on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). Resolves NO if it is not discovered by the end of turn 120.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7008_b925" data-set="mirrors" disabled> issue</label><input class="why" type="text" data-id="seed7008_b925" placeholder="why" disabled></span></li>
+<li><span class="q">Will Belgian lose at least 1 city by turn 120?</span><span class="meta">seed7008 · losses ≥ k</span><span class="val">0.996</span><span class="crit">Resolves YES if Belgian loses at least 1 city to capture on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). Losses to any player count, including to barbarians. Each loss event counts separately, so a city lost, retaken and lost again counts twice. A city destroyed rather than captured, or lost through a civil war split, does not count. Exactly 1 counts.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7008_b993" data-set="mirrors" disabled> issue</label><input class="why" type="text" data-id="seed7008_b993" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>T150</h4><ul>
+<li><span class="q">Will Greek and Ostrogothic form an Alliance at any point between turns 61 and 150?</span><span class="meta">seed7005 · diplomatic state reached</span><span class="val">0.994</span><span class="crit">Resolves YES if the diplomatic state between Greek and Ostrogothic is Alliance at the end of any turn from 61 through 150 inclusive. Resolves NO if the state never occurs in that window (every other state do not count).</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7005_b1361" data-set="mirrors" disabled> issue</label><input class="why" type="text" data-id="seed7005_b1361" placeholder="why" disabled></span></li>
+<li><span class="q">Will Boian capture at least 2 cities by turn 150?</span><span class="meta">seed7022 · captures ≥ k</span><span class="val">0.993</span><span class="crit">Resolves YES if Boian captures at least 2 cities on any turn from 61 through 150 inclusive (an event on turn 150 itself counts). A capture is a city changing owner by force. Captures of cities held by barbarians count. Each capture event counts separately, so a city captured, lost and captured again counts twice. Cities that change hands when a civilization splits in a civil war are not captures. Exactly 2 counts.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7022_b1003" data-set="mirrors" disabled> issue</label><input class="why" type="text" data-id="seed7022_b1003" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>T180</h4><ul>
+<li><span class="q">Will Otomí&#x27;s treasury be at least 76 at turn 180?</span><span class="meta">seed7005 · value threshold (score/treasury/pop/cities/territory/military)</span><span class="val">0.951</span><span class="crit">Resolves YES if Otomí&#x27;s treasury as recorded at the end of turn 180 is 76 or more; exactly 76 counts. This is the same quantity the world report calls Treasury.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7005_b2266" data-set="mirrors" disabled> issue</label><input class="why" type="text" data-id="seed7005_b2266" placeholder="why" disabled></span></li>
+<li><span class="q">Will Tajik lose at least 1 city by turn 180?</span><span class="meta">seed7014 · losses ≥ k</span><span class="val">0.998</span><span class="crit">Resolves YES if Tajik loses at least 1 city to capture on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). Losses to any player count, including to barbarians. Each loss event counts separately, so a city lost, retaken and lost again counts twice. A city destroyed rather than captured, or lost through a civil war split, does not count. Exactly 1 counts.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7014_b2283" data-set="mirrors" disabled> issue</label><input class="why" type="text" data-id="seed7014_b2283" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>T210</h4><ul>
+<li><span class="q">Will Latvian capture at least one city from Belgian by turn 210?</span><span class="meta">seed7008 · directed conquest</span><span class="val">0.986</span><span class="crit">Resolves YES if Latvian captures at least one city whose owner at the moment of capture is Belgian, on any turn from 61 through 210 inclusive (an event on turn 210 itself counts). Recaptures count. Resolves NO otherwise.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7008_b2836" data-set="mirrors" disabled> issue</label><input class="why" type="text" data-id="seed7008_b2836" placeholder="why" disabled></span></li>
+<li><span class="q">Will Latvian and Belgian be at war at turn 210?</span><span class="meta">seed7008 · war at T</span><span class="val">0.998</span><span class="crit">Resolves YES if the diplomatic state between Latvian and Belgian as recorded at the end of turn 210 is War. Cease-fire, armistice, peace, alliance, or never having met all resolve NO.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7008_b2834" data-set="mirrors" disabled> issue</label><input class="why" type="text" data-id="seed7008_b2834" placeholder="why" disabled></span></li>
+</ul></div>
+<h3>Continuous · family × horizon</h3>
+<div class="cell"><h4>civ captures · T90</h4><ul>
+<li><span class="q">How many cities will Sammarinese capture by turn 90?</span><span class="meta">seed7003</span><span class="val small">median 2 · IQR 2 · p05–p95 0–4</span><span class="crit">Resolves to the number of cities Sammarinese captures on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). A capture is a city changing owner by force. Captures of cities held by barbarians count. Each capture event counts separately, so a city captured, lost and captured again counts twice. Cities that change hands when a civilization splits in a civil war are not captures.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7003_c12" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7003_c12" placeholder="why" disabled></span></li>
+<li><span class="q">How many cities will Latvian capture by turn 90?</span><span class="meta">seed7008</span><span class="val small">median 1 · IQR 1 · p05–p95 0–3</span><span class="crit">Resolves to the number of cities Latvian captures on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). A capture is a city changing owner by force. Captures of cities held by barbarians count. Each capture event counts separately, so a city captured, lost and captured again counts twice. Cities that change hands when a civilization splits in a civil war are not captures.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7008_c0" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7008_c0" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>civ captures · T120</h4><ul>
+<li><span class="q">How many cities will Corsican capture by turn 120?</span><span class="meta">seed7003</span><span class="val small">median 4 · IQR 3 · p05–p95 1–9</span><span class="crit">Resolves to the number of cities Corsican captures on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). A capture is a city changing owner by force. Captures of cities held by barbarians count. Each capture event counts separately, so a city captured, lost and captured again counts twice. Cities that change hands when a civilization splits in a civil war are not captures.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7003_c60" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7003_c60" placeholder="why" disabled></span></li>
+<li><span class="q">How many cities will Chinese capture by turn 120?</span><span class="meta">seed7014</span><span class="val small">median 4 · IQR 3 · p05–p95 1–9</span><span class="crit">Resolves to the number of cities Chinese captures on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). A capture is a city changing owner by force. Captures of cities held by barbarians count. Each capture event counts separately, so a city captured, lost and captured again counts twice. Cities that change hands when a civilization splits in a civil war are not captures.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7014_c60" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7014_c60" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>civ captures · T150</h4><ul>
+<li><span class="q">How many cities will Spanish capture by turn 150?</span><span class="meta">seed7008</span><span class="val small">median 3 · IQR 3 · p05–p95 0–8</span><span class="crit">Resolves to the number of cities Spanish captures on any turn from 61 through 150 inclusive (an event on turn 150 itself counts). A capture is a city changing owner by force. Captures of cities held by barbarians count. Each capture event counts separately, so a city captured, lost and captured again counts twice. Cities that change hands when a civilization splits in a civil war are not captures.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7008_c96" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7008_c96" placeholder="why" disabled></span></li>
+<li><span class="q">How many cities will Rhenish capture by turn 150?</span><span class="meta">seed7003</span><span class="val small">median 7 · IQR 4 · p05–p95 2–13</span><span class="crit">Resolves to the number of cities Rhenish captures on any turn from 61 through 150 inclusive (an event on turn 150 itself counts). A capture is a city changing owner by force. Captures of cities held by barbarians count. Each capture event counts separately, so a city captured, lost and captured again counts twice. Cities that change hands when a civilization splits in a civil war are not captures.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7003_c92" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7003_c92" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>civ captures · T180</h4><ul>
+<li><span class="q">How many cities will Equatoguinean capture by turn 180?</span><span class="meta">seed7011</span><span class="val small">median 4 · IQR 5 · p05–p95 0–11</span><span class="crit">Resolves to the number of cities Equatoguinean captures on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). A capture is a city changing owner by force. Captures of cities held by barbarians count. Each capture event counts separately, so a city captured, lost and captured again counts twice. Cities that change hands when a civilization splits in a civil war are not captures.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7011_c131" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7011_c131" placeholder="why" disabled></span></li>
+<li><span class="q">How many cities will Pelasgian capture by turn 180?</span><span class="meta">seed7022</span><span class="val small">median 12 · IQR 6 · p05–p95 6–20</span><span class="crit">Resolves to the number of cities Pelasgian captures on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). A capture is a city changing owner by force. Captures of cities held by barbarians count. Each capture event counts separately, so a city captured, lost and captured again counts twice. Cities that change hands when a civilization splits in a civil war are not captures.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7022_c93" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7022_c93" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>civ captures · T210</h4><ul>
+<li><span class="q">How many cities will Somali capture by turn 210?</span><span class="meta">seed7008</span><span class="val small">median 8 · IQR 5 · p05–p95 3–16</span><span class="crit">Resolves to the number of cities Somali captures on any turn from 61 through 210 inclusive (an event on turn 210 itself counts). A capture is a city changing owner by force. Captures of cities held by barbarians count. Each capture event counts separately, so a city captured, lost and captured again counts twice. Cities that change hands when a civilization splits in a civil war are not captures.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7008_c192" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7008_c192" placeholder="why" disabled></span></li>
+<li><span class="q">How many cities will Bissau-Guinean capture by turn 210?</span><span class="meta">seed7014</span><span class="val small">median 11 · IQR 6 · p05–p95 5–20</span><span class="crit">Resolves to the number of cities Bissau-Guinean captures on any turn from 61 through 210 inclusive (an event on turn 210 itself counts). A capture is a city changing owner by force. Captures of cities held by barbarians count. Each capture event counts separately, so a city captured, lost and captured again counts twice. Cities that change hands when a civilization splits in a civil war are not captures.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7014_c158" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7014_c158" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>civ losses · T90</h4><ul>
+<li><span class="q">How many cities will Boian lose by turn 90?</span><span class="meta">seed7022</span><span class="val small">median 1 · IQR 3 · p05–p95 0–6</span><span class="crit">Resolves to the number of cities Boian loses to capture on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). Losses to any player count, including to barbarians. Each loss event counts separately, so a city lost, retaken and lost again counts twice. A city destroyed rather than captured, or lost through a civil war split, does not count.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7022_c1" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7022_c1" placeholder="why" disabled></span></li>
+<li><span class="q">How many cities will Rhenish lose by turn 90?</span><span class="meta">seed7003</span><span class="val small">median 1 · IQR 2 · p05–p95 0–5</span><span class="crit">Resolves to the number of cities Rhenish loses to capture on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). Losses to any player count, including to barbarians. Each loss event counts separately, so a city lost, retaken and lost again counts twice. A city destroyed rather than captured, or lost through a civil war split, does not count.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7003_c5" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7003_c5" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>civ losses · T120</h4><ul>
+<li><span class="q">How many cities will Swazi lose by turn 120?</span><span class="meta">seed7014</span><span class="val small">median 4 · IQR 4 · p05–p95 1–10</span><span class="crit">Resolves to the number of cities Swazi loses to capture on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). Losses to any player count, including to barbarians. Each loss event counts separately, so a city lost, retaken and lost again counts twice. A city destroyed rather than captured, or lost through a civil war split, does not count.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7014_c57" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7014_c57" placeholder="why" disabled></span></li>
+<li><span class="q">How many cities will Somali lose by turn 120?</span><span class="meta">seed7008</span><span class="val small">median 4 · IQR 6 · p05–p95 0–15</span><span class="crit">Resolves to the number of cities Somali loses to capture on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). Losses to any player count, including to barbarians. Each loss event counts separately, so a city lost, retaken and lost again counts twice. A city destroyed rather than captured, or lost through a civil war split, does not count.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7008_c61" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7008_c61" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>civ losses · T150</h4><ul>
+<li><span class="q">How many cities will Central American lose by turn 150?</span><span class="meta">seed7010</span><span class="val small">median 8 · IQR 6 · p05–p95 3–16</span><span class="crit">Resolves to the number of cities Central American loses to capture on any turn from 61 through 150 inclusive (an event on turn 150 itself counts). Losses to any player count, including to barbarians. Each loss event counts separately, so a city lost, retaken and lost again counts twice. A city destroyed rather than captured, or lost through a civil war split, does not count.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7010_c89" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7010_c89" placeholder="why" disabled></span></li>
+<li><span class="q">How many cities will Hunnic lose by turn 150?</span><span class="meta">seed7022</span><span class="val small">median 7 · IQR 3 · p05–p95 2–11</span><span class="crit">Resolves to the number of cities Hunnic loses to capture on any turn from 61 through 150 inclusive (an event on turn 150 itself counts). Losses to any player count, including to barbarians. Each loss event counts separately, so a city lost, retaken and lost again counts twice. A city destroyed rather than captured, or lost through a civil war split, does not count.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7022_c71" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7022_c71" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>civ losses · T180</h4><ul>
+<li><span class="q">How many cities will Rhenish lose by turn 180?</span><span class="meta">seed7003</span><span class="val small">median 15 · IQR 9 · p05–p95 5–27</span><span class="crit">Resolves to the number of cities Rhenish loses to capture on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). Losses to any player count, including to barbarians. Each loss event counts separately, so a city lost, retaken and lost again counts twice. A city destroyed rather than captured, or lost through a civil war split, does not count.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7003_c137" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7003_c137" placeholder="why" disabled></span></li>
+<li><span class="q">How many cities will Central American lose by turn 180?</span><span class="meta">seed7010</span><span class="val small">median 12 · IQR 7 · p05–p95 5–22</span><span class="crit">Resolves to the number of cities Central American loses to capture on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). Losses to any player count, including to barbarians. Each loss event counts separately, so a city lost, retaken and lost again counts twice. A city destroyed rather than captured, or lost through a civil war split, does not count.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7010_c124" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7010_c124" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>civ losses · T210</h4><ul>
+<li><span class="q">How many cities will Otomí lose by turn 210?</span><span class="meta">seed7005</span><span class="val small">median 8 · IQR 5 · p05–p95 4–14</span><span class="crit">Resolves to the number of cities Otomí loses to capture on any turn from 61 through 210 inclusive (an event on turn 210 itself counts). Losses to any player count, including to barbarians. Each loss event counts separately, so a city lost, retaken and lost again counts twice. A city destroyed rather than captured, or lost through a civil war split, does not count.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7005_c181" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7005_c181" placeholder="why" disabled></span></li>
+<li><span class="q">How many cities will Cañari lose by turn 210?</span><span class="meta">seed7005</span><span class="val small">median 12 · IQR 6 · p05–p95 7–19</span><span class="crit">Resolves to the number of cities Cañari loses to capture on any turn from 61 through 210 inclusive (an event on turn 210 itself counts). Losses to any player count, including to barbarians. Each loss event counts separately, so a city lost, retaken and lost again counts twice. A city destroyed rather than captured, or lost through a civil war split, does not count.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7005_c185" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7005_c185" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>civ founds · T90</h4><ul>
+<li><span class="q">How many new cities will Fijian found by turn 90?</span><span class="meta">seed7010</span><span class="val small">median 6.5 · IQR 3 · p05–p95 4–10</span><span class="crit">Resolves to the number of new cities Fijian founds on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). Cities held at turn 60 and captured cities do not count.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7010_c18" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7010_c18" placeholder="why" disabled></span></li>
+<li><span class="q">How many new cities will Corsican found by turn 90?</span><span class="meta">seed7003</span><span class="val small">median 14 · IQR 2 · p05–p95 11–17</span><span class="crit">Resolves to the number of new cities Corsican founds on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). Cities held at turn 60 and captured cities do not count.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7003_c18" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7003_c18" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>civ founds · T120</h4><ul>
+<li><span class="q">How many new cities will Sahrawi found by turn 120?</span><span class="meta">seed7001</span><span class="val small">median 11 · IQR 7 · p05–p95 6–20</span><span class="crit">Resolves to the number of new cities Sahrawi founds on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). Cities held at turn 60 and captured cities do not count.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7001_c62" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7001_c62" placeholder="why" disabled></span></li>
+<li><span class="q">How many new cities will American found by turn 120?</span><span class="meta">seed7011</span><span class="val small">median 18 · IQR 4 · p05–p95 13–23</span><span class="crit">Resolves to the number of new cities American founds on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). Cities held at turn 60 and captured cities do not count.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7011_c62" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7011_c62" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>civ founds · T150</h4><ul>
+<li><span class="q">How many new cities will Chinese found by turn 150?</span><span class="meta">seed7014</span><span class="val small">median 29 · IQR 9 · p05–p95 19–40</span><span class="crit">Resolves to the number of new cities Chinese founds on any turn from 61 through 150 inclusive (an event on turn 150 itself counts). Cities held at turn 60 and captured cities do not count.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7014_c102" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7014_c102" placeholder="why" disabled></span></li>
+<li><span class="q">How many new cities will Bissau-Guinean found by turn 150?</span><span class="meta">seed7014</span><span class="val small">median 25 · IQR 9 · p05–p95 14–37</span><span class="crit">Resolves to the number of new cities Bissau-Guinean founds on any turn from 61 through 150 inclusive (an event on turn 150 itself counts). Cities held at turn 60 and captured cities do not count.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7014_c90" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7014_c90" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>civ founds · T180</h4><ul>
+<li><span class="q">How many new cities will Crimean Tatar found by turn 180?</span><span class="meta">seed7003</span><span class="val small">median 34 · IQR 5 · p05–p95 24–40</span><span class="crit">Resolves to the number of new cities Crimean Tatar founds on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). Cities held at turn 60 and captured cities do not count.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7003_c134" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7003_c134" placeholder="why" disabled></span></li>
+<li><span class="q">How many new cities will Pelasgian found by turn 180?</span><span class="meta">seed7022</span><span class="val small">median 21 · IQR 8 · p05–p95 13–31</span><span class="crit">Resolves to the number of new cities Pelasgian founds on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). Cities held at turn 60 and captured cities do not count.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7022_c95" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7022_c95" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>civ founds · T210</h4><ul>
+<li><span class="q">How many new cities will Central American found by turn 210?</span><span class="meta">seed7010</span><span class="val small">median 24 · IQR 11 · p05–p95 12–36</span><span class="crit">Resolves to the number of new cities Central American founds on any turn from 61 through 210 inclusive (an event on turn 210 itself counts). Cities held at turn 60 and captured cities do not count.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7010_c160" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7010_c160" placeholder="why" disabled></span></li>
+<li><span class="q">How many new cities will Belgian found by turn 210?</span><span class="meta">seed7008</span><span class="val small">median 19 · IQR 6 · p05–p95 11–26</span><span class="crit">Resolves to the number of new cities Belgian founds on any turn from 61 through 210 inclusive (an event on turn 210 itself counts). Cities held at turn 60 and captured cities do not count.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7008_c182" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7008_c182" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>techs at T · T90</h4><ul>
+<li><span class="q">How many technologies will Trinidadian and Tobagonian know at turn 90?</span><span class="meta">seed7014</span><span class="val small">median 23 · IQR 3 · p05–p95 21–27</span><span class="crit">Resolves to the number of technologies Trinidadian and Tobagonian knows as recorded at the end of turn 90, counting those known at turn 60. This is the count the world report calls Techs; FreeCiv&#x27;s initial &#x27;None&#x27; entry is not a technology and is not counted. A whole number.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7014_c7" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7014_c7" placeholder="why" disabled></span></li>
+<li><span class="q">How many technologies will Central American know at turn 90?</span><span class="meta">seed7010</span><span class="val small">median 19 · IQR 2 · p05–p95 17–21</span><span class="crit">Resolves to the number of technologies Central American knows as recorded at the end of turn 90, counting those known at turn 60. This is the count the world report calls Techs; FreeCiv&#x27;s initial &#x27;None&#x27; entry is not a technology and is not counted. A whole number.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7010_c3" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7010_c3" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>techs at T · T120</h4><ul>
+<li><span class="q">How many technologies will Saka know at turn 120?</span><span class="meta">seed7005</span><span class="val small">median 28 · IQR 4 · p05–p95 23–33</span><span class="crit">Resolves to the number of technologies Saka knows as recorded at the end of turn 120, counting those known at turn 60. This is the count the world report calls Techs; FreeCiv&#x27;s initial &#x27;None&#x27; entry is not a technology and is not counted. A whole number.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7005_c47" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7005_c47" placeholder="why" disabled></span></li>
+<li><span class="q">How many technologies will Sammarinese know at turn 120?</span><span class="meta">seed7003</span><span class="val small">median 33 · IQR 4 · p05–p95 28–38</span><span class="crit">Resolves to the number of technologies Sammarinese knows as recorded at the end of turn 120, counting those known at turn 60. This is the count the world report calls Techs; FreeCiv&#x27;s initial &#x27;None&#x27; entry is not a technology and is not counted. A whole number.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7003_c59" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7003_c59" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>techs at T · T150</h4><ul>
+<li><span class="q">How many technologies will Somali know at turn 150?</span><span class="meta">seed7008</span><span class="val small">median 43 · IQR 3 · p05–p95 39–48</span><span class="crit">Resolves to the number of technologies Somali knows as recorded at the end of turn 150, counting those known at turn 60. This is the count the world report calls Techs; FreeCiv&#x27;s initial &#x27;None&#x27; entry is not a technology and is not counted. A whole number.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7008_c107" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7008_c107" placeholder="why" disabled></span></li>
+<li><span class="q">How many technologies will Libyan know at turn 150?</span><span class="meta">seed7011</span><span class="val small">median 43 · IQR 3 · p05–p95 38–47</span><span class="crit">Resolves to the number of technologies Libyan knows as recorded at the end of turn 150, counting those known at turn 60. This is the count the world report calls Techs; FreeCiv&#x27;s initial &#x27;None&#x27; entry is not a technology and is not counted. A whole number.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7011_c95" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7011_c95" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>techs at T · T180</h4><ul>
+<li><span class="q">How many technologies will Ghana know at turn 180?</span><span class="meta">seed7003</span><span class="val small">median 48 · IQR 3 · p05–p95 43–52</span><span class="crit">Resolves to the number of technologies Ghana knows as recorded at the end of turn 180, counting those known at turn 60. This is the count the world report calls Techs; FreeCiv&#x27;s initial &#x27;None&#x27; entry is not a technology and is not counted. A whole number.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7003_c143" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7003_c143" placeholder="why" disabled></span></li>
+<li><span class="q">How many technologies will Central American know at turn 180?</span><span class="meta">seed7010</span><span class="val small">median 46 · IQR 4 · p05–p95 41–50</span><span class="crit">Resolves to the number of technologies Central American knows as recorded at the end of turn 180, counting those known at turn 60. This is the count the world report calls Techs; FreeCiv&#x27;s initial &#x27;None&#x27; entry is not a technology and is not counted. A whole number.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7010_c126" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7010_c126" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>techs at T · T210</h4><ul>
+<li><span class="q">How many technologies will Tajik know at turn 210?</span><span class="meta">seed7014</span><span class="val small">median 54 · IQR 4 · p05–p95 48–60</span><span class="crit">Resolves to the number of technologies Tajik knows as recorded at the end of turn 210, counting those known at turn 60. This is the count the world report calls Techs; FreeCiv&#x27;s initial &#x27;None&#x27; entry is not a technology and is not counted. A whole number.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7014_c169" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7014_c169" placeholder="why" disabled></span></li>
+<li><span class="q">How many technologies will Ostrogothic know at turn 210?</span><span class="meta">seed7005</span><span class="val small">median 45 · IQR 3 · p05–p95 40–48</span><span class="crit">Resolves to the number of technologies Ostrogothic knows as recorded at the end of turn 210, counting those known at turn 60. This is the count the world report calls Techs; FreeCiv&#x27;s initial &#x27;None&#x27; entry is not a technology and is not counted. A whole number.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7005_c191" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7005_c191" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>world techs · T90</h4><ul>
+<li><span class="q">What will the combined number of technologies known by all five civilizations be at turn 90?</span><span class="meta">seed7005</span><span class="val small">median 101 · IQR 6 · p05–p95 95–108</span><span class="crit">Resolves to the sum, over the five civilizations, of the number of technologies each knows as recorded at the end of turn 90, counting those known at turn 60. This is the count the world report calls Techs; FreeCiv&#x27;s initial &#x27;None&#x27; entry is not a technology and is not counted. A whole number.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7005_c40" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7005_c40" placeholder="why" disabled></span></li>
+<li><span class="q">What will the combined number of technologies known by all five civilizations be at turn 90?</span><span class="meta">seed7003</span><span class="val small">median 109 · IQR 6 · p05–p95 101–117</span><span class="crit">Resolves to the sum, over the five civilizations, of the number of technologies each knows as recorded at the end of turn 90, counting those known at turn 60. This is the count the world report calls Techs; FreeCiv&#x27;s initial &#x27;None&#x27; entry is not a technology and is not counted. A whole number.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7003_c40" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7003_c40" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>world techs · T120</h4><ul>
+<li><span class="q">What will the combined number of technologies known by all five civilizations be at turn 120?</span><span class="meta">seed7008</span><span class="val small">median 179 · IQR 9.25 · p05–p95 167–190</span><span class="crit">Resolves to the sum, over the five civilizations, of the number of technologies each knows as recorded at the end of turn 120, counting those known at turn 60. This is the count the world report calls Techs; FreeCiv&#x27;s initial &#x27;None&#x27; entry is not a technology and is not counted. A whole number.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7008_c84" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7008_c84" placeholder="why" disabled></span></li>
+<li><span class="q">What will the combined number of technologies known by all five civilizations be at turn 120?</span><span class="meta">seed7014</span><span class="val small">median 169 · IQR 12 · p05–p95 155–183</span><span class="crit">Resolves to the sum, over the five civilizations, of the number of technologies each knows as recorded at the end of turn 120, counting those known at turn 60. This is the count the world report calls Techs; FreeCiv&#x27;s initial &#x27;None&#x27; entry is not a technology and is not counted. A whole number.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7014_c84" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7014_c84" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>world techs · T150</h4><ul>
+<li><span class="q">What will the combined number of technologies known by all five civilizations be at turn 150?</span><span class="meta">seed7003</span><span class="val small">median 211 · IQR 13 · p05–p95 196–226</span><span class="crit">Resolves to the sum, over the five civilizations, of the number of technologies each knows as recorded at the end of turn 150, counting those known at turn 60. This is the count the world report calls Techs; FreeCiv&#x27;s initial &#x27;None&#x27; entry is not a technology and is not counted. A whole number.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7003_c128" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7003_c128" placeholder="why" disabled></span></li>
+<li><span class="q">What will the combined number of technologies known by all five civilizations be at turn 150?</span><span class="meta">seed7008</span><span class="val small">median 214 · IQR 12 · p05–p95 198–230</span><span class="crit">Resolves to the sum, over the five civilizations, of the number of technologies each knows as recorded at the end of turn 150, counting those known at turn 60. This is the count the world report calls Techs; FreeCiv&#x27;s initial &#x27;None&#x27; entry is not a technology and is not counted. A whole number.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7008_c128" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7008_c128" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>world techs · T180</h4><ul>
+<li><span class="q">What will the combined number of technologies known by all five civilizations be at turn 180?</span><span class="meta">seed7005</span><span class="val small">median 207 · IQR 11.25 · p05–p95 193–221</span><span class="crit">Resolves to the sum, over the five civilizations, of the number of technologies each knows as recorded at the end of turn 180, counting those known at turn 60. This is the count the world report calls Techs; FreeCiv&#x27;s initial &#x27;None&#x27; entry is not a technology and is not counted. A whole number.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7005_c172" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7005_c172" placeholder="why" disabled></span></li>
+<li><span class="q">What will the combined number of technologies known by all five civilizations be at turn 180?</span><span class="meta">seed7003</span><span class="val small">median 238 · IQR 15 · p05–p95 218–255</span><span class="crit">Resolves to the sum, over the five civilizations, of the number of technologies each knows as recorded at the end of turn 180, counting those known at turn 60. This is the count the world report calls Techs; FreeCiv&#x27;s initial &#x27;None&#x27; entry is not a technology and is not counted. A whole number.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7003_c172" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7003_c172" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>world techs · T210</h4><ul>
+<li><span class="q">What will the combined number of technologies known by all five civilizations be at turn 210?</span><span class="meta">seed7003</span><span class="val small">median 261 · IQR 17 · p05–p95 240–282</span><span class="crit">Resolves to the sum, over the five civilizations, of the number of technologies each knows as recorded at the end of turn 210, counting those known at turn 60. This is the count the world report calls Techs; FreeCiv&#x27;s initial &#x27;None&#x27; entry is not a technology and is not counted. A whole number.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7003_c216" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7003_c216" placeholder="why" disabled></span></li>
+<li><span class="q">What will the combined number of technologies known by all five civilizations be at turn 210?</span><span class="meta">seed7008</span><span class="val small">median 263 · IQR 16 · p05–p95 242–287</span><span class="crit">Resolves to the sum, over the five civilizations, of the number of technologies each knows as recorded at the end of turn 210, counting those known at turn 60. This is the count the world report calls Techs; FreeCiv&#x27;s initial &#x27;None&#x27; entry is not a technology and is not counted. A whole number.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7008_c216" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7008_c216" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>world captures · T90</h4><ul>
+<li><span class="q">How many cities will be captured (in total, across all civilizations) by turn 90?</span><span class="meta">seed7014</span><span class="val small">median 6 · IQR 4 · p05–p95 2–14</span><span class="crit">Resolves to the total number of city captures by all players on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). A capture is a city changing owner by force. Captures of cities held by barbarians count. Each capture event counts separately, so a city captured, lost and captured again counts twice. Cities that change hands when a civilization splits in a civil war are not captures.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7014_c41" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7014_c41" placeholder="why" disabled></span></li>
+<li><span class="q">How many cities will be captured (in total, across all civilizations) by turn 90?</span><span class="meta">seed7003</span><span class="val small">median 8 · IQR 6 · p05–p95 3–16</span><span class="crit">Resolves to the total number of city captures by all players on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). A capture is a city changing owner by force. Captures of cities held by barbarians count. Each capture event counts separately, so a city captured, lost and captured again counts twice. Cities that change hands when a civilization splits in a civil war are not captures.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7003_c41" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7003_c41" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>world captures · T120</h4><ul>
+<li><span class="q">How many cities will be captured (in total, across all civilizations) by turn 120?</span><span class="meta">seed7011</span><span class="val small">median 34 · IQR 14 · p05–p95 17–55</span><span class="crit">Resolves to the total number of city captures by all players on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). A capture is a city changing owner by force. Captures of cities held by barbarians count. Each capture event counts separately, so a city captured, lost and captured again counts twice. Cities that change hands when a civilization splits in a civil war are not captures.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7011_c85" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7011_c85" placeholder="why" disabled></span></li>
+<li><span class="q">How many cities will be captured (in total, across all civilizations) by turn 120?</span><span class="meta">seed7014</span><span class="val small">median 32 · IQR 13 · p05–p95 18–49</span><span class="crit">Resolves to the total number of city captures by all players on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). A capture is a city changing owner by force. Captures of cities held by barbarians count. Each capture event counts separately, so a city captured, lost and captured again counts twice. Cities that change hands when a civilization splits in a civil war are not captures.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7014_c85" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7014_c85" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>world captures · T150</h4><ul>
+<li><span class="q">How many cities will be captured (in total, across all civilizations) by turn 150?</span><span class="meta">seed7003</span><span class="val small">median 51 · IQR 20 · p05–p95 30–77</span><span class="crit">Resolves to the total number of city captures by all players on any turn from 61 through 150 inclusive (an event on turn 150 itself counts). A capture is a city changing owner by force. Captures of cities held by barbarians count. Each capture event counts separately, so a city captured, lost and captured again counts twice. Cities that change hands when a civilization splits in a civil war are not captures.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7003_c129" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7003_c129" placeholder="why" disabled></span></li>
+<li><span class="q">How many cities will be captured (in total, across all civilizations) by turn 150?</span><span class="meta">seed7022</span><span class="val small">median 55 · IQR 20 · p05–p95 32–81</span><span class="crit">Resolves to the total number of city captures by all players on any turn from 61 through 150 inclusive (an event on turn 150 itself counts). A capture is a city changing owner by force. Captures of cities held by barbarians count. Each capture event counts separately, so a city captured, lost and captured again counts twice. Cities that change hands when a civilization splits in a civil war are not captures.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7022_c86" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7022_c86" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>world captures · T180</h4><ul>
+<li><span class="q">How many cities will be captured (in total, across all civilizations) by turn 180?</span><span class="meta">seed7011</span><span class="val small">median 82 · IQR 27 · p05–p95 50–115</span><span class="crit">Resolves to the total number of city captures by all players on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). A capture is a city changing owner by force. Captures of cities held by barbarians count. Each capture event counts separately, so a city captured, lost and captured again counts twice. Cities that change hands when a civilization splits in a civil war are not captures.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7011_c155" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7011_c155" placeholder="why" disabled></span></li>
+<li><span class="q">How many cities will be captured (in total, across all civilizations) by turn 180?</span><span class="meta">seed7008</span><span class="val small">median 61 · IQR 23.25 · p05–p95 36–89</span><span class="crit">Resolves to the total number of city captures by all players on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). A capture is a city changing owner by force. Captures of cities held by barbarians count. Each capture event counts separately, so a city captured, lost and captured again counts twice. Cities that change hands when a civilization splits in a civil war are not captures.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7008_c173" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7008_c173" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>world captures · T210</h4><ul>
+<li><span class="q">How many cities will be captured (in total, across all civilizations) by turn 210?</span><span class="meta">seed7005</span><span class="val small">median 45 · IQR 13 · p05–p95 30–62</span><span class="crit">Resolves to the total number of city captures by all players on any turn from 61 through 210 inclusive (an event on turn 210 itself counts). A capture is a city changing owner by force. Captures of cities held by barbarians count. Each capture event counts separately, so a city captured, lost and captured again counts twice. Cities that change hands when a civilization splits in a civil war are not captures.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7005_c208" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7005_c208" placeholder="why" disabled></span></li>
+<li><span class="q">How many cities will be captured (in total, across all civilizations) by turn 210?</span><span class="meta">seed7022</span><span class="val small">median 99 · IQR 31 · p05–p95 65–139</span><span class="crit">Resolves to the total number of city captures by all players on any turn from 61 through 210 inclusive (an event on turn 210 itself counts). A capture is a city changing owner by force. Captures of cities held by barbarians count. Each capture event counts separately, so a city captured, lost and captured again counts twice. Cities that change hands when a civilization splits in a civil war are not captures.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7022_c116" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7022_c116" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>world wonders · T90</h4><ul>
+<li><span class="q">How many wonders will be completed (across all civilizations) between turn 61 and turn 90?</span><span class="meta">seed7011</span><span class="val small">median 2 · IQR 1 · p05–p95 1–3</span><span class="crit">Resolves to the number of great wonders completed by all civilizations on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). Small wonders such as a palace do not count.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7011_c42" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7011_c42" placeholder="why" disabled></span></li>
+<li><span class="q">How many wonders will be completed (across all civilizations) between turn 61 and turn 90?</span><span class="meta">seed7001</span><span class="val small">median 1 · IQR 1 · p05–p95 1–2</span><span class="crit">Resolves to the number of great wonders completed by all civilizations on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). Small wonders such as a palace do not count.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7001_c42" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7001_c42" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>world wonders · T120</h4><ul>
+<li><span class="q">How many wonders will be completed (across all civilizations) between turn 61 and turn 120?</span><span class="meta">seed7010</span><span class="val small">median 2 · IQR 1 · p05–p95 1–4</span><span class="crit">Resolves to the number of great wonders completed by all civilizations on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). Small wonders such as a palace do not count.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7010_c86" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7010_c86" placeholder="why" disabled></span></li>
+<li><span class="q">How many wonders will be completed (across all civilizations) between turn 61 and turn 120?</span><span class="meta">seed7003</span><span class="val small">median 3 · IQR 1 · p05–p95 2–5</span><span class="crit">Resolves to the number of great wonders completed by all civilizations on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). Small wonders such as a palace do not count.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7003_c86" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7003_c86" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>world wonders · T150</h4><ul>
+<li><span class="q">How many wonders will be completed (across all civilizations) between turn 61 and turn 150?</span><span class="meta">seed7010</span><span class="val small">median 2 · IQR 1 · p05–p95 1–5</span><span class="crit">Resolves to the number of great wonders completed by all civilizations on any turn from 61 through 150 inclusive (an event on turn 150 itself counts). Small wonders such as a palace do not count.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7010_c121" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7010_c121" placeholder="why" disabled></span></li>
+<li><span class="q">How many wonders will be completed (across all civilizations) between turn 61 and turn 150?</span><span class="meta">seed7008</span><span class="val small">median 2 · IQR 2 · p05–p95 1–4</span><span class="crit">Resolves to the number of great wonders completed by all civilizations on any turn from 61 through 150 inclusive (an event on turn 150 itself counts). Small wonders such as a palace do not count.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7008_c130" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7008_c130" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>world wonders · T180</h4><ul>
+<li><span class="q">How many wonders will be completed (across all civilizations) between turn 61 and turn 180?</span><span class="meta">seed7014</span><span class="val small">median 5 · IQR 3 · p05–p95 2–9</span><span class="crit">Resolves to the number of great wonders completed by all civilizations on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). Small wonders such as a palace do not count.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7014_c156" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7014_c156" placeholder="why" disabled></span></li>
+<li><span class="q">How many wonders will be completed (across all civilizations) between turn 61 and turn 180?</span><span class="meta">seed7010</span><span class="val small">median 3 · IQR 2 · p05–p95 1–6</span><span class="crit">Resolves to the number of great wonders completed by all civilizations on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). Small wonders such as a palace do not count.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7010_c156" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7010_c156" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>world wonders · T210</h4><ul>
+<li><span class="q">How many wonders will be completed (across all civilizations) between turn 61 and turn 210?</span><span class="meta">seed7005</span><span class="val small">median 2 · IQR 2 · p05–p95 0–5</span><span class="crit">Resolves to the number of great wonders completed by all civilizations on any turn from 61 through 210 inclusive (an event on turn 210 itself counts). Small wonders such as a palace do not count.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7005_c209" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7005_c209" placeholder="why" disabled></span></li>
+<li><span class="q">How many wonders will be completed (across all civilizations) between turn 61 and turn 210?</span><span class="meta">seed7014</span><span class="val small">median 6 · IQR 3 · p05–p95 3–10</span><span class="crit">Resolves to the number of great wonders completed by all civilizations on any turn from 61 through 210 inclusive (an event on turn 210 itself counts). Small wonders such as a palace do not count.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7014_c191" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7014_c191" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>world razings · T90</h4><ul>
+<li><span class="q">How many cities will be destroyed in total by turn 90?</span><span class="meta">seed7010</span><span class="val small">median 5 · IQR 4 · p05–p95 1–10</span><span class="crit">Resolves to the number of cities destroyed on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). A city is destroyed when it ceases to exist; a captured city that survives does not count.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7010_c43" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7010_c43" placeholder="why" disabled></span></li>
+<li><span class="q">How many cities will be destroyed in total by turn 90?</span><span class="meta">seed7005</span><span class="val small">median 8 · IQR 3 · p05–p95 5–13</span><span class="crit">Resolves to the number of cities destroyed on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). A city is destroyed when it ceases to exist; a captured city that survives does not count.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7005_c43" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7005_c43" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>world razings · T120</h4><ul>
+<li><span class="q">How many cities will be destroyed in total by turn 120?</span><span class="meta">seed7010</span><span class="val small">median 10 · IQR 7 · p05–p95 4–19</span><span class="crit">Resolves to the number of cities destroyed on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). A city is destroyed when it ceases to exist; a captured city that survives does not count.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7010_c87" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7010_c87" placeholder="why" disabled></span></li>
+<li><span class="q">How many cities will be destroyed in total by turn 120?</span><span class="meta">seed7022</span><span class="val small">median 12 · IQR 7 · p05–p95 5–22</span><span class="crit">Resolves to the number of cities destroyed on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). A city is destroyed when it ceases to exist; a captured city that survives does not count.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7022_c61" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7022_c61" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>world razings · T150</h4><ul>
+<li><span class="q">How many cities will be destroyed in total by turn 150?</span><span class="meta">seed7008</span><span class="val small">median 12 · IQR 8 · p05–p95 5–22</span><span class="crit">Resolves to the number of cities destroyed on any turn from 61 through 150 inclusive (an event on turn 150 itself counts). A city is destroyed when it ceases to exist; a captured city that survives does not count.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7008_c131" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7008_c131" placeholder="why" disabled></span></li>
+<li><span class="q">How many cities will be destroyed in total by turn 150?</span><span class="meta">seed7014</span><span class="val small">median 16 · IQR 7 · p05–p95 8–26</span><span class="crit">Resolves to the number of cities destroyed on any turn from 61 through 150 inclusive (an event on turn 150 itself counts). A city is destroyed when it ceases to exist; a captured city that survives does not count.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7014_c122" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7014_c122" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>world razings · T180</h4><ul>
+<li><span class="q">How many cities will be destroyed in total by turn 180?</span><span class="meta">seed7011</span><span class="val small">median 20 · IQR 9.25 · p05–p95 10–33</span><span class="crit">Resolves to the number of cities destroyed on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). A city is destroyed when it ceases to exist; a captured city that survives does not count.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7011_c157" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7011_c157" placeholder="why" disabled></span></li>
+<li><span class="q">How many cities will be destroyed in total by turn 180?</span><span class="meta">seed7003</span><span class="val small">median 24 · IQR 10 · p05–p95 14–38</span><span class="crit">Resolves to the number of cities destroyed on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). A city is destroyed when it ceases to exist; a captured city that survives does not count.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7003_c175" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7003_c175" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>world razings · T210</h4><ul>
+<li><span class="q">How many cities will be destroyed in total by turn 210?</span><span class="meta">seed7008</span><span class="val small">median 20 · IQR 10 · p05–p95 9–34</span><span class="crit">Resolves to the number of cities destroyed on any turn from 61 through 210 inclusive (an event on turn 210 itself counts). A city is destroyed when it ceases to exist; a captured city that survives does not count.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7008_c219" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7008_c219" placeholder="why" disabled></span></li>
+<li><span class="q">How many cities will be destroyed in total by turn 210?</span><span class="meta">seed7014</span><span class="val small">median 26 · IQR 10 · p05–p95 16–40</span><span class="crit">Resolves to the number of cities destroyed on any turn from 61 through 210 inclusive (an event on turn 210 itself counts). A city is destroyed when it ceases to exist; a captured city that survives does not count.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7014_c192" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7014_c192" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>NC1_value_at_T · T90</h4><ul>
+<li><span class="q">What will Ohlone&#x27;s score be at turn 90?</span><span class="meta">seed7011</span><span class="val small">median 149 · IQR 13.25 · p05–p95 125–160</span><span class="crit">Resolves to Ohlone&#x27;s score as recorded at the end of turn 90, the same quantity the world report calls Score. A whole number.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7011_c20" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7011_c20" placeholder="why" disabled></span></li>
+<li><span class="q">What will Peruvian&#x27;s number of cities be at turn 90?</span><span class="meta">seed7008</span><span class="val small">median 33 · IQR 4 · p05–p95 26–37</span><span class="crit">Resolves to Peruvian&#x27;s number of cities as recorded at the end of turn 90, the same quantity the world report calls Cities. A whole number.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7008_c34" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7008_c34" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>NC1_value_at_T · T120</h4><ul>
+<li><span class="q">What will Ghana&#x27;s number of cities be at turn 120?</span><span class="meta">seed7003</span><span class="val small">median 23 · IQR 5 · p05–p95 13–27</span><span class="crit">Resolves to Ghana&#x27;s number of cities as recorded at the end of turn 120, the same quantity the world report calls Cities. A whole number.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7003_c74" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7003_c74" placeholder="why" disabled></span></li>
+<li><span class="q">What will Libyan&#x27;s score be at turn 120?</span><span class="meta">seed7011</span><span class="val small">median 169 · IQR 19 · p05–p95 141–192</span><span class="crit">Resolves to Libyan&#x27;s score as recorded at the end of turn 120, the same quantity the world report calls Score. A whole number.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7011_c68" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7011_c68" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>NC1_value_at_T · T150</h4><ul>
+<li><span class="q">What will Fijian&#x27;s number of cities be at turn 150?</span><span class="meta">seed7010</span><span class="val small">median 26 · IQR 8 · p05–p95 17–35</span><span class="crit">Resolves to Fijian&#x27;s number of cities as recorded at the end of turn 150, the same quantity the world report calls Cities. A whole number.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7010_c118" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7010_c118" placeholder="why" disabled></span></li>
+<li><span class="q">What will Corsican&#x27;s territory size be at turn 150?</span><span class="meta">seed7003</span><span class="val small">median 341 · IQR 89 · p05–p95 164–434</span><span class="crit">Resolves to Corsican&#x27;s territory size as recorded at the end of turn 150, the same quantity the world report calls Territory. A whole number.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7003_c127" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7003_c127" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>NC1_value_at_T · T180</h4><ul>
+<li><span class="q">What will Greek&#x27;s territory size be at turn 180?</span><span class="meta">seed7005</span><span class="val small">median 173 · IQR 51.25 · p05–p95 96–233</span><span class="crit">Resolves to Greek&#x27;s territory size as recorded at the end of turn 180, the same quantity the world report calls Territory. A whole number.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7005_c163" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7005_c163" placeholder="why" disabled></span></li>
+<li><span class="q">What will Spanish&#x27;s territory size be at turn 180?</span><span class="meta">seed7008</span><span class="val small">median 257 · IQR 102.25 · p05–p95 119–436</span><span class="crit">Resolves to Spanish&#x27;s territory size as recorded at the end of turn 180, the same quantity the world report calls Territory. A whole number.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7008_c163" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7008_c163" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>NC1_value_at_T · T210</h4><ul>
+<li><span class="q">What will Saka&#x27;s population be at turn 210?</span><span class="meta">seed7005</span><span class="val small">median 69 · IQR 22 · p05–p95 41–97</span><span class="crit">Resolves to Saka&#x27;s population as recorded at the end of turn 210, the same quantity the world report calls Population. A whole number.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7005_c193" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7005_c193" placeholder="why" disabled></span></li>
+<li><span class="q">What will Rhenish&#x27;s population be at turn 210?</span><span class="meta">seed7003</span><span class="val small">median 80.5 · IQR 45 · p05–p95 26–126</span><span class="crit">Resolves to Rhenish&#x27;s population as recorded at the end of turn 210, the same quantity the world report calls Population. A whole number.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7003_c201" data-set="continuous" disabled> issue</label><input class="why" type="text" data-id="seed7003_c201" placeholder="why" disabled></span></li>
+</ul></div>
+<h3>Natural conditionals · block × horizon</h3>
+<div class="cell"><h4>A · irrelevant news · T120</h4><ul>
+<li><span class="q">Will Santomean suffer a civil war (a breakaway civilization splitting off) by turn 120?</span><span class="rev">news: Estonian and Sahrawi made first contact.</span><span class="meta">seed7001 · civil war by T · n<sub>x</sub>=940</span><span class="val">0.06 → 0.06 <em>(-0.00)</em></span><span class="crit">Resolves YES if Santomean splits in a civil war on any turn from 61 through 120 inclusive (an event on turn 120 itself counts), meaning a new civilization is created out of some of Santomean&#x27;s cities. Anarchy, disorder, or the loss of cities to other players without such a split resolve NO.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7001_b1021__seed7001_r17" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7001_b1021__seed7001_r17" placeholder="why" disabled></span></li>
+<li><span class="q">Will the Great Wall be completed by any civilization by turn 120?</span><span class="rev">news: Pelasgian and Abyssinian went to war.</span><span class="meta">seed7022 · wonder completed (any) · n<sub>x</sub>=101</span><span class="val">0.34 → 0.37 <em>(+0.03)</em></span><span class="crit">Resolves YES if any civilization completes Great Wall on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). Resolves NO if it has not been completed by the end of turn 120.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7022_b516__seed7022_r11" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7022_b516__seed7022_r11" placeholder="why" disabled></span></li>
+<li><span class="q">Will at least 20 cities be conquered (in total) by turn 120?</span><span class="rev">news: American lost at least three cities.</span><span class="meta">seed7011 · world conquest count · n<sub>x</sub>=357</span><span class="val">0.92 → 0.97 <em>(+0.05)</em></span><span class="crit">Resolves YES if at least 20 city captures occur in total across all players on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). A capture is a city changing owner by force. Captures of cities held by barbarians count. Each capture event counts separately, so a city captured, lost and captured again counts twice. Cities that change hands when a civilization splits in a civil war are not captures. Exactly 20 counts.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7011_b762__seed7011_r52" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7011_b762__seed7011_r52" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>A · irrelevant news · T150</h4><ul>
+<li><span class="q">Will Spanish and Peruvian have a formal peace in effect at turn 150?</span><span class="rev">news: Latvian lost at least three cities.</span><span class="meta">seed7008 · peace at T · n<sub>x</sub>=190</span><span class="val">0.06 → 0.06 <em>(-0.01)</em></span><span class="crit">Resolves YES if the diplomatic state between Spanish and Peruvian as recorded at the end of turn 150 is Peace. War, cease-fire, armistice, alliance, or never having met all resolve NO.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7008_b1419__seed7008_r18" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7008_b1419__seed7008_r18" placeholder="why" disabled></span></li>
+<li><span class="q">Will Fijian capture at least one city from Central American by turn 150?</span><span class="rev">news: American fell into anarchy at some point.</span><span class="meta">seed7010 · directed conquest · n<sub>x</sub>=1000</span><span class="val">0.95 → 0.95 <em>(+0.00)</em></span><span class="crit">Resolves YES if Fijian captures at least one city whose owner at the moment of capture is Central American, on any turn from 61 through 150 inclusive (an event on turn 150 itself counts). Recaptures count. Resolves NO otherwise.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7010_b1359__seed7010_r25" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7010_b1359__seed7010_r25" placeholder="why" disabled></span></li>
+<li><span class="q">Will Pelasgian&#x27;s number of technologies be at least 43 at turn 150?</span><span class="rev">news: Abyssinian knew at least 20 technologies at turn 90.</span><span class="meta">seed7022 · tech threshold · n<sub>x</sub>=748</span><span class="val">0.41 → 0.42 <em>(+0.00)</em></span><span class="crit">Resolves YES if Pelasgian&#x27;s number of technologies as recorded at the end of turn 150 is 43 or more; exactly 43 counts. This is the count the world report calls Techs; FreeCiv&#x27;s initial &#x27;None&#x27; entry is not a technology and is not counted, counting technologies known at turn 60.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7022_b1047__seed7022_r53" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7022_b1047__seed7022_r53" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>A · irrelevant news · T180</h4><ul>
+<li><span class="q">Will Spanish complete at least 1 wonder by turn 180?</span><span class="rev">news: Belgian and Somali went to war.</span><span class="meta">seed7008 · civ wonders ≥ k · n<sub>x</sub>=772</span><span class="val">0.63 → 0.63 <em>(+0.00)</em></span><span class="crit">Resolves YES if Spanish completes at least 1 great wonder on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). Exactly 1 counts. Small wonders such as a palace do not count.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7008_b2585__seed7008_r11" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7008_b2585__seed7008_r11" placeholder="why" disabled></span></li>
+<li><span class="q">Will Greek found at least 8 new cities by turn 180?</span><span class="rev">news: Saka changed its form of government (not counting a spell of anarchy).</span><span class="meta">seed7005 · city founding ≥ k · n<sub>x</sub>=872</span><span class="val">0.60 → 0.59 <em>(-0.01)</em></span><span class="crit">Resolves YES if Greek founds at least 8 new cities on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). Cities held at turn 60 and cities captured do not count. Exactly 8 counts.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7005_b2427__seed7005_r16" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7005_b2427__seed7005_r16" placeholder="why" disabled></span></li>
+<li><span class="q">Will Spanish&#x27;s number of military units be at least 15 at turn 180?</span><span class="rev">news: Somali had at least four more cities at turn 90 than at turn 60.</span><span class="meta">seed7008 · value threshold (score/treasury/pop/cities/territory/military) · n<sub>x</sub>=989</span><span class="val">0.76 → 0.76 <em>(+0.00)</em></span><span class="crit">Resolves YES if Spanish&#x27;s number of military units as recorded at the end of turn 180 is 15 or more; exactly 15 counts. This is the same quantity the world report calls Military.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7008_b2572__seed7008_r51" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7008_b2572__seed7008_r51" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>A · irrelevant news · T210</h4><ul>
+<li><span class="q">Will Bissau-Guinean&#x27;s government change at least 3 times by turn 210? (Anarchy counts as a form of government, for this question.)</span><span class="rev">news: Trinidadian and Tobagonian had at least four more cities at turn 90 than at turn 60.</span><span class="meta">seed7014 · gov-change count · n<sub>x</sub>=948</span><span class="val">0.92 → 0.92 <em>(+0.00)</em></span><span class="crit">Resolves YES if Bissau-Guinean&#x27;s government changes at least 3 times on any turn from 61 through 210 inclusive (an event on turn 210 itself counts). Every recorded change counts, including a change into anarchy and a change out of it, so one revolution normally counts twice. Exactly 3 counts.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7014_b2519__seed7014_r28" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7014_b2519__seed7014_r28" placeholder="why" disabled></span></li>
+<li><span class="q">Will Belgian&#x27;s population be at least 92 at turn 210?</span><span class="rev">news: Peruvian completed a wonder.</span><span class="meta">seed7008 · value threshold (score/treasury/pop/cities/territory/military) · n<sub>x</sub>=194</span><span class="val">0.53 → 0.53 <em>(-0.00)</em></span><span class="crit">Resolves YES if Belgian&#x27;s population as recorded at the end of turn 210 is 92 or more; exactly 92 counts. This is the same quantity the world report calls Population.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7008_b3213__seed7008_r42" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7008_b3213__seed7008_r42" placeholder="why" disabled></span></li>
+<li><span class="q">Will Spanish found at least 8 new cities by turn 210?</span><span class="rev">news: Belgian and Somali reached a cease-fire or armistice.</span><span class="meta">seed7008 · city founding ≥ k · n<sub>x</sub>=1000</span><span class="val">0.95 → 0.95 <em>(+0.00)</em></span><span class="crit">Resolves YES if Spanish founds at least 8 new cities on any turn from 61 through 210 inclusive (an event on turn 210 itself counts). Cities held at turn 60 and cities captured do not count. Exactly 8 counts.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7008_b3364__seed7008_r12" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7008_b3364__seed7008_r12" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>B · related, weak news · T120</h4><ul>
+<li><span class="q">Will Greek know strictly more technologies than every other civilization at turn 120?</span><span class="rev">news: Greek captured a city.</span><span class="meta">seed7005 · tech lead · n<sub>x</sub>=936</span><span class="val">0.27 → 0.27 <em>(-0.00)</em></span><span class="crit">Resolves YES if, as recorded at the end of turn 120, Greek knows strictly more technologies than each of the other four civilizations, counting every technology known including those known at turn 60. This is the count the world report calls Techs; FreeCiv&#x27;s initial &#x27;None&#x27; entry is not a technology and is not counted. Any tie for the most resolves NO.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7005_b974__seed7005_r26" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7005_b974__seed7005_r26" placeholder="why" disabled></span></li>
+<li><span class="q">Will Spanish and Peruvian have a formal peace in effect at turn 120?</span><span class="rev">news: Spanish had at least four more cities at turn 90 than at turn 60.</span><span class="meta">seed7008 · peace at T · n<sub>x</sub>=901</span><span class="val">0.28 → 0.27 <em>(-0.01)</em></span><span class="crit">Resolves YES if the diplomatic state between Spanish and Peruvian as recorded at the end of turn 120 is Peace. War, cease-fire, armistice, alliance, or never having met all resolve NO.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7008_b713__seed7008_r35" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7008_b713__seed7008_r35" placeholder="why" disabled></span></li>
+<li><span class="q">Will Sammarinese complete Marco Polo&#x27;s Embassy by turn 120?</span><span class="rev">news: Crimean Tatar and Sammarinese reached a cease-fire or armistice.</span><span class="meta">seed7003 · wonder race · n<sub>x</sub>=1000</span><span class="val">0.22 → 0.22 <em>(+0.00)</em></span><span class="crit">Resolves YES if Sammarinese completes Marco Polo&#x27;s Embassy on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). A great wonder can be completed only once per game, so this resolves NO if another civilization completes it, or if it is not completed by the end of turn 120.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7003_b745__seed7003_r3" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7003_b745__seed7003_r3" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>B · related, weak news · T150</h4><ul>
+<li><span class="q">Will Ostrogothic&#x27;s treasury drop below 50% of its turn-60 level at any point up to turn 150?</span><span class="rev">news: Ostrogothic had at least four more cities at turn 90 than at turn 60.</span><span class="meta">seed7005 · drawdown · n<sub>x</sub>=922</span><span class="val">0.81 → 0.81 <em>(-0.00)</em></span><span class="crit">Resolves YES if, at the end of any turn from 61 through 150 inclusive, Ostrogothic&#x27;s treasury is below 50% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 50% does not count. A later recovery does not change the result.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7005_b1930__seed7005_r45" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7005_b1930__seed7005_r45" placeholder="why" disabled></span></li>
+<li><span class="q">Will Crimean Tatar know strictly more technologies than every other civilization at turn 150?</span><span class="rev">news: Crimean Tatar and Sammarinese reached a cease-fire or armistice.</span><span class="meta">seed7003 · tech lead · n<sub>x</sub>=1000</span><span class="val">0.09 → 0.09 <em>(+0.00)</em></span><span class="crit">Resolves YES if, as recorded at the end of turn 150, Crimean Tatar knows strictly more technologies than each of the other four civilizations, counting every technology known including those known at turn 60. This is the count the world report calls Techs; FreeCiv&#x27;s initial &#x27;None&#x27; entry is not a technology and is not counted. Any tie for the most resolves NO.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7003_b1517__seed7003_r3" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7003_b1517__seed7003_r3" placeholder="why" disabled></span></li>
+<li><span class="q">Will Saka and Otomí be at formal Peace at any point between turns 61 and 150?</span><span class="rev">news: Otomí fell into anarchy at some point.</span><span class="meta">seed7005 · diplomatic state reached · n<sub>x</sub>=973</span><span class="val">0.42 → 0.42 <em>(-0.00)</em></span><span class="crit">Resolves YES if the diplomatic state between Saka and Otomí is Peace at the end of any turn from 61 through 150 inclusive. Resolves NO if the state never occurs in that window (war, cease-fire, armistice and alliance do not count).</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7005_b1262__seed7005_r22" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7005_b1262__seed7005_r22" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>B · related, weak news · T180</h4><ul>
+<li><span class="q">Will Ghana complete the Great Library by turn 180?</span><span class="rev">news: Ghana changed its form of government (not counting a spell of anarchy).</span><span class="meta">seed7003 · wonder race · n<sub>x</sub>=1000</span><span class="val">0.93 → 0.93 <em>(+0.00)</em></span><span class="crit">Resolves YES if Ghana completes Great Library on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). A great wonder can be completed only once per game, so this resolves NO if another civilization completes it, or if it is not completed by the end of turn 180.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7003_b2158__seed7003_r35" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7003_b2158__seed7003_r35" placeholder="why" disabled></span></li>
+<li><span class="q">Will Corsican&#x27;s number of military units be at least 33 at turn 180?</span><span class="rev">news: Sammarinese and Corsican reached a cease-fire or armistice.</span><span class="meta">seed7003 · value threshold (score/treasury/pop/cities/territory/military) · n<sub>x</sub>=251</span><span class="val">0.27 → 0.33 <em>(+0.06)</em></span><span class="crit">Resolves YES if Corsican&#x27;s number of military units as recorded at the end of turn 180 is 33 or more; exactly 33 counts. This is the same quantity the world report calls Military.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7003_b2748__seed7003_r15" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7003_b2748__seed7003_r15" placeholder="why" disabled></span></li>
+<li><span class="q">Will American and Fijian form an Alliance at any point between turns 61 and 180?</span><span class="rev">news: American captured a city.</span><span class="meta">seed7010 · diplomatic state reached · n<sub>x</sub>=462</span><span class="val">0.60 → 0.68 <em>(+0.08)</em></span><span class="crit">Resolves YES if the diplomatic state between American and Fijian is Alliance at the end of any turn from 61 through 180 inclusive. Resolves NO if the state never occurs in that window (every other state do not count).</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7010_b1925__seed7010_r21" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7010_b1925__seed7010_r21" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>B · related, weak news · T210</h4><ul>
+<li><span class="q">Will American and Fijian reach a cease-fire or armistice at any point between turns 61 and 210?</span><span class="rev">news: Fijian knew at least 20 technologies at turn 90.</span><span class="meta">seed7010 · diplomatic state reached · n<sub>x</sub>=537</span><span class="val">0.17 → 0.16 <em>(-0.01)</em></span><span class="crit">Resolves YES if the diplomatic state between American and Fijian is Cease-fire or Armistice at the end of any turn from 61 through 210 inclusive. Resolves NO if the state never occurs in that window (war, peace and alliance do not count).</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7010_b2476__seed7010_r51" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7010_b2476__seed7010_r51" placeholder="why" disabled></span></li>
+<li><span class="q">Will Rhenish&#x27;s government be Democracy at turn 210?</span><span class="rev">news: Rhenish changed its form of government (not counting a spell of anarchy).</span><span class="meta">seed7003 · government at T · n<sub>x</sub>=924</span><span class="val">0.50 → 0.50 <em>(+0.00)</em></span><span class="crit">Resolves YES if Rhenish&#x27;s government as recorded at the end of turn 210 is Democracy. A change of government completed on turn 210 counts. Anarchy counts as a form of government. Resolves NO for any other government.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7003_b3064__seed7003_r27" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7003_b3064__seed7003_r27" placeholder="why" disabled></span></li>
+<li><span class="q">Will American and Fijian be at war at turn 210?</span><span class="rev">news: Central American and Fijian reached a cease-fire or armistice.</span><span class="meta">seed7010 · war at T · n<sub>x</sub>=1000</span><span class="val">0.50 → 0.50 <em>(+0.00)</em></span><span class="crit">Resolves YES if the diplomatic state between American and Fijian as recorded at the end of turn 210 is War. Cease-fire, armistice, peace, alliance, or never having met all resolve NO.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7010_b2473__seed7010_r5" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7010_b2473__seed7010_r5" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>C1 · mechanical, same series · T120</h4><ul>
+<li><span class="q">Will Belgian&#x27;s number of cities drop below 99% of its turn-60 level at any point up to turn 120?</span><span class="rev">news: Belgian lost at least three cities.</span><span class="meta">seed7008 · drawdown · n<sub>x</sub>=237</span><span class="val">0.09 → 0.19 <em>(+0.10)</em></span><span class="crit">Resolves YES if, at the end of any turn from 61 through 120 inclusive, Belgian&#x27;s number of cities is below 99% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 99% does not count. A later recovery does not change the result.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7008_b981__seed7008_r25" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7008_b981__seed7008_r25" placeholder="why" disabled></span></li>
+<li><span class="q">Will Rhenish have a higher number of cities than Sammarinese at turn 120?</span><span class="rev">news: Rhenish lost at least three cities.</span><span class="meta">seed7003 · comparative (pop/cities/territory/score) · n<sub>x</sub>=247</span><span class="val">0.66 → 0.52 <em>(-0.14)</em></span><span class="crit">Resolves YES if Rhenish&#x27;s number of cities as recorded at the end of turn 120 is strictly greater than Sammarinese&#x27;s. Equal values resolve NO. The quantity is the same quantity the world report calls Cities.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7003_b670__seed7003_r26" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7003_b670__seed7003_r26" placeholder="why" disabled></span></li>
+<li><span class="q">Will Brazzaville-Congolese have a higher number of cities than Santomean at turn 120?</span><span class="rev">news: Santomean lost at least three cities.</span><span class="meta">seed7001 · comparative (pop/cities/territory/score) · n<sub>x</sub>=288</span><span class="val">0.53 → 0.73 <em>(+0.21)</em></span><span class="crit">Resolves YES if Brazzaville-Congolese&#x27;s number of cities as recorded at the end of turn 120 is strictly greater than Santomean&#x27;s. Equal values resolve NO. The quantity is the same quantity the world report calls Cities.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7001_b628__seed7001_r28" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7001_b628__seed7001_r28" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>C1 · mechanical, same series · T150</h4><ul>
+<li><span class="q">Will Belgian&#x27;s number of cities drop below 70% of its turn-60 level at any point up to turn 150?</span><span class="rev">news: Belgian lost at least three cities.</span><span class="meta">seed7008 · drawdown · n<sub>x</sub>=237</span><span class="val">0.07 → 0.16 <em>(+0.08)</em></span><span class="crit">Resolves YES if, at the end of any turn from 61 through 150 inclusive, Belgian&#x27;s number of cities is below 70% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 70% does not count. A later recovery does not change the result.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7008_b1713__seed7008_r25" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7008_b1713__seed7008_r25" placeholder="why" disabled></span></li>
+<li><span class="q">Will Somali&#x27;s number of cities be at least 52 at turn 150?</span><span class="rev">news: Somali lost at least three cities.</span><span class="meta">seed7008 · value threshold (score/treasury/pop/cities/territory/military) · n<sub>x</sub>=184</span><span class="val">0.11 → 0.02 <em>(-0.09)</em></span><span class="crit">Resolves YES if Somali&#x27;s number of cities as recorded at the end of turn 150 is 52 or more; exactly 52 counts. This is the same quantity the world report calls Cities.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7008_b2032__seed7008_r47" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7008_b2032__seed7008_r47" placeholder="why" disabled></span></li>
+<li><span class="q">Will Cañari have a higher number of cities than Saka at turn 150?</span><span class="rev">news: Saka had at least two fewer cities at turn 90 than at turn 60.</span><span class="meta">seed7005 · comparative (pop/cities/territory/score) · n<sub>x</sub>=150</span><span class="val">0.61 → 0.77 <em>(+0.16)</em></span><span class="crit">Resolves YES if Cañari&#x27;s number of cities as recorded at the end of turn 150 is strictly greater than Saka&#x27;s. Equal values resolve NO. The quantity is the same quantity the world report calls Cities.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7005_b1292__seed7005_r15" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7005_b1292__seed7005_r15" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>C1 · mechanical, same series · T180</h4><ul>
+<li><span class="q">Will Rhenish have a higher number of cities than Crimean Tatar at turn 180?</span><span class="rev">news: Crimean Tatar lost at least three cities.</span><span class="meta">seed7003 · comparative (pop/cities/territory/score) · n<sub>x</sub>=200</span><span class="val">0.17 → 0.43 <em>(+0.27)</em></span><span class="crit">Resolves YES if Rhenish&#x27;s number of cities as recorded at the end of turn 180 is strictly greater than Crimean Tatar&#x27;s. Equal values resolve NO. The quantity is the same quantity the world report calls Cities.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7003_b2033__seed7003_r18" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7003_b2033__seed7003_r18" placeholder="why" disabled></span></li>
+<li><span class="q">Will Brazzaville-Congolese&#x27;s number of cities drop below 70% of its turn-60 level at any point up to turn 180?</span><span class="rev">news: Brazzaville-Congolese lost at least three cities.</span><span class="meta">seed7001 · drawdown · n<sub>x</sub>=200</span><span class="val">0.11 → 0.24 <em>(+0.14)</em></span><span class="crit">Resolves YES if, at the end of any turn from 61 through 180 inclusive, Brazzaville-Congolese&#x27;s number of cities is below 70% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 70% does not count. A later recovery does not change the result.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7001_b1884__seed7001_r22" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7001_b1884__seed7001_r22" placeholder="why" disabled></span></li>
+<li><span class="q">Will Estonian&#x27;s number of cities be at least 31 at turn 180?</span><span class="rev">news: Estonian lost at least three cities.</span><span class="meta">seed7001 · value threshold (score/treasury/pop/cities/territory/military) · n<sub>x</sub>=100</span><span class="val">0.75 → 0.61 <em>(-0.14)</em></span><span class="crit">Resolves YES if Estonian&#x27;s number of cities as recorded at the end of turn 180 is 31 or more; exactly 31 counts. This is the same quantity the world report calls Cities.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7001_b1971__seed7001_r36" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7001_b1971__seed7001_r36" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>C1 · mechanical, same series · T210</h4><ul>
+<li><span class="q">Will Trinidadian and Tobagonian have a higher number of cities than Bissau-Guinean at turn 210?</span><span class="rev">news: Trinidadian and Tobagonian lost at least three cities.</span><span class="meta">seed7014 · comparative (pop/cities/territory/score) · n<sub>x</sub>=555</span><span class="val">0.48 → 0.42 <em>(-0.06)</em></span><span class="crit">Resolves YES if Trinidadian and Tobagonian&#x27;s number of cities as recorded at the end of turn 210 is strictly greater than Bissau-Guinean&#x27;s. Equal values resolve NO. The quantity is the same quantity the world report calls Cities.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7014_b2406__seed7014_r24" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7014_b2406__seed7014_r24" placeholder="why" disabled></span></li>
+<li><span class="q">Will Central American have a higher number of cities than American at turn 210?</span><span class="rev">news: Central American lost at least three cities.</span><span class="meta">seed7010 · comparative (pop/cities/territory/score) · n<sub>x</sub>=103</span><span class="val">0.24 → 0.22 <em>(-0.02)</em></span><span class="crit">Resolves YES if Central American&#x27;s number of cities as recorded at the end of turn 210 is strictly greater than American&#x27;s. Equal values resolve NO. The quantity is the same quantity the world report calls Cities.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7010_b2427__seed7010_r17" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7010_b2427__seed7010_r17" placeholder="why" disabled></span></li>
+<li><span class="q">Will Trinidadian and Tobagonian&#x27;s number of cities be at least 44 at turn 210?</span><span class="rev">news: Trinidadian and Tobagonian lost at least three cities.</span><span class="meta">seed7014 · value threshold (score/treasury/pop/cities/territory/military) · n<sub>x</sub>=555</span><span class="val">0.25 → 0.19 <em>(-0.06)</em></span><span class="crit">Resolves YES if Trinidadian and Tobagonian&#x27;s number of cities as recorded at the end of turn 210 is 44 or more; exactly 44 counts. This is the same quantity the world report calls Cities.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7014_b2716__seed7014_r24" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7014_b2716__seed7014_r24" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>C2 · persistence, cross-series · T120</h4><ul>
+<li><span class="q">Will Sammarinese&#x27;s score be at least 166 at turn 120?</span><span class="rev">news: Sammarinese lost at least three cities.</span><span class="meta">seed7003 · value threshold (score/treasury/pop/cities/territory/military) · n<sub>x</sub>=286</span><span class="val">0.27 → 0.13 <em>(-0.14)</em></span><span class="crit">Resolves YES if Sammarinese&#x27;s score as recorded at the end of turn 120 is 166 or more; exactly 166 counts. This is the same quantity the world report calls Score.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7003_b1143__seed7003_r42" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7003_b1143__seed7003_r42" placeholder="why" disabled></span></li>
+<li><span class="q">Will Equatoguinean have a higher population than Ohlone at turn 120?</span><span class="rev">news: Ohlone lost at least three cities.</span><span class="meta">seed7011 · comparative (pop/cities/territory/score) · n<sub>x</sub>=143</span><span class="val">0.51 → 0.63 <em>(+0.12)</em></span><span class="crit">Resolves YES if Equatoguinean&#x27;s population as recorded at the end of turn 120 is strictly greater than Ohlone&#x27;s. Equal values resolve NO. The quantity is the same quantity the world report calls Population.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7011_b664__seed7011_r21" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7011_b664__seed7011_r21" placeholder="why" disabled></span></li>
+<li><span class="q">Will Somali have a higher population than Spanish at turn 120?</span><span class="rev">news: Somali lost at least three cities.</span><span class="meta">seed7008 · comparative (pop/cities/territory/score) · n<sub>x</sub>=184</span><span class="val">0.91 → 0.79 <em>(-0.12)</em></span><span class="crit">Resolves YES if Somali&#x27;s population as recorded at the end of turn 120 is strictly greater than Spanish&#x27;s. Equal values resolve NO. The quantity is the same quantity the world report calls Population.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7008_b731__seed7008_r47" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7008_b731__seed7008_r47" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>C2 · persistence, cross-series · T150</h4><ul>
+<li><span class="q">Will Fijian&#x27;s treasury drop below 25% of its turn-60 level at any point up to turn 150?</span><span class="rev">news: Fijian lost at least three cities.</span><span class="meta">seed7010 · drawdown · n<sub>x</sub>=203</span><span class="val">0.41 → 0.48 <em>(+0.06)</em></span><span class="crit">Resolves YES if, at the end of any turn from 61 through 150 inclusive, Fijian&#x27;s treasury is below 25% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 25% does not count. A later recovery does not change the result.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7010_b1855__seed7010_r47" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7010_b1855__seed7010_r47" placeholder="why" disabled></span></li>
+<li><span class="q">Will Cañari&#x27;s treasury be at least 663 at turn 150?</span><span class="rev">news: Cañari lost at least three cities.</span><span class="meta">seed7005 · value threshold (score/treasury/pop/cities/territory/military) · n<sub>x</sub>=328</span><span class="val">0.10 → 0.09 <em>(-0.02)</em></span><span class="crit">Resolves YES if Cañari&#x27;s treasury as recorded at the end of turn 150 is 663 or more; exactly 663 counts. This is the same quantity the world report calls Treasury.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7005_b1794__seed7005_r35" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7005_b1794__seed7005_r35" placeholder="why" disabled></span></li>
+<li><span class="q">Will Saka&#x27;s number of military units be at least 20 at turn 150?</span><span class="rev">news: Saka lost at least three cities.</span><span class="meta">seed7005 · value threshold (score/treasury/pop/cities/territory/military) · n<sub>x</sub>=732</span><span class="val">0.76 → 0.71 <em>(-0.05)</em></span><span class="crit">Resolves YES if Saka&#x27;s number of military units as recorded at the end of turn 150 is 20 or more; exactly 20 counts. This is the same quantity the world report calls Military.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7005_b1495__seed7005_r14" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7005_b1495__seed7005_r14" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>C2 · persistence, cross-series · T180</h4><ul>
+<li><span class="q">Will American have a higher territory size than Fijian at turn 180?</span><span class="rev">news: American lost at least three cities.</span><span class="meta">seed7010 · comparative (pop/cities/territory/score) · n<sub>x</sub>=231</span><span class="val">0.69 → 0.62 <em>(-0.07)</em></span><span class="crit">Resolves YES if American&#x27;s territory size as recorded at the end of turn 180 is strictly greater than Fijian&#x27;s. Equal values resolve NO. The quantity is the same quantity the world report calls Territory.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7010_b1933__seed7010_r23" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7010_b1933__seed7010_r23" placeholder="why" disabled></span></li>
+<li><span class="q">Will Saka&#x27;s population drop below 90% of its turn-60 level at any point up to turn 180?</span><span class="rev">news: Saka had at least two fewer cities at turn 90 than at turn 60.</span><span class="meta">seed7005 · drawdown · n<sub>x</sub>=150</span><span class="val">0.07 → 0.40 <em>(+0.33)</em></span><span class="crit">Resolves YES if, at the end of any turn from 61 through 180 inclusive, Saka&#x27;s population is below 90% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 90% does not count. A later recovery does not change the result.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7005_b2204__seed7005_r15" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7005_b2204__seed7005_r15" placeholder="why" disabled></span></li>
+<li><span class="q">Will Boian&#x27;s score be at least 174 at turn 180?</span><span class="rev">news: Boian lost at least three cities.</span><span class="meta">seed7022 · value threshold (score/treasury/pop/cities/territory/military) · n<sub>x</sub>=342</span><span class="val">0.75 → 0.71 <em>(-0.05)</em></span><span class="crit">Resolves YES if Boian&#x27;s score as recorded at the end of turn 180 is 174 or more; exactly 174 counts. This is the same quantity the world report calls Score.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7022_b1324__seed7022_r20" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7022_b1324__seed7022_r20" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>C2 · persistence, cross-series · T210</h4><ul>
+<li><span class="q">Will Rhenish&#x27;s treasury drop below 50% of its turn-60 level at any point up to turn 210?</span><span class="rev">news: Rhenish had the highest score of any civilization at turn 90.</span><span class="meta">seed7003 · drawdown · n<sub>x</sub>=107</span><span class="val">0.70 → 0.69 <em>(-0.00)</em></span><span class="crit">Resolves YES if, at the end of any turn from 61 through 210 inclusive, Rhenish&#x27;s treasury is below 50% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 50% does not count. A later recovery does not change the result.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7003_b3156__seed7003_r31" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7003_b3156__seed7003_r31" placeholder="why" disabled></span></li>
+<li><span class="q">Will Corsican have a higher population than Crimean Tatar at turn 210?</span><span class="rev">news: Crimean Tatar had the highest score of any civilization at turn 90.</span><span class="meta">seed7003 · comparative (pop/cities/territory/score) · n<sub>x</sub>=823</span><span class="val">0.32 → 0.28 <em>(-0.04)</em></span><span class="crit">Resolves YES if Corsican&#x27;s population as recorded at the end of turn 210 is strictly greater than Crimean Tatar&#x27;s. Equal values resolve NO. The quantity is the same quantity the world report calls Population.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7003_b2810__seed7003_r22" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7003_b2810__seed7003_r22" placeholder="why" disabled></span></li>
+<li><span class="q">Will American&#x27;s score be at least 254 at turn 210?</span><span class="rev">news: American lost a city.</span><span class="meta">seed7011 · value threshold (score/treasury/pop/cities/territory/military) · n<sub>x</sub>=780</span><span class="val">0.10 → 0.09 <em>(-0.01)</em></span><span class="crit">Resolves YES if American&#x27;s score as recorded at the end of turn 210 is 254 or more; exactly 254 counts. This is the same quantity the world report calls Score.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7011_b3012__seed7011_r51" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7011_b3012__seed7011_r51" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>D · inferential · T120</h4><ul>
+<li><span class="q">Will Rhenish suffer a civil war (a breakaway civilization splitting off) by turn 120?</span><span class="rev">news: Rhenish and Sammarinese went to war.</span><span class="meta">seed7003 · civil war by T · n<sub>x</sub>=1000</span><span class="val">0.05 → 0.05 <em>(+0.00)</em></span><span class="crit">Resolves YES if Rhenish splits in a civil war on any turn from 61 through 120 inclusive (an event on turn 120 itself counts), meaning a new civilization is created out of some of Rhenish&#x27;s cities. Anarchy, disorder, or the loss of cities to other players without such a split resolve NO.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7003_b980__seed7003_r8" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7003_b980__seed7003_r8" placeholder="why" disabled></span></li>
+<li><span class="q">Will Bissau-Guinean and Swazi have a formal peace in effect at turn 120?</span><span class="rev">news: Bissau-Guinean and Tajik went to war.</span><span class="meta">seed7014 · peace at T · n<sub>x</sub>=1000</span><span class="val">0.05 → 0.05 <em>(+0.00)</em></span><span class="crit">Resolves YES if the diplomatic state between Bissau-Guinean and Swazi as recorded at the end of turn 120 is Peace. War, cease-fire, armistice, alliance, or never having met all resolve NO.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7014_b638__seed7014_r2" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7014_b638__seed7014_r2" placeholder="why" disabled></span></li>
+<li><span class="q">Will Rhenish suffer a civil war (a breakaway civilization splitting off) by turn 120?</span><span class="rev">news: Rhenish lost at least three cities.</span><span class="meta">seed7003 · civil war by T · n<sub>x</sub>=247</span><span class="val">0.05 → 0.10 <em>(+0.05)</em></span><span class="crit">Resolves YES if Rhenish splits in a civil war on any turn from 61 through 120 inclusive (an event on turn 120 itself counts), meaning a new civilization is created out of some of Rhenish&#x27;s cities. Anarchy, disorder, or the loss of cities to other players without such a split resolve NO.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7003_b980__seed7003_r26" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7003_b980__seed7003_r26" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>D · inferential · T150</h4><ul>
+<li><span class="q">Will Otomí capture at least one city from Greek by turn 150?</span><span class="rev">news: Greek and Cañari went to war.</span><span class="meta">seed7005 · directed conquest · n<sub>x</sub>=1000</span><span class="val">0.70 → 0.70 <em>(+0.00)</em></span><span class="crit">Resolves YES if Otomí captures at least one city whose owner at the moment of capture is Greek, on any turn from 61 through 150 inclusive (an event on turn 150 itself counts). Recaptures count. Resolves NO otherwise.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7005_b1312__seed7005_r9" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7005_b1312__seed7005_r9" placeholder="why" disabled></span></li>
+<li><span class="q">Will Rhenish and Sammarinese be at war at turn 150?</span><span class="rev">news: Rhenish lost at least three cities.</span><span class="meta">seed7003 · war at T · n<sub>x</sub>=247</span><span class="val">0.87 → 0.86 <em>(-0.01)</em></span><span class="crit">Resolves YES if the diplomatic state between Rhenish and Sammarinese as recorded at the end of turn 150 is War. Cease-fire, armistice, peace, alliance, or never having met all resolve NO.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7003_b1370__seed7003_r26" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7003_b1370__seed7003_r26" placeholder="why" disabled></span></li>
+<li><span class="q">Will Equatoguinean capture at least one city from American by turn 150?</span><span class="rev">news: Equatoguinean and American went to war.</span><span class="meta">seed7011 · directed conquest · n<sub>x</sub>=683</span><span class="val">0.46 → 0.51 <em>(+0.05)</em></span><span class="crit">Resolves YES if Equatoguinean captures at least one city whose owner at the moment of capture is American, on any turn from 61 through 150 inclusive (an event on turn 150 itself counts). Recaptures count. Resolves NO otherwise.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7011_b1402__seed7011_r16" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7011_b1402__seed7011_r16" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>D · inferential · T180</h4><ul>
+<li><span class="q">Will Ghana lose at least 5 cities by turn 180?</span><span class="rev">news: Crimean Tatar and Ghana went to war.</span><span class="meta">seed7003 · losses ≥ k · n<sub>x</sub>=1000</span><span class="val">0.63 → 0.63 <em>(+0.00)</em></span><span class="crit">Resolves YES if Ghana loses at least 5 cities to capture on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). Losses to any player count, including to barbarians. Each loss event counts separately, so a city lost, retaken and lost again counts twice. A city destroyed rather than captured, or lost through a civil war split, does not count. Exactly 5 counts.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7003_b2536__seed7003_r0" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7003_b2536__seed7003_r0" placeholder="why" disabled></span></li>
+<li><span class="q">Will Central American capture at least one city from Spanish by turn 180?</span><span class="rev">news: Spanish and Beninese went to war.</span><span class="meta">seed7010 · directed conquest · n<sub>x</sub>=547</span><span class="val">0.52 → 0.56 <em>(+0.03)</em></span><span class="crit">Resolves YES if Central American captures at least one city whose owner at the moment of capture is Spanish, on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). Recaptures count. Resolves NO otherwise.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7010_b1887__seed7010_r11" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7010_b1887__seed7010_r11" placeholder="why" disabled></span></li>
+<li><span class="q">Will American capture at least one city from Central American by turn 180?</span><span class="rev">news: Central American lost at least three cities.</span><span class="meta">seed7010 · directed conquest · n<sub>x</sub>=103</span><span class="val">0.88 → 0.94 <em>(+0.06)</em></span><span class="crit">Resolves YES if American captures at least one city whose owner at the moment of capture is Central American, on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). Recaptures count. Resolves NO otherwise.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7010_b1874__seed7010_r17" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7010_b1874__seed7010_r17" placeholder="why" disabled></span></li>
+</ul></div>
+<div class="cell"><h4>D · inferential · T210</h4><ul>
+<li><span class="q">Will Swazi suffer a civil war (a breakaway civilization splitting off) by turn 210?</span><span class="rev">news: Swazi and Chinese went to war.</span><span class="meta">seed7014 · civil war by T · n<sub>x</sub>=631</span><span class="val">0.42 → 0.39 <em>(-0.03)</em></span><span class="crit">Resolves YES if Swazi splits in a civil war on any turn from 61 through 210 inclusive (an event on turn 210 itself counts), meaning a new civilization is created out of some of Swazi&#x27;s cities. Anarchy, disorder, or the loss of cities to other players without such a split resolve NO.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7014_b2858__seed7014_r14" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7014_b2858__seed7014_r14" placeholder="why" disabled></span></li>
+<li><span class="q">Will Central American capture at least one city from Spanish by turn 210?</span><span class="rev">news: Central American and Spanish went to war.</span><span class="meta">seed7010 · directed conquest · n<sub>x</sub>=868</span><span class="val">0.55 → 0.58 <em>(+0.03)</em></span><span class="crit">Resolves YES if Central American captures at least one city whose owner at the moment of capture is Spanish, on any turn from 61 through 210 inclusive (an event on turn 210 itself counts). Recaptures count. Resolves NO otherwise.</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7010_b2437__seed7010_r0" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7010_b2437__seed7010_r0" placeholder="why" disabled></span></li>
+<li><span class="q">Will American and Spanish be at formal Peace at any point between turns 61 and 210?</span><span class="rev">news: Spanish and Beninese went to war.</span><span class="meta">seed7010 · diplomatic state reached · n<sub>x</sub>=547</span><span class="val">0.51 → 0.71 <em>(+0.20)</em></span><span class="crit">Resolves YES if the diplomatic state between American and Spanish is Peace at the end of any turn from 61 through 210 inclusive. Resolves NO if the state never occurs in that window (war, cease-fire, armistice and alliance do not count).</span><span class="ctl"><label class="flag"><input type="checkbox" data-id="seed7010_b2461__seed7010_r11" data-set="natcond" disabled> issue</label><input class="why" type="text" data-id="seed7010_b2461__seed7010_r11" placeholder="why" disabled></span></li>
+</ul></div>
+</section><footer>Files: tmp/fbsim_v3_corpus/draw_v1/{bank_750,tails_300,mirrors_50,continuous_300,natcond_600}.json · COMPOSITION.md · QC_SAMPLES.md. Draw seed 2026; QC sample seed 11.</footer></main><script>
+(async () => {
+  const status = document.getElementById('qcstatus');
+  const boxes = Array.from(document.querySelectorAll('input[type=checkbox][data-id]'));
+  const whys = Array.from(document.querySelectorAll('input.why[data-id]'));
+  const byId = {}; boxes.forEach(b => { byId[b.dataset.id] = byId[b.dataset.id] || {}; byId[b.dataset.id].box = b; });
+  whys.forEach(w => { byId[w.dataset.id] = byId[w.dataset.id] || {}; byId[w.dataset.id].why = w; });
+  const textOf = (el) => { const li = el.closest('li'); return li ? (li.querySelector('.q') || {}).textContent || '' : ''; };
+  const db = window.claude && window.claude.use ? await window.claude.use('db') : null;
+  if (!db) { status.textContent = 'Shared record unavailable in this view; marks cannot be saved here.'; return; }
+  const enable = () => { boxes.forEach(b => b.disabled = false); whys.forEach(w => w.disabled = false); };
+  const paint = () => { let n = 0; Object.values(byId).forEach(o => { const on = o.box && o.box.checked; if (on) n++; const li = o.box && o.box.closest('li'); if (li) li.classList.toggle('flagged', !!on); }); status.innerHTML = '<b>' + n + '</b> item' + (n === 1 ? '' : 's') + ' flagged so far.'; };
+  try {
+    const snap = await db.collection('qc').limit(1000).get();
+    snap.docs.forEach(d => { const v = d.data(); const o = byId[d.id]; if (!o || !v) return; if (o.box) o.box.checked = !!v.flag; if (o.why) o.why.value = v.reason || ''; });
+  } catch (e) { status.textContent = 'Could not load saved marks (' + (e && e.code || 'error') + '); new marks will still be saved.'; }
+  enable(); paint();
+  const timers = {};
+  const save = (id) => {
+    const o = byId[id]; if (!o) return;
+    clearTimeout(timers[id]);
+    timers[id] = setTimeout(async () => {
+      const body = { flag: !!(o.box && o.box.checked), reason: (o.why && o.why.value || '').slice(0, 2000), set: o.box ? o.box.dataset.set : '', text: textOf(o.box || o.why).slice(0, 400), ts: new Date().toISOString() };
+      try { await db.doc('qc/' + id).set(body); paint(); }
+      catch (e) { status.textContent = 'Save failed (' + (e && e.code || 'error') + '); try again.'; }
+    }, 400);
+  };
+  boxes.forEach(b => b.addEventListener('change', () => { paint(); save(b.dataset.id); }));
+  whys.forEach(w => w.addEventListener('input', () => save(w.dataset.id)));
+})();
+</script>

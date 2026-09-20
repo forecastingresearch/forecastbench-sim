@@ -1,0 +1,2034 @@
+[
+{
+"world": "seed7001",
+"family": "NB1_value_threshold",
+"T": 120,
+"text": "Will Estonian's number of cities be at least 34 at turn 120?",
+"subj": [
+"2"
+],
+"qAll": 0.546,
+"qA": 0.542,
+"qB": 0.5511022044088176,
+"metric": "cities_count",
+"x": 34,
+"sel_q": 0.5,
+"id": "seed7001:b1088",
+"criteria": "Resolves YES if Estonian's number of cities as recorded at the end of turn 120 is 34 or more; exactly 34 counts. This is the same quantity the world report calls Cities."
+},
+{
+"world": "seed7001",
+"family": "EX_comparative",
+"T": 150,
+"text": "Will Brazzaville-Congolese have a higher score than Estonian at turn 150?",
+"subj": [
+"0",
+"2"
+],
+"qAll": 0.397,
+"qA": 0.406,
+"qB": 0.38877755511022044,
+"metric": "scores",
+"id": "seed7001:b1354",
+"criteria": "Resolves YES if Brazzaville-Congolese's score as recorded at the end of turn 150 is strictly greater than Estonian's. Equal values resolve NO. The quantity is the same quantity the world report calls Score."
+},
+{
+"world": "seed7001",
+"family": "EX_comparative",
+"T": 150,
+"text": "Will Brazzaville-Congolese have a higher score than Sahrawi at turn 150?",
+"subj": [
+"0",
+"4"
+],
+"qAll": 0.544,
+"qA": 0.55,
+"qB": 0.5390781563126252,
+"metric": "scores",
+"id": "seed7001:b1369",
+"criteria": "Resolves YES if Brazzaville-Congolese's score as recorded at the end of turn 150 is strictly greater than Sahrawi's. Equal values resolve NO. The quantity is the same quantity the world report calls Score."
+},
+{
+"world": "seed7001",
+"family": "NB1_value_threshold",
+"T": 150,
+"text": "Will Brazzaville-Congolese's treasury be at least 119 at turn 150?",
+"subj": [
+"0"
+],
+"qAll": 0.95,
+"qA": 0.938,
+"qB": 0.9619238476953907,
+"metric": "treasury",
+"x": 119,
+"sel_q": 0.05,
+"id": "seed7001:b1470",
+"criteria": "Resolves YES if Brazzaville-Congolese's treasury as recorded at the end of turn 150 is 119 or more; exactly 119 counts. This is the same quantity the world report calls Treasury."
+},
+{
+"world": "seed7001",
+"family": "NB4_drawdown",
+"T": 180,
+"text": "Will Brazzaville-Congolese's territory size drop below 70% of its turn-60 level at any point up to turn 180?",
+"subj": [
+"0"
+],
+"qAll": 0.173,
+"qA": 0.176,
+"qB": 0.17034068136272545,
+"metric": "territory_size",
+"f": 0.7,
+"id": "seed7001:b1882",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 180 inclusive, Brazzaville-Congolese's territory size is below 70% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 70% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7001",
+"family": "NB4_drawdown",
+"T": 180,
+"text": "Will Brazzaville-Congolese's number of cities drop below 70% of its turn-60 level at any point up to turn 180?",
+"subj": [
+"0"
+],
+"qAll": 0.107,
+"qA": 0.112,
+"qB": 0.10220440881763528,
+"metric": "cities_count",
+"f": 0.7,
+"id": "seed7001:b1884",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 180 inclusive, Brazzaville-Congolese's number of cities is below 70% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 70% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7001",
+"family": "NB1_value_threshold",
+"T": 180,
+"text": "Will Estonian's treasury be at least 325 at turn 180?",
+"subj": [
+"2"
+],
+"qAll": 0.751,
+"qA": 0.752,
+"qB": 0.749498997995992,
+"metric": "treasury",
+"x": 325,
+"sel_q": 0.25,
+"id": "seed7001:b1957",
+"criteria": "Resolves YES if Estonian's treasury as recorded at the end of turn 180 is 325 or more; exactly 325 counts. This is the same quantity the world report calls Treasury."
+},
+{
+"world": "seed7001",
+"family": "NB1_value_threshold",
+"T": 180,
+"text": "Will Estonian's number of cities be at least 31 at turn 180?",
+"subj": [
+"2"
+],
+"qAll": 0.751,
+"qA": 0.756,
+"qB": 0.7474949899799599,
+"metric": "cities_count",
+"x": 31,
+"sel_q": 0.25,
+"id": "seed7001:b1971",
+"criteria": "Resolves YES if Estonian's number of cities as recorded at the end of turn 180 is 31 or more; exactly 31 counts. This is the same quantity the world report calls Cities."
+},
+{
+"world": "seed7001",
+"family": "NB1_value_threshold",
+"T": 180,
+"text": "Will Estonian's number of military units be at least 17 at turn 180?",
+"subj": [
+"2"
+],
+"qAll": 0.76,
+"qA": 0.762,
+"qB": 0.7575150300601202,
+"metric": "military_units_count",
+"x": 17,
+"sel_q": 0.25,
+"id": "seed7001:b1985",
+"criteria": "Resolves YES if Estonian's number of military units as recorded at the end of turn 180 is 17 or more; exactly 17 counts. This is the same quantity the world report calls Military."
+},
+{
+"world": "seed7003",
+"family": "NB1_value_threshold",
+"T": 120,
+"text": "Will Sammarinese's number of cities be at least 23 at turn 120?",
+"subj": [
+"3"
+],
+"qAll": 0.906,
+"qA": 0.904,
+"qB": 0.9078156312625251,
+"metric": "cities_count",
+"x": 23,
+"sel_q": 0.1,
+"id": "seed7003:b1161",
+"criteria": "Resolves YES if Sammarinese's number of cities as recorded at the end of turn 120 is 23 or more; exactly 23 counts. This is the same quantity the world report calls Cities."
+},
+{
+"world": "seed7003",
+"family": "NB4_drawdown",
+"T": 120,
+"text": "Will Sammarinese's territory size drop below 90% of its turn-60 level at any point up to turn 120?",
+"subj": [
+"3"
+],
+"qAll": 0.064,
+"qA": 0.066,
+"qB": 0.06212424849699399,
+"metric": "territory_size",
+"f": 0.9,
+"id": "seed7003:b1183",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 120 inclusive, Sammarinese's territory size is below 90% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 90% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7003",
+"family": "EX_comparative",
+"T": 150,
+"text": "Will Crimean Tatar have a higher number of cities than Sammarinese at turn 150?",
+"subj": [
+"0",
+"3"
+],
+"qAll": 0.783,
+"qA": 0.762,
+"qB": 0.8036072144288577,
+"metric": "cities_count",
+"id": "seed7003:b1343",
+"criteria": "Resolves YES if Crimean Tatar's number of cities as recorded at the end of turn 150 is strictly greater than Sammarinese's. Equal values resolve NO. The quantity is the same quantity the world report calls Cities."
+},
+{
+"world": "seed7003",
+"family": "NB1_value_threshold",
+"T": 150,
+"text": "Will Crimean Tatar's number of cities be at least 43 at turn 150?",
+"subj": [
+"0"
+],
+"qAll": 0.531,
+"qA": 0.538,
+"qB": 0.5230460921843687,
+"metric": "cities_count",
+"x": 43,
+"sel_q": 0.5,
+"id": "seed7003:b1549",
+"criteria": "Resolves YES if Crimean Tatar's number of cities as recorded at the end of turn 150 is 43 or more; exactly 43 counts. This is the same quantity the world report calls Cities."
+},
+{
+"world": "seed7003",
+"family": "NB1_value_threshold",
+"T": 150,
+"text": "Will Crimean Tatar's number of military units be at least 35 at turn 150?",
+"subj": [
+"0"
+],
+"qAll": 0.251,
+"qA": 0.272,
+"qB": 0.22845691382765532,
+"metric": "military_units_count",
+"x": 35,
+"sel_q": 0.75,
+"id": "seed7003:b1564",
+"criteria": "Resolves YES if Crimean Tatar's number of military units as recorded at the end of turn 150 is 35 or more; exactly 35 counts. This is the same quantity the world report calls Military."
+},
+{
+"world": "seed7003",
+"family": "NB4_drawdown",
+"T": 150,
+"text": "Will Rhenish's number of cities drop below 70% of its turn-60 level at any point up to turn 150?",
+"subj": [
+"1"
+],
+"qAll": 0.051,
+"qA": 0.042,
+"qB": 0.06012024048096192,
+"metric": "cities_count",
+"f": 0.7,
+"id": "seed7003:b1682",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 150 inclusive, Rhenish's number of cities is below 70% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 70% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7003",
+"family": "NB1_value_threshold",
+"T": 150,
+"text": "Will Corsican's score be at least 208 at turn 150?",
+"subj": [
+"4"
+],
+"qAll": 0.107,
+"qA": 0.108,
+"qB": 0.1062124248496994,
+"metric": "scores",
+"x": 208,
+"sel_q": 0.9,
+"id": "seed7003:b1971",
+"criteria": "Resolves YES if Corsican's score as recorded at the end of turn 150 is 208 or more; exactly 208 counts. This is the same quantity the world report calls Score."
+},
+{
+"world": "seed7003",
+"family": "NB1_value_threshold",
+"T": 150,
+"text": "Will Corsican's number of military units be at least 45 at turn 150?",
+"subj": [
+"4"
+],
+"qAll": 0.054,
+"qA": 0.048,
+"qB": 0.06012024048096192,
+"metric": "military_units_count",
+"x": 45,
+"sel_q": 0.95,
+"id": "seed7003:b2007",
+"criteria": "Resolves YES if Corsican's number of military units as recorded at the end of turn 150 is 45 or more; exactly 45 counts. This is the same quantity the world report calls Military."
+},
+{
+"world": "seed7003",
+"family": "NB4_drawdown",
+"T": 150,
+"text": "Will Corsican's treasury drop below 25% of its turn-60 level at any point up to turn 150?",
+"subj": [
+"4"
+],
+"qAll": 0.262,
+"qA": 0.266,
+"qB": 0.25851703406813625,
+"metric": "treasury",
+"f": 0.25,
+"id": "seed7003:b2009",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 150 inclusive, Corsican's treasury is below 25% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 25% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7003",
+"family": "NB4_drawdown",
+"T": 150,
+"text": "Will Corsican's territory size drop below 90% of its turn-60 level at any point up to turn 150?",
+"subj": [
+"4"
+],
+"qAll": 0.087,
+"qA": 0.092,
+"qB": 0.08216432865731463,
+"metric": "territory_size",
+"f": 0.9,
+"id": "seed7003:b2010",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 150 inclusive, Corsican's territory size is below 90% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 90% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7003",
+"family": "EX_comparative",
+"T": 180,
+"text": "Will Rhenish have a higher number of cities than Crimean Tatar at turn 180?",
+"subj": [
+"1",
+"0"
+],
+"qAll": 0.167,
+"qA": 0.174,
+"qB": 0.16032064128256512,
+"metric": "cities_count",
+"id": "seed7003:b2033",
+"criteria": "Resolves YES if Rhenish's number of cities as recorded at the end of turn 180 is strictly greater than Crimean Tatar's. Equal values resolve NO. The quantity is the same quantity the world report calls Cities."
+},
+{
+"world": "seed7003",
+"family": "EX_comparative",
+"T": 180,
+"text": "Will Rhenish have a higher score than Crimean Tatar at turn 180?",
+"subj": [
+"1",
+"0"
+],
+"qAll": 0.169,
+"qA": 0.162,
+"qB": 0.17635270541082165,
+"metric": "scores",
+"id": "seed7003:b2037",
+"criteria": "Resolves YES if Rhenish's score as recorded at the end of turn 180 is strictly greater than Crimean Tatar's. Equal values resolve NO. The quantity is the same quantity the world report calls Score."
+},
+{
+"world": "seed7003",
+"family": "EX_comparative",
+"T": 180,
+"text": "Will Ghana have a higher score than Crimean Tatar at turn 180?",
+"subj": [
+"2",
+"0"
+],
+"qAll": 0.152,
+"qA": 0.15,
+"qB": 0.15430861723446893,
+"metric": "scores",
+"id": "seed7003:b2049",
+"criteria": "Resolves YES if Ghana's score as recorded at the end of turn 180 is strictly greater than Crimean Tatar's. Equal values resolve NO. The quantity is the same quantity the world report calls Score."
+},
+{
+"world": "seed7003",
+"family": "NB1_value_threshold",
+"T": 180,
+"text": "Will Crimean Tatar's score be at least 231 at turn 180?",
+"subj": [
+"0"
+],
+"qAll": 0.517,
+"qA": 0.518,
+"qB": 0.5150300601202404,
+"metric": "scores",
+"x": 231,
+"sel_q": 0.5,
+"id": "seed7003:b2253",
+"criteria": "Resolves YES if Crimean Tatar's score as recorded at the end of turn 180 is 231 or more; exactly 231 counts. This is the same quantity the world report calls Score."
+},
+{
+"world": "seed7003",
+"family": "NB4_drawdown",
+"T": 180,
+"text": "Will Rhenish's number of cities drop below 70% of its turn-60 level at any point up to turn 180?",
+"subj": [
+"1"
+],
+"qAll": 0.119,
+"qA": 0.114,
+"qB": 0.12424849699398798,
+"metric": "cities_count",
+"f": 0.7,
+"id": "seed7003:b2410",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 180 inclusive, Rhenish's number of cities is below 70% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 70% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7003",
+"family": "NB1_value_threshold",
+"T": 210,
+"text": "Will Crimean Tatar's treasury be at least 450 at turn 210?",
+"subj": [
+"0"
+],
+"qAll": 0.501,
+"qA": 0.492,
+"qB": 0.5090180360721442,
+"metric": "treasury",
+"x": 450,
+"sel_q": 0.5,
+"id": "seed7003:b3008",
+"criteria": "Resolves YES if Crimean Tatar's treasury as recorded at the end of turn 210 is 450 or more; exactly 450 counts. This is the same quantity the world report calls Treasury."
+},
+{
+"world": "seed7003",
+"family": "EX_comparative",
+"T": 120,
+"text": "Will Rhenish have a higher number of cities than Sammarinese at turn 120?",
+"subj": [
+"1",
+"3"
+],
+"qAll": 0.658,
+"qA": 0.672,
+"qB": 0.6432865731462926,
+"metric": "cities_count",
+"id": "seed7003:b670",
+"criteria": "Resolves YES if Rhenish's number of cities as recorded at the end of turn 120 is strictly greater than Sammarinese's. Equal values resolve NO. The quantity is the same quantity the world report calls Cities."
+},
+{
+"world": "seed7003",
+"family": "EX_comparative",
+"T": 120,
+"text": "Will Rhenish have a higher population than Corsican at turn 120?",
+"subj": [
+"1",
+"4"
+],
+"qAll": 0.616,
+"qA": 0.612,
+"qB": 0.6192384769539078,
+"metric": "population",
+"id": "seed7003:b676",
+"criteria": "Resolves YES if Rhenish's population as recorded at the end of turn 120 is strictly greater than Corsican's. Equal values resolve NO. The quantity is the same quantity the world report calls Population."
+},
+{
+"world": "seed7005",
+"family": "NB4_drawdown",
+"T": 120,
+"text": "Will Ca\u00f1ari's number of cities drop below 70% of its turn-60 level at any point up to turn 120?",
+"subj": [
+"3"
+],
+"qAll": 0.065,
+"qA": 0.074,
+"qB": 0.056112224448897796,
+"metric": "cities_count",
+"f": 0.7,
+"id": "seed7005:b1137",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 120 inclusive, Ca\u00f1ari's number of cities is below 70% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 70% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7005",
+"family": "EX_comparative",
+"T": 150,
+"text": "Will Ca\u00f1ari have a higher number of cities than Saka at turn 150?",
+"subj": [
+"3",
+"0"
+],
+"qAll": 0.608,
+"qA": 0.592,
+"qB": 0.625250501002004,
+"metric": "cities_count",
+"id": "seed7005:b1292",
+"criteria": "Resolves YES if Ca\u00f1ari's number of cities as recorded at the end of turn 150 is strictly greater than Saka's. Equal values resolve NO. The quantity is the same quantity the world report calls Cities."
+},
+{
+"world": "seed7005",
+"family": "NB1_value_threshold",
+"T": 150,
+"text": "Will Saka's population be at least 66 at turn 150?",
+"subj": [
+"0"
+],
+"qAll": 0.525,
+"qA": 0.544,
+"qB": 0.5070140280561122,
+"metric": "population",
+"x": 66,
+"sel_q": 0.5,
+"id": "seed7005:b1475",
+"criteria": "Resolves YES if Saka's population as recorded at the end of turn 150 is 66 or more; exactly 66 counts. This is the same quantity the world report calls Population."
+},
+{
+"world": "seed7005",
+"family": "NB4_drawdown",
+"T": 150,
+"text": "Will Saka's number of cities drop below 70% of its turn-60 level at any point up to turn 150?",
+"subj": [
+"0"
+],
+"qAll": 0.136,
+"qA": 0.138,
+"qB": 0.1342685370741483,
+"metric": "cities_count",
+"f": 0.7,
+"id": "seed7005:b1505",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 150 inclusive, Saka's number of cities is below 70% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 70% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7005",
+"family": "NB1_value_threshold",
+"T": 150,
+"text": "Will Ca\u00f1ari's treasury be at least 663 at turn 150?",
+"subj": [
+"3"
+],
+"qAll": 0.101,
+"qA": 0.094,
+"qB": 0.10821643286573146,
+"metric": "treasury",
+"x": 663,
+"sel_q": 0.9,
+"id": "seed7005:b1794",
+"criteria": "Resolves YES if Ca\u00f1ari's treasury as recorded at the end of turn 150 is 663 or more; exactly 663 counts. This is the same quantity the world report calls Treasury."
+},
+{
+"world": "seed7005",
+"family": "EX_comparative",
+"T": 180,
+"text": "Will Ca\u00f1ari have a higher score than Saka at turn 180?",
+"subj": [
+"3",
+"0"
+],
+"qAll": 0.547,
+"qA": 0.542,
+"qB": 0.5511022044088176,
+"metric": "scores",
+"id": "seed7005:b1988",
+"criteria": "Resolves YES if Ca\u00f1ari's score as recorded at the end of turn 180 is strictly greater than Saka's. Equal values resolve NO. The quantity is the same quantity the world report calls Score."
+},
+{
+"world": "seed7005",
+"family": "EX_comparative",
+"T": 180,
+"text": "Will Ostrogothic have a higher territory size than Ca\u00f1ari at turn 180?",
+"subj": [
+"4",
+"3"
+],
+"qAll": 0.453,
+"qA": 0.462,
+"qB": 0.44288577154308617,
+"metric": "territory_size",
+"id": "seed7005:b2070",
+"criteria": "Resolves YES if Ostrogothic's territory size as recorded at the end of turn 180 is strictly greater than Ca\u00f1ari's. Equal values resolve NO. The quantity is the same quantity the world report calls Territory."
+},
+{
+"world": "seed7005",
+"family": "NB4_drawdown",
+"T": 180,
+"text": "Will Saka's population drop below 90% of its turn-60 level at any point up to turn 180?",
+"subj": [
+"0"
+],
+"qAll": 0.073,
+"qA": 0.082,
+"qB": 0.06412825651302605,
+"metric": "population",
+"f": 0.9,
+"id": "seed7005:b2204",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 180 inclusive, Saka's population is below 90% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 90% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7005",
+"family": "NB1_value_threshold",
+"T": 180,
+"text": "Will Ca\u00f1ari's number of cities be at least 14 at turn 180?",
+"subj": [
+"3"
+],
+"qAll": 0.753,
+"qA": 0.744,
+"qB": 0.7615230460921844,
+"metric": "cities_count",
+"x": 14,
+"sel_q": 0.25,
+"id": "seed7005:b2502",
+"criteria": "Resolves YES if Ca\u00f1ari's number of cities as recorded at the end of turn 180 is 14 or more; exactly 14 counts. This is the same quantity the world report calls Cities."
+},
+{
+"world": "seed7005",
+"family": "NB4_drawdown",
+"T": 180,
+"text": "Will Ca\u00f1ari's territory size drop below 90% of its turn-60 level at any point up to turn 180?",
+"subj": [
+"3"
+],
+"qAll": 0.322,
+"qA": 0.324,
+"qB": 0.32064128256513025,
+"metric": "territory_size",
+"f": 0.9,
+"id": "seed7005:b2523",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 180 inclusive, Ca\u00f1ari's territory size is below 90% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 90% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7005",
+"family": "NB4_drawdown",
+"T": 180,
+"text": "Will Ca\u00f1ari's number of cities drop below 99% of its turn-60 level at any point up to turn 180?",
+"subj": [
+"3"
+],
+"qAll": 0.366,
+"qA": 0.372,
+"qB": 0.36072144288577157,
+"metric": "cities_count",
+"f": 0.99,
+"id": "seed7005:b2525",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 180 inclusive, Ca\u00f1ari's number of cities is below 99% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 99% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7005",
+"family": "NB1_value_threshold",
+"T": 210,
+"text": "Will Saka's population be at least 90 at turn 210?",
+"subj": [
+"0"
+],
+"qAll": 0.111,
+"qA": 0.112,
+"qB": 0.11022044088176353,
+"metric": "population",
+"x": 90,
+"sel_q": 0.9,
+"id": "seed7005:b2807",
+"criteria": "Resolves YES if Saka's population as recorded at the end of turn 210 is 90 or more; exactly 90 counts. This is the same quantity the world report calls Population."
+},
+{
+"world": "seed7005",
+"family": "NB4_drawdown",
+"T": 120,
+"text": "Will Saka's treasury drop below 25% of its turn-60 level at any point up to turn 120?",
+"subj": [
+"0"
+],
+"qAll": 0.343,
+"qA": 0.326,
+"qB": 0.36072144288577157,
+"metric": "treasury",
+"f": 0.25,
+"id": "seed7005:b814",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 120 inclusive, Saka's treasury is below 25% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 25% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7008",
+"family": "NB1_value_threshold",
+"T": 120,
+"text": "Will Somali's number of military units be at least 24 at turn 120?",
+"subj": [
+"4"
+],
+"qAll": 0.253,
+"qA": 0.258,
+"qB": 0.24849699398797595,
+"metric": "military_units_count",
+"x": 24,
+"sel_q": 0.75,
+"id": "seed7008:b1301",
+"criteria": "Resolves YES if Somali's number of military units as recorded at the end of turn 120 is 24 or more; exactly 24 counts. This is the same quantity the world report calls Military."
+},
+{
+"world": "seed7008",
+"family": "EX_comparative",
+"T": 150,
+"text": "Will Latvian have a higher number of cities than Somali at turn 150?",
+"subj": [
+"0",
+"4"
+],
+"qAll": 0.118,
+"qA": 0.106,
+"qB": 0.13026052104208416,
+"metric": "cities_count",
+"id": "seed7008:b1371",
+"criteria": "Resolves YES if Latvian's number of cities as recorded at the end of turn 150 is strictly greater than Somali's. Equal values resolve NO. The quantity is the same quantity the world report calls Cities."
+},
+{
+"world": "seed7008",
+"family": "NB1_value_threshold",
+"T": 150,
+"text": "Will Latvian's number of cities be at least 26 at turn 150?",
+"subj": [
+"0"
+],
+"qAll": 0.286,
+"qA": 0.268,
+"qB": 0.3046092184368738,
+"metric": "cities_count",
+"x": 26,
+"sel_q": 0.75,
+"id": "seed7008:b1574",
+"criteria": "Resolves YES if Latvian's number of cities as recorded at the end of turn 150 is 26 or more; exactly 26 counts. This is the same quantity the world report calls Cities."
+},
+{
+"world": "seed7008",
+"family": "NB4_drawdown",
+"T": 150,
+"text": "Will Latvian's territory size drop below 90% of its turn-60 level at any point up to turn 150?",
+"subj": [
+"0"
+],
+"qAll": 0.087,
+"qA": 0.09,
+"qB": 0.0841683366733467,
+"metric": "territory_size",
+"f": 0.9,
+"id": "seed7008:b1593",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 150 inclusive, Latvian's territory size is below 90% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 90% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7008",
+"family": "NB4_drawdown",
+"T": 150,
+"text": "Will Latvian's number of cities drop below 99% of its turn-60 level at any point up to turn 150?",
+"subj": [
+"0"
+],
+"qAll": 0.097,
+"qA": 0.102,
+"qB": 0.09218436873747494,
+"metric": "cities_count",
+"f": 0.99,
+"id": "seed7008:b1595",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 150 inclusive, Latvian's number of cities is below 99% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 99% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7008",
+"family": "NB4_drawdown",
+"T": 150,
+"text": "Will Belgian's number of cities drop below 70% of its turn-60 level at any point up to turn 150?",
+"subj": [
+"1"
+],
+"qAll": 0.072,
+"qA": 0.076,
+"qB": 0.06813627254509018,
+"metric": "cities_count",
+"f": 0.7,
+"id": "seed7008:b1713",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 150 inclusive, Belgian's number of cities is below 70% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 70% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7008",
+"family": "NB1_value_threshold",
+"T": 150,
+"text": "Will Somali's number of cities be at least 52 at turn 150?",
+"subj": [
+"4"
+],
+"qAll": 0.113,
+"qA": 0.11,
+"qB": 0.11623246492985972,
+"metric": "cities_count",
+"x": 52,
+"sel_q": 0.9,
+"id": "seed7008:b2032",
+"criteria": "Resolves YES if Somali's number of cities as recorded at the end of turn 150 is 52 or more; exactly 52 counts. This is the same quantity the world report calls Cities."
+},
+{
+"world": "seed7008",
+"family": "EX_comparative",
+"T": 180,
+"text": "Will Somali have a higher territory size than Belgian at turn 180?",
+"subj": [
+"4",
+"1"
+],
+"qAll": 0.767,
+"qA": 0.75,
+"qB": 0.7835671342685371,
+"metric": "territory_size",
+"id": "seed7008:b2158",
+"criteria": "Resolves YES if Somali's territory size as recorded at the end of turn 180 is strictly greater than Belgian's. Equal values resolve NO. The quantity is the same quantity the world report calls Territory."
+},
+{
+"world": "seed7008",
+"family": "EX_comparative",
+"T": 180,
+"text": "Will Somali have a higher population than Peruvian at turn 180?",
+"subj": [
+"4",
+"3"
+],
+"qAll": 0.536,
+"qA": 0.536,
+"qB": 0.5350701402805611,
+"metric": "population",
+"id": "seed7008:b2196",
+"criteria": "Resolves YES if Somali's population as recorded at the end of turn 180 is strictly greater than Peruvian's. Equal values resolve NO. The quantity is the same quantity the world report calls Population."
+},
+{
+"world": "seed7008",
+"family": "EX_comparative",
+"T": 180,
+"text": "Will Peruvian have a higher number of cities than Somali at turn 180?",
+"subj": [
+"3",
+"4"
+],
+"qAll": 0.428,
+"qA": 0.432,
+"qB": 0.4248496993987976,
+"metric": "cities_count",
+"id": "seed7008:b2197",
+"criteria": "Resolves YES if Peruvian's number of cities as recorded at the end of turn 180 is strictly greater than Somali's. Equal values resolve NO. The quantity is the same quantity the world report calls Cities."
+},
+{
+"world": "seed7008",
+"family": "NB4_drawdown",
+"T": 180,
+"text": "Will Belgian's treasury drop below 25% of its turn-60 level at any point up to turn 180?",
+"subj": [
+"1"
+],
+"qAll": 0.288,
+"qA": 0.302,
+"qB": 0.2725450901803607,
+"metric": "treasury",
+"f": 0.25,
+"id": "seed7008:b2465",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 180 inclusive, Belgian's treasury is below 25% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 25% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7008",
+"family": "NB4_drawdown",
+"T": 180,
+"text": "Will Belgian's territory size drop below 70% of its turn-60 level at any point up to turn 180?",
+"subj": [
+"1"
+],
+"qAll": 0.159,
+"qA": 0.154,
+"qB": 0.16432865731462926,
+"metric": "territory_size",
+"f": 0.7,
+"id": "seed7008:b2467",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 180 inclusive, Belgian's territory size is below 70% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 70% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7008",
+"family": "NB1_value_threshold",
+"T": 180,
+"text": "Will Peruvian's population be at least 85 at turn 180?",
+"subj": [
+"3"
+],
+"qAll": 0.512,
+"qA": 0.476,
+"qB": 0.5490981963927856,
+"metric": "population",
+"x": 85,
+"sel_q": 0.5,
+"id": "seed7008:b2670",
+"criteria": "Resolves YES if Peruvian's population as recorded at the end of turn 180 is 85 or more; exactly 85 counts. This is the same quantity the world report calls Population."
+},
+{
+"world": "seed7008",
+"family": "NB1_value_threshold",
+"T": 180,
+"text": "Will Peruvian's population be at least 101 at turn 180?",
+"subj": [
+"3"
+],
+"qAll": 0.262,
+"qA": 0.232,
+"qB": 0.2925851703406814,
+"metric": "population",
+"x": 101,
+"sel_q": 0.75,
+"id": "seed7008:b2671",
+"criteria": "Resolves YES if Peruvian's population as recorded at the end of turn 180 is 101 or more; exactly 101 counts. This is the same quantity the world report calls Population."
+},
+{
+"world": "seed7008",
+"family": "NB4_drawdown",
+"T": 180,
+"text": "Will Peruvian's treasury drop below 25% of its turn-60 level at any point up to turn 180?",
+"subj": [
+"3"
+],
+"qAll": 0.319,
+"qA": 0.324,
+"qB": 0.31462925851703405,
+"metric": "treasury",
+"f": 0.25,
+"id": "seed7008:b2696",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 180 inclusive, Peruvian's treasury is below 25% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 25% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7008",
+"family": "NB1_value_threshold",
+"T": 180,
+"text": "Will Somali's number of cities be at least 37 at turn 180?",
+"subj": [
+"4"
+],
+"qAll": 0.513,
+"qA": 0.506,
+"qB": 0.5190380761523046,
+"metric": "cities_count",
+"x": 37,
+"sel_q": 0.5,
+"id": "seed7008:b2796",
+"criteria": "Resolves YES if Somali's number of cities as recorded at the end of turn 180 is 37 or more; exactly 37 counts. This is the same quantity the world report calls Cities."
+},
+{
+"world": "seed7008",
+"family": "NB1_value_threshold",
+"T": 210,
+"text": "Will Peruvian's score be at least 235 at turn 210?",
+"subj": [
+"3"
+],
+"qAll": 0.511,
+"qA": 0.488,
+"qB": 0.5350701402805611,
+"metric": "scores",
+"x": 235,
+"sel_q": 0.5,
+"id": "seed7008:b3435",
+"criteria": "Resolves YES if Peruvian's score as recorded at the end of turn 210 is 235 or more; exactly 235 counts. This is the same quantity the world report calls Score."
+},
+{
+"world": "seed7008",
+"family": "EX_comparative",
+"T": 120,
+"text": "Will Peruvian have a higher population than Belgian at turn 120?",
+"subj": [
+"3",
+"1"
+],
+"qAll": 0.493,
+"qA": 0.474,
+"qB": 0.5130260521042084,
+"metric": "population",
+"id": "seed7008:b692",
+"criteria": "Resolves YES if Peruvian's population as recorded at the end of turn 120 is strictly greater than Belgian's. Equal values resolve NO. The quantity is the same quantity the world report calls Population."
+},
+{
+"world": "seed7008",
+"family": "EX_comparative",
+"T": 120,
+"text": "Will Somali have a higher population than Spanish at turn 120?",
+"subj": [
+"4",
+"2"
+],
+"qAll": 0.906,
+"qA": 0.906,
+"qB": 0.905811623246493,
+"metric": "population",
+"id": "seed7008:b731",
+"criteria": "Resolves YES if Somali's population as recorded at the end of turn 120 is strictly greater than Spanish's. Equal values resolve NO. The quantity is the same quantity the world report calls Population."
+},
+{
+"world": "seed7008",
+"family": "EX_comparative",
+"T": 120,
+"text": "Will Peruvian have a higher population than Somali at turn 120?",
+"subj": [
+"3",
+"4"
+],
+"qAll": 0.229,
+"qA": 0.216,
+"qB": 0.24248496993987975,
+"metric": "population",
+"id": "seed7008:b744",
+"criteria": "Resolves YES if Peruvian's population as recorded at the end of turn 120 is strictly greater than Somali's. Equal values resolve NO. The quantity is the same quantity the world report calls Population."
+},
+{
+"world": "seed7008",
+"family": "NB1_value_threshold",
+"T": 120,
+"text": "Will Latvian's number of military units be at least 25 at turn 120?",
+"subj": [
+"0"
+],
+"qAll": 0.294,
+"qA": 0.3,
+"qB": 0.28857715430861725,
+"metric": "military_units_count",
+"x": 25,
+"sel_q": 0.75,
+"id": "seed7008:b863",
+"criteria": "Resolves YES if Latvian's number of military units as recorded at the end of turn 120 is 25 or more; exactly 25 counts. This is the same quantity the world report calls Military."
+},
+{
+"world": "seed7008",
+"family": "NB1_value_threshold",
+"T": 120,
+"text": "Will Belgian's score be at least 159 at turn 120?",
+"subj": [
+"1"
+],
+"qAll": 0.512,
+"qA": 0.528,
+"qB": 0.49498997995991983,
+"metric": "scores",
+"x": 159,
+"sel_q": 0.5,
+"id": "seed7008:b938",
+"criteria": "Resolves YES if Belgian's score as recorded at the end of turn 120 is 159 or more; exactly 159 counts. This is the same quantity the world report calls Score."
+},
+{
+"world": "seed7008",
+"family": "NB4_drawdown",
+"T": 120,
+"text": "Will Belgian's number of cities drop below 99% of its turn-60 level at any point up to turn 120?",
+"subj": [
+"1"
+],
+"qAll": 0.09,
+"qA": 0.094,
+"qB": 0.08617234468937876,
+"metric": "cities_count",
+"f": 0.99,
+"id": "seed7008:b981",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 120 inclusive, Belgian's number of cities is below 99% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 99% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7010",
+"family": "NB1_value_threshold",
+"T": 120,
+"text": "Will Beninese's population be at least 93 at turn 120?",
+"subj": [
+"3"
+],
+"qAll": 0.272,
+"qA": 0.262,
+"qB": 0.28256513026052105,
+"metric": "population",
+"x": 93,
+"sel_q": 0.75,
+"id": "seed7010:b1176",
+"criteria": "Resolves YES if Beninese's population as recorded at the end of turn 120 is 93 or more; exactly 93 counts. This is the same quantity the world report calls Population."
+},
+{
+"world": "seed7010",
+"family": "NB1_value_threshold",
+"T": 120,
+"text": "Will Beninese's number of cities be at least 26 at turn 120?",
+"subj": [
+"3"
+],
+"qAll": 0.75,
+"qA": 0.738,
+"qB": 0.7635270541082164,
+"metric": "cities_count",
+"x": 26,
+"sel_q": 0.25,
+"id": "seed7010:b1181",
+"criteria": "Resolves YES if Beninese's number of cities as recorded at the end of turn 120 is 26 or more; exactly 26 counts. This is the same quantity the world report calls Cities."
+},
+{
+"world": "seed7010",
+"family": "NB4_drawdown",
+"T": 120,
+"text": "Will Beninese's number of cities drop below 70% of its turn-60 level at any point up to turn 120?",
+"subj": [
+"3"
+],
+"qAll": 0.064,
+"qA": 0.066,
+"qB": 0.06012024048096192,
+"metric": "cities_count",
+"f": 0.7,
+"id": "seed7010:b1205",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 120 inclusive, Beninese's number of cities is below 70% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 70% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7010",
+"family": "NB4_drawdown",
+"T": 120,
+"text": "Will Beninese's population drop below 90% of its turn-60 level at any point up to turn 120?",
+"subj": [
+"3"
+],
+"qAll": 0.057,
+"qA": 0.062,
+"qB": 0.050100200400801605,
+"metric": "population",
+"f": 0.9,
+"id": "seed7010:b1206",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 120 inclusive, Beninese's population is below 90% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 90% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7010",
+"family": "EX_comparative",
+"T": 150,
+"text": "Will Spanish have a higher number of cities than American at turn 150?",
+"subj": [
+"2",
+"1"
+],
+"qAll": 0.249,
+"qA": 0.24,
+"qB": 0.25851703406813625,
+"metric": "cities_count",
+"id": "seed7010:b1377",
+"criteria": "Resolves YES if Spanish's number of cities as recorded at the end of turn 150 is strictly greater than American's. Equal values resolve NO. The quantity is the same quantity the world report calls Cities."
+},
+{
+"world": "seed7010",
+"family": "NB1_value_threshold",
+"T": 150,
+"text": "Will American's score be at least 242 at turn 150?",
+"subj": [
+"1"
+],
+"qAll": 0.051,
+"qA": 0.052,
+"qB": 0.050100200400801605,
+"metric": "scores",
+"x": 242,
+"sel_q": 0.95,
+"id": "seed7010:b1599",
+"criteria": "Resolves YES if American's score as recorded at the end of turn 150 is 242 or more; exactly 242 counts. This is the same quantity the world report calls Score."
+},
+{
+"world": "seed7010",
+"family": "NB4_drawdown",
+"T": 150,
+"text": "Will Fijian's treasury drop below 25% of its turn-60 level at any point up to turn 150?",
+"subj": [
+"4"
+],
+"qAll": 0.415,
+"qA": 0.424,
+"qB": 0.40480961923847697,
+"metric": "treasury",
+"f": 0.25,
+"id": "seed7010:b1855",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 150 inclusive, Fijian's treasury is below 25% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 25% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7010",
+"family": "EX_comparative",
+"T": 180,
+"text": "Will Central American have a higher number of cities than American at turn 180?",
+"subj": [
+"0",
+"1"
+],
+"qAll": 0.251,
+"qA": 0.246,
+"qB": 0.2565130260521042,
+"metric": "cities_count",
+"id": "seed7010:b1877",
+"criteria": "Resolves YES if Central American's number of cities as recorded at the end of turn 180 is strictly greater than American's. Equal values resolve NO. The quantity is the same quantity the world report calls Cities."
+},
+{
+"world": "seed7010",
+"family": "EX_comparative",
+"T": 180,
+"text": "Will American have a higher territory size than Fijian at turn 180?",
+"subj": [
+"1",
+"4"
+],
+"qAll": 0.687,
+"qA": 0.69,
+"qB": 0.685370741482966,
+"metric": "territory_size",
+"id": "seed7010:b1933",
+"criteria": "Resolves YES if American's territory size as recorded at the end of turn 180 is strictly greater than Fijian's. Equal values resolve NO. The quantity is the same quantity the world report calls Territory."
+},
+{
+"world": "seed7010",
+"family": "NB1_value_threshold",
+"T": 180,
+"text": "Will Central American's territory size be at least 377 at turn 180?",
+"subj": [
+"0"
+],
+"qAll": 0.052,
+"qA": 0.042,
+"qB": 0.06212424849699399,
+"metric": "territory_size",
+"x": 377,
+"sel_q": 0.95,
+"id": "seed7010:b2067",
+"criteria": "Resolves YES if Central American's territory size as recorded at the end of turn 180 is 377 or more; exactly 377 counts. This is the same quantity the world report calls Territory."
+},
+{
+"world": "seed7010",
+"family": "NB4_drawdown",
+"T": 180,
+"text": "Will Central American's treasury drop below 50% of its turn-60 level at any point up to turn 180?",
+"subj": [
+"0"
+],
+"qAll": 0.909,
+"qA": 0.9,
+"qB": 0.9178356713426854,
+"metric": "treasury",
+"f": 0.5,
+"id": "seed7010:b2075",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 180 inclusive, Central American's treasury is below 50% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 50% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7010",
+"family": "NB1_value_threshold",
+"T": 180,
+"text": "Will American's number of cities be at least 23 at turn 180?",
+"subj": [
+"1"
+],
+"qAll": 0.901,
+"qA": 0.894,
+"qB": 0.9078156312625251,
+"metric": "cities_count",
+"x": 23,
+"sel_q": 0.1,
+"id": "seed7010:b2164",
+"criteria": "Resolves YES if American's number of cities as recorded at the end of turn 180 is 23 or more; exactly 23 counts. This is the same quantity the world report calls Cities."
+},
+{
+"world": "seed7010",
+"family": "EX_comparative",
+"T": 210,
+"text": "Will Central American have a higher number of cities than American at turn 210?",
+"subj": [
+"0",
+"1"
+],
+"qAll": 0.241,
+"qA": 0.226,
+"qB": 0.2565130260521042,
+"metric": "cities_count",
+"id": "seed7010:b2427",
+"criteria": "Resolves YES if Central American's number of cities as recorded at the end of turn 210 is strictly greater than American's. Equal values resolve NO. The quantity is the same quantity the world report calls Cities."
+},
+{
+"world": "seed7010",
+"family": "EX_comparative",
+"T": 210,
+"text": "Will American have a higher number of cities than Fijian at turn 210?",
+"subj": [
+"1",
+"4"
+],
+"qAll": 0.704,
+"qA": 0.716,
+"qB": 0.6913827655310621,
+"metric": "cities_count",
+"id": "seed7010:b2481",
+"criteria": "Resolves YES if American's number of cities as recorded at the end of turn 210 is strictly greater than Fijian's. Equal values resolve NO. The quantity is the same quantity the world report calls Cities."
+},
+{
+"world": "seed7010",
+"family": "EX_comparative",
+"T": 210,
+"text": "Will Fijian have a higher number of cities than Spanish at turn 210?",
+"subj": [
+"4",
+"2"
+],
+"qAll": 0.496,
+"qA": 0.494,
+"qB": 0.4969939879759519,
+"metric": "cities_count",
+"id": "seed7010:b2496",
+"criteria": "Resolves YES if Fijian's number of cities as recorded at the end of turn 210 is strictly greater than Spanish's. Equal values resolve NO. The quantity is the same quantity the world report calls Cities."
+},
+{
+"world": "seed7010",
+"family": "NB4_drawdown",
+"T": 210,
+"text": "Will Central American's number of cities drop below 99% of its turn-60 level at any point up to turn 210?",
+"subj": [
+"0"
+],
+"qAll": 0.088,
+"qA": 0.084,
+"qB": 0.09218436873747494,
+"metric": "cities_count",
+"f": 0.99,
+"id": "seed7010:b2637",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 210 inclusive, Central American's number of cities is below 99% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 99% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7010",
+"family": "NB1_value_threshold",
+"T": 210,
+"text": "Will American's number of cities be at least 44 at turn 210?",
+"subj": [
+"1"
+],
+"qAll": 0.119,
+"qA": 0.132,
+"qB": 0.10420841683366733,
+"metric": "cities_count",
+"x": 44,
+"sel_q": 0.9,
+"id": "seed7010:b2728",
+"criteria": "Resolves YES if American's number of cities as recorded at the end of turn 210 is 44 or more; exactly 44 counts. This is the same quantity the world report calls Cities."
+},
+{
+"world": "seed7010",
+"family": "NB1_value_threshold",
+"T": 210,
+"text": "Will Fijian's number of cities be at least 22 at turn 210?",
+"subj": [
+"4"
+],
+"qAll": 0.781,
+"qA": 0.772,
+"qB": 0.7895791583166333,
+"metric": "cities_count",
+"x": 22,
+"sel_q": 0.25,
+"id": "seed7010:b2954",
+"criteria": "Resolves YES if Fijian's number of cities as recorded at the end of turn 210 is 22 or more; exactly 22 counts. This is the same quantity the world report calls Cities."
+},
+{
+"world": "seed7010",
+"family": "EX_comparative",
+"T": 120,
+"text": "Will Central American have a higher population than Fijian at turn 120?",
+"subj": [
+"0",
+"4"
+],
+"qAll": 0.52,
+"qA": 0.578,
+"qB": 0.46292585170340683,
+"metric": "population",
+"id": "seed7010:b664",
+"criteria": "Resolves YES if Central American's population as recorded at the end of turn 120 is strictly greater than Fijian's. Equal values resolve NO. The quantity is the same quantity the world report calls Population."
+},
+{
+"world": "seed7010",
+"family": "EX_comparative",
+"T": 120,
+"text": "Will Fijian have a higher number of cities than Central American at turn 120?",
+"subj": [
+"4",
+"0"
+],
+"qAll": 0.422,
+"qA": 0.404,
+"qB": 0.43887775551102204,
+"metric": "cities_count",
+"id": "seed7010:b667",
+"criteria": "Resolves YES if Fijian's number of cities as recorded at the end of turn 120 is strictly greater than Central American's. Equal values resolve NO. The quantity is the same quantity the world report calls Cities."
+},
+{
+"world": "seed7010",
+"family": "NB4_drawdown",
+"T": 120,
+"text": "Will Central American's treasury drop below 50% of its turn-60 level at any point up to turn 120?",
+"subj": [
+"0"
+],
+"qAll": 0.539,
+"qA": 0.52,
+"qB": 0.5571142284569138,
+"metric": "treasury",
+"f": 0.5,
+"id": "seed7010:b876",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 120 inclusive, Central American's treasury is below 50% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 50% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7010",
+"family": "NB1_value_threshold",
+"T": 120,
+"text": "Will American's number of cities be at least 34 at turn 120?",
+"subj": [
+"1"
+],
+"qAll": 0.31,
+"qA": 0.312,
+"qB": 0.30861723446893785,
+"metric": "cities_count",
+"x": 34,
+"sel_q": 0.75,
+"id": "seed7010:b964",
+"criteria": "Resolves YES if American's number of cities as recorded at the end of turn 120 is 34 or more; exactly 34 counts. This is the same quantity the world report calls Cities."
+},
+{
+"world": "seed7011",
+"family": "NB4_drawdown",
+"T": 120,
+"text": "Will Guyanese's territory size drop below 70% of its turn-60 level at any point up to turn 120?",
+"subj": [
+"2"
+],
+"qAll": 0.07,
+"qA": 0.08,
+"qB": 0.06012024048096192,
+"metric": "territory_size",
+"f": 0.7,
+"id": "seed7011:b1104",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 120 inclusive, Guyanese's territory size is below 70% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 70% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7011",
+"family": "NB1_value_threshold",
+"T": 120,
+"text": "Will Equatoguinean's territory size be at least 217 at turn 120?",
+"subj": [
+"3"
+],
+"qAll": 0.9,
+"qA": 0.91,
+"qB": 0.8897795591182365,
+"metric": "territory_size",
+"x": 217,
+"sel_q": 0.1,
+"id": "seed7011:b1197",
+"criteria": "Resolves YES if Equatoguinean's territory size as recorded at the end of turn 120 is 217 or more; exactly 217 counts. This is the same quantity the world report calls Territory."
+},
+{
+"world": "seed7011",
+"family": "NB4_drawdown",
+"T": 120,
+"text": "Will Equatoguinean's territory size drop below 90% of its turn-60 level at any point up to turn 120?",
+"subj": [
+"3"
+],
+"qAll": 0.126,
+"qA": 0.12,
+"qB": 0.13226452905811623,
+"metric": "territory_size",
+"f": 0.9,
+"id": "seed7011:b1212",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 120 inclusive, Equatoguinean's territory size is below 90% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 90% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7011",
+"family": "NB4_drawdown",
+"T": 120,
+"text": "Will Equatoguinean's number of cities drop below 70% of its turn-60 level at any point up to turn 120?",
+"subj": [
+"3"
+],
+"qAll": 0.051,
+"qA": 0.046,
+"qB": 0.056112224448897796,
+"metric": "cities_count",
+"f": 0.7,
+"id": "seed7011:b1215",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 120 inclusive, Equatoguinean's number of cities is below 70% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 70% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7011",
+"family": "NB1_value_threshold",
+"T": 120,
+"text": "Will American's score be at least 161 at turn 120?",
+"subj": [
+"4"
+],
+"qAll": 0.518,
+"qA": 0.508,
+"qB": 0.5290581162324649,
+"metric": "scores",
+"x": 161,
+"sel_q": 0.5,
+"id": "seed7011:b1279",
+"criteria": "Resolves YES if American's score as recorded at the end of turn 120 is 161 or more; exactly 161 counts. This is the same quantity the world report calls Score."
+},
+{
+"world": "seed7011",
+"family": "NB1_value_threshold",
+"T": 120,
+"text": "Will American's territory size be at least 358 at turn 120?",
+"subj": [
+"4"
+],
+"qAll": 0.104,
+"qA": 0.102,
+"qB": 0.1062124248496994,
+"metric": "territory_size",
+"x": 358,
+"sel_q": 0.9,
+"id": "seed7011:b1309",
+"criteria": "Resolves YES if American's territory size as recorded at the end of turn 120 is 358 or more; exactly 358 counts. This is the same quantity the world report calls Territory."
+},
+{
+"world": "seed7011",
+"family": "EX_comparative",
+"T": 150,
+"text": "Will Equatoguinean have a higher score than Ohlone at turn 150?",
+"subj": [
+"3",
+"0"
+],
+"qAll": 0.334,
+"qA": 0.34,
+"qB": 0.3286573146292585,
+"metric": "scores",
+"id": "seed7011:b1363",
+"criteria": "Resolves YES if Equatoguinean's score as recorded at the end of turn 150 is strictly greater than Ohlone's. Equal values resolve NO. The quantity is the same quantity the world report calls Score."
+},
+{
+"world": "seed7011",
+"family": "EX_comparative",
+"T": 150,
+"text": "Will Equatoguinean have a higher number of cities than American at turn 150?",
+"subj": [
+"3",
+"4"
+],
+"qAll": 0.697,
+"qA": 0.708,
+"qB": 0.685370741482966,
+"metric": "cities_count",
+"id": "seed7011:b1406",
+"criteria": "Resolves YES if Equatoguinean's number of cities as recorded at the end of turn 150 is strictly greater than American's. Equal values resolve NO. The quantity is the same quantity the world report calls Cities."
+},
+{
+"world": "seed7011",
+"family": "NB1_value_threshold",
+"T": 150,
+"text": "Will Equatoguinean's treasury be at least 238 at turn 150?",
+"subj": [
+"3"
+],
+"qAll": 0.9,
+"qA": 0.9,
+"qB": 0.8997995991983968,
+"metric": "treasury",
+"x": 238,
+"sel_q": 0.1,
+"id": "seed7011:b1729",
+"criteria": "Resolves YES if Equatoguinean's treasury as recorded at the end of turn 150 is 238 or more; exactly 238 counts. This is the same quantity the world report calls Treasury."
+},
+{
+"world": "seed7011",
+"family": "NB4_drawdown",
+"T": 150,
+"text": "Will Equatoguinean's territory size drop below 90% of its turn-60 level at any point up to turn 150?",
+"subj": [
+"3"
+],
+"qAll": 0.291,
+"qA": 0.286,
+"qB": 0.2965931863727455,
+"metric": "territory_size",
+"f": 0.9,
+"id": "seed7011:b1765",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 150 inclusive, Equatoguinean's territory size is below 90% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 90% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7011",
+"family": "NB4_drawdown",
+"T": 150,
+"text": "Will American's treasury drop below 50% of its turn-60 level at any point up to turn 150?",
+"subj": [
+"4"
+],
+"qAll": 0.474,
+"qA": 0.468,
+"qB": 0.4789579158316633,
+"metric": "treasury",
+"f": 0.5,
+"id": "seed7011:b1873",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 150 inclusive, American's treasury is below 50% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 50% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7011",
+"family": "EX_comparative",
+"T": 180,
+"text": "Will Equatoguinean have a higher population than Ohlone at turn 180?",
+"subj": [
+"3",
+"0"
+],
+"qAll": 0.351,
+"qA": 0.348,
+"qB": 0.35470941883767537,
+"metric": "population",
+"id": "seed7011:b1912",
+"criteria": "Resolves YES if Equatoguinean's population as recorded at the end of turn 180 is strictly greater than Ohlone's. Equal values resolve NO. The quantity is the same quantity the world report calls Population."
+},
+{
+"world": "seed7011",
+"family": "NB4_drawdown",
+"T": 180,
+"text": "Will Ohlone's territory size drop below 90% of its turn-60 level at any point up to turn 180?",
+"subj": [
+"0"
+],
+"qAll": 0.119,
+"qA": 0.122,
+"qB": 0.11623246492985972,
+"metric": "territory_size",
+"f": 0.9,
+"id": "seed7011:b2098",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 180 inclusive, Ohlone's territory size is below 90% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 90% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7011",
+"family": "NB4_drawdown",
+"T": 180,
+"text": "Will American's number of cities drop below 70% of its turn-60 level at any point up to turn 180?",
+"subj": [
+"4"
+],
+"qAll": 0.091,
+"qA": 0.092,
+"qB": 0.09018036072144289,
+"metric": "cities_count",
+"f": 0.7,
+"id": "seed7011:b2453",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 180 inclusive, American's number of cities is below 70% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 70% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7011",
+"family": "EX_comparative",
+"T": 120,
+"text": "Will Ohlone have a higher territory size than Guyanese at turn 120?",
+"subj": [
+"0",
+"2"
+],
+"qAll": 0.883,
+"qA": 0.902,
+"qB": 0.8637274549098196,
+"metric": "territory_size",
+"id": "seed7011:b657",
+"criteria": "Resolves YES if Ohlone's territory size as recorded at the end of turn 120 is strictly greater than Guyanese's. Equal values resolve NO. The quantity is the same quantity the world report calls Territory."
+},
+{
+"world": "seed7011",
+"family": "EX_comparative",
+"T": 120,
+"text": "Will Equatoguinean have a higher population than Ohlone at turn 120?",
+"subj": [
+"3",
+"0"
+],
+"qAll": 0.511,
+"qA": 0.514,
+"qB": 0.5070140280561122,
+"metric": "population",
+"id": "seed7011:b664",
+"criteria": "Resolves YES if Equatoguinean's population as recorded at the end of turn 120 is strictly greater than Ohlone's. Equal values resolve NO. The quantity is the same quantity the world report calls Population."
+},
+{
+"world": "seed7011",
+"family": "NB1_value_threshold",
+"T": 120,
+"text": "Will Ohlone's treasury be at least 652 at turn 120?",
+"subj": [
+"0"
+],
+"qAll": 0.75,
+"qA": 0.74,
+"qB": 0.7595190380761523,
+"metric": "treasury",
+"x": 652,
+"sel_q": 0.25,
+"id": "seed7011:b843",
+"criteria": "Resolves YES if Ohlone's treasury as recorded at the end of turn 120 is 652 or more; exactly 652 counts. This is the same quantity the world report calls Treasury."
+},
+{
+"world": "seed7011",
+"family": "NB1_value_threshold",
+"T": 120,
+"text": "Will Ohlone's treasury be at least 1643 at turn 120?",
+"subj": [
+"0"
+],
+"qAll": 0.25,
+"qA": 0.236,
+"qB": 0.26452905811623245,
+"metric": "treasury",
+"x": 1643,
+"sel_q": 0.75,
+"id": "seed7011:b845",
+"criteria": "Resolves YES if Ohlone's treasury as recorded at the end of turn 120 is 1643 or more; exactly 1643 counts. This is the same quantity the world report calls Treasury."
+},
+{
+"world": "seed7011",
+"family": "NB1_value_threshold",
+"T": 120,
+"text": "Will Ohlone's territory size be at least 461 at turn 120?",
+"subj": [
+"0"
+],
+"qAll": 0.254,
+"qA": 0.27,
+"qB": 0.23647294589178355,
+"metric": "territory_size",
+"x": 461,
+"sel_q": 0.75,
+"id": "seed7011:b866",
+"criteria": "Resolves YES if Ohlone's territory size as recorded at the end of turn 120 is 461 or more; exactly 461 counts. This is the same quantity the world report calls Territory."
+},
+{
+"world": "seed7014",
+"family": "EX_comparative",
+"T": 180,
+"text": "Will Chinese have a higher population than Trinidadian and Tobagonian at turn 180?",
+"subj": [
+"4",
+"1"
+],
+"qAll": 0.476,
+"qA": 0.476,
+"qB": 0.47695390781563124,
+"metric": "population",
+"id": "seed7014:b1902",
+"criteria": "Resolves YES if Chinese's population as recorded at the end of turn 180 is strictly greater than Trinidadian and Tobagonian's. Equal values resolve NO. The quantity is the same quantity the world report calls Population."
+},
+{
+"world": "seed7014",
+"family": "NB4_drawdown",
+"T": 180,
+"text": "Will Trinidadian and Tobagonian's territory size drop below 90% of its turn-60 level at any point up to turn 180?",
+"subj": [
+"1"
+],
+"qAll": 0.374,
+"qA": 0.36,
+"qB": 0.38877755511022044,
+"metric": "territory_size",
+"f": 0.9,
+"id": "seed7014:b2168",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 180 inclusive, Trinidadian and Tobagonian's territory size is below 90% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 90% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7014",
+"family": "NB1_value_threshold",
+"T": 180,
+"text": "Will Chinese's number of military units be at least 42 at turn 180?",
+"subj": [
+"4"
+],
+"qAll": 0.052,
+"qA": 0.046,
+"qB": 0.05811623246492986,
+"metric": "military_units_count",
+"x": 42,
+"sel_q": 0.95,
+"id": "seed7014:b2376",
+"criteria": "Resolves YES if Chinese's number of military units as recorded at the end of turn 180 is 42 or more; exactly 42 counts. This is the same quantity the world report calls Military."
+},
+{
+"world": "seed7014",
+"family": "NB4_drawdown",
+"T": 180,
+"text": "Will Chinese's treasury drop below 25% of its turn-60 level at any point up to turn 180?",
+"subj": [
+"4"
+],
+"qAll": 0.328,
+"qA": 0.346,
+"qB": 0.3106212424849699,
+"metric": "treasury",
+"f": 0.25,
+"id": "seed7014:b2378",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 180 inclusive, Chinese's treasury is below 25% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 25% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7014",
+"family": "NB4_drawdown",
+"T": 180,
+"text": "Will Chinese's territory size drop below 70% of its turn-60 level at any point up to turn 180?",
+"subj": [
+"4"
+],
+"qAll": 0.057,
+"qA": 0.068,
+"qB": 0.04609218436873747,
+"metric": "territory_size",
+"f": 0.7,
+"id": "seed7014:b2380",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 180 inclusive, Chinese's territory size is below 70% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 70% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7014",
+"family": "EX_comparative",
+"T": 210,
+"text": "Will Trinidadian and Tobagonian have a higher number of cities than Bissau-Guinean at turn 210?",
+"subj": [
+"1",
+"0"
+],
+"qAll": 0.481,
+"qA": 0.488,
+"qB": 0.4749498997995992,
+"metric": "cities_count",
+"id": "seed7014:b2406",
+"criteria": "Resolves YES if Trinidadian and Tobagonian's number of cities as recorded at the end of turn 210 is strictly greater than Bissau-Guinean's. Equal values resolve NO. The quantity is the same quantity the world report calls Cities."
+},
+{
+"world": "seed7014",
+"family": "NB1_value_threshold",
+"T": 210,
+"text": "Will Trinidadian and Tobagonian's number of cities be at least 44 at turn 210?",
+"subj": [
+"1"
+],
+"qAll": 0.253,
+"qA": 0.266,
+"qB": 0.23847695390781562,
+"metric": "cities_count",
+"x": 44,
+"sel_q": 0.75,
+"id": "seed7014:b2716",
+"criteria": "Resolves YES if Trinidadian and Tobagonian's number of cities as recorded at the end of turn 210 is 44 or more; exactly 44 counts. This is the same quantity the world report calls Cities."
+},
+{
+"world": "seed7014",
+"family": "NB1_value_threshold",
+"T": 210,
+"text": "Will Chinese's number of military units be at least 19 at turn 210?",
+"subj": [
+"4"
+],
+"qAll": 0.766,
+"qA": 0.75,
+"qB": 0.781563126252505,
+"metric": "military_units_count",
+"x": 19,
+"sel_q": 0.25,
+"id": "seed7014:b2945",
+"criteria": "Resolves YES if Chinese's number of military units as recorded at the end of turn 210 is 19 or more; exactly 19 counts. This is the same quantity the world report calls Military."
+},
+{
+"world": "seed7022",
+"family": "NB4_drawdown",
+"T": 150,
+"text": "Will Pelasgian's territory size drop below 90% of its turn-60 level at any point up to turn 150?",
+"subj": [
+"1"
+],
+"qAll": 0.116,
+"qA": 0.112,
+"qB": 0.12024048096192384,
+"metric": "territory_size",
+"f": 0.9,
+"id": "seed7022:b1094",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 150 inclusive, Pelasgian's territory size is below 90% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 90% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7022",
+"family": "NB1_value_threshold",
+"T": 150,
+"text": "Will Hunnic's number of cities be at least 8 at turn 150?",
+"subj": [
+"3"
+],
+"qAll": 0.924,
+"qA": 0.926,
+"qB": 0.9218436873747495,
+"metric": "cities_count",
+"x": 8,
+"sel_q": 0.1,
+"id": "seed7022:b1194",
+"criteria": "Resolves YES if Hunnic's number of cities as recorded at the end of turn 150 is 8 or more; exactly 8 counts. This is the same quantity the world report calls Cities."
+},
+{
+"world": "seed7022",
+"family": "NB1_value_threshold",
+"T": 180,
+"text": "Will Boian's score be at least 174 at turn 180?",
+"subj": [
+"0"
+],
+"qAll": 0.754,
+"qA": 0.77,
+"qB": 0.7374749498997996,
+"metric": "scores",
+"x": 174,
+"sel_q": 0.25,
+"id": "seed7022:b1324",
+"criteria": "Resolves YES if Boian's score as recorded at the end of turn 180 is 174 or more; exactly 174 counts. This is the same quantity the world report calls Score."
+},
+{
+"world": "seed7022",
+"family": "NB1_value_threshold",
+"T": 180,
+"text": "Will Boian's number of cities be at least 27 at turn 180?",
+"subj": [
+"0"
+],
+"qAll": 0.504,
+"qA": 0.51,
+"qB": 0.4969939879759519,
+"metric": "cities_count",
+"x": 27,
+"sel_q": 0.5,
+"id": "seed7022:b1346",
+"criteria": "Resolves YES if Boian's number of cities as recorded at the end of turn 180 is 27 or more; exactly 27 counts. This is the same quantity the world report calls Cities."
+},
+{
+"world": "seed7022",
+"family": "NB4_drawdown",
+"T": 180,
+"text": "Will Boian's population drop below 90% of its turn-60 level at any point up to turn 180?",
+"subj": [
+"0"
+],
+"qAll": 0.079,
+"qA": 0.07,
+"qB": 0.08817635270541083,
+"metric": "population",
+"f": 0.9,
+"id": "seed7022:b1370",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 180 inclusive, Boian's population is below 90% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 90% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7022",
+"family": "NB1_value_threshold",
+"T": 180,
+"text": "Will Pelasgian's population be at least 94 at turn 180?",
+"subj": [
+"1"
+],
+"qAll": 0.256,
+"qA": 0.272,
+"qB": 0.24048096192384769,
+"metric": "population",
+"x": 94,
+"sel_q": 0.75,
+"id": "seed7022:b1437",
+"criteria": "Resolves YES if Pelasgian's population as recorded at the end of turn 180 is 94 or more; exactly 94 counts. This is the same quantity the world report calls Population."
+},
+{
+"world": "seed7022",
+"family": "NB1_value_threshold",
+"T": 210,
+"text": "Will Boian's number of cities be at least 15 at turn 210?",
+"subj": [
+"0"
+],
+"qAll": 0.753,
+"qA": 0.778,
+"qB": 0.7274549098196392,
+"metric": "cities_count",
+"x": 15,
+"sel_q": 0.25,
+"id": "seed7022:b1571",
+"criteria": "Resolves YES if Boian's number of cities as recorded at the end of turn 210 is 15 or more; exactly 15 counts. This is the same quantity the world report calls Cities."
+},
+{
+"world": "seed7022",
+"family": "NB4_drawdown",
+"T": 210,
+"text": "Will Boian's number of cities drop below 99% of its turn-60 level at any point up to turn 210?",
+"subj": [
+"0"
+],
+"qAll": 0.449,
+"qA": 0.44,
+"qB": 0.4589178356713427,
+"metric": "cities_count",
+"f": 0.99,
+"id": "seed7022:b1594",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 210 inclusive, Boian's number of cities is below 99% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 99% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7022",
+"family": "NB4_drawdown",
+"T": 120,
+"text": "Will Pelasgian's treasury drop below 25% of its turn-60 level at any point up to turn 120?",
+"subj": [
+"1"
+],
+"qAll": 0.109,
+"qA": 0.116,
+"qB": 0.10220440881763528,
+"metric": "treasury",
+"f": 0.25,
+"id": "seed7022:b714",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 120 inclusive, Pelasgian's treasury is below 25% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 25% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7022",
+"family": "NB4_drawdown",
+"T": 120,
+"text": "Will Hunnic's territory size drop below 90% of its turn-60 level at any point up to turn 120?",
+"subj": [
+"3"
+],
+"qAll": 0.167,
+"qA": 0.168,
+"qB": 0.16633266533066132,
+"metric": "territory_size",
+"f": 0.9,
+"id": "seed7022:b832",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 120 inclusive, Hunnic's territory size is below 90% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 90% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7022",
+"family": "NB4_drawdown",
+"T": 120,
+"text": "Will Hunnic's territory size drop below 70% of its turn-60 level at any point up to turn 120?",
+"subj": [
+"3"
+],
+"qAll": 0.077,
+"qA": 0.082,
+"qB": 0.07214428857715431,
+"metric": "territory_size",
+"f": 0.7,
+"id": "seed7022:b833",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 120 inclusive, Hunnic's territory size is below 70% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 70% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7022",
+"family": "EX_comparative",
+"T": 150,
+"text": "Will Pelasgian have a higher territory size than Hunnic at turn 150?",
+"subj": [
+"1",
+"3"
+],
+"qAll": 0.927,
+"qA": 0.914,
+"qB": 0.9398797595190381,
+"metric": "territory_size",
+"id": "seed7022:b880",
+"criteria": "Resolves YES if Pelasgian's territory size as recorded at the end of turn 150 is strictly greater than Hunnic's. Equal values resolve NO. The quantity is the same quantity the world report calls Territory."
+}
+]

@@ -1,0 +1,757 @@
+[
+{
+"world": "seed7010",
+"family": "EX_comparative",
+"T": 90,
+"text": "Will American have a higher number of cities than Central American at turn 90?",
+"subj": [
+"1",
+"0"
+],
+"qAll": 0.958,
+"qA": 0.952,
+"qB": 0.9639278557114228,
+"metric": "cities_count",
+"id": "seed7010:b5",
+"criteria": "Resolves YES if American's number of cities as recorded at the end of turn 90 is strictly greater than Central American's. Equal values resolve NO. The quantity is the same quantity the world report calls Cities."
+},
+{
+"world": "seed7011",
+"family": "S3_wars_at_T",
+"T": 90,
+"text": "Will at least 4 pairs of civilizations be at war at exactly turn 90?",
+"subj": [],
+"qAll": 0.992,
+"qA": 0.992,
+"qB": 0.9919839679358717,
+"k": 4,
+"id": "seed7011:b117",
+"criteria": "Resolves YES if, as recorded at the end of turn 90, at least 4 of the ten pairs among the five civilizations are in the diplomatic state War. Exactly 4 counts."
+},
+{
+"world": "seed7003",
+"family": "W1_wonder_race",
+"T": 90,
+"text": "Will Crimean Tatar complete the Great Wall by turn 90?",
+"subj": [
+"0"
+],
+"qAll": 0.998,
+"qA": 1.0,
+"qB": 0.9959919839679359,
+"wonder": "Great Wall",
+"id": "seed7003:b108",
+"criteria": "Resolves YES if Crimean Tatar completes Great Wall on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). A great wonder can be completed only once per game, so this resolves NO if another civilization completes it, or if it is not completed by the end of turn 90."
+},
+{
+"world": "seed7014",
+"family": "NW5_wonder",
+"T": 90,
+"text": "Will the Great Wall be completed by any civilization by turn 90?",
+"subj": [],
+"qAll": 0.968,
+"qA": 0.956,
+"qB": 0.9799599198396793,
+"wonder": "Great Wall",
+"id": "seed7014:b124",
+"criteria": "Resolves YES if any civilization completes Great Wall on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). Resolves NO if it has not been completed by the end of turn 90."
+},
+{
+"world": "seed7003",
+"family": "NB6_event",
+"T": 90,
+"text": "Will at least 3 cities be conquered (in total) by turn 90?",
+"subj": [],
+"qAll": 0.984,
+"qA": 0.988,
+"qB": 0.9799599198396793,
+"kind": "ge3",
+"id": "seed7003:b100",
+"criteria": "Resolves YES if at least 3 city captures occur in total across all players on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). A capture is a city changing owner by force. Captures of cities held by barbarians count. Each capture event counts separately, so a city captured, lost and captured again counts twice. Cities that change hands when a civilization splits in a civil war are not captures. Exactly 3 counts."
+},
+{
+"world": "seed7005",
+"family": "W3_capture_k",
+"T": 90,
+"text": "Will Ca\u00f1ari capture at least 1 city by turn 90?",
+"subj": [
+"3"
+],
+"qAll": 0.991,
+"qA": 0.99,
+"qB": 0.9919839679358717,
+"k": 1,
+"id": "seed7005:b478",
+"criteria": "Resolves YES if Ca\u00f1ari captures at least 1 city on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). A capture is a city changing owner by force. Captures of cities held by barbarians count. Each capture event counts separately, so a city captured, lost and captured again counts twice. Cities that change hands when a civilization splits in a civil war are not captures. Exactly 1 counts."
+},
+{
+"world": "seed7005",
+"family": "NB1_value_threshold",
+"T": 90,
+"text": "Will Otom\u00ed's score be at least 82 at turn 90?",
+"subj": [
+"1"
+],
+"qAll": 0.951,
+"qA": 0.956,
+"qB": 0.9458917835671342,
+"metric": "scores",
+"x": 82,
+"sel_q": 0.05,
+"id": "seed7005:b236",
+"criteria": "Resolves YES if Otom\u00ed's score as recorded at the end of turn 90 is 82 or more; exactly 82 counts. This is the same quantity the world report calls Score."
+},
+{
+"world": "seed7005",
+"family": "S6_city_founding",
+"T": 90,
+"text": "Will Otom\u00ed found at least 1 new city by turn 90?",
+"subj": [
+"1"
+],
+"qAll": 0.999,
+"qA": 1.0,
+"qB": 0.9979959919839679,
+"k": 1,
+"id": "seed7005:b287",
+"criteria": "Resolves YES if Otom\u00ed founds at least 1 new city on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). Cities held at turn 60 and cities captured do not count. Exactly 1 counts."
+},
+{
+"world": "seed7003",
+"family": "W4_lose_k",
+"T": 90,
+"text": "Will Sammarinese lose at least 1 city by turn 90?",
+"subj": [
+"3"
+],
+"qAll": 0.993,
+"qA": 0.996,
+"qB": 0.9899799599198397,
+"k": 1,
+"id": "seed7003:b505",
+"criteria": "Resolves YES if Sammarinese loses at least 1 city to capture on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). Losses to any player count, including to barbarians. Each loss event counts separately, so a city lost, retaken and lost again counts twice. A city destroyed rather than captured, or lost through a civil war split, does not count. Exactly 1 counts."
+},
+{
+"world": "seed7014",
+"family": "EX_government_at",
+"T": 90,
+"text": "Will Chinese's government be Republic at turn 90?",
+"subj": [
+"4"
+],
+"qAll": 0.954,
+"qA": 0.958,
+"qB": 0.9498997995991983,
+"gov": "Republic",
+"id": "seed7014:b517",
+"criteria": "Resolves YES if Chinese's government as recorded at the end of turn 90 is Republic. A change of government completed on turn 90 counts. Anarchy counts as a form of government. Resolves NO for any other government."
+},
+{
+"world": "seed7011",
+"family": "W3_capture_k",
+"T": 120,
+"text": "Will Libyan capture at least 2 cities by turn 120?",
+"subj": [
+"1"
+],
+"qAll": 0.969,
+"qA": 0.966,
+"qB": 0.9719438877755511,
+"k": 2,
+"id": "seed7011:b1000",
+"criteria": "Resolves YES if Libyan captures at least 2 cities on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). A capture is a city changing owner by force. Captures of cities held by barbarians count. Each capture event counts separately, so a city captured, lost and captured again counts twice. Cities that change hands when a civilization splits in a civil war are not captures. Exactly 2 counts."
+},
+{
+"world": "seed7008",
+"family": "W4_lose_k",
+"T": 120,
+"text": "Will Belgian lose at least 1 city by turn 120?",
+"subj": [
+"1"
+],
+"qAll": 0.996,
+"qA": 0.996,
+"qB": 0.9959919839679359,
+"k": 1,
+"id": "seed7008:b993",
+"criteria": "Resolves YES if Belgian loses at least 1 city to capture on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). Losses to any player count, including to barbarians. Each loss event counts separately, so a city lost, retaken and lost again counts twice. A city destroyed rather than captured, or lost through a civil war split, does not count. Exactly 1 counts."
+},
+{
+"world": "seed7008",
+"family": "EX_tech_discovered",
+"T": 120,
+"text": "Will Belgian have discovered Trade by turn 120?",
+"subj": [
+"1"
+],
+"qAll": 0.999,
+"qA": 0.998,
+"qB": 1.0,
+"tech": "Trade",
+"id": "seed7008:b925",
+"criteria": "Resolves YES if Belgian discovers Trade on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). Resolves NO if it is not discovered by the end of turn 120."
+},
+{
+"world": "seed7022",
+"family": "NB6_event",
+"T": 120,
+"text": "Will at least 10 cities be conquered (in total) by turn 120?",
+"subj": [],
+"qAll": 0.999,
+"qA": 1.0,
+"qB": 0.9979959919839679,
+"kind": "ge10",
+"id": "seed7022:b506",
+"criteria": "Resolves YES if at least 10 city captures occur in total across all players on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). A capture is a city changing owner by force. Captures of cities held by barbarians count. Each capture event counts separately, so a city captured, lost and captured again counts twice. Cities that change hands when a civilization splits in a civil war are not captures. Exactly 10 counts."
+},
+{
+"world": "seed7008",
+"family": "S4_gov_change_count",
+"T": 120,
+"text": "Will Spanish's government change at least 1 time by turn 120? (Anarchy counts as a form of government, for this question.)",
+"subj": [
+"2"
+],
+"qAll": 0.994,
+"qA": 0.994,
+"qB": 0.9939879759519038,
+"k": 1,
+"id": "seed7008:b1002",
+"criteria": "Resolves YES if Spanish's government changes at least 1 time on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). Every recorded change counts, including a change into anarchy and a change out of it, so one revolution normally counts twice. Exactly 1 counts."
+},
+{
+"world": "seed7005",
+"family": "NB1_threshold",
+"T": 120,
+"text": "Will Otom\u00ed's number of technologies be at least 28 at turn 120?",
+"subj": [
+"1"
+],
+"qAll": 0.979,
+"qA": 0.988,
+"qB": 0.969939879759519,
+"metric": "techs_known",
+"x": 28,
+"sel_q": 0.05,
+"id": "seed7005:b868",
+"criteria": "Resolves YES if Otom\u00ed's number of technologies as recorded at the end of turn 120 is 28 or more; exactly 28 counts. This is the count the world report calls Techs; FreeCiv's initial 'None' entry is not a technology and is not counted, counting technologies known at turn 60."
+},
+{
+"world": "seed7011",
+"family": "EX_government_at",
+"T": 120,
+"text": "Will Ohlone's government be Democracy at turn 120?",
+"subj": [
+"0"
+],
+"qAll": 0.959,
+"qA": 0.966,
+"qB": 0.9519038076152304,
+"gov": "Democracy",
+"id": "seed7011:b792",
+"criteria": "Resolves YES if Ohlone's government as recorded at the end of turn 120 is Democracy. A change of government completed on turn 120 counts. Anarchy counts as a form of government. Resolves NO for any other government."
+},
+{
+"world": "seed7005",
+"family": "W2_directed_conquest",
+"T": 120,
+"text": "Will Ostrogothic capture at least one city from Ca\u00f1ari by turn 120?",
+"subj": [
+"4",
+"3"
+],
+"qAll": 0.999,
+"qA": 0.998,
+"qB": 1.0,
+"id": "seed7005:b691",
+"criteria": "Resolves YES if Ostrogothic captures at least one city whose owner at the moment of capture is Ca\u00f1ari, on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). Recaptures count. Resolves NO otherwise."
+},
+{
+"world": "seed7001",
+"family": "NW1_war_at",
+"T": 120,
+"text": "Will Brazzaville-Congolese and Guinean be at war at turn 120?",
+"subj": [
+"0",
+"3"
+],
+"qAll": 0.997,
+"qA": 0.996,
+"qB": 0.9979959919839679,
+"id": "seed7001:b648",
+"criteria": "Resolves YES if the diplomatic state between Brazzaville-Congolese and Guinean as recorded at the end of turn 120 is War. Cease-fire, armistice, peace, alliance, or never having met all resolve NO."
+},
+{
+"world": "seed7003",
+"family": "NW5_wonder",
+"T": 120,
+"text": "Will the Great Library be completed by any civilization by turn 120?",
+"subj": [],
+"qAll": 0.998,
+"qA": 1.0,
+"qB": 0.9959919839679359,
+"wonder": "Great Library",
+"id": "seed7003:b729",
+"criteria": "Resolves YES if any civilization completes Great Library on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). Resolves NO if it has not been completed by the end of turn 120."
+},
+{
+"world": "seed7005",
+"family": "NB4_drawdown",
+"T": 150,
+"text": "Will Saka's territory size drop below 90% of its turn-60 level at any point up to turn 150?",
+"subj": [
+"0"
+],
+"qAll": 0.996,
+"qA": 0.996,
+"qB": 0.9959919839679359,
+"metric": "territory_size",
+"f": 0.9,
+"id": "seed7005:b1502",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 150 inclusive, Saka's territory size is below 90% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 90% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7005",
+"family": "S4_gov_change_count",
+"T": 150,
+"text": "Will Saka's government change at least 2 times by turn 150? (Anarchy counts as a form of government, for this question.)",
+"subj": [
+"0"
+],
+"qAll": 0.966,
+"qA": 0.97,
+"qB": 0.9619238476953907,
+"k": 2,
+"id": "seed7005:b1413",
+"criteria": "Resolves YES if Saka's government changes at least 2 times on any turn from 61 through 150 inclusive (an event on turn 150 itself counts). Every recorded change counts, including a change into anarchy and a change out of it, so one revolution normally counts twice. Exactly 2 counts."
+},
+{
+"world": "seed7005",
+"family": "NW2_diplo",
+"T": 150,
+"text": "Will Greek and Ostrogothic form an Alliance at any point between turns 61 and 150?",
+"subj": [
+"2",
+"4"
+],
+"qAll": 0.994,
+"qA": 0.988,
+"qB": 1.0,
+"kind": "alliance_by",
+"id": "seed7005:b1361",
+"criteria": "Resolves YES if the diplomatic state between Greek and Ostrogothic is Alliance at the end of any turn from 61 through 150 inclusive. Resolves NO if the state never occurs in that window (every other state do not count)."
+},
+{
+"world": "seed7008",
+"family": "NB1_threshold",
+"T": 150,
+"text": "Will Belgian's number of technologies be at least 36 at turn 150?",
+"subj": [
+"1"
+],
+"qAll": 0.952,
+"qA": 0.952,
+"qB": 0.9519038076152304,
+"metric": "techs_known",
+"x": 36,
+"sel_q": 0.05,
+"id": "seed7008:b1659",
+"criteria": "Resolves YES if Belgian's number of technologies as recorded at the end of turn 150 is 36 or more; exactly 36 counts. This is the count the world report calls Techs; FreeCiv's initial 'None' entry is not a technology and is not counted, counting technologies known at turn 60."
+},
+{
+"world": "seed7003",
+"family": "NB6_event",
+"T": 150,
+"text": "Will at least 20 cities be conquered (in total) by turn 150?",
+"subj": [],
+"qAll": 0.996,
+"qA": 0.998,
+"qB": 0.9939879759519038,
+"kind": "ge20",
+"id": "seed7003:b1430",
+"criteria": "Resolves YES if at least 20 city captures occur in total across all players on any turn from 61 through 150 inclusive (an event on turn 150 itself counts). A capture is a city changing owner by force. Captures of cities held by barbarians count. Each capture event counts separately, so a city captured, lost and captured again counts twice. Cities that change hands when a civilization splits in a civil war are not captures. Exactly 20 counts."
+},
+{
+"world": "seed7011",
+"family": "EX_government_at",
+"T": 150,
+"text": "Will Ohlone's government be Democracy at turn 150?",
+"subj": [
+"0"
+],
+"qAll": 0.988,
+"qA": 0.994,
+"qB": 0.9819639278557114,
+"gov": "Democracy",
+"id": "seed7011:b1448",
+"criteria": "Resolves YES if Ohlone's government as recorded at the end of turn 150 is Democracy. A change of government completed on turn 150 counts. Anarchy counts as a form of government. Resolves NO for any other government."
+},
+{
+"world": "seed7011",
+"family": "W4_lose_k",
+"T": 150,
+"text": "Will Ohlone lose at least 2 cities by turn 150?",
+"subj": [
+"0"
+],
+"qAll": 0.98,
+"qA": 0.99,
+"qB": 0.969939879759519,
+"k": 2,
+"id": "seed7011:b1549",
+"criteria": "Resolves YES if Ohlone loses at least 2 cities to capture on any turn from 61 through 150 inclusive (an event on turn 150 itself counts). Losses to any player count, including to barbarians. Each loss event counts separately, so a city lost, retaken and lost again counts twice. A city destroyed rather than captured, or lost through a civil war split, does not count. Exactly 2 counts."
+},
+{
+"world": "seed7022",
+"family": "W3_capture_k",
+"T": 150,
+"text": "Will Boian capture at least 2 cities by turn 150?",
+"subj": [
+"0"
+],
+"qAll": 0.993,
+"qA": 0.992,
+"qB": 0.9939879759519038,
+"k": 2,
+"id": "seed7022:b1003",
+"criteria": "Resolves YES if Boian captures at least 2 cities on any turn from 61 through 150 inclusive (an event on turn 150 itself counts). A capture is a city changing owner by force. Captures of cities held by barbarians count. Each capture event counts separately, so a city captured, lost and captured again counts twice. Cities that change hands when a civilization splits in a civil war are not captures. Exactly 2 counts."
+},
+{
+"world": "seed7022",
+"family": "W2_directed_conquest",
+"T": 150,
+"text": "Will Pelasgian capture at least one city from Hunnic by turn 150?",
+"subj": [
+"1",
+"3"
+],
+"qAll": 0.995,
+"qA": 0.996,
+"qB": 0.9939879759519038,
+"id": "seed7022:b874",
+"criteria": "Resolves YES if Pelasgian captures at least one city whose owner at the moment of capture is Hunnic, on any turn from 61 through 150 inclusive (an event on turn 150 itself counts). Recaptures count. Resolves NO otherwise."
+},
+{
+"world": "seed7022",
+"family": "EX_comparative",
+"T": 150,
+"text": "Will Pelasgian have a higher score than Hunnic at turn 150?",
+"subj": [
+"1",
+"3"
+],
+"qAll": 0.962,
+"qA": 0.962,
+"qB": 0.9619238476953907,
+"metric": "scores",
+"id": "seed7022:b882",
+"criteria": "Resolves YES if Pelasgian's score as recorded at the end of turn 150 is strictly greater than Hunnic's. Equal values resolve NO. The quantity is the same quantity the world report calls Score."
+},
+{
+"world": "seed7014",
+"family": "NW5_wonder",
+"T": 180,
+"text": "Will the Great Wall be completed by any civilization by turn 180?",
+"subj": [],
+"qAll": 0.983,
+"qA": 0.974,
+"qB": 0.9919839679358717,
+"wonder": "Great Wall",
+"id": "seed7014:b1937",
+"criteria": "Resolves YES if any civilization completes Great Wall on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). Resolves NO if it has not been completed by the end of turn 180."
+},
+{
+"world": "seed7011",
+"family": "S4_gov_change_count",
+"T": 180,
+"text": "Will Ohlone's government change at least 2 times by turn 180? (Anarchy counts as a form of government, for this question.)",
+"subj": [
+"0"
+],
+"qAll": 0.992,
+"qA": 0.994,
+"qB": 0.9899799599198397,
+"k": 2,
+"id": "seed7011:b2008",
+"criteria": "Resolves YES if Ohlone's government changes at least 2 times on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). Every recorded change counts, including a change into anarchy and a change out of it, so one revolution normally counts twice. Exactly 2 counts."
+},
+{
+"world": "seed7014",
+"family": "W4_lose_k",
+"T": 180,
+"text": "Will Tajik lose at least 1 city by turn 180?",
+"subj": [
+"2"
+],
+"qAll": 0.998,
+"qA": 0.996,
+"qB": 1.0,
+"k": 1,
+"id": "seed7014:b2283",
+"criteria": "Resolves YES if Tajik loses at least 1 city to capture on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). Losses to any player count, including to barbarians. Each loss event counts separately, so a city lost, retaken and lost again counts twice. A city destroyed rather than captured, or lost through a civil war split, does not count. Exactly 1 counts."
+},
+{
+"world": "seed7011",
+"family": "W3_capture_k",
+"T": 180,
+"text": "Will American capture at least 2 cities by turn 180?",
+"subj": [
+"4"
+],
+"qAll": 0.982,
+"qA": 0.984,
+"qB": 0.9799599198396793,
+"k": 2,
+"id": "seed7011:b2461",
+"criteria": "Resolves YES if American captures at least 2 cities on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). A capture is a city changing owner by force. Captures of cities held by barbarians count. Each capture event counts separately, so a city captured, lost and captured again counts twice. Cities that change hands when a civilization splits in a civil war are not captures. Exactly 2 counts."
+},
+{
+"world": "seed7008",
+"family": "NW1_war_at",
+"T": 180,
+"text": "Will Peruvian and Somali be at war at turn 180?",
+"subj": [
+"3",
+"4"
+],
+"qAll": 0.97,
+"qA": 0.968,
+"qB": 0.9719438877755511,
+"id": "seed7008:b2189",
+"criteria": "Resolves YES if the diplomatic state between Peruvian and Somali as recorded at the end of turn 180 is War. Cease-fire, armistice, peace, alliance, or never having met all resolve NO."
+},
+{
+"world": "seed7010",
+"family": "EX_government_at",
+"T": 180,
+"text": "Will Central American's government be Democracy at turn 180?",
+"subj": [
+"0"
+],
+"qAll": 0.975,
+"qA": 0.974,
+"qB": 0.9759519038076152,
+"gov": "Democracy",
+"id": "seed7010:b1987",
+"criteria": "Resolves YES if Central American's government as recorded at the end of turn 180 is Democracy. A change of government completed on turn 180 counts. Anarchy counts as a form of government. Resolves NO for any other government."
+},
+{
+"world": "seed7005",
+"family": "NB1_value_threshold",
+"T": 180,
+"text": "Will Otom\u00ed's treasury be at least 76 at turn 180?",
+"subj": [
+"1"
+],
+"qAll": 0.951,
+"qA": 0.956,
+"qB": 0.9458917835671342,
+"metric": "treasury",
+"x": 76,
+"sel_q": 0.05,
+"id": "seed7005:b2266",
+"criteria": "Resolves YES if Otom\u00ed's treasury as recorded at the end of turn 180 is 76 or more; exactly 76 counts. This is the same quantity the world report calls Treasury."
+},
+{
+"world": "seed7014",
+"family": "S5_civ_wonders",
+"T": 180,
+"text": "Will Tajik complete at least 1 wonder by turn 180?",
+"subj": [
+"2"
+],
+"qAll": 0.966,
+"qA": 0.948,
+"qB": 0.9839679358717435,
+"k": 1,
+"id": "seed7014:b2276",
+"criteria": "Resolves YES if Tajik completes at least 1 great wonder on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). Exactly 1 counts. Small wonders such as a palace do not count."
+},
+{
+"world": "seed7005",
+"family": "NB4_drawdown",
+"T": 180,
+"text": "Will Saka's number of cities drop below 99% of its turn-60 level at any point up to turn 180?",
+"subj": [
+"0"
+],
+"qAll": 0.998,
+"qA": 0.996,
+"qB": 1.0,
+"metric": "cities_count",
+"f": 0.99,
+"id": "seed7005:b2202",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 180 inclusive, Saka's number of cities is below 99% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 99% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7008",
+"family": "NB1_threshold",
+"T": 180,
+"text": "Will Belgian's number of technologies be at least 42 at turn 180?",
+"subj": [
+"1"
+],
+"qAll": 0.95,
+"qA": 0.95,
+"qB": 0.9498997995991983,
+"metric": "techs_known",
+"x": 42,
+"sel_q": 0.05,
+"id": "seed7008:b2415",
+"criteria": "Resolves YES if Belgian's number of technologies as recorded at the end of turn 180 is 42 or more; exactly 42 counts. This is the count the world report calls Techs; FreeCiv's initial 'None' entry is not a technology and is not counted, counting technologies known at turn 60."
+},
+{
+"world": "seed7008",
+"family": "NW1_war_at",
+"T": 210,
+"text": "Will Latvian and Belgian be at war at turn 210?",
+"subj": [
+"0",
+"1"
+],
+"qAll": 0.998,
+"qA": 1.0,
+"qB": 0.9959919839679359,
+"id": "seed7008:b2834",
+"criteria": "Resolves YES if the diplomatic state between Latvian and Belgian as recorded at the end of turn 210 is War. Cease-fire, armistice, peace, alliance, or never having met all resolve NO."
+},
+{
+"world": "seed7003",
+"family": "EX_tech_discovered",
+"T": 210,
+"text": "Will Rhenish have discovered Chivalry by turn 210?",
+"subj": [
+"1"
+],
+"qAll": 0.996,
+"qA": 0.998,
+"qB": 0.9939879759519038,
+"tech": "Chivalry",
+"id": "seed7003:b3071",
+"criteria": "Resolves YES if Rhenish discovers Chivalry on any turn from 61 through 210 inclusive (an event on turn 210 itself counts). Resolves NO if it is not discovered by the end of turn 210."
+},
+{
+"world": "seed7005",
+"family": "NB1_value_threshold",
+"T": 210,
+"text": "Will Ca\u00f1ari's score be at least 135 at turn 210?",
+"subj": [
+"3"
+],
+"qAll": 0.954,
+"qA": 0.952,
+"qB": 0.9559118236472945,
+"metric": "scores",
+"x": 135,
+"sel_q": 0.05,
+"id": "seed7005:b3001",
+"criteria": "Resolves YES if Ca\u00f1ari's score as recorded at the end of turn 210 is 135 or more; exactly 135 counts. This is the same quantity the world report calls Score."
+},
+{
+"world": "seed7008",
+"family": "W4_lose_k",
+"T": 210,
+"text": "Will Somali lose at least 2 cities by turn 210?",
+"subj": [
+"4"
+],
+"qAll": 0.987,
+"qA": 0.986,
+"qB": 0.9879759519038076,
+"k": 2,
+"id": "seed7008:b3617",
+"criteria": "Resolves YES if Somali loses at least 2 cities to capture on any turn from 61 through 210 inclusive (an event on turn 210 itself counts). Losses to any player count, including to barbarians. Each loss event counts separately, so a city lost, retaken and lost again counts twice. A city destroyed rather than captured, or lost through a civil war split, does not count. Exactly 2 counts."
+},
+{
+"world": "seed7003",
+"family": "S5_civ_wonders",
+"T": 210,
+"text": "Will Crimean Tatar complete at least 1 wonder by turn 210?",
+"subj": [
+"0"
+],
+"qAll": 0.998,
+"qA": 1.0,
+"qB": 0.9959919839679359,
+"k": 1,
+"id": "seed7003:b3048",
+"criteria": "Resolves YES if Crimean Tatar completes at least 1 great wonder on any turn from 61 through 210 inclusive (an event on turn 210 itself counts). Exactly 1 counts. Small wonders such as a palace do not count."
+},
+{
+"world": "seed7008",
+"family": "W2_directed_conquest",
+"T": 210,
+"text": "Will Latvian capture at least one city from Belgian by turn 210?",
+"subj": [
+"0",
+"1"
+],
+"qAll": 0.986,
+"qA": 0.984,
+"qB": 0.9879759519038076,
+"id": "seed7008:b2836",
+"criteria": "Resolves YES if Latvian captures at least one city whose owner at the moment of capture is Belgian, on any turn from 61 through 210 inclusive (an event on turn 210 itself counts). Recaptures count. Resolves NO otherwise."
+},
+{
+"world": "seed7003",
+"family": "W1_wonder_race",
+"T": 210,
+"text": "Will Crimean Tatar complete the Great Wall by turn 210?",
+"subj": [
+"0"
+],
+"qAll": 0.998,
+"qA": 1.0,
+"qB": 0.9959919839679359,
+"wonder": "Great Wall",
+"id": "seed7003:b2903",
+"criteria": "Resolves YES if Crimean Tatar completes Great Wall on any turn from 61 through 210 inclusive (an event on turn 210 itself counts). A great wonder can be completed only once per game, so this resolves NO if another civilization completes it, or if it is not completed by the end of turn 210."
+},
+{
+"world": "seed7011",
+"family": "S6_city_founding",
+"T": 210,
+"text": "Will Libyan found at least 5 new cities by turn 210?",
+"subj": [
+"1"
+],
+"qAll": 0.99,
+"qA": 0.994,
+"qB": 0.9859719438877755,
+"k": 5,
+"id": "seed7011:b2813",
+"criteria": "Resolves YES if Libyan founds at least 5 new cities on any turn from 61 through 210 inclusive (an event on turn 210 itself counts). Cities held at turn 60 and cities captured do not count. Exactly 5 counts."
+},
+{
+"world": "seed7005",
+"family": "NB1_threshold",
+"T": 210,
+"text": "Will Ca\u00f1ari's number of technologies be at least 39 at turn 210?",
+"subj": [
+"3"
+],
+"qAll": 0.954,
+"qA": 0.952,
+"qB": 0.9559118236472945,
+"metric": "techs_known",
+"x": 39,
+"sel_q": 0.05,
+"id": "seed7005:b2994",
+"criteria": "Resolves YES if Ca\u00f1ari's number of technologies as recorded at the end of turn 210 is 39 or more; exactly 39 counts. This is the count the world report calls Techs; FreeCiv's initial 'None' entry is not a technology and is not counted, counting technologies known at turn 60."
+},
+{
+"world": "seed7005",
+"family": "S4_gov_change_count",
+"T": 210,
+"text": "Will Saka's government change at least 2 times by turn 210? (Anarchy counts as a form of government, for this question.)",
+"subj": [
+"0"
+],
+"qAll": 0.999,
+"qA": 1.0,
+"qB": 0.9979959919839679,
+"k": 2,
+"id": "seed7005:b2744",
+"criteria": "Resolves YES if Saka's government changes at least 2 times on any turn from 61 through 210 inclusive (an event on turn 210 itself counts). Every recorded change counts, including a change into anarchy and a change out of it, so one revolution normally counts twice. Exactly 2 counts."
+}
+]

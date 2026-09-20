@@ -1,0 +1,319 @@
+WORLD REPORT TXT v1
+Game ID: seed7003
+Snapshot turn: 60
+Turns analyzed: 1..60
+Barbarians: default settings (barbarian and pirate raids begin around turn 60; none exist at turn 60)
+Map size: 78x52
+
+CIVILIZATIONS
+ID | Name
+---+---------------
+0  | Crimean Tatar
+1  | Rhenish
+2  | Ghana
+3  | Sammarinese
+4  | Corsican
+
+CURRENT STATE (TURN 60)
+ID | Name          | Score | Rank | Government | Treasury | Population | Techs | Wonders | Cities | Territory | Units | Military | Science | Trade | Food | Shields
+---+---------------+-------+------+------------+----------+------------+-------+---------+--------+-----------+-------+----------+---------+-------+------+--------
+0  | Crimean Tatar | 45    | 1    | Despotism  | 280      | 28         | 8     | 0       | 17     | 242       | 5     | 0        | 60      | 28.0  | 56.0 | 51.0   
+1  | Rhenish       | 44    | 2    | Despotism  | 557      | 27         | 8     | 0       | 17     | 250       | 8     | 2        | 60      | 35.0  | 70.0 | 50.0   
+2  | Ghana         | 31    | 5    | Despotism  | 388      | 18         | 6     | 0       | 12     | 127       | 3     | 0        | 60      | 24.0  | 48.0 | 29.0   
+3  | Sammarinese   | 39    | 3    | Monarchy   | 312      | 18         | 10    | 0       | 12     | 197       | 7     | 1        | 70      | 39.0  | 78.0 | 33.0   
+4  | Corsican      | 38    | 4    | Despotism  | 367      | 21         | 8     | 0       | 14     | 178       | 7     | 1        | 60      | 49.0  | 98.0 | 39.0   
+
+DIPLOMACY (TURN 60)
+State between each pair of civilizations. 'Never met' = no contact yet; an embassy gives full intelligence on the other side.
+Civ A         | Civ B       | State      | First contact turn | Embassy
+--------------+-------------+------------+--------------------+--------
+Crimean Tatar | Rhenish     | War        | 38                 | no     
+Crimean Tatar | Ghana       | Cease-fire | 46                 | no     
+Crimean Tatar | Sammarinese | Cease-fire | 45                 | no     
+Crimean Tatar | Corsican    | Cease-fire | 46                 | no     
+Rhenish       | Ghana       | Armistice  | 38                 | no     
+Rhenish       | Sammarinese | Cease-fire | 42                 | no     
+Rhenish       | Corsican    | Armistice  | 34                 | no     
+Ghana         | Sammarinese | War        | 7                  | no     
+Ghana         | Corsican    | Armistice  | 26                 | no     
+Sammarinese   | Corsican    | War        | 20                 | yes    
+
+BORDERS (TURN 60)
+Whether each pair's territories are adjacent (share a border) at turn 60, and otherwise the gap in tiles between their nearest owned tiles.
+Civ A         | Civ B         | Touch| Gap
+--------------+---------------+-----+----
+Crimean Tatar | Rhenish       | no  |   2
+Crimean Tatar | Ghana         | no  |   9
+Crimean Tatar | Sammarinese   | no  |   7
+Crimean Tatar | Corsican      | no  |   3
+Rhenish       | Ghana         | no  |   6
+Rhenish       | Sammarinese   | no  |  15
+Rhenish       | Corsican      | no  |  15
+Ghana         | Sammarinese   | no  |   6
+Ghana         | Corsican      | no  |  11
+Sammarinese   | Corsican      | yes |   0
+
+GOVERNMENT TIMELINE (derived from recordings)
+Each entry is a change point (turn number -> new government); the first entry is the first observed government.
+0 Crimean Tatar: 1 Despotism
+1 Rhenish: 1 Despotism
+2 Ghana: 1 Despotism
+3 Sammarinese: 1 Despotism; 56 Anarchy; 57 Monarchy
+4 Corsican: 1 Despotism
+
+TREASURY (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Crimean Tatar: 50, 57, 67, 77, 112, 122, 136, 149, 165, 186, 207, 242, 280
+1 Rhenish: 50, 52, 107, 217, 327, 339, 359, 381, 403, 431, 472, 514, 557
+2 Ghana: 50, 54, 64, 124, 136, 151, 195, 219, 247, 280, 317, 353, 388
+3 Sammarinese: 50, 58, 73, 87, 97, 105, 122, 142, 163, 190, 228, 268, 312
+4 Corsican: 50, 78, 83, 91, 100, 118, 135, 150, 175, 202, 238, 278, 367
+
+POPULATION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Crimean Tatar: 0, 2, 2, 3, 4, 6, 8, 7, 12, 14, 19, 22, 28
+1 Rhenish: 0, 2, 2, 4, 4, 7, 7, 9, 13, 17, 18, 24, 27
+2 Ghana: 0, 2, 2, 3, 4, 4, 6, 6, 9, 11, 12, 12, 18
+3 Sammarinese: 0, 2, 2, 3, 4, 3, 5, 8, 6, 8, 12, 14, 18
+4 Corsican: 0, 2, 2, 3, 4, 6, 8, 8, 10, 13, 18, 18, 21
+
+TECHS KNOWN (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Crimean Tatar: 0, 0, 0, 0, 1, 3, 3, 4, 5, 6, 6, 6, 8
+1 Rhenish: 0, 0, 0, 1, 1, 2, 4, 4, 5, 6, 7, 7, 8
+2 Ghana: 0, 0, 0, 0, 1, 2, 2, 3, 5, 5, 6, 6, 6
+3 Sammarinese: 0, 1, 2, 3, 3, 4, 5, 6, 7, 8, 8, 10, 10
+4 Corsican: 0, 0, 0, 0, 1, 2, 2, 3, 4, 5, 7, 7, 8
+
+WONDERS DISCOVERED (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Crimean Tatar: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+1 Rhenish: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+2 Ghana: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+3 Sammarinese: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+4 Corsican: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+
+CITIES COUNT (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Crimean Tatar: 0, 2, 2, 2, 4, 4, 6, 7, 8, 9, 12, 15, 17
+1 Rhenish: 0, 2, 2, 3, 3, 5, 5, 7, 9, 10, 12, 15, 17
+2 Ghana: 0, 2, 2, 2, 3, 3, 4, 5, 6, 7, 7, 9, 12
+3 Sammarinese: 0, 2, 2, 2, 2, 3, 4, 4, 5, 8, 8, 8, 12
+4 Corsican: 0, 2, 2, 2, 4, 4, 6, 6, 6, 9, 11, 11, 14
+
+TERRITORY SIZE (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Crimean Tatar: 0, 62, 62, 62, 109, 109, 114, 124, 151, 169, 200, 239, 242
+1 Rhenish: 0, 42, 42, 59, 59, 81, 86, 104, 150, 159, 185, 216, 250
+2 Ghana: 0, 48, 49, 49, 65, 71, 81, 91, 96, 98, 101, 107, 127
+3 Sammarinese: 0, 44, 45, 48, 48, 61, 82, 83, 101, 140, 141, 149, 197
+4 Corsican: 0, 65, 77, 80, 131, 132, 143, 143, 143, 165, 169, 169, 178
+
+SCIENCE (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Crimean Tatar: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+1 Rhenish: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+2 Ghana: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+3 Sammarinese: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 70
+4 Corsican: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+
+TRADE PRODUCTION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Crimean Tatar: 0.0, 2.0, 2.0, 3.0, 4.0, 6.0, 8.0, 7.0, 12.0, 14.0, 19.0, 22.0, 28.0
+1 Rhenish: 0.0, 5.0, 5.0, 7.0, 8.0, 10.0, 12.0, 15.0, 18.0, 23.0, 26.0, 30.0, 35.0
+2 Ghana: 0.0, 8.0, 8.0, 11.0, 10.0, 10.0, 14.0, 16.0, 19.0, 17.0, 22.0, 24.0, 24.0
+3 Sammarinese: 0.0, 11.0, 11.0, 12.0, 16.0, 18.0, 17.0, 20.0, 24.0, 20.0, 30.0, 32.0, 39.0
+4 Corsican: 0.0, 14.0, 18.0, 23.0, 20.0, 22.0, 24.0, 24.0, 34.0, 33.0, 34.0, 38.0, 49.0
+
+FOOD PRODUCTION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Crimean Tatar: 0.0, 4.0, 4.0, 6.0, 8.0, 12.0, 16.0, 14.0, 24.0, 28.0, 38.0, 44.0, 56.0
+1 Rhenish: 0.0, 10.0, 10.0, 14.0, 16.0, 20.0, 24.0, 30.0, 36.0, 46.0, 52.0, 60.0, 70.0
+2 Ghana: 0.0, 16.0, 16.0, 22.0, 20.0, 20.0, 28.0, 32.0, 38.0, 34.0, 44.0, 48.0, 48.0
+3 Sammarinese: 0.0, 22.0, 22.0, 24.0, 32.0, 36.0, 34.0, 40.0, 48.0, 40.0, 60.0, 64.0, 78.0
+4 Corsican: 0.0, 28.0, 36.0, 46.0, 40.0, 44.0, 48.0, 48.0, 68.0, 66.0, 68.0, 76.0, 98.0
+
+SHIELD PRODUCTION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Crimean Tatar: 0.0, 4.0, 4.0, 11.0, 12.0, 13.0, 17.0, 21.0, 27.0, 29.0, 39.0, 43.0, 51.0
+1 Rhenish: 0.0, 7.0, 7.0, 7.0, 14.0, 11.0, 15.0, 16.0, 26.0, 34.0, 28.0, 49.0, 50.0
+2 Ghana: 0.0, 4.0, 4.0, 8.0, 7.0, 8.0, 11.0, 12.0, 16.0, 20.0, 21.0, 20.0, 29.0
+3 Sammarinese: 0.0, 6.0, 6.0, 4.0, 11.0, 4.0, 15.0, 17.0, 16.0, 21.0, 27.0, 31.0, 33.0
+4 Corsican: 0.0, 6.0, 6.0, 7.0, 9.0, 12.0, 16.0, 16.0, 21.0, 27.0, 33.0, 37.0, 39.0
+
+UNITS COUNT (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Crimean Tatar: 5, 3, 3, 4, 3, 3, 3, 4, 4, 6, 4, 5, 5
+1 Rhenish: 5, 3, 3, 3, 4, 3, 5, 6, 5, 6, 8, 6, 8
+2 Ghana: 5, 3, 3, 4, 3, 3, 4, 5, 5, 3, 5, 6, 3
+3 Sammarinese: 5, 3, 3, 3, 4, 5, 4, 4, 6, 4, 6, 6, 7
+4 Corsican: 5, 3, 4, 5, 4, 4, 4, 4, 6, 5, 4, 5, 7
+
+MILITARY UNITS COUNT (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Crimean Tatar: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+1 Rhenish: 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2
+2 Ghana: 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0
+3 Sammarinese: 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1
+4 Corsican: 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1
+
+SCORES (derived from recordings)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Crimean Tatar: 0, 2, 2, 3, 6, 12, 14, 15, 22, 27, 32, 35, 45
+1 Rhenish: 0, 2, 2, 6, 6, 11, 15, 17, 23, 30, 33, 39, 44
+2 Ghana: 0, 2, 2, 3, 6, 8, 10, 12, 19, 21, 24, 25, 31
+3 Sammarinese: 0, 4, 6, 9, 10, 11, 15, 20, 20, 24, 28, 35, 39
+4 Corsican: 0, 2, 2, 3, 6, 10, 12, 14, 18, 23, 32, 33, 38
+
+EVENT TYPES (exhaustive)
+city_founded, city_conquered, city_destroyed, government_change, diplomatic_change, tech_discovered, wonder_completed
+If a type does not appear in EVENTS, it did not occur in the analyzed turns.
+
+EVENTS (chronological)
+Turn | Type | Civ | Description
+--------------------------------------------------------------------------------
+2 | city_founded | Crimean Tatar | Crimean Tatar founded Bağçasaray
+2 | city_founded | Rhenish | Rhenish founded Mainz
+2 | tech_discovered | Sammarinese | Sammarinese discovered Horseback Riding
+3 | city_founded | Crimean Tatar | Crimean Tatar founded Yalta
+3 | city_founded | Sammarinese | Sammarinese founded San Marino
+3 | city_founded | Corsican | Corsican founded Corti
+4 | city_founded | Rhenish | Rhenish founded Köln
+4 | city_founded | Ghana | Ghana founded Walata
+4 | city_founded | Ghana | Ghana founded Kumbi Saleh
+4 | city_founded | Sammarinese | Sammarinese founded Acquaviva
+4 | city_founded | Corsican | Corsican founded Aiacciu
+8 | diplomatic_change | Ghana | Ghana and Sammarinese: Never met -> War
+8 | tech_discovered | Sammarinese | Sammarinese discovered Masonry
+9 | diplomatic_change | Ghana | Ghana and Sammarinese: War -> Cease-fire
+14 | tech_discovered | Sammarinese | Sammarinese discovered Ceremonial Burial
+15 | city_founded | Rhenish | Rhenish founded Bonn
+15 | tech_discovered | Rhenish | Rhenish discovered Masonry
+16 | tech_discovered | Crimean Tatar | Crimean Tatar discovered Masonry
+17 | tech_discovered | Ghana | Ghana discovered Masonry
+17 | tech_discovered | Corsican | Corsican discovered Masonry
+18 | city_founded | Corsican | Corsican founded Aleria
+19 | city_founded | Crimean Tatar | Crimean Tatar founded Curçı
+19 | city_founded | Crimean Tatar | Crimean Tatar founded Kefe
+19 | city_founded | Ghana | Ghana founded Bamako
+20 | city_founded | Corsican | Corsican founded Bastia
+21 | diplomatic_change | Sammarinese | Sammarinese and Corsican: Never met -> War
+21 | tech_discovered | Crimean Tatar | Crimean Tatar discovered Ceremonial Burial
+21 | tech_discovered | Sammarinese | Sammarinese discovered Warrior Code
+22 | city_founded | Rhenish | Rhenish founded Aachen
+22 | tech_discovered | Rhenish | Rhenish discovered Bronze Working
+23 | diplomatic_change | Sammarinese | Sammarinese and Corsican: War -> Cease-fire
+24 | diplomatic_change | Ghana | Ghana and Sammarinese: Cease-fire -> War
+24 | tech_discovered | Crimean Tatar | Crimean Tatar discovered Alphabet
+24 | tech_discovered | Ghana | Ghana discovered Alphabet
+24 | tech_discovered | Corsican | Corsican discovered Bronze Working
+25 | city_founded | Rhenish | Rhenish founded Trier
+25 | city_founded | Sammarinese | Sammarinese founded Borgo Maggiore
+26 | city_founded | Sammarinese | Sammarinese founded Chiesanuova
+27 | diplomatic_change | Ghana | Ghana and Sammarinese: War -> Cease-fire
+27 | diplomatic_change | Ghana | Ghana and Corsican: Never met -> War
+27 | tech_discovered | Rhenish | Rhenish discovered Alphabet
+27 | tech_discovered | Sammarinese | Sammarinese discovered Alphabet
+28 | diplomatic_change | Ghana | Ghana and Corsican: War -> Cease-fire
+28 | tech_discovered | Rhenish | Rhenish discovered Pottery
+29 | city_founded | Ghana | Ghana founded Segu
+30 | city_founded | Crimean Tatar | Crimean Tatar founded Kürey Başı
+30 | city_founded | Crimean Tatar | Crimean Tatar founded Paşa Töpe
+30 | city_founded | Corsican | Corsican founded Ponte Novu
+30 | city_founded | Corsican | Corsican founded Porti Vechju
+31 | city_founded | Ghana | Ghana founded Bure
+31 | tech_discovered | Corsican | Corsican discovered Pottery
+32 | tech_discovered | Sammarinese | Sammarinese discovered Pottery
+33 | city_founded | Crimean Tatar | Crimean Tatar founded Otuz
+33 | city_founded | Rhenish | Rhenish founded Koblenz
+33 | tech_discovered | Ghana | Ghana discovered Code of Laws
+34 | city_founded | Rhenish | Rhenish founded Kleve
+34 | tech_discovered | Crimean Tatar | Crimean Tatar discovered Code of Laws
+35 | diplomatic_change | Rhenish | Rhenish and Corsican: Never met -> Cease-fire
+36 | city_founded | Crimean Tatar | Crimean Tatar founded Kaygador
+36 | city_founded | Rhenish | Rhenish founded Düsseldorf
+36 | tech_discovered | Ghana | Ghana discovered Writing
+37 | city_founded | Rhenish | Rhenish founded Saarbrücken
+37 | diplomatic_change | Sammarinese | Sammarinese and Corsican: Cease-fire -> Armistice
+37 | tech_discovered | Rhenish | Rhenish discovered Code of Laws
+38 | city_founded | Ghana | Ghana founded Sama
+38 | diplomatic_change | Crimean Tatar | Crimean Tatar and Rhenish: Never met -> War
+38 | tech_discovered | Crimean Tatar | Crimean Tatar discovered Bronze Working
+38 | tech_discovered | Ghana | Ghana discovered Pottery
+39 | diplomatic_change | Crimean Tatar | Crimean Tatar and Rhenish: War -> Cease-fire
+39 | diplomatic_change | Rhenish | Rhenish and Ghana: Never met -> War
+39 | tech_discovered | Sammarinese | Sammarinese discovered Code of Laws
+39 | tech_discovered | Corsican | Corsican discovered Currency
+40 | city_founded | Sammarinese | Sammarinese founded Serravalle
+41 | city_founded | Crimean Tatar | Crimean Tatar founded Sultan Sala
+41 | city_founded | Rhenish | Rhenish founded Moers
+41 | city_founded | Corsican | Corsican founded Biguglia
+41 | diplomatic_change | Rhenish | Rhenish and Ghana: War -> Cease-fire
+42 | diplomatic_change | Ghana | Ghana and Sammarinese: Cease-fire -> War
+42 | tech_discovered | Rhenish | Rhenish discovered Map Making
+42 | tech_discovered | Corsican | Corsican discovered Alphabet
+43 | city_founded | Ghana | Ghana founded Morfil
+43 | city_founded | Sammarinese | Sammarinese founded Domagnano
+43 | diplomatic_change | Rhenish | Rhenish and Sammarinese: Never met -> War
+43 | diplomatic_change | Ghana | Ghana and Corsican: Cease-fire -> War
+44 | city_founded | Sammarinese | Sammarinese founded Montegiardino
+44 | city_founded | Sammarinese | Sammarinese founded Fiorentino
+44 | city_founded | Corsican | Corsican founded U Borgu
+44 | diplomatic_change | Ghana | Ghana and Corsican: War -> Cease-fire
+44 | tech_discovered | Crimean Tatar | Crimean Tatar discovered Currency
+45 | city_founded | Corsican | Corsican founded Furiani
+45 | diplomatic_change | Crimean Tatar | Crimean Tatar and Sammarinese: Never met -> War
+45 | tech_discovered | Sammarinese | Sammarinese discovered Writing
+46 | diplomatic_change | Crimean Tatar | Crimean Tatar and Corsican: Never met -> War
+46 | diplomatic_change | Rhenish | Rhenish and Sammarinese: War -> Cease-fire
+47 | city_founded | Crimean Tatar | Crimean Tatar founded Baraq Göl
+47 | city_founded | Rhenish | Rhenish founded Jülich
+47 | city_founded | Corsican | Corsican founded Ghisunaccia
+47 | diplomatic_change | Crimean Tatar | Crimean Tatar and Ghana: Never met -> War
+47 | tech_discovered | Rhenish | Rhenish discovered Currency
+48 | city_founded | Crimean Tatar | Crimean Tatar founded Köktöbel
+48 | city_founded | Corsican | Corsican founded Calvi
+48 | diplomatic_change | Crimean Tatar | Crimean Tatar and Ghana: War -> Cease-fire
+48 | diplomatic_change | Crimean Tatar | Crimean Tatar and Sammarinese: War -> Cease-fire
+48 | tech_discovered | Corsican | Corsican discovered Code of Laws
+49 | city_founded | Rhenish | Rhenish founded Mülheim an der Ruhr
+49 | diplomatic_change | Rhenish | Rhenish and Corsican: Cease-fire -> Armistice
+50 | city_founded | Crimean Tatar | Crimean Tatar founded Qızıltaş
+50 | diplomatic_change | Crimean Tatar | Crimean Tatar and Corsican: War -> Cease-fire
+50 | tech_discovered | Ghana | Ghana discovered Literacy
+50 | tech_discovered | Corsican | Corsican discovered Warrior Code
+51 | city_founded | Crimean Tatar | Crimean Tatar founded Aşağı Otuz
+51 | city_founded | Rhenish | Rhenish founded Essen
+51 | city_founded | Ghana | Ghana founded Awdaghost
+52 | city_founded | Rhenish | Rhenish founded Krefeld
+52 | diplomatic_change | Sammarinese | Sammarinese and Corsican: Armistice -> Peace
+53 | city_founded | Rhenish | Rhenish founded Duisburg
+53 | city_founded | Ghana | Ghana founded Sosso
+54 | tech_discovered | Sammarinese | Sammarinese discovered Currency
+55 | city_founded | Crimean Tatar | Crimean Tatar founded Aşağı Degirmenköy
+55 | city_founded | Crimean Tatar | Crimean Tatar founded Büyük Lambat
+55 | diplomatic_change | Crimean Tatar | Crimean Tatar and Rhenish: Cease-fire -> War
+55 | diplomatic_change | Rhenish | Rhenish and Ghana: Cease-fire -> Armistice
+55 | tech_discovered | Sammarinese | Sammarinese discovered Monarchy
+56 | city_founded | Ghana | Ghana founded Kirina
+56 | city_founded | Corsican | Corsican founded Lucciana
+56 | government_change | Sammarinese | Sammarinese changed government from Despotism to Anarchy
+56 | tech_discovered | Crimean Tatar | Crimean Tatar discovered Trade
+57 | city_founded | Crimean Tatar | Crimean Tatar founded Degirmenköy
+57 | city_founded | Rhenish | Rhenish founded Brühl
+57 | city_founded | Ghana | Ghana founded Bambuk
+57 | city_founded | Ghana | Ghana founded Auker
+57 | city_founded | Sammarinese | Sammarinese founded Faetano
+57 | diplomatic_change | Ghana | Ghana and Corsican: Cease-fire -> Armistice
+57 | government_change | Sammarinese | Sammarinese changed government from Anarchy to Monarchy
+58 | city_founded | Crimean Tatar | Crimean Tatar founded Küçük Lambat
+58 | city_founded | Corsican | Corsican founded Prupià
+58 | diplomatic_change | Sammarinese | Sammarinese and Corsican: Peace -> War
+59 | city_founded | Sammarinese | Sammarinese founded Falciano
+59 | city_founded | Corsican | Corsican founded E Ville di Petrabugnu
+59 | tech_discovered | Crimean Tatar | Crimean Tatar discovered Writing
+59 | tech_discovered | Corsican | Corsican discovered Construction
+60 | city_founded | Rhenish | Rhenish founded Oberhausen
+60 | city_founded | Sammarinese | Sammarinese founded Fiorina
+60 | city_founded | Sammarinese | Sammarinese founded Dogana
+60 | tech_discovered | Rhenish | Rhenish discovered Trade

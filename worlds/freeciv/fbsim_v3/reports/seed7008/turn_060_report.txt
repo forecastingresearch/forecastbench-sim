@@ -1,0 +1,330 @@
+WORLD REPORT TXT v1
+Game ID: seed7008
+Snapshot turn: 60
+Turns analyzed: 1..60
+Barbarians: default settings (barbarian and pirate raids begin around turn 60; none exist at turn 60)
+Map size: 78x52
+
+CIVILIZATIONS
+ID | Name
+---+---------------
+0  | Latvian
+1  | Belgian
+2  | Spanish
+3  | Peruvian
+4  | Somali
+
+CURRENT STATE (TURN 60)
+ID | Name     | Score | Rank | Government | Treasury | Population | Techs | Wonders | Cities | Territory | Units | Military | Science | Trade | Food  | Shields
+---+----------+-------+------+------------+----------+------------+-------+---------+--------+-----------+-------+----------+---------+-------+-------+--------
+0  | Latvian  | 35    | 5    | Despotism  | 347      | 18         | 8     | 0       | 12     | 156       | 8     | 4        | 60      | 18.0  | 36.0  | 29.0   
+1  | Belgian  | 37    | 4    | Despotism  | 283      | 22         | 7     | 0       | 13     | 203       | 6     | 3        | 60      | 28.0  | 56.0  | 39.0   
+2  | Spanish  | 44    | 2    | Republic   | 458      | 23         | 10    | 0       | 13     | 128       | 5     | 0        | 80      | 33.0  | 66.0  | 30.0   
+3  | Peruvian | 40    | 3    | Despotism  | 419      | 23         | 8     | 0       | 17     | 224       | 6     | 1        | 60      | 41.0  | 82.0  | 49.0   
+4  | Somali   | 46    | 1    | Despotism  | 310      | 24         | 10    | 0       | 17     | 279       | 13    | 7        | 60      | 76.0  | 152.0 | 47.0   
+
+DIPLOMACY (TURN 60)
+State between each pair of civilizations. 'Never met' = no contact yet; an embassy gives full intelligence on the other side.
+Civ A    | Civ B    | State      | First contact turn | Embassy
+---------+----------+------------+--------------------+--------
+Latvian  | Belgian  | Peace      | 28                 | no     
+Latvian  | Spanish  | Armistice  | 29                 | no     
+Latvian  | Peruvian | Cease-fire | 29                 | no     
+Latvian  | Somali   | Armistice  | 18                 | no     
+Belgian  | Spanish  | War        | 24                 | no     
+Belgian  | Peruvian | Armistice  | 16                 | no     
+Belgian  | Somali   | Armistice  | 19                 | no     
+Spanish  | Peruvian | Peace      | 18                 | no     
+Spanish  | Somali   | Peace      | 26                 | no     
+Peruvian | Somali   | Peace      | 26                 | no     
+
+BORDERS (TURN 60)
+Whether each pair's territories are adjacent (share a border) at turn 60, and otherwise the gap in tiles between their nearest owned tiles.
+Civ A         | Civ B         | Touch| Gap
+--------------+---------------+-----+----
+Latvian       | Belgian       | yes |   0
+Latvian       | Spanish       | no  |   6
+Latvian       | Peruvian      | no  |  15
+Latvian       | Somali        | yes |   0
+Belgian       | Spanish       | no  |   2
+Belgian       | Peruvian      | yes |   0
+Belgian       | Somali        | no  |  11
+Spanish       | Peruvian      | yes |   0
+Spanish       | Somali        | no  |  14
+Peruvian      | Somali        | no  |   4
+
+GOVERNMENT TIMELINE (derived from recordings)
+Each entry is a change point (turn number -> new government); the first entry is the first observed government.
+0 Latvian: 1 Despotism
+1 Belgian: 1 Despotism
+2 Spanish: 1 Despotism; 56 Anarchy; 57 Republic
+3 Peruvian: 1 Despotism
+4 Somali: 1 Despotism
+
+TREASURY (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Latvian: 50, 53, 58, 63, 73, 189, 200, 255, 265, 281, 295, 314, 347
+1 Belgian: 50, 54, 59, 70, 77, 87, 94, 157, 172, 191, 216, 246, 283
+2 Spanish: 50, 55, 93, 108, 126, 151, 227, 252, 278, 315, 354, 394, 458
+3 Peruvian: 50, 51, 110, 120, 130, 142, 161, 208, 233, 311, 340, 374, 419
+4 Somali: 50, 103, 108, 164, 170, 176, 181, 186, 200, 209, 220, 237, 310
+
+POPULATION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Latvian: 0, 2, 2, 2, 3, 5, 8, 7, 8, 11, 14, 14, 18
+1 Belgian: 0, 3, 3, 5, 5, 6, 7, 7, 9, 11, 13, 16, 22
+2 Spanish: 0, 3, 3, 5, 5, 5, 10, 11, 12, 15, 16, 21, 23
+3 Peruvian: 0, 2, 2, 3, 3, 4, 6, 8, 9, 12, 16, 19, 23
+4 Somali: 0, 2, 2, 2, 4, 7, 9, 10, 14, 16, 19, 24, 24
+
+TECHS KNOWN (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Latvian: 0, 0, 0, 1, 1, 2, 3, 4, 4, 6, 7, 8, 8
+1 Belgian: 0, 0, 0, 2, 3, 3, 4, 4, 5, 6, 6, 6, 7
+2 Spanish: 0, 0, 0, 1, 2, 3, 3, 4, 5, 6, 6, 7, 10
+3 Peruvian: 0, 0, 0, 0, 1, 2, 3, 4, 4, 6, 7, 8, 8
+4 Somali: 0, 1, 1, 2, 3, 4, 5, 5, 7, 8, 9, 10, 10
+
+WONDERS DISCOVERED (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Latvian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+1 Belgian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+2 Spanish: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+3 Peruvian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+4 Somali: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+
+CITIES COUNT (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Latvian: 0, 2, 2, 2, 3, 4, 4, 4, 5, 6, 8, 9, 12
+1 Belgian: 0, 3, 3, 3, 3, 3, 4, 5, 6, 6, 10, 12, 13
+2 Spanish: 0, 3, 3, 3, 4, 5, 6, 7, 7, 9, 10, 13, 13
+3 Peruvian: 0, 2, 2, 2, 3, 4, 5, 7, 7, 9, 11, 14, 17
+4 Somali: 0, 2, 2, 2, 4, 4, 6, 6, 8, 11, 11, 13, 17
+
+TERRITORY SIZE (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Latvian: 0, 50, 50, 54, 64, 79, 80, 83, 89, 110, 119, 124, 156
+1 Belgian: 0, 60, 71, 74, 74, 81, 110, 121, 127, 126, 169, 183, 203
+2 Spanish: 0, 48, 55, 55, 64, 76, 85, 86, 86, 98, 105, 128, 128
+3 Peruvian: 0, 45, 50, 50, 68, 83, 84, 109, 127, 147, 149, 196, 224
+4 Somali: 0, 63, 70, 70, 102, 109, 122, 122, 149, 184, 187, 232, 279
+
+SCIENCE (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Latvian: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+1 Belgian: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+2 Spanish: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 80
+3 Peruvian: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+4 Somali: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+
+TRADE PRODUCTION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Latvian: 0.0, 2.0, 2.0, 2.0, 3.0, 5.0, 8.0, 7.0, 8.0, 11.0, 14.0, 14.0, 18.0
+1 Belgian: 0.0, 6.0, 6.0, 9.0, 12.0, 12.0, 14.0, 14.0, 15.0, 19.0, 21.0, 23.0, 28.0
+2 Spanish: 0.0, 9.0, 9.0, 15.0, 15.0, 15.0, 18.0, 17.0, 22.0, 23.0, 26.0, 27.0, 33.0
+3 Peruvian: 0.0, 11.0, 11.0, 18.0, 18.0, 19.0, 21.0, 20.0, 27.0, 30.0, 37.0, 40.0, 41.0
+4 Somali: 0.0, 14.0, 14.0, 22.0, 20.0, 27.0, 25.0, 30.0, 34.0, 44.0, 67.0, 76.0, 76.0
+
+FOOD PRODUCTION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Latvian: 0.0, 4.0, 4.0, 4.0, 6.0, 10.0, 16.0, 14.0, 16.0, 22.0, 28.0, 28.0, 36.0
+1 Belgian: 0.0, 12.0, 12.0, 18.0, 24.0, 24.0, 28.0, 28.0, 30.0, 38.0, 42.0, 46.0, 56.0
+2 Spanish: 0.0, 18.0, 18.0, 30.0, 30.0, 30.0, 36.0, 34.0, 44.0, 46.0, 52.0, 54.0, 66.0
+3 Peruvian: 0.0, 22.0, 22.0, 36.0, 36.0, 38.0, 42.0, 40.0, 54.0, 60.0, 74.0, 80.0, 82.0
+4 Somali: 0.0, 28.0, 28.0, 44.0, 40.0, 54.0, 50.0, 60.0, 68.0, 88.0, 134.0, 152.0, 152.0
+
+SHIELD PRODUCTION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Latvian: 0.0, 8.0, 9.0, 9.0, 8.0, 9.0, 16.0, 12.0, 14.0, 16.0, 22.0, 30.0, 29.0
+1 Belgian: 0.0, 8.0, 8.0, 10.0, 10.0, 12.0, 11.0, 14.0, 20.0, 23.0, 27.0, 31.0, 39.0
+2 Spanish: 0.0, 7.0, 7.0, 9.0, 13.0, 14.0, 15.0, 16.0, 17.0, 21.0, 23.0, 33.0, 30.0
+3 Peruvian: 0.0, 7.0, 7.0, 8.0, 11.0, 14.0, 19.0, 20.0, 20.0, 26.0, 30.0, 35.0, 49.0
+4 Somali: 0.0, 8.0, 8.0, 8.0, 10.0, 18.0, 18.0, 22.0, 30.0, 32.0, 43.0, 44.0, 47.0
+
+UNITS COUNT (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Latvian: 5, 3, 3, 5, 5, 4, 6, 8, 8, 8, 8, 10, 8
+1 Belgian: 5, 3, 3, 4, 7, 6, 7, 7, 6, 8, 8, 7, 6
+2 Spanish: 5, 3, 3, 5, 5, 5, 4, 3, 5, 4, 5, 3, 5
+3 Peruvian: 5, 3, 3, 5, 5, 5, 5, 4, 6, 6, 7, 7, 6
+4 Somali: 5, 3, 3, 5, 4, 5, 4, 5, 5, 7, 12, 13, 13
+
+MILITARY UNITS COUNT (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Latvian: 0, 0, 0, 1, 1, 1, 3, 4, 4, 4, 4, 4, 4
+1 Belgian: 0, 0, 0, 1, 4, 4, 4, 4, 4, 4, 4, 4, 3
+2 Spanish: 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0
+3 Peruvian: 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+4 Somali: 0, 0, 0, 0, 1, 1, 1, 1, 1, 4, 7, 7, 7
+
+SCORES (derived from recordings)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Latvian: 0, 2, 2, 4, 5, 9, 14, 15, 16, 23, 29, 31, 35
+1 Belgian: 0, 3, 3, 9, 11, 12, 15, 15, 19, 23, 26, 29, 37
+2 Spanish: 0, 3, 3, 7, 9, 11, 16, 19, 22, 27, 28, 36, 44
+3 Peruvian: 0, 2, 2, 3, 5, 8, 12, 16, 17, 24, 31, 36, 40
+4 Somali: 0, 4, 4, 6, 10, 15, 19, 20, 28, 33, 38, 46, 46
+
+EVENT TYPES (exhaustive)
+city_founded, city_conquered, city_destroyed, government_change, diplomatic_change, tech_discovered, wonder_completed
+If a type does not appear in EVENTS, it did not occur in the analyzed turns.
+
+EVENTS (chronological)
+Turn | Type | Civ | Description
+--------------------------------------------------------------------------------
+2 | city_founded | Belgian | Belgian founded Antwerpen
+2 | city_founded | Belgian | Belgian founded Brussel / Bruxelles
+2 | city_founded | Spanish | Spanish founded Barcelona
+3 | city_founded | Latvian | Latvian founded Jelgava
+3 | city_founded | Spanish | Spanish founded Bilbao
+3 | city_founded | Peruvian | Peruvian founded Lima
+3 | city_founded | Somali | Somali founded Muqdisho
+3 | city_founded | Somali | Somali founded Marka
+4 | city_founded | Latvian | Latvian founded Liepāja
+4 | city_founded | Belgian | Belgian founded Charleroi
+4 | tech_discovered | Somali | Somali discovered Masonry
+5 | city_founded | Spanish | Spanish founded Madrid
+5 | city_founded | Peruvian | Peruvian founded Chiclayo
+11 | tech_discovered | Belgian | Belgian discovered Bronze Working
+11 | tech_discovered | Belgian | Belgian discovered Masonry
+12 | tech_discovered | Latvian | Latvian discovered Masonry
+12 | tech_discovered | Spanish | Spanish discovered Masonry
+15 | tech_discovered | Somali | Somali discovered Ceremonial Burial
+17 | city_founded | Latvian | Latvian founded Daugavpils
+17 | city_founded | Peruvian | Peruvian founded Arequipa
+17 | city_founded | Somali | Somali founded Berbera
+17 | diplomatic_change | Belgian | Belgian and Peruvian: Never met -> War
+17 | tech_discovered | Peruvian | Peruvian discovered Masonry
+18 | city_founded | Spanish | Spanish founded Valencia
+18 | city_founded | Somali | Somali founded Hargeysa
+18 | diplomatic_change | Latvian | Latvian and Somali: Never met -> War
+18 | tech_discovered | Belgian | Belgian discovered Alphabet
+18 | tech_discovered | Somali | Somali discovered Horseback Riding
+19 | diplomatic_change | Spanish | Spanish and Peruvian: Never met -> Cease-fire
+19 | tech_discovered | Spanish | Spanish discovered Alphabet
+20 | diplomatic_change | Belgian | Belgian and Somali: Never met -> Cease-fire
+21 | city_founded | Latvian | Latvian founded Rēzekne
+21 | city_founded | Spanish | Spanish founded Sevilla
+21 | diplomatic_change | Belgian | Belgian and Peruvian: War -> Cease-fire
+22 | diplomatic_change | Latvian | Latvian and Somali: War -> Cease-fire
+22 | tech_discovered | Latvian | Latvian discovered Horseback Riding
+24 | city_founded | Peruvian | Peruvian founded Chimbote
+24 | tech_discovered | Spanish | Spanish discovered Pottery
+24 | tech_discovered | Somali | Somali discovered Bronze Working
+25 | diplomatic_change | Belgian | Belgian and Spanish: Never met -> War
+25 | tech_discovered | Peruvian | Peruvian discovered Warrior Code
+27 | city_founded | Spanish | Spanish founded Zaragoza
+27 | diplomatic_change | Spanish | Spanish and Somali: Never met -> Cease-fire
+27 | diplomatic_change | Peruvian | Peruvian and Somali: Never met -> War
+28 | city_founded | Peruvian | Peruvian founded El Callao
+28 | city_founded | Somali | Somali founded Kismaayo
+28 | diplomatic_change | Belgian | Belgian and Spanish: War -> Cease-fire
+28 | tech_discovered | Latvian | Latvian discovered Ceremonial Burial
+29 | city_founded | Belgian | Belgian founded Gent
+29 | city_founded | Somali | Somali founded Jamaame
+29 | diplomatic_change | Latvian | Latvian and Belgian: Never met -> Cease-fire
+29 | diplomatic_change | Latvian | Latvian and Peruvian: Never met -> War
+29 | diplomatic_change | Peruvian | Peruvian and Somali: War -> Cease-fire
+29 | tech_discovered | Somali | Somali discovered Alphabet
+30 | diplomatic_change | Latvian | Latvian and Spanish: Never met -> War
+30 | tech_discovered | Belgian | Belgian discovered Writing
+30 | tech_discovered | Peruvian | Peruvian discovered Pottery
+31 | city_founded | Spanish | Spanish founded Santander
+31 | diplomatic_change | Latvian | Latvian and Spanish: War -> Cease-fire
+31 | tech_discovered | Spanish | Spanish discovered Code of Laws
+32 | diplomatic_change | Latvian | Latvian and Peruvian: War -> Cease-fire
+33 | city_founded | Belgian | Belgian founded Liège
+33 | tech_discovered | Latvian | Latvian discovered Bronze Working
+34 | city_founded | Peruvian | Peruvian founded Trujillo
+34 | city_founded | Peruvian | Peruvian founded Piura
+34 | diplomatic_change | Spanish | Spanish and Peruvian: Cease-fire -> Armistice
+35 | tech_discovered | Peruvian | Peruvian discovered Alphabet
+36 | city_founded | Latvian | Latvian founded Mežotne
+36 | diplomatic_change | Belgian | Belgian and Peruvian: Cease-fire -> War
+36 | diplomatic_change | Belgian | Belgian and Somali: Cease-fire -> War
+36 | tech_discovered | Spanish | Spanish discovered Writing
+36 | tech_discovered | Somali | Somali discovered Writing
+37 | city_founded | Belgian | Belgian founded Brugge
+37 | diplomatic_change | Latvian | Latvian and Somali: Cease-fire -> War
+38 | city_founded | Somali | Somali founded Baydhabo
+38 | diplomatic_change | Latvian | Latvian and Somali: War -> Cease-fire
+38 | tech_discovered | Belgian | Belgian discovered Currency
+39 | diplomatic_change | Belgian | Belgian and Peruvian: War -> Cease-fire
+39 | tech_discovered | Somali | Somali discovered Pottery
+40 | city_founded | Somali | Somali founded Burco
+40 | diplomatic_change | Belgian | Belgian and Somali: War -> Cease-fire
+41 | city_founded | Latvian | Latvian founded Rīga
+41 | city_founded | Spanish | Spanish founded Pamplona
+41 | city_founded | Peruvian | Peruvian founded Huancayo
+41 | city_founded | Peruvian | Peruvian founded Iquitos
+41 | city_founded | Somali | Somali founded Boosaaso
+41 | diplomatic_change | Peruvian | Peruvian and Somali: Cease-fire -> Armistice
+41 | tech_discovered | Latvian | Latvian discovered The Wheel
+42 | city_founded | Somali | Somali founded Afgooye
+42 | tech_discovered | Peruvian | Peruvian discovered Code of Laws
+43 | diplomatic_change | Belgian | Belgian and Spanish: Cease-fire -> War
+43 | diplomatic_change | Spanish | Spanish and Somali: Cease-fire -> Armistice
+44 | city_founded | Spanish | Spanish founded Oviedo
+44 | diplomatic_change | Latvian | Latvian and Belgian: Cease-fire -> Armistice
+44 | tech_discovered | Somali | Somali discovered Code of Laws
+45 | city_founded | Somali | Somali founded Gaalkacyo
+45 | diplomatic_change | Belgian | Belgian and Spanish: War -> Cease-fire
+45 | tech_discovered | Latvian | Latvian discovered Alphabet
+45 | tech_discovered | Belgian | Belgian discovered Code of Laws
+45 | tech_discovered | Spanish | Spanish discovered Literacy
+45 | tech_discovered | Peruvian | Peruvian discovered Bronze Working
+46 | city_founded | Latvian | Latvian founded Beverīna
+46 | city_founded | Peruvian | Peruvian founded Cusco
+46 | diplomatic_change | Latvian | Latvian and Spanish: Cease-fire -> Armistice
+46 | tech_discovered | Somali | Somali discovered Warrior Code
+47 | city_founded | Belgian | Belgian founded Namur
+47 | city_founded | Peruvian | Peruvian founded Ica
+47 | diplomatic_change | Latvian | Latvian and Peruvian: Cease-fire -> War
+48 | city_founded | Latvian | Latvian founded Alūksne
+48 | city_founded | Belgian | Belgian founded Leuven
+48 | city_founded | Spanish | Spanish founded Toledo
+49 | city_founded | Belgian | Belgian founded La Louvière
+49 | diplomatic_change | Latvian | Latvian and Peruvian: War -> Cease-fire
+49 | diplomatic_change | Spanish | Spanish and Peruvian: Armistice -> Peace
+50 | city_founded | Belgian | Belgian founded Mons
+50 | tech_discovered | Latvian | Latvian discovered Code of Laws
+50 | tech_discovered | Peruvian | Peruvian discovered Writing
+51 | diplomatic_change | Belgian | Belgian and Peruvian: Cease-fire -> Armistice
+52 | city_founded | Spanish | Spanish founded Valladolid
+53 | city_founded | Latvian | Latvian founded Jūrmala
+53 | city_founded | Belgian | Belgian founded Aalst
+53 | city_founded | Spanish | Spanish founded Granada
+53 | city_founded | Peruvian | Peruvian founded Tacna
+53 | city_founded | Somali | Somali founded Beledweyne
+53 | diplomatic_change | Latvian | Latvian and Somali: Cease-fire -> Armistice
+53 | diplomatic_change | Belgian | Belgian and Somali: Cease-fire -> Armistice
+54 | city_founded | Belgian | Belgian founded Mechelen
+54 | city_founded | Spanish | Spanish founded San Sebastián
+54 | city_founded | Peruvian | Peruvian founded Huánuco
+54 | city_founded | Peruvian | Peruvian founded Pucallpa
+54 | tech_discovered | Peruvian | Peruvian discovered Currency
+54 | tech_discovered | Somali | Somali discovered Literacy
+55 | city_founded | Somali | Somali founded Qoryooley
+55 | tech_discovered | Latvian | Latvian discovered Writing
+55 | tech_discovered | Spanish | Spanish discovered The Republic
+56 | city_founded | Peruvian | Peruvian founded Juliaca
+56 | diplomatic_change | Peruvian | Peruvian and Somali: Armistice -> Peace
+56 | government_change | Spanish | Spanish changed government from Despotism to Anarchy
+56 | tech_discovered | Belgian | Belgian discovered Literacy
+57 | city_founded | Latvian | Latvian founded Jersika
+57 | city_founded | Somali | Somali founded Garoowe
+57 | government_change | Spanish | Spanish changed government from Anarchy to Republic
+57 | tech_discovered | Spanish | Spanish discovered Warrior Code
+57 | tech_discovered | Spanish | Spanish discovered Bronze Working
+58 | city_founded | Belgian | Belgian founded Tournai
+58 | city_founded | Peruvian | Peruvian founded Ayacucho
+58 | city_founded | Peruvian | Peruvian founded Sullana
+58 | city_founded | Somali | Somali founded Jowhar
+58 | diplomatic_change | Spanish | Spanish and Somali: Armistice -> Peace
+58 | tech_discovered | Spanish | Spanish discovered Currency
+59 | city_founded | Latvian | Latvian founded Sēlpils
+59 | city_founded | Latvian | Latvian founded Durbe
+59 | city_founded | Somali | Somali founded Jilib
+59 | diplomatic_change | Latvian | Latvian and Belgian: Armistice -> Peace
+60 | city_founded | Somali | Somali founded Baardheere
+60 | diplomatic_change | Belgian | Belgian and Spanish: Cease-fire -> War

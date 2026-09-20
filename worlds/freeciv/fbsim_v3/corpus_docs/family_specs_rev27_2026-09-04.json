@@ -1,0 +1,2516 @@
+{
+ "schema_version": "27",
+ "generated": "2026-09-07",
+ "generated_by": "Claude (fbsim v3 rerun session, 2026-09-02..04); supersedes rev 26.1 for everything below",
+ "provenance": {
+  "corpus": "tmp/mined/rollouts: 8 worlds x ~1000 replays, turns 60-151 (H1-H3); seed300 in place of seed1000",
+  "protocol": "selection parameters from half A (even rollout indices), all reported truth from half B",
+  "caveat": "local miners approximate edge handling; the resolver.semantics fields here are NORMATIVE for the fbsim-core implementations",
+  "note": "stats for EX_government_at are production-only (local archive lacks government identity)",
+  "integrity_audit_2026_08_30": "peer-reported defects verified against tmp/mined_v2/rollouts/sample (122 production-pipeline rollouts of seed0): (1) techs_known defective locally - CONFIRMED; affected stats corrected or withdrawn. (2) t60 sentinels (scores -1, treasury 0) - CONFIRMED for civs 1/4 in BOTH archives, plus civ2 locally; the miner's t60-score alive filter quarantined sentinel civs, so no question used a sentinel baseline, at the cost of a reduced roster. (3) treasury archive disagreement - CONFIRMED both directions; pending production adjudication. Production-pool stats (cells_all.json) unaffected throughout.",
+  "legacy_corpus_context": "2026-08-30 correction from Jaeho + STATUS.md: tmp/mined/rollouts is the LEGACY pre-fix corpus. Its defects were root-caused 08-22..24 (embassy-gated recording: the '3/5 frozen civs' signature, t60 sentinels, partial event capture; plus harness perturbations e.g. research-goal wipe that altered dynamics) and are exactly why the production corpus was rebuilt and gate-verified (frozen-civs 0/10, coverage 1.0, pooled |obs-p_mc|=0.032, frozen bench-prep-v2 @ 896b8985). Therefore ALL stats_local values are design evidence (band coverage mechanisms, reliability, relative structure), not provisional truth; production numbers come from running these family resolvers over the existing t210 corpus on the RunPod volume. The integrity gate written 2026-08-30 duplicates production publish-gate checks and is for legacy/local archives only.",
+  "production_league_2026_08_30": "all stats_production measured on tmp/fbsim_v2_corpus (8x1000 unique gate-verified rollouts to t210, 954 retry duplicates removed by rng tag), canonical split from natcond_cells_v2.split_tags (500 A / 499 B / 1 reserved). stats_local fields are the deprecated legacy-archive measurements, retained for provenance only. All statuses are RECOMMENDATIONS; Jaeho decides after reviewing the production league."
+ },
+ "elicitation": {
+  "binary": "v4-honest BASE_PROMPT (production)",
+  "continuous": "fork draft 2026-08-29 (turn-1 percentiles + turn-2 conditional reveal); percentile grid is a PARAMETER pending decision D3 (p10-p90 vs p05-p95)",
+  "conditional_continuous_truth": "n_x >= 100 floor on conditioning events, per plumbing session"
+ },
+ "families": {
+  "EX_comparative": {
+   "kind": "binary",
+   "status": "swapped_out_techs_slice",
+   "role_note": "cmp-techs swapped out for W5_tech_lead per curator direction (worst binary family: single metric, 21 tails, horizon-lopsided); pairwise comparatives on pop/cities/territory return with the death flag",
+   "question_template": "Will {civA} have higher {metric} than {civB} at turn {T}?",
+   "parameters": {
+    "metric": [
+     "scores",
+     "treasury",
+     "population",
+     "cities_count",
+     "territory_size",
+     "techs_known (production re-mine only)"
+    ],
+    "civA/civB": "ordered pair of civs alive at t60",
+    "T": "resolution turn"
+   },
+   "resolver": {
+    "semantics": "value(metric,civA,T) strictly greater than value(metric,civB,T)",
+    "window": "point",
+    "window_text": "at exactly turn {T}",
+    "tie": "NO",
+    "missing": "either value missing -> NO; a civ's metric value is MISSING whenever its score is unobserved (sentinel) at that turn; path aggregates (min/max/range) run over observed turns only"
+   },
+   "selection": "all alive ordered pairs; no value-based selection",
+   "stats_local": {
+    "n": 570,
+    "mid_share": 0.75,
+    "mid_by_T": {
+     "90": 0.54,
+     "120": 0.81,
+     "150": 0.91
+    },
+    "tails_le5pct": 14,
+    "tails_le1pct": 2,
+    "saturated_share": 0.06,
+    "r": 0.997,
+    "r_tail_log": 0.949
+   },
+   "source": "existing template, re-measured",
+   "stats_production": {
+    "n": 2400,
+    "mid_share": 0.9,
+    "mid_by_T": {
+     "90": 0.64,
+     "120": 0.92,
+     "150": 0.96,
+     "180": 0.99,
+     "210": 1.0
+    },
+    "tails_le5pct": 142,
+    "tails_le1pct": 22,
+    "saturated_share": 0.01,
+    "r": 0.995,
+    "r_tail_log": 0.906
+   },
+   "prior_curator_signal": "approved by Jaeho 2026-08-30 (pre-production-league; to be re-decided)",
+   "benchmark_assignment": "core (superset: turn-1 on all; instances feed bank/tail/mirror slices by their q)",
+   "audit": "2026-08-30: dark-mask fix applied (alive-but-unobserved civs previously read as zeros; 11% of instances shifted >0.02)",
+   "criteria_template": "Resolves YES if {civA}'s {metric_noun} is strictly greater than {civB}'s at exactly turn {T}. Resolves NO if the two values are equal, if {civA}'s value is lower.",
+   "staging": "techs slice admissible today (comparatives/NB1); population/cities/territory slices staged behind the death flag; treasury/scores slices removed permanently",
+   "resolver_note_techs": "techs slice resolves via EVENT RECONSTRUCTION (turn-60 count + counted tech_discovered events), verified identical to the recorded field in 72/72 independent checks; kills the rare missing-field edge (dead civs) and makes the slice certain for all civs at all turns",
+   "status_rev27": "re-admitted_rev27 on value metrics"
+  },
+  "EX_rank1": {
+   "kind": "binary",
+   "status": "rejected_by_curator",
+   "role_note": "curator cut 2026-08-30 (final slate): largely entailed by comparatives; smallest family",
+   "question_template": "Will {civ} have the strictly highest score at turn {T}?",
+   "parameters": {
+    "civ": "any civ alive at t60",
+    "T": "resolution turn"
+   },
+   "resolver": {
+    "semantics": "subject's score strictly exceeds every other alive civ's score at T",
+    "window": "point",
+    "window_text": "at exactly turn {T}",
+    "tie": "NO (any tie for first -> NO)",
+    "missing": "subject value missing -> NO; a competitor's missing value is ignored"
+   },
+   "selection": "all alive civs",
+   "stats_local": {
+    "n": 84,
+    "mid_share": 0.76,
+    "mid_by_T": {
+     "90": 0.57,
+     "120": 0.82,
+     "150": 0.89
+    },
+    "tails_le5pct": 14,
+    "tails_le1pct": 4,
+    "saturated_share": 0.07,
+    "r": 0.998,
+    "r_tail_log": 0.967
+   },
+   "source": "existing template, re-measured",
+   "stats_production": {
+    "n": 200,
+    "mid_share": 0.79,
+    "mid_by_T": {
+     "90": 0.47,
+     "120": 0.72,
+     "150": 0.9,
+     "180": 0.93,
+     "210": 0.9
+    },
+    "tails_le5pct": 33,
+    "tails_le1pct": 10,
+    "saturated_share": 0.05,
+    "r": 0.992,
+    "r_tail_log": 0.885
+   },
+   "prior_curator_signal": "approved by Jaeho 2026-08-30 (pre-production-league; to be re-decided)",
+   "benchmark_assignment": "core (superset: turn-1 on all; instances feed bank/tail/mirror slices by their q)"
+  },
+  "EX_tech_discovered": {
+   "kind": "binary",
+   "status": "recommended_tail_engine",
+   "role_note": "tail engine, horizon-tunable (same question flips tail->mid across T); mid-band contributor at H3+",
+   "question_template": "Will {civ} have discovered {tech} by turn {T}?",
+   "parameters": {
+    "civ": "civ alive at t60",
+    "tech": "named technology",
+    "T": "deadline turn"
+   },
+   "resolver": {
+    "semantics": "a tech_discovered event with player=civ and tech name exists in the window",
+    "window": "path",
+    "window_text": "over turns 61 through {T} inclusive",
+    "tie": "n/a",
+    "missing": "no such event -> NO"
+   },
+   "selection": "techs sampled per civ stratified by half-A discovery frequency",
+   "stats_local": {
+    "n": 216,
+    "mid_share": 0.3,
+    "mid_by_T": {
+     "90": 0.19,
+     "120": 0.31,
+     "150": 0.4
+    },
+    "tails_le5pct": 60,
+    "tails_le1pct": 51,
+    "saturated_share": 0.26,
+    "r": 1.0,
+    "r_tail_log": 0.94
+   },
+   "source": "existing template, re-measured",
+   "stats_production": {
+    "n": 1200,
+    "mid_share": 0.24,
+    "mid_by_T": {
+     "90": 0.17,
+     "120": 0.26,
+     "150": 0.18,
+     "180": 0.28,
+     "210": 0.29
+    },
+    "tails_le5pct": 97,
+    "tails_le1pct": 46,
+    "saturated_share": 0.55,
+    "r": 1.0,
+    "r_tail_log": 0.897
+   },
+   "prior_curator_signal": "approved by Jaeho 2026-08-30 (pre-production-league; to be re-decided)",
+   "benchmark_assignment": "core (superset: turn-1 on all; instances feed bank/tail/mirror slices by their q)",
+   "criteria_template": "Resolves YES if {civ} discovers {tech} on any turn from 61 through {T} inclusive - a discovery on turn {T} itself counts. Technologies already known at turn 60 are never asked about. Resolves NO if the discovery does not occur by turn {T}."
+  },
+  "EX_wonder": {
+   "kind": "binary",
+   "status": "superseded_by_NW5",
+   "role_note": "tail only; 82% saturated as a general template",
+   "question_template": "Will {civ} have completed at least {k} wonders by turn {T}?",
+   "parameters": {
+    "civ": "civ alive at t60",
+    "k": [
+     1,
+     2,
+     3
+    ],
+    "T": "resolution turn"
+   },
+   "resolver": {
+    "semantics": "wonders_count(civ,T) >= k",
+    "window": "point",
+    "window_text": "at exactly turn {T}",
+    "tie": "n/a (>= is inclusive)",
+    "missing": "a missing/undefined value resolves the question NO"
+   },
+   "selection": "k grid per civ",
+   "stats_local": {
+    "n": 252,
+    "mid_share": 0.1,
+    "mid_by_T": {
+     "90": 0.06,
+     "120": 0.11,
+     "150": 0.14
+    },
+    "tails_le5pct": 14,
+    "tails_le1pct": 4,
+    "saturated_share": 0.82,
+    "r": 1.0,
+    "r_tail_log": 0.868
+   },
+   "source": "existing template, re-measured",
+   "stats_production": {
+    "n": 600,
+    "mid_share": 0.09,
+    "mid_by_T": {
+     "90": 0.04,
+     "120": 0.08,
+     "150": 0.1,
+     "180": 0.12,
+     "210": 0.12
+    },
+    "tails_le5pct": 17,
+    "tails_le1pct": 5,
+    "saturated_share": 0.86,
+    "r": 0.999,
+    "r_tail_log": 0.926
+   },
+   "prior_curator_signal": "approved by Jaeho 2026-08-30 (pre-production-league; to be re-decided)",
+   "benchmark_assignment": "cut (recommendation)"
+  },
+  "EX_government_at": {
+   "kind": "binary",
+   "status": "recommended_core_plus_tail",
+   "role_note": "bank core (73% usable); its 134 tail instances UNUSED under the disjoint design",
+   "question_template": "Will {civ} be in {government} government at turn {T}?",
+   "parameters": {
+    "government": "candidates frequency-filtered on half A, cap 3/civ/T",
+    "civ": "alive",
+    "T": "resolution turn"
+   },
+   "resolver": {
+    "semantics": "government at T reconstructed per rollout: shared t60 government (modal 'from' of first post-60 change) updated by that rollout's change events with turn <= T",
+    "window": "point",
+    "window_text": "at exactly turn {T}",
+    "tie": "n/a",
+    "missing": "civ with no reconstructable t60 government -> excluded"
+   },
+   "selection": "production pipeline",
+   "stats_local": null,
+   "source": "existing template, production only",
+   "stats_production": {
+    "n": 593,
+    "mid_share": 0.73,
+    "mid_by_T": {
+     "90": 0.48,
+     "120": 0.88,
+     "150": 0.64,
+     "180": 0.74,
+     "210": 0.88
+    },
+    "tails_le5pct": 134,
+    "tails_le1pct": 38,
+    "saturated_share": 0.02,
+    "r": 0.996,
+    "r_tail_log": 0.886
+   },
+   "benchmark_assignment": "core (superset: turn-1 on all; instances feed bank/tail/mirror slices by their q)",
+   "inference_disclosure": "government at T is reconstructed by replaying recorded change events from the shared t60 state; the only inferred element (t60 government = modal 'from' of first change) is verified exact (dominance 1.000 in every world/civ). Kept under the no-inferred-resolvers rule as deterministic replay of direct event data; flagged for curator's final check.",
+   "criteria_template": "Resolves YES if {government} is {civ}'s government in effect at the end of turn {T} - a change of government occurring on turn {T} itself counts. Anarchy counts as a government form. Resolves NO otherwise, or if {civ}'s government cannot be determined at turn {T}. Anarchy - the transitional state between governments - counts as a government form."
+  },
+  "NB1_threshold": {
+   "kind": "binary",
+   "status": "recommended_filler_tail_engine",
+   "role_note": "filler capped at <=20% of the mid-band slice AND <=20% of the tail slice",
+   "question_template": "Will {civ}'s {metric} be at least {x} at turn {T}?",
+   "parameters": {
+    "metric": [
+     "scores",
+     "techs_known",
+     "treasury",
+     "population",
+     "cities_count",
+     "territory_size",
+     "science"
+    ],
+    "civ": "civ alive at t60",
+    "T": "resolution turn",
+    "x": "threshold from half-A quantile of value-at-T; ROUND TO INTEGER for ALL metrics (all FreeCiv metrics are integer-valued - sample audit found decimals like 'at least 63.9 tiles')",
+    "selection_quantile": [
+     0.01,
+     0.05,
+     0.1,
+     0.25,
+     0.5,
+     0.75,
+     0.9,
+     0.95,
+     0.99
+    ]
+   },
+   "resolver": {
+    "semantics": "value(metric,civ,T) >= x",
+    "window": "point",
+    "window_text": "at exactly turn {T}",
+    "tie": "n/a (>= inclusive)",
+    "missing": "a missing/undefined value resolves the question NO"
+   },
+   "selection": "x at half-A quantiles; measured q from half B",
+   "stats_local": {
+    "n": 3392,
+    "mid_share": 0.65,
+    "mid_by_T": {
+     "90": 0.63,
+     "120": 0.66,
+     "150": 0.67
+    },
+    "tails_le5pct": 583,
+    "tails_le1pct": 190,
+    "saturated_share": 0.04,
+    "r": 0.999,
+    "r_tail_log": 0.886
+   },
+   "source": "new 2026-08-29",
+   "stats_production": {
+    "n": 11594,
+    "mid_share": 0.7,
+    "mid_by_T": {
+     "90": 0.6,
+     "120": 0.71,
+     "150": 0.72,
+     "180": 0.73,
+     "210": 0.72
+    },
+    "tails_le5pct": 1624,
+    "tails_le1pct": 340,
+    "saturated_share": 0.02,
+    "r": 0.998,
+    "r_tail_log": 0.892
+   },
+   "prior_curator_signal": "approved by Jaeho 2026-08-30 (pre-production-league; to be re-decided)",
+   "benchmark_assignment": "core (superset: turn-1 on all; instances feed bank/tail/mirror slices by their q)",
+   "criteria_template": "Resolves YES if {civ}'s {metric_noun}, as recorded at exactly turn {T}, is {x} or more - a value exactly equal to {x} counts. Resolves NO if it is lower.",
+   "data_quality": "culture dropped (untested channel); treasury/scores instances take the observability floor",
+   "staging": "techs slice admissible today (comparatives/NB1); population/cities/territory slices staged behind the death flag; treasury/scores slices removed permanently",
+   "resolver_note_techs": "techs slice resolves via EVENT RECONSTRUCTION (turn-60 count + counted tech_discovered events), verified identical to the recorded field in 72/72 independent checks; kills the rare missing-field edge (dead civs) and makes the slice certain for all civs at all turns"
+  },
+  "NB4_drawdown": {
+   "kind": "binary",
+   "status": "recommended_tail_engine",
+   "role_note": "best tail reliability (.915); path-dependent; tails are meaningful events (collapse/loss)",
+   "question_template": "Will {civ}'s {metric} drop below {f_pct}% of its turn-60 level at any point up to turn {T}?",
+   "parameters": {
+    "metric_f_grid": {
+     "treasury": [
+      0.5,
+      0.25
+     ],
+     "territory_size": [
+      0.9,
+      0.7
+     ],
+     "cities_count": [
+      0.99,
+      0.7
+     ],
+     "population": [
+      0.9,
+      0.75
+     ]
+    },
+    "civ": "civ alive at t60",
+    "T": "window end"
+   },
+   "resolver": {
+    "semantics": "min over the window of value(metric,civ,t) < f * value(metric,civ,60); turn-60 value is common to all replays",
+    "window": "path",
+    "window_text": "over turns 61 through {T} inclusive",
+    "tie": "strict < (equal to f*base -> NO)",
+    "missing": "missing turns skipped; a civ's metric value is MISSING whenever its score is unobserved (sentinel) at that turn; path aggregates (min/max/range) run over observed turns only"
+   },
+   "selection": "fixed f grid per metric",
+   "stats_local": {
+    "n": 672,
+    "mid_share": 0.21,
+    "mid_by_T": {
+     "90": 0.12,
+     "120": 0.2,
+     "150": 0.31
+    },
+    "tails_le5pct": 201,
+    "tails_le1pct": 107,
+    "saturated_share": 0.48,
+    "r": 0.999,
+    "r_tail_log": 0.915
+   },
+   "source": "new 2026-08-29",
+   "stats_production": {
+    "n": 960,
+    "mid_share": 0.38,
+    "mid_by_T": {
+     "90": 0.12,
+     "120": 0.29,
+     "150": 0.45,
+     "180": 0.5,
+     "210": 0.51
+    },
+    "tails_le5pct": 318,
+    "tails_le1pct": 155,
+    "saturated_share": 0.29,
+    "r": 0.997,
+    "r_tail_log": 0.931
+   },
+   "prior_curator_signal": "approved by Jaeho 2026-08-30 (pre-production-league; to be re-decided)",
+   "benchmark_assignment": "core (superset: turn-1 on all; instances feed bank/tail/mirror slices by their q)",
+   "audit": "2026-08-30: gap-artifact fix (22% of YES were min-on-dark-turn artifacts); corrected family is stronger; tails per horizon 84/77/51/53/53",
+   "criteria_template": "Resolves YES if {civ}'s {metric_noun}, on any turn from 61 through {T} inclusive, is recorded strictly below {f_pct}% of its value recorded at turn 60 - that is, strictly below {x_literal} {unit} (a value exactly equal to {x_literal} does NOT count). Resolves NO otherwise, including if the turn-60 value is zero or unrecorded.",
+   "data_quality": "population/territory/cities are GLOBAL channels - use unmasked values (gap dips are real); treasury gated -> floor + mask",
+   "staging": "techs slice admissible today (comparatives/NB1); population/cities/territory slices staged behind the death flag; treasury/scores slices removed permanently",
+   "status_rev27": "core_rev27"
+  },
+  "NB9_gap": {
+   "kind": "binary",
+   "status": "measured_curator_rejected",
+   "role_note": "rejected by Jaeho 2026-08-30: manufactured threshold uncertainty, homogeneous family; the lead-margin content survives as NC4 (continuous)",
+   "question_template": "Will the score gap between the leading and second-place civ be at least {g} points at turn {T}?",
+   "parameters": {
+    "g": "from half-A quantiles [.10,.25,.50,.75,.90] of the gap",
+    "T": "resolution turn"
+   },
+   "resolver": {
+    "semantics": "(highest alive-civ score at T) - (second highest) >= g",
+    "window": "point",
+    "window_text": "at exactly turn {T}",
+    "tie": "tied leaders -> gap 0",
+    "missing": "civs with missing scores are excluded from the ranking"
+   },
+   "selection": "g at half-A quantiles",
+   "stats_local": {
+    "n": 120,
+    "mid_share": 0.99,
+    "mid_by_T": {
+     "90": 1.0,
+     "120": 0.97,
+     "150": 1.0
+    },
+    "tails_le5pct": 0,
+    "tails_le1pct": 0,
+    "saturated_share": 0.0,
+    "r": 0.998,
+    "r_tail_log": null
+   },
+   "source": "new 2026-08-29",
+   "stats_production": {
+    "n": 200,
+    "mid_share": 0.99,
+    "mid_by_T": {
+     "90": 1.0,
+     "120": 0.97,
+     "150": 1.0,
+     "180": 0.97,
+     "210": 1.0
+    },
+    "tails_le5pct": 0,
+    "tails_le1pct": 0,
+    "saturated_share": 0.0,
+    "r": 0.997,
+    "r_tail_log": -0.0
+   },
+   "benchmark_assignment": "cut (recommendation)"
+  },
+  "NB6_event": {
+   "kind": "binary",
+   "status": "recommended_core",
+   "role_note": "war/politics variety; best natcond turn-2 fuel (news moves these); some tails (r_tail .913)",
+   "question_template": "variants: 'Will any city be conquered between turn 61 and turn {T}?' | 'Will {civ} conquer at least one city by turn {T}?' | 'Will {civ} change its government at least once by turn {T}?' | 'Will at least {k} cities be conquered (in total) by turn {T}?'",
+   "parameters": {
+    "kind": [
+     "any_city_conquered",
+     "civ_conquers",
+     "civ_gov_change",
+     "conquests_ge_k"
+    ],
+    "civ": "for civ-scoped kinds",
+    "k": [
+     3,
+     10,
+     20
+    ],
+    "T": "window end"
+   },
+   "resolver": {
+    "semantics": "count of matching events in the window meets the stated minimum",
+    "window": "path",
+    "window_text": "over turns 61 through {T} inclusive",
+    "tie": "n/a (>= inclusive)",
+    "missing": "no matching events -> NO"
+   },
+   "selection": "fixed kind/k grid",
+   "stats_local": {
+    "n": 264,
+    "mid_share": 0.45,
+    "mid_by_T": {
+     "90": 0.4,
+     "120": 0.52,
+     "150": 0.43
+    },
+    "tails_le5pct": 22,
+    "tails_le1pct": 11,
+    "saturated_share": 0.34,
+    "r": 0.999,
+    "r_tail_log": 0.913
+   },
+   "source": "new 2026-08-29",
+   "stats_production": {
+    "n": 760,
+    "mid_share": 0.5,
+    "mid_by_T": {
+     "90": 0.42,
+     "120": 0.62,
+     "150": 0.55,
+     "180": 0.48,
+     "210": 0.42
+    },
+    "tails_le5pct": 49,
+    "tails_le1pct": 24,
+    "saturated_share": 0.28,
+    "r": 0.999,
+    "r_tail_log": 0.872
+   },
+   "prior_curator_signal": "approved by Jaeho 2026-08-30 (pre-production-league; to be re-decided)",
+   "benchmark_assignment": "core (superset: turn-1 on all; instances feed bank/tail/mirror slices by their q)",
+   "criteria_template": "Resolves YES if at least {k} qualifying event(s) occur on any turn from 61 through {T} inclusive - an event on turn {T} itself counts. A qualifying event is {event_def} (for city conquests: a city being captured; each capture counts once, recaptures included; a city being destroyed is not a conquest). Resolves NO otherwise.",
+   "k_grid_extension": "W3 capture>=k (133 tails, all horizons, 30/30 verified) and W4 lose>=k (70% usable, r_tail .927, 30/30 verified) fold into NB6 as k-grids on the civ_conquers/civ_loses kinds"
+  },
+  "NB3_overtaken": {
+   "kind": "binary",
+   "status": "recommended_secondary",
+   "role_note": "path flavor; low yield (1 per metric/world/horizon)",
+   "question_template": "Will {leader} (the {metric} leader at turn 60) be overtaken by any civ at any turn up to {T}?",
+   "parameters": {
+    "metric": [
+     "scores",
+     "techs_known",
+     "population",
+     "territory_size"
+    ],
+    "T": "window end",
+    "leader": "argmax of the common turn-60 state (deterministic)"
+   },
+   "resolver": {
+    "semantics": "exists a turn in the window where some other alive civ's value strictly exceeds the turn-60 leader's value at that same turn",
+    "window": "path",
+    "window_text": "over turns 61 through {T} inclusive",
+    "tie": "equal values do not count as overtaking",
+    "missing": "comparisons with missing values are false"
+   },
+   "selection": "leader fixed by t60 state",
+   "stats_local": {
+    "n": 72,
+    "mid_share": 0.6,
+    "mid_by_T": {
+     "90": 0.33,
+     "120": 0.71,
+     "150": 0.75
+    },
+    "tails_le5pct": 12,
+    "tails_le1pct": 4,
+    "saturated_share": 0.17,
+    "r": 0.998,
+    "r_tail_log": 0.874
+   },
+   "source": "new 2026-08-29",
+   "stats_production": {
+    "n": 160,
+    "mid_share": 0.56,
+    "mid_by_T": {
+     "90": 0.44,
+     "120": 0.59,
+     "150": 0.62,
+     "180": 0.56,
+     "210": 0.56
+    },
+    "tails_le5pct": 10,
+    "tails_le1pct": 2,
+    "saturated_share": 0.25,
+    "r": 0.998,
+    "r_tail_log": 0.906
+   },
+   "benchmark_assignment": "core probe (small n)"
+  },
+  "NB7_conjunction": {
+   "kind": "binary",
+   "status": "recommended_secondary",
+   "role_note": "isolates dependence reasoning: 28% of pairs deviate >25% from the independence product",
+   "question_template": "Will BOTH happen by turn {T}: {clause_A} AND {clause_B}?",
+   "parameters": {
+    "clauses": "two NB1 predicates at the same T, differing in metric or civ, each with half-A q in [0.15,0.6]"
+   },
+   "resolver": {
+    "semantics": "logical AND of the two component resolvers",
+    "window": "point",
+    "window_text": "at exactly turn {T}",
+    "tie": "per component",
+    "missing": "per component (missing -> component NO)"
+   },
+   "selection": "component q band on half A",
+   "stats_local": {
+    "n": 320,
+    "mid_share": 0.98,
+    "mid_by_T": {
+     "90": null,
+     "120": 0.98,
+     "150": null
+    },
+    "tails_le5pct": 8,
+    "tails_le1pct": 0,
+    "saturated_share": 0.0,
+    "r": 0.968,
+    "r_tail_log": 0.813
+   },
+   "source": "new 2026-08-29",
+   "stats_production": {
+    "n": 320,
+    "mid_share": 0.95,
+    "mid_by_T": {
+     "150": 0.95
+    },
+    "tails_le5pct": 16,
+    "tails_le1pct": 0,
+    "saturated_share": 0.0,
+    "r": 0.97,
+    "r_tail_log": 0.833
+   },
+   "benchmark_assignment": "core probe (small n)"
+  },
+  "NB8_early_deadline": {
+   "kind": "binary",
+   "status": "recommended_secondary",
+   "role_note": "speed-surprise tails; weakest tail reliability (.770) - minority flavor only",
+   "question_template": "Will {civ}'s {metric} already be at least {x} by turn 90?",
+   "parameters": {
+    "x": "half-A median of value at t150 (i.e., a typically-reached-later level)",
+    "metric": [
+     "scores",
+     "techs_known",
+     "treasury",
+     "population",
+     "cities_count",
+     "territory_size"
+    ]
+   },
+   "resolver": {
+    "semantics": "value(metric,civ,90) >= x",
+    "window": "point",
+    "window_text": "at exactly turn 90",
+    "tie": "n/a (>= inclusive)",
+    "missing": "a missing/undefined value resolves the question NO"
+   },
+   "selection": "x from half-A t150 median",
+   "stats_local": {
+    "n": 150,
+    "mid_share": 0.25,
+    "mid_by_T": {
+     "90": 0.25,
+     "120": null,
+     "150": null
+    },
+    "tails_le5pct": 34,
+    "tails_le1pct": 10,
+    "saturated_share": 0.5,
+    "r": 0.999,
+    "r_tail_log": 0.77
+   },
+   "source": "new 2026-08-29",
+   "stats_production": {
+    "n": 280,
+    "mid_share": 0.16,
+    "mid_by_T": {
+     "90": 0.16
+    },
+    "tails_le5pct": 33,
+    "tails_le1pct": 15,
+    "saturated_share": 0.66,
+    "r": 0.999,
+    "r_tail_log": 0.796
+   },
+   "benchmark_assignment": "cut (recommendation)"
+  },
+  "NB5_streak": {
+   "kind": "binary",
+   "status": "recommended_secondary",
+   "role_note": "upgraded after correction: excl. techs_known it is 50% mid, sat 23% - borderline, low yield (48 instances)",
+   "question_template": "Will {leader} hold strict first place in {metric} at every turn from 61 through {T}?",
+   "parameters": {},
+   "resolver": {
+    "semantics": "strict rank-1 at every turn of the window",
+    "window": "path",
+    "window_text": "over turns 61 through {T} inclusive",
+    "tie": "any tie breaks the streak",
+    "missing": "missing subject value breaks the streak"
+   },
+   "selection": "-",
+   "stats_local": {
+    "n": 48,
+    "mid_share": 0.5,
+    "mid_by_T": {
+     "90": 0.31,
+     "120": 0.56,
+     "150": 0.62
+    },
+    "tails_le5pct": 6,
+    "tails_le1pct": 3,
+    "saturated_share": 0.23,
+    "r": 0.999,
+    "r_tail_log": null
+   },
+   "source": "new 2026-08-29",
+   "stats_production": {
+    "n": 120,
+    "mid_share": 0.45,
+    "mid_by_T": {
+     "90": 0.46,
+     "120": 0.5,
+     "150": 0.46,
+     "180": 0.42,
+     "210": 0.42
+    },
+    "tails_le5pct": 18,
+    "tails_le1pct": 7,
+    "saturated_share": 0.37,
+    "r": 0.998,
+    "r_tail_log": 0.906
+   },
+   "benchmark_assignment": "cut (recommendation)"
+  },
+  "NB2_race": {
+   "kind": "binary",
+   "status": "rejected_by_curator",
+   "role_note": "curator cut 2026-08-30 (final slate): K is a pipeline-chosen milestone (half-A median), i.e. a manufactured parameter - consistent with the NB9/NC7 cuts and the NB1 cap",
+   "question_template": "Will {civA} reach {K} technologies before {civB} does (by turn {T})?",
+   "parameters": {},
+   "resolver": {
+    "semantics": "first turn civA's techs_known >= K is strictly earlier than civB's",
+    "window": "path",
+    "window_text": "over turns 61 through {T} inclusive",
+    "tie": "tie or neither reaches K -> NO",
+    "missing": "a missing/undefined value resolves the question NO"
+   },
+   "selection": "-",
+   "stats_local": {
+    "n": 114,
+    "mid_share": 0.03,
+    "mid_by_T": {
+     "90": 0.03,
+     "120": 0.03,
+     "150": 0.03
+    },
+    "tails_le5pct": 3,
+    "tails_le1pct": 1,
+    "saturated_share": 0.71,
+    "r": 1.0,
+    "r_tail_log": null
+   },
+   "source": "new 2026-08-29",
+   "stats_production": {
+    "n": 400,
+    "mid_share": 0.91,
+    "mid_by_T": {
+     "90": 0.75,
+     "120": 0.9,
+     "150": 0.93,
+     "180": 0.97,
+     "210": 0.99
+    },
+    "tails_le5pct": 29,
+    "tails_le1pct": 6,
+    "saturated_share": 0.01,
+    "r": 0.993,
+    "r_tail_log": 0.936
+   },
+   "benchmark_assignment": "core (superset: turn-1 on all; instances feed bank/tail/mirror slices by their q)"
+  },
+  "NC1_value": {
+   "kind": "continuous",
+   "status": "rejected_by_curator",
+   "role_note": "(already rejected by curator)",
+   "question_template": "What will {civ}'s {metric} be at turn {T}?",
+   "parameters": {
+    "metric": [
+     "scores",
+     "techs_known",
+     "treasury",
+     "population",
+     "cities_count",
+     "territory_size"
+    ],
+    "civ": "civ alive at t60",
+    "T": "resolution turn"
+   },
+   "resolver": {
+    "semantics": "value(metric,civ,T)",
+    "window": "point",
+    "window_text": "at exactly turn {T}",
+    "missing": "instance excluded at selection if the subject can be missing; a replay with a missing value is dropped from the truth distribution"
+   },
+   "value_format_note": "The answer is measured in the metric's own unit (gold for treasury; a count for techs/cities; points for score).",
+   "selection": "dispersion floor on half A (relative IQR above threshold)",
+   "stats_local": {
+    "n": 504,
+    "r_median": 0.998,
+    "r_iqr": 0.997,
+    "median_relative_iqr": 0.33,
+    "nondegenerate_share": 0.86
+   },
+   "source_stats": "NC1_value",
+   "stats_production": {
+    "n": 1597,
+    "r_median": 0.995,
+    "r_iqr": 0.996,
+    "median_relative_iqr": 0.18,
+    "nondegenerate_share": 0.79
+   },
+   "status_rev27": "re-admitted_rev27 as NC1_value_at_T (score, population, cities, territory)"
+  },
+  "NC2_path_max": {
+   "kind": "continuous",
+   "status": "rejected_by_curator",
+   "role_note": "cut 2026-08-30: its metrics (treasury/scores) are gated; zero-uncertainty survival 6/80 at long horizons",
+   "question_template": "What is the highest {metric} {civ} will reach at any turn up to {T}?",
+   "parameters": {
+    "metric": [
+     "treasury",
+     "scores"
+    ],
+    "civ": "civ alive at t60",
+    "T": "window end"
+   },
+   "resolver": {
+    "semantics": "max over the window of value(metric,civ,t)",
+    "window": "path",
+    "window_text": "over turns 61 through {T} inclusive",
+    "missing": "instance excluded at selection if the subject can be missing; a replay with a missing value is dropped from the truth distribution"
+   },
+   "value_format_note": "The answer is measured in the metric's own unit.",
+   "selection": "none beyond alive filter",
+   "stats_local": {
+    "n": 168,
+    "r_median": 0.999,
+    "r_iqr": 0.996,
+    "median_relative_iqr": 0.2,
+    "nondegenerate_share": 1.0
+   },
+   "source_stats": "NC2_path_max",
+   "stats_production": {
+    "n": 598,
+    "r_median": 0.999,
+    "r_iqr": 0.994,
+    "median_relative_iqr": 0.33,
+    "nondegenerate_share": 0.95
+   },
+   "criteria_template": "Resolves to the highest {metric_noun} recorded for {civ} on any turn from 61 through {T} inclusive. Values are read from the game's recorded statistics; turns on which the civilization's statistics are not recorded are excluded from the calculation.",
+   "data_quality": "metric list reduced: military_units_count dropped (mixed-visibility channel); treasury/scores are gated -> observability floor applies"
+  },
+  "NC4_margin": {
+   "kind": "continuous",
+   "status": "marginal_certain_today",
+   "role_note": "techs margin demoted after audit: distribution is cramped (median 1, IQR 1-2, support ~{0..3}) - certain and non-degenerate but a poor percentile-elicitation target; the family's real value is the population/territory/cities margins (relIQR 1.26-1.27) behind the death flag",
+   "question_template": "By how many points will the leading civ be ahead of second place at turn {T}?",
+   "parameters": {
+    "T": "resolution turn"
+   },
+   "resolver": {
+    "semantics": "(highest alive-civ score at T) - (second highest); tied leaders -> 0",
+    "window": "point",
+    "window_text": "at exactly turn {T}",
+    "missing": "instance excluded at selection if the subject can be missing; a replay with a missing value is dropped from the truth distribution"
+   },
+   "value_format_note": "The answer is a number of score points (can be 0, never negative).",
+   "selection": "none",
+   "stats_local": {
+    "n": 24,
+    "r_median": 0.999,
+    "r_iqr": 0.99,
+    "median_relative_iqr": 1.25,
+    "nondegenerate_share": 1.0
+   },
+   "source_stats": "NC4_margin",
+   "stats_production": {
+    "n": 40,
+    "r_median": 0.985,
+    "r_iqr": 0.976,
+    "median_relative_iqr": 1.42,
+    "nondegenerate_share": 1.0
+   },
+   "criteria_template": "Resolves to the leading civilization's score minus the second-place civilization's score, among civilizations whose scores are recorded at exactly turn {T}. Resolves to 0 if the top two are tied.",
+   "data_quality": "scores are gated, but the top-2 civs are systematically the most-observed; apply the floor (top-2 candidates observed at T in >=95% of half-A rollouts)",
+   "resolver_note_techs": "techs slice resolves via EVENT RECONSTRUCTION (turn-60 count + counted tech_discovered events), verified identical to the recorded field in 72/72 independent checks; kills the rare missing-field edge (dead civs) and makes the slice certain for all civs at all turns"
+  },
+  "NC5_count": {
+   "kind": "continuous",
+   "status": "recommended_core",
+   "role_note": "integer-valued war-intensity distribution; pairs thematically with NB6",
+   "question_template": "How many cities will be conquered (in total, all civs) by turn {T}?",
+   "parameters": {
+    "T": "window end"
+   },
+   "resolver": {
+    "semantics": "count of city_conquered events in the window",
+    "window": "path",
+    "window_text": "over turns 61 through {T} inclusive",
+    "missing": "instance excluded at selection if the subject can be missing; a replay with a missing value is dropped from the truth distribution"
+   },
+   "value_format_note": "The answer is a whole number (a count of conquest events; 0 is possible).",
+   "selection": "none",
+   "stats_local": {
+    "n": 24,
+    "r_median": 0.999,
+    "r_iqr": 0.986,
+    "median_relative_iqr": 0.92,
+    "nondegenerate_share": 1.0
+   },
+   "source_stats": "NC5_count",
+   "stats_production": {
+    "n": 40,
+    "r_median": 0.999,
+    "r_iqr": 0.994,
+    "median_relative_iqr": 0.82,
+    "nondegenerate_share": 1.0
+   },
+   "criteria_template": "Resolves to the total number of city-capture events recorded on turns 61 through {T} inclusive, across all civilizations - each capture of a city counts once, recaptures included; an event on turn {T} itself counts."
+  },
+  "NC7_share": {
+   "kind": "continuous",
+   "status": "rejected_by_curator",
+   "role_note": "rejected by Jaeho 2026-08-30: bounded [0,1] answer sits oddly in an otherwise unbounded continuous set; content covered by NC11 + NC4",
+   "question_template": "What share of all civs' combined score will {civ} hold at turn {T}?",
+   "parameters": {
+    "civ": "civ alive at t60",
+    "T": "resolution turn"
+   },
+   "resolver": {
+    "semantics": "value(scores,civ,T) / sum over alive civs of value(scores,·,T); undefined if the denominator is 0 (instance excluded)",
+    "window": "point",
+    "window_text": "at exactly turn {T}",
+    "missing": "instance excluded at selection if the subject can be missing; a replay with a missing value is dropped from the truth distribution"
+   },
+   "value_format_note": "The answer is a share between 0 and 1.",
+   "selection": "none",
+   "stats_local": {
+    "n": 84,
+    "r_median": 1.0,
+    "r_iqr": 0.962,
+    "median_relative_iqr": 0.28,
+    "nondegenerate_share": 1.0
+   },
+   "source_stats": "NC7_share",
+   "stats_production": {
+    "n": 197,
+    "r_median": 0.99,
+    "r_iqr": 0.981,
+    "median_relative_iqr": 0.25,
+    "nondegenerate_share": 1.0
+   }
+  },
+  "NC9_range": {
+   "kind": "continuous",
+   "status": "recommended_core",
+   "role_note": "volatility magnitude; second-widest spread after NC4; 97% non-degenerate",
+   "question_template": "What is the largest range (max minus min) {civ}'s {metric} will span up to turn {T}?",
+   "parameters": {
+    "metric": [
+     "treasury",
+     "population"
+    ],
+    "civ": "civ alive at t60",
+    "T": "window end"
+   },
+   "resolver": {
+    "semantics": "max minus min of value(metric,civ,t) over the window",
+    "window": "path",
+    "window_text": "over turns 61 through {T} inclusive",
+    "missing": "a civ's metric value is MISSING whenever its score is unobserved (sentinel) at that turn; path aggregates (min/max/range) run over observed turns only"
+   },
+   "value_format_note": "The answer is measured in the metric's own unit (0 if the value never moves).",
+   "selection": "none",
+   "stats_local": {
+    "n": 168,
+    "r_median": 0.999,
+    "r_iqr": 0.996,
+    "median_relative_iqr": 0.43,
+    "nondegenerate_share": 0.97
+   },
+   "source_stats": "NC9_range",
+   "stats_production": {
+    "n": 594,
+    "r_median": 0.999,
+    "r_iqr": 0.995,
+    "median_relative_iqr": 0.55,
+    "nondegenerate_share": 0.94
+   },
+   "criteria_template": "Resolves to the difference between the highest and the lowest {metric_noun} recorded for {civ} on any turn from 61 through {T} inclusive (0 if the value never changes). Values are read from the game's recorded statistics; turns on which the civilization's statistics are not recorded are excluded from the calculation.",
+   "data_quality": "military_units_count dropped (mixed channel); population is a global channel (no mask needed); treasury gated -> floor applies",
+   "staging": "techs slice admissible today (comparatives/NB1); population/cities/territory slices staged behind the death flag; treasury/scores slices removed permanently"
+  },
+  "NC11_world_total": {
+   "kind": "continuous",
+   "status": "rejected_by_curator",
+   "role_note": "curator cut 2026-08-30 (final slate): dead-vs-unobserved inference unavoidable without the death flag; replaced by NC3",
+   "question_template": "What will the combined {metric} of all civs be at turn {T}?",
+   "parameters": {
+    "metric": [
+     "scores",
+     "population",
+     "techs_known"
+    ],
+    "T": "resolution turn"
+   },
+   "resolver": {
+    "semantics": "sum over alive civs of value(metric,·,T)",
+    "window": "point",
+    "window_text": "at exactly turn {T}",
+    "missing": "instance excluded at selection if the subject can be missing; a replay with a missing value is dropped from the truth distribution"
+   },
+   "value_format_note": "The answer is measured in the metric's own unit, summed across all civs.",
+   "selection": "none",
+   "stats_local": {
+    "n": 72,
+    "r_median": 0.999,
+    "r_iqr": 0.997,
+    "median_relative_iqr": 0.21,
+    "nondegenerate_share": 1.0
+   },
+   "source_stats": "NC11_world_total",
+   "stats_production": {
+    "n": 120,
+    "r_median": 1.0,
+    "r_iqr": 0.996,
+    "median_relative_iqr": 0.21,
+    "nondegenerate_share": 1.0
+   }
+  },
+  "NC3_time_to_K": {
+   "kind": "continuous",
+   "status": "recommended_core",
+   "role_note": "promoted to the 6th continuous seat 2026-08-30 (replacing NC11): direct read (first turn techs>=K), censoring stated in the wording; elicitation carries a never-probability arm",
+   "question_template": "-",
+   "parameters": {},
+   "resolver": {
+    "semantics": "EVENT-BASED (rev 13, gap-proof): techs known at turn t = recorded count at turn 60 (shared state, observed for all civs) + number of tech_discovered events for the civ on turns 61..t; resolves to the first turn this reaches K (exactly K counts); 'never' if not by T. Events are engine-side and recorded through dark gaps, so this resolver is unaffected by observability.",
+    "window": "point",
+    "window_text": "at exactly turn {T}",
+    "missing": "instance excluded at selection if the subject can be missing; a replay with a missing value is dropped from the truth distribution"
+   },
+   "value_format_note": "-",
+   "selection": "-",
+   "stats_local": {
+    "n": 28,
+    "r_median": 1.0,
+    "r_iqr": 0.995,
+    "median_relative_iqr": 0.0,
+    "nondegenerate_share": 0.36
+   },
+   "source_stats": "NC3_time_to_K",
+   "stats_production": {
+    "n": 40,
+    "r_median": 0.898,
+    "r_iqr": 0.831,
+    "median_relative_iqr": 0.09,
+    "nondegenerate_share": 1.0,
+    "censored_share": 0.45
+   },
+   "criteria_template": "Resolves to the first turn, from 61 through {T} inclusive, on which {civ}'s recorded number of technologies known is {K} or more - exactly {K} counts. If that does not happen by turn {T}, resolves to 'never'.",
+   "resolver_note_techs": "techs slice resolves via EVENT RECONSTRUCTION (turn-60 count + counted tech_discovered events), verified identical to the recorded field in 72/72 independent checks; kills the rare missing-field edge (dead civs) and makes the slice certain for all civs at all turns",
+   "status_rev27": "DROPPED_rev27 (censored timing)"
+  },
+  "NC8_peak_turn": {
+   "kind": "continuous",
+   "status": "borderline",
+   "role_note": "rejected: answer distribution hugs the deadline; relative IQR .14",
+   "question_template": "-",
+   "parameters": {},
+   "resolver": {
+    "semantics": "-",
+    "window": "point",
+    "window_text": "at exactly turn {T}",
+    "missing": "instance excluded at selection if the subject can be missing; a replay with a missing value is dropped from the truth distribution"
+   },
+   "value_format_note": "-",
+   "selection": "-",
+   "stats_local": {
+    "n": 168,
+    "r_median": 0.998,
+    "r_iqr": 0.995,
+    "median_relative_iqr": 0.14,
+    "nondegenerate_share": 0.88
+   },
+   "source_stats": "NC8_peak_turn",
+   "stats_production": {
+    "n": 400,
+    "r_median": 0.997,
+    "r_iqr": 0.975,
+    "median_relative_iqr": 0.21,
+    "nondegenerate_share": 0.94
+   }
+  },
+  "NC10_leader_churn": {
+   "kind": "continuous",
+   "status": "rejected",
+   "role_note": "rejected: median IQR 0; lead almost never changes",
+   "question_template": "-",
+   "parameters": {},
+   "resolver": {
+    "semantics": "-",
+    "window": "point",
+    "window_text": "at exactly turn {T}",
+    "missing": "instance excluded at selection if the subject can be missing; a replay with a missing value is dropped from the truth distribution"
+   },
+   "value_format_note": "-",
+   "selection": "-",
+   "stats_local": {
+    "n": 24,
+    "r_median": 1.0,
+    "r_iqr": 1.0,
+    "median_relative_iqr": 0.0,
+    "nondegenerate_share": 0.33
+   },
+   "source_stats": "NC10_leader_churn",
+   "stats_production": {
+    "n": 40,
+    "r_median": 0.936,
+    "r_iqr": 0.812,
+    "median_relative_iqr": 0.33,
+    "nondegenerate_share": 0.78
+   }
+  },
+  "NC12_path_min": {
+   "kind": "continuous",
+   "status": "rejected",
+   "role_note": "rejected: 21% non-degenerate; minimum lands right after t60",
+   "question_template": "-",
+   "parameters": {},
+   "resolver": {
+    "semantics": "-",
+    "window": "point",
+    "window_text": "at exactly turn {T}",
+    "missing": "instance excluded at selection if the subject can be missing; a replay with a missing value is dropped from the truth distribution"
+   },
+   "value_format_note": "-",
+   "selection": "-",
+   "stats_local": {
+    "n": 168,
+    "r_median": 0.999,
+    "r_iqr": 0.99,
+    "median_relative_iqr": 0.0,
+    "nondegenerate_share": 0.21
+   },
+   "source_stats": "NC12_path_min",
+   "stats_production": {
+    "n": 600,
+    "r_median": 0.998,
+    "r_iqr": 0.991,
+    "median_relative_iqr": 0.0,
+    "nondegenerate_share": 0.15
+   }
+  },
+  "NW1_war_at": {
+   "kind": "binary",
+   "status": "recommended_core",
+   "role_note": "relationships not quantities; rises with horizon; prime natcond fuel",
+   "question_template": "Will {civA} and {civB} be at war at turn {T}?",
+   "parameters": {
+    "pair": "alive-civ pairs",
+    "T": "resolution turn"
+   },
+   "resolver": {
+    "semantics": "diplomacy state for the pair equals 'War' at T",
+    "window": "point",
+    "window_text": "at exactly turn {T}",
+    "tie": "NO",
+    "missing": "missing/sentinel -> NO (binary) / dropped (continuous)"
+   },
+   "selection": "frequency-filtered on half A where applicable",
+   "source": "new 2026-08-30 (production corpus)",
+   "stats_production": {
+    "n": 400,
+    "mid_share": 0.59,
+    "mid_by_T": {
+     "90": 0.44,
+     "120": 0.57,
+     "150": 0.6,
+     "180": 0.65,
+     "210": 0.68
+    },
+    "tails_le5pct": 32,
+    "tails_le1pct": 11,
+    "saturated_share": 0.1,
+    "r": 0.998,
+    "r_tail_log": 0.915
+   },
+   "benchmark_assignment": "core (superset: turn-1 on all; instances feed bank/tail/mirror slices by their q)",
+   "criteria_template": "Resolves YES if the diplomatic state recorded between {civA} and {civB} at exactly turn {T} is War. A cease-fire, armistice, peace, alliance, or never having met all resolve NO."
+  },
+  "NW2_diplo": {
+   "kind": "binary",
+   "status": "recommended_tail_engine",
+   "role_note": "best tail reliability in league (.942); peace/alliance are the rare events",
+   "question_template": "Will {civA} and {civB} reach {state} at any point by turn {T}?",
+   "parameters": {
+    "kind": [
+     "peace_by",
+     "alliance_by",
+     "ceasefire_by (incl. armistice)"
+    ],
+    "pair": "alive-civ pairs",
+    "T": "window end"
+   },
+   "resolver": {
+    "semantics": "any turn in the window with the pair's diplomacy state in the kind's state set",
+    "window": "path",
+    "window_text": "over turns 61 through {T} inclusive",
+    "tie": "NO",
+    "missing": "missing/sentinel -> NO (binary) / dropped (continuous)"
+   },
+   "selection": "frequency-filtered on half A where applicable",
+   "source": "new 2026-08-30 (production corpus)",
+   "stats_production": {
+    "n": 1200,
+    "mid_share": 0.31,
+    "mid_by_T": {
+     "90": 0.14,
+     "120": 0.3,
+     "150": 0.35,
+     "180": 0.37,
+     "210": 0.39
+    },
+    "tails_le5pct": 155,
+    "tails_le1pct": 60,
+    "saturated_share": 0.51,
+    "r": 0.999,
+    "r_tail_log": 0.942
+   },
+   "benchmark_assignment": "core (superset: turn-1 on all; instances feed bank/tail/mirror slices by their q)",
+   "criteria_template": "Resolves YES if the diplomatic state recorded between {civA} and {civB} is {state_set} on any turn from 61 through {T} inclusive - turn {T} itself counts. Resolves NO if no such state is recorded in that window ({other_states} do not count).",
+   "resolver_rev27": "state in the kind set at the end of any turn 61..T; pairs already in that state at turn 60 excluded"
+  },
+  "NW4_survival": {
+   "kind": "binary",
+   "status": "rejected_by_curator",
+   "role_note": "curator cut 2026-08-30 (final slate): resolution requires inference (seen-then-dark); cut under the no-inferred-resolvers rule; revisit if the eliminated-at-turn flag lands",
+   "question_template": "Will {civ} be eliminated (hold zero cities) by turn {T}? / Will any civ be eliminated by turn {T}?",
+   "parameters": {
+    "kind": [
+     "civ_eliminated",
+     "any_eliminated"
+    ],
+    "T": "resolution turn"
+   },
+   "resolver": {
+    "semantics": "eliminated by T: civ's score was observed (non-sentinel) at some turn <= T and is sentinel/missing for the final 5 turns up to T ('seen, then permanently dark'). INTERIM: production-grade resolution requires an authoritative eliminated-at-turn flag emitted by the pipeline (ENGINEERING REQUEST to plumbing session).",
+    "window": "path",
+    "window_text": "after turn 60, up to and including turn {T}",
+    "tie": "n/a",
+    "missing": "never-observed civs -> excluded as subjects"
+   },
+   "selection": "frequency-filtered on half A where applicable",
+   "source": "new 2026-08-30 (production corpus)",
+   "stats_production": {
+    "n": 240,
+    "mid_share": 0.45,
+    "mid_by_T": {
+     "90": 0.25,
+     "120": 0.48,
+     "150": 0.5,
+     "180": 0.5,
+     "210": 0.5
+    },
+    "tails_le5pct": 77,
+    "saturated_share": 0.23,
+    "r": 0.995,
+    "r_tail_log": 0.811
+   },
+   "benchmark_assignment": "core (superset: turn-1 on all; instances feed bank/tail/mirror slices by their q)",
+   "status_rev27": "re-admitted_rev27 (exact alive flag)"
+  },
+  "NW5_wonder": {
+   "kind": "binary",
+   "status": "recommended_core",
+   "role_note": "83% mid; supersedes count-based EX_wonder (9% mid)",
+   "question_template": "Will {wonder} be completed (by any civ) by turn {T}? / Will {civ} be the civ that completes {wonder} by turn {T}?",
+   "parameters": {
+    "kind": [
+     "any",
+     "civ"
+    ],
+    "wonder": "named wonder with half-A completion freq in (0,1), cap 6/world/T",
+    "T": "window end"
+   },
+   "resolver": {
+    "semantics": "a wonder_completed event with that wonder_name (and player, for kind=civ) exists in the window",
+    "window": "path",
+    "window_text": "over turns 61 through {T} inclusive",
+    "tie": "NO",
+    "missing": "missing/sentinel -> NO (binary) / dropped (continuous)"
+   },
+   "selection": "frequency-filtered on half A where applicable",
+   "source": "new 2026-08-30 (production corpus)",
+   "stats_production": {
+    "n": 474,
+    "mid_share": 0.83,
+    "mid_by_T": {
+     "90": 0.44,
+     "120": 0.79,
+     "150": 0.92,
+     "180": 0.98,
+     "210": 0.99
+    },
+    "tails_le5pct": 62,
+    "tails_le1pct": 17,
+    "saturated_share": 0.04,
+    "r": 0.99,
+    "r_tail_log": 0.91
+   },
+   "benchmark_assignment": "core (superset: turn-1 on all; instances feed bank/tail/mirror slices by their q)",
+   "criteria_template_civ": "Resolves YES if {civ} completes the wonder {wonder} on any turn from 61 through {T} (inclusive). Resolves NO otherwise - including if another civilization completes {wonder} first, if no one completes it by turn {T}, or if its completion is not recorded. Each wonder can be completed only once per game.",
+   "criteria_template_any": "Resolves YES if any civilization completes the wonder {wonder} on any turn from 61 through {T} (inclusive). Resolves NO if it is not completed by turn {T}.",
+   "exclusions": "EXCLUDE 'Palace' (every civ starts with one and rebuilds it when its capital moves - it is not a unique world wonder; 'Will Palace be completed' actually asks about capital relocation and violates the once-per-game criteria text). Wonder names render with articles ('the Pyramids', 'the Great Wall') and expansions (A.Smith's Trading Co. -> Adam Smith's Trading Company)."
+  },
+  "NW7_named_city": {
+   "kind": "binary",
+   "status": "rejected_by_curator",
+   "role_note": "curator cut 2026-08-30 (final slate): narrowest skill, zero tail value, lowest r",
+   "question_template": "Will the city of {name} be captured (conquered by any civilization) at least once after turn 60, up to and including turn {T}?",
+   "parameters": {
+    "city": "names from half-A conquest events, cap 5/world/T",
+    "T": "window end"
+   },
+   "resolver": {
+    "semantics": "a city_conquered event with that city_name exists in the window",
+    "window": "path",
+    "window_text": "over turns 61 through {T} inclusive",
+    "tie": "NO",
+    "missing": "missing/sentinel -> NO (binary) / dropped (continuous)"
+   },
+   "selection": "frequency-filtered on half A where applicable",
+   "source": "new 2026-08-30 (production corpus)",
+   "stats_production": {
+    "n": 200,
+    "mid_share": 0.98,
+    "mid_by_T": {
+     "90": 0.9,
+     "120": 1.0,
+     "150": 1.0,
+     "180": 1.0,
+     "210": 1.0
+    },
+    "tails_le5pct": 4,
+    "tails_le1pct": 1,
+    "saturated_share": 0.0,
+    "r": 0.987,
+    "r_tail_log": 0.917
+   },
+   "benchmark_assignment": "core (superset: turn-1 on all; instances feed bank/tail/mirror slices by their q)"
+  },
+  "NC13_turns_at_war": {
+   "kind": "continuous",
+   "status": "rejected",
+   "role_note": "war is chronic: 64% non-degenerate only",
+   "question_template": "How many turns will {civA} and {civB} spend at war between turn 61 and {T}?",
+   "parameters": {},
+   "resolver": {
+    "semantics": "count of window turns with state=War",
+    "window": "path",
+    "window_text": "over turns 61 through {T} inclusive",
+    "tie": "NO",
+    "missing": "missing/sentinel -> NO (binary) / dropped (continuous)"
+   },
+   "selection": "frequency-filtered on half A where applicable",
+   "source": "new 2026-08-30 (production corpus)",
+   "stats_production": {
+    "n": 240,
+    "r_median": 0.998,
+    "r_iqr": 0.985,
+    "median_relative_iqr": 0.09,
+    "nondegenerate_share": 0.64
+   }
+  },
+  "NC14_wonders_built": {
+   "kind": "continuous",
+   "status": "recommended_core",
+   "role_note": "integer, 95% non-degenerate, relIQR .56",
+   "question_template": "How many wonders will be completed (all civs) between turn 61 and {T}?",
+   "parameters": {
+    "T": "window end"
+   },
+   "resolver": {
+    "semantics": "count of wonder_completed events in the window",
+    "window": "path",
+    "window_text": "over turns 61 through {T} inclusive",
+    "tie": "NO",
+    "missing": "missing/sentinel -> NO (binary) / dropped (continuous)"
+   },
+   "selection": "frequency-filtered on half A where applicable",
+   "source": "new 2026-08-30 (production corpus)",
+   "value_format_note": "The answer is a whole number (a count of wonders; 0 is possible).",
+   "stats_production": {
+    "n": 40,
+    "r_median": 0.981,
+    "r_iqr": 0.97,
+    "median_relative_iqr": 0.56,
+    "nondegenerate_share": 0.95
+   },
+   "criteria_template": "Resolves to the total number of wonder completions recorded on turns 61 through {T} inclusive, across all civilizations - a completion on turn {T} itself counts."
+  },
+  "NC15_alive_count": {
+   "kind": "continuous",
+   "status": "rejected",
+   "role_note": "18% non-degenerate",
+   "question_template": "How many of the five civs will hold at least one city at turn {T}?",
+   "parameters": {},
+   "resolver": {
+    "semantics": "count of civs with cities_count>0 at T",
+    "window": "point",
+    "window_text": "at exactly turn {T}",
+    "tie": "NO",
+    "missing": "missing/sentinel -> NO (binary) / dropped (continuous)"
+   },
+   "selection": "frequency-filtered on half A where applicable",
+   "source": "new 2026-08-30 (production corpus)",
+   "stats_production": {
+    "n": 40,
+    "r_median": 0.993,
+    "r_iqr": 1.0,
+    "median_relative_iqr": 0.0,
+    "nondegenerate_share": 0.17
+   }
+  },
+  "NC16_first_elim": {
+   "kind": "continuous",
+   "status": "rejected",
+   "role_note": "too thin (n=6) and degenerate",
+   "question_template": "On what turn will the first civ be eliminated?",
+   "parameters": {},
+   "resolver": {
+    "semantics": "first window turn with any civ at zero cities; censored at TMAX",
+    "window": "path",
+    "window_text": "over turns 61 through {T} inclusive",
+    "tie": "NO",
+    "missing": "missing/sentinel -> NO (binary) / dropped (continuous)"
+   },
+   "selection": "frequency-filtered on half A where applicable",
+   "source": "new 2026-08-30 (production corpus)",
+   "stats_production": {
+    "n": 6,
+    "r_median": null,
+    "r_iqr": null,
+    "median_relative_iqr": 0.0,
+    "nondegenerate_share": 0.0,
+    "censored_share": 0.0
+   }
+  },
+  "S5_civ_wonders": {
+   "kind": "binary",
+   "status": "recommended_core_plus_tail",
+   "role_note": "event-channel replacement for the dead count-metric wonder template; usable rises 23->73% with horizon; 150 tails spread across ALL horizons (17/39/40/30/24)",
+   "question_template": "Will {civ} complete at least {k} wonder(s) by turn {T}?",
+   "resolver": {
+    "semantics": "count of wonder_completed events with player={civ} in turns 61..T >= k",
+    "window": "path",
+    "window_text": "after turn 60 and by turn {T}",
+    "tie": "NO",
+    "missing": "n/a (certain event/diplomacy channels)"
+   },
+   "stats_production": {
+    "n": 600,
+    "usable": 0.53,
+    "tails_le5pct": 150,
+    "saturated_share": 0.2,
+    "r": 0.997,
+    "r_tail_log": 0.89
+   },
+   "source": "sweep 2026-08-30 (certain channels)",
+   "phrasing_note": "k=1 renders as 'complete a wonder', not 'at least 1 wonder'",
+   "criteria_template": "Resolves YES if {civ} completes at least {k} wonder(s) on any turn from 61 through {T} inclusive - an event on turn {T} itself counts. Each wonder can be completed only once per game. Resolves NO otherwise."
+  },
+  "S6_city_founding": {
+   "kind": "binary",
+   "status": "recommended_core",
+   "role_note": "expansion/growth dimension no other family covers; 56% usable, 41 tails (front-loaded), sat 16%",
+   "question_template": "Will {civ} found at least {k} new cities by turn {T}?",
+   "resolver": {
+    "semantics": "count of city_founded events with player={civ} in turns 61..T >= k",
+    "window": "path",
+    "window_text": "after turn 60 and by turn {T}",
+    "tie": "NO",
+    "missing": "n/a (certain event/diplomacy channels)"
+   },
+   "stats_production": {
+    "n": 600,
+    "usable": 0.56,
+    "tails_le5pct": 41,
+    "saturated_share": 0.16,
+    "r": 0.999,
+    "r_tail_log": 0.898
+   },
+   "source": "sweep 2026-08-30 (certain channels)",
+   "criteria_template": "Resolves YES if {civ} founds at least {k} new cities on any turn from 61 through {T} inclusive - an event on turn {T} itself counts (cities held at turn 60 do not count). Resolves NO otherwise."
+  },
+  "S4_gov_change_count": {
+   "kind": "binary",
+   "status": "recommended_core",
+   "role_note": "REDEFINED 2026-08-30 audit: count only COMPLETED changes (arrivals at a non-Anarchy government) - 48% of raw change events are Anarchy transits, which double-counted every revolution. Redefined stats: binary usable 50% (38/82/60/41/31), tails 34, sat 15%, r .999, r_tail .919; continuous relIQR .50, nondeg 84%, median counts now intuitive (~3).",
+   "question_template": "Will {civ} complete at least {k} changes of government by turn {T}? / How many times will {civ} change to a new government (Anarchy transitions not counted) by turn {T}?",
+   "resolver": {
+    "semantics": "count of government_change events with player={civ}, turn in 61..T, and metadata.to != 'Anarchy'",
+    "window": "path",
+    "window_text": "after turn 60 and by turn {T}",
+    "tie": "NO",
+    "missing": "n/a (certain event/diplomacy channels)"
+   },
+   "stats_production": {
+    "n": 400,
+    "usable": 0.36,
+    "tails_le5pct": 24,
+    "saturated_share": 0.31,
+    "r": 0.999,
+    "r_tail_log": 0.885
+   },
+   "source": "sweep 2026-08-30 (certain channels)",
+   "resolver_rev27": "count of ALL government_change events for civ in 61..T, including changes into and out of Anarchy"
+  },
+  "S3_wars_at_T": {
+   "kind": "binary",
+   "status": "recommended_secondary",
+   "role_note": "system-level war intensity; 38% usable, r_tail .960; continuous count relIQR .20 borderline",
+   "question_template": "Will at least {k} pairs of civilizations be at war at exactly turn {T}?",
+   "resolver": {
+    "semantics": "count of alive-civ pairs whose diplomacy state at T is War >= k",
+    "window": "point",
+    "window_text": "at exactly turn {T}",
+    "tie": "NO",
+    "missing": "n/a (certain event/diplomacy channels)"
+   },
+   "stats_production": {
+    "n": 160,
+    "usable": 0.38,
+    "tails_le5pct": 4,
+    "saturated_share": 0.31,
+    "r": 0.999,
+    "r_tail_log": 0.96
+   },
+   "source": "sweep 2026-08-30 (certain channels)"
+  },
+  "S7_city_razing": {
+   "kind": "continuous",
+   "status": "recommended_core",
+   "role_note": "razing intensity - the 5th certain continuous family: relIQR .89, nondeg 98%, r .997/.957; binary any-destroyed usable only at H1-H3",
+   "question_template": "How many cities will be destroyed (razed) in total by turn {T}? Answer with a whole number.",
+   "resolver": {
+    "semantics": "count of city_destroyed events in turns 61..T",
+    "window": "path",
+    "window_text": "after turn 60 and by turn {T}",
+    "tie": "NO",
+    "missing": "n/a (certain event/diplomacy channels)"
+   },
+   "stats_production": {
+    "n": 40,
+    "r_median": 0.997,
+    "r_iqr": 0.957,
+    "median_relative_iqr": 0.89,
+    "nondegenerate_share": 0.98
+   },
+   "source": "sweep 2026-08-30 (certain channels)",
+   "criteria_template": "Resolves to the total number of cities destroyed (razed) across all civilizations on any turn from 61 through {T} inclusive - an event on turn {T} itself counts. A city that is captured but not destroyed does not count."
+  },
+  "P1_civ_conquests": {
+   "kind": "continuous",
+   "status": "recommended_core",
+   "question_template": "How many cities will {civ} capture by turn {T}?",
+   "resolver": {
+    "semantics": "count of city_conquered events with new_owner={civ}, turns 61..T",
+    "window": "path/point per template",
+    "window_text": "per template",
+    "tie": "n/a",
+    "missing": "n/a (certain channels)"
+   },
+   "stats_production": {
+    "floored_per_T": [
+     0,
+     16,
+     31,
+     32,
+     38
+    ],
+    "r_med": 0.987,
+    "r_iqr": 0.895,
+    "rel_iqr": 1.0
+   },
+   "source": "continuous expansion mine 2026-08-30",
+   "criteria_template": "Resolves to the number of city captures by {civ} on any turn from 61 through {T} inclusive - an event on turn {T} itself counts - each capture counts once, recaptures included."
+  },
+  "P2_civ_losses": {
+   "kind": "continuous",
+   "status": "recommended_core - hardest new family",
+   "question_template": "How many cities will {civ} lose by turn {T}?",
+   "resolver": {
+    "semantics": "count of city_conquered events with prev_owner={civ}, turns 61..T",
+    "window": "path/point per template",
+    "window_text": "per template",
+    "tie": "n/a",
+    "missing": "n/a (certain channels)"
+   },
+   "stats_production": {
+    "floored_per_T": [
+     5,
+     16,
+     28,
+     37,
+     40
+    ],
+    "r_med": 0.991,
+    "r_iqr": 0.983,
+    "rel_iqr": 1.33
+   },
+   "source": "continuous expansion mine 2026-08-30",
+   "criteria_template": "Resolves to the number of cities {civ} loses to capture on any turn from 61 through {T} inclusive - an event on turn {T} itself counts - each loss counts once."
+  },
+  "P3_civ_founds": {
+   "kind": "continuous",
+   "status": "recommended_core",
+   "question_template": "How many new cities will {civ} found by turn {T}?",
+   "resolver": {
+    "semantics": "count of city_founded events with player={civ}, turns 61..T",
+    "window": "path/point per template",
+    "window_text": "per template",
+    "tie": "n/a",
+    "missing": "n/a (certain channels)"
+   },
+   "stats_production": {
+    "floored_per_T": [
+     15,
+     39,
+     40,
+     40,
+     40
+    ],
+    "r_med": 0.994,
+    "r_iqr": 0.991,
+    "rel_iqr": 0.74
+   },
+   "source": "continuous expansion mine 2026-08-30",
+   "criteria_template": "Resolves to the number of new cities founded by {civ} on any turn from 61 through {T} inclusive - an event on turn {T} itself counts (cities held at turn 60 do not count)."
+  },
+  "P5_techs_at_T": {
+   "kind": "continuous",
+   "status": "recommended_core (easier; supply backbone)",
+   "question_template": "How many technologies will {civ} know at turn {T}?",
+   "resolver": {
+    "semantics": "techs_known at exactly T (event-reconstructed channel) - Nick's continuous template, techs slice, REDEEMED",
+    "window": "path/point per template",
+    "window_text": "per template",
+    "tie": "n/a",
+    "missing": "n/a (certain channels)"
+   },
+   "stats_production": {
+    "floored_per_T": [
+     36,
+     40,
+     40,
+     40,
+     40
+    ],
+    "r_med": 0.999,
+    "r_iqr": 0.912,
+    "rel_iqr": 0.09
+   },
+   "source": "continuous expansion mine 2026-08-30",
+   "criteria_template": "Resolves to the number of technologies {civ} has discovered by exactly turn {T}, counting those known at turn 60 (a civilization eliminated before turn {T} keeps the count it held when eliminated)."
+  },
+  "P6_world_techs": {
+   "kind": "continuous",
+   "status": "recommended (easy aggregate anchor)",
+   "question_template": "What will the combined number of technologies known by all five civilizations be at turn {T}?",
+   "resolver": {
+    "semantics": "sum of techs_known over the five civs at T",
+    "window": "path/point per template",
+    "window_text": "per template",
+    "tie": "n/a",
+    "missing": "n/a (certain channels)"
+   },
+   "stats_production": {
+    "floored_per_T": [
+     8,
+     8,
+     8,
+     8,
+     8
+    ],
+    "r_med": 1.0,
+    "r_iqr": 0.979
+   },
+   "source": "continuous expansion mine 2026-08-30",
+   "criteria_template": "Resolves to the sum, over the five civilizations, of technologies each has discovered by exactly turn {T} (counting those known at turn 60)."
+  },
+  "P7_first_capture": {
+   "kind": "continuous",
+   "status": "recommended_core - timing with LOW censoring",
+   "question_template": "On what turn will {civ} first capture a city? ('never by {T}' allowed)",
+   "resolver": {
+    "semantics": "first city_conquered event with new_owner={civ} after turn 60; censored at T",
+    "window": "path/point per template",
+    "window_text": "per template",
+    "tie": "n/a",
+    "missing": "n/a (certain channels)"
+   },
+   "stats_production": {
+    "floored": 40,
+    "median_iqr": 34.2,
+    "censored": 0.04,
+    "r_med": 0.995
+   },
+   "source": "continuous expansion mine 2026-08-30",
+   "criteria_template": "Resolves to the first turn, from 61 through {T} inclusive, on which {civ} captures a city. If {civ} captures no city by turn {T}, resolves to 'never'.",
+   "status_rev27": "DROPPED_rev27 (censored timing)"
+  },
+  "P8_first_wonder": {
+   "kind": "continuous",
+   "status": "recommended_secondary",
+   "question_template": "On what turn will {civ} complete its first wonder? ('never by {T}' allowed)",
+   "resolver": {
+    "semantics": "first wonder_completed with player={civ} after 60; censored",
+    "window": "path/point per template",
+    "window_text": "per template",
+    "tie": "n/a",
+    "missing": "n/a (certain channels)"
+   },
+   "stats_production": {
+    "floored": 24,
+    "median_iqr": 36.1,
+    "r_med": 0.989
+   },
+   "source": "continuous expansion mine 2026-08-30",
+   "criteria_template": "Resolves to the first turn, from 61 through {T} inclusive, on which {civ} completes a wonder. If none is completed by turn {T}, resolves to 'never'.",
+   "status_rev27": "DROPPED_rev27 (censored timing)"
+  },
+  "P9_time_to_K_multi": {
+   "kind": "continuous",
+   "status": "recommended_core (subsumes NC3)",
+   "question_template": "On what turn will {civ} first know at least {K} technologies? ('never by {T}' allowed)",
+   "resolver": {
+    "semantics": "first turn techs_known>=K; K at half-A quartiles (.25/.5/.75) - triples NC3 supply",
+    "window": "path/point per template",
+    "window_text": "per template",
+    "tie": "n/a",
+    "missing": "n/a (certain channels)"
+   },
+   "stats_production": {
+    "floored": 120,
+    "median_iqr": 17.6,
+    "r_med": 0.974
+   },
+   "source": "continuous expansion mine 2026-08-30",
+   "criteria_template": "Resolves to the first turn, from 61 through {T} inclusive, on which {civ} has discovered {K} or more technologies (exactly {K} counts). If that does not happen by turn {T}, resolves to 'never'.",
+   "status_rev27": "DROPPED_rev27 (censored timing)"
+  },
+  "P4_civ_wonders": {
+   "kind": "continuous",
+   "status": "rejected",
+   "role_note": "per-civ wonder counts too thin (18 floored instances, r_med .849) - S5 binary covers the content",
+   "source": "expansion mine"
+  },
+  "W5_tech_lead": {
+   "kind": "binary",
+   "status": "recommended_core - REPLACES cmp-techs (dominates it: 70% vs horizon-lopsided usable, 53 vs 21 tails)",
+   "question_template": "Will {civ} know strictly more technologies than every other civilization at turn {T}?",
+   "resolver": {
+    "semantics": "strict max of techs_known at T (event-reconstructed channel); any tie -> NO",
+    "window": "per template",
+    "window_text": "per template",
+    "tie": "NO",
+    "missing": "n/a (certain channels)"
+   },
+   "stats_production": {
+    "n": 200,
+    "usable": 0.7,
+    "usable_T": [
+     0.52,
+     0.65,
+     0.65,
+     0.82,
+     0.88
+    ],
+    "tails": 53,
+    "tails_T": [
+     14,
+     13,
+     14,
+     7,
+     5
+    ],
+    "sat": 0.03,
+    "r": 0.992,
+    "r_tail": 0.892
+   },
+   "verification": "30/30 raw-vs-pipeline checks",
+   "source": "sweep 3, 2026-09-01",
+   "criteria_template": "Resolves YES if, at exactly turn {T}, {civ} has discovered strictly more technologies than every other civilization (counting all technologies known, including those known at turn 60). Any tie for the lead resolves NO."
+  },
+  "W2_directed_conquest": {
+   "kind": "binary",
+   "status": "recommended_core - directed war content + all-horizon tails",
+   "question_template": "Will {civA} capture at least one city from {civB} by turn {T}?",
+   "resolver": {
+    "semantics": "city_conquered event with new_owner={civA} and prev_owner={civB} in 61..T",
+    "window": "per template",
+    "window_text": "per template",
+    "tie": "NO",
+    "missing": "n/a (certain channels)"
+   },
+   "stats_production": {
+    "n": 240,
+    "usable": 0.46,
+    "tails": 74,
+    "tails_T": [
+     10,
+     20,
+     16,
+     11,
+     17
+    ],
+    "sat": 0.22,
+    "r": 0.998,
+    "r_tail": 0.894
+   },
+   "verification": "30/30 raw-vs-pipeline checks",
+   "source": "sweep 3, 2026-09-01",
+   "criteria_template": "Resolves YES if {civA} captures at least one city from {civB} on any turn from 61 through {T} inclusive - an event on turn {T} itself counts (a capture counts when the city's previous owner was {civB} and its new owner is {civA}; recaptures count). Resolves NO otherwise."
+  },
+  "W6_peace_at": {
+   "kind": "binary",
+   "status": "recommended_tail_engine - the only family whose tails GROW with horizon",
+   "question_template": "Will {civA} and {civB} have a formal peace in effect at turn {T}?",
+   "resolver": {
+    "semantics": "diplomacy state == Peace at exactly T",
+    "window": "per template",
+    "window_text": "per template",
+    "tie": "NO",
+    "missing": "n/a (certain channels)"
+   },
+   "stats_production": {
+    "n": 400,
+    "usable": 0.19,
+    "tails": 160,
+    "tails_T": [
+     9,
+     30,
+     34,
+     40,
+     47
+    ],
+    "sat": 0.41,
+    "r": 0.993,
+    "r_tail": 0.863
+   },
+   "verification": "30/30 raw-vs-pipeline checks",
+   "source": "sweep 3, 2026-09-01",
+   "criteria_template": "Resolves YES if the diplomatic state recorded between {civA} and {civB} at exactly turn {T} is Peace. War, cease-fire, armistice, alliance, or never having met all resolve NO."
+  },
+  "W1_wonder_race": {
+   "kind": "binary",
+   "status": "recommended - upgraded NW5 civ-variant (top-2 filtering makes every race contested; 100% usable)",
+   "question_template": "Will {civ}, rather than any other civilization, be the one to complete {wonder} by turn {T}?",
+   "resolver": {
+    "semantics": "first wonder_completed event for {wonder} after 60 is by {civ} and occurs <= T (top-2-builder instances only)",
+    "window": "per template",
+    "window_text": "per template",
+    "tie": "NO",
+    "missing": "n/a (certain channels)"
+   },
+   "stats_production": {
+    "n": 110,
+    "usable": 1.0,
+    "sat": 0.0,
+    "r": 0.987
+   },
+   "verification": "30/30 raw-vs-pipeline checks",
+   "source": "sweep 3, 2026-09-01",
+   "criteria_template": "Resolves YES if {civ} is the civilization that completes {wonder}, and does so on any turn from 61 through {T} inclusive - an event on turn {T} itself counts. Resolves NO if another civilization completes it first or if it is not completed by turn {T}. Each wonder can be completed only once per game."
+  },
+  "NEW_civil_war": {
+   "kind": "binary",
+   "status": "added_rev27",
+   "question_template": "Will {civ} suffer a civil war (a breakaway civilization splitting off) by turn {T}?",
+   "resolver": {
+    "semantics": "a civil_war_transfer event (new player created from {civ} cities) in turns 61..T",
+    "window": "path",
+    "tie": "n/a"
+   }
+  },
+  "NC1_value_at_T": {
+   "kind": "continuous",
+   "status": "added_rev27",
+   "question_template": "What will {civ}'s {metric} be at turn {T}?",
+   "resolver": {
+    "semantics": "value(metric,civ,T) from the savegame series; metric in score/population/cities/territory"
+   }
+  }
+ },
+ "composition": {
+  "principle": "SUPERSET (curator 2026-08-30, supersedes disjoint): core binary set spans the whole probability axis; turn-1 elicitation on all core questions; bank/tail/mirror are reporting slices by q. Continuous separate.",
+  "core_roster": [
+   "EX_comparative",
+   "NB2_race",
+   "NW5_wonder",
+   "EX_rank1",
+   "EX_government_at",
+   "NW1_war_at",
+   "NB6_event",
+   "NW7_named_city",
+   "NB4_drawdown",
+   "NW2_diplo",
+   "NW4_survival",
+   "EX_tech_discovered",
+   "NB1_threshold"
+  ],
+  "probes": [
+   "NB7_conjunction",
+   "NB3_overtaken"
+  ],
+  "cuts": [
+   "NB5_streak",
+   "NB8_early_deadline",
+   "NB9_gap",
+   "EX_wonder"
+  ],
+  "tail_slice": "per-mechanism/world/horizon caps; NB1 arithmetic tails capped <=20% of slice; mirrors from same families",
+  "continuous": [
+   "NC2_path_max",
+   "NC4_margin",
+   "NC5_count",
+   "NC9_range",
+   "NC14_wonders_built",
+   "NC3_time_to_K"
+  ],
+  "natcond": "turn-2 reveals on a core subset; RECOMMENDED: effect-size-stratified across the whole axis incl. a dramatic-reveal tail stratum (tails-only turn 2 has ~45% relative conditional-truth noise at q~1-2% unless the reveal moves q into the mid-band); open item for Jaeho",
+  "binary_core": [
+   "EX_comparative",
+   "NW5_wonder",
+   "EX_government_at (see inference_disclosure)",
+   "NW1_war_at",
+   "NB6_event",
+   "NB4_drawdown",
+   "NW2_diplo",
+   "EX_tech_discovered",
+   "NB1_threshold (capped filler)"
+  ],
+  "cuts_final": [
+   "NW7_named_city",
+   "EX_rank1",
+   "NW4_survival",
+   "NC11_world_total",
+   "NC1_value",
+   "NB5_streak",
+   "NB8_early_deadline",
+   "NB9_gap",
+   "EX_wonder",
+   "NC7_share",
+   "NC8_peak_turn",
+   "NC10",
+   "NC12",
+   "NC13",
+   "NC15",
+   "NC16",
+   "NB2_race"
+  ],
+  "certain_today": {
+   "binary_core": [
+    "NB1_threshold (techs, capped filler)",
+    "EX_government_at",
+    "NW1_war_at",
+    "NW2_diplo",
+    "NB6_event (+W3/W4 k-grids)",
+    "NW5_wonder (any + W1 race variant)",
+    "EX_tech_discovered",
+    "S5_civ_wonders",
+    "S6_city_founding",
+    "W5_tech_lead",
+    "W2_directed_conquest"
+   ],
+   "binary_secondary": [
+    "S4_gov_change_count",
+    "S3_wars_at_T",
+    "S7 any-destroyed (H1-H3 only)",
+    "S2_war_end (flavor)"
+   ],
+   "continuous": [
+    "NC5",
+    "NC14 (floored)",
+    "S7 razing (floored)",
+    "P1 civ-captures",
+    "P2 civ-losses",
+    "P3 civ-founds",
+    "P5 techs-at-T",
+    "P6 world techs",
+    "P7 first-capture",
+    "P8 first-wonder (small)",
+    "P9 multi-K timing (subsumes NC3)",
+    "NC4-techs (marginal)"
+   ],
+   "tails_certain": "739 from the 8 original families + ~215 from sweep keepers (S5 150, S6 41, S4 24) = ~950 candidates across all horizons",
+   "tail_engines_added": "W6_peace_at (160 tails, growing with horizon)"
+  },
+  "staged_behind_death_flag": {
+   "why": "most long-horizon darkness IS death; with the eliminated-at-turn flag each civ at each turn is observed (real), dead (zero is true), or alive-but-dark (inadmissible) - restoring population/cities/territory questions wherever no alive-but-dark civ is involved in any rollout",
+   "restores": [
+    "EX_comparative + NB1 on population/cities/territory",
+    "NB4_drawdown (population/territory/cities)",
+    "NC9_range (population/territory)",
+    "NC4 margins on population/territory/cities (relIQR 1.26-1.27, r .98-.99)",
+    "NW4_survival",
+    "NC11_world_total"
+   ]
+  },
+  "continuous_supply": "~995 floored instances total: 64/120/150/163/358 per horizon from the expansion + ~140 prior; timing families currently asked at T210 only (windowed variants are a further lever)",
+  "tails_updated": "~1,400 candidates: prior 964 + W2 74 + W3 133 + W4 43 + W5 53 + W6 160; long-horizon coverage strengthened (T180 ~237, T210 ~235)"
+ },
+ "phrasing_conventions": {
+  "window": "after turn 60, up to and including turn {T}",
+  "point": "at exactly turn {T}",
+  "counts": "state what is counted, e.g. 'conquest events, each captured city counted once per capture'",
+  "units": "every continuous question ends with its unit ('Answer in gold' / 'Answer with a whole number')",
+  "censoring": "timing questions state: 'If this has not happened by turn {T}, answer never'",
+  "note": "canonical bank phrasing; miner texts in stats examples predate this pass; conformance-test wording against resolvers as with v4-honest",
+  "full_sentence_continuous": {
+   "NC2_path_max": "What is the highest {metric_noun} that {civ} will hold at any point after turn 60, up to and including turn {T}? Answer with a single number{unit_clause}.",
+   "NC4_margin": "At exactly turn {T}, by how many score points will the leading civilization be ahead of the second-place civilization? Answer with a whole number (0 if two civilizations are tied for the lead).",
+   "NC5_count": "How many city-conquest events will occur in total, across all civilizations, after turn 60 and up to and including turn {T}? Answer with a whole number; each capture of a city counts once.",
+   "NC9_range": "Considering {civ}'s {metric_noun} at every turn after 60 up to and including turn {T}, what will the difference between its highest and its lowest value be? Answer with a single number{unit_clause}.",
+   "NC14_wonders_built": "How many wonders will be completed by all civilizations combined, after turn 60 and up to and including turn {T}? Answer with a whole number.",
+   "NC3_time_to_K": "On what turn will {civ} first know at least {K} technologies? If that has not happened by turn {T}, answer 'never'."
+  },
+  "metric_noun_map": "render metric ids as grammatical noun phrases: scores->'score', techs_known->'number of technologies known', cities_count->'number of cities', territory_size->'territory size (in tiles)', treasury->'treasury (in gold)', population->'population', military_units_count->'number of military units'",
+  "sample_audit_2026_08_30": {
+   "NW5_any": "'(by any civ)' -> 'by any civilization'",
+   "NW5_civ": "'be the civ that completes X' -> 'be the one to complete X'",
+   "NB6_counts": "'(in total)' -> 'in total across all civilizations'",
+   "NW2_peace": "'be at formal Peace at any point' -> 'have a formal peace in effect at any point'",
+   "NB4_count_metrics": "for count metrics prefer 'lose at least {pct}% of its cities' over 'number of cities drop below {pct}% of its turn-60 level'",
+   "NB4_window": "accept the double turn-60 mention ('turn-60 level ... after turn 60') - precision beats elegance; criteria restate it anyway",
+   "NC2_verb": "'hold' works for treasury/score; use 'field' for military units",
+   "NC9_NC2_floor": "apply the half-A dispersion floor to NC9/NC2 instances (sample audit surfaced median-0 and median-2 degenerates)",
+   "NC3_NC4_homogeneity": "accepted: these families are one sentence with varying parameters (40 instances each); their role is depth not variety"
+  },
+  "literal_cutoffs": "since the turn-60 state is shared and appears in the report, threshold criteria render the LITERAL resolved cutoff (e.g. 'strictly below 7 cities') computed from the actual turn-60 value - removes all arithmetic ambiguity; applies to NB4 and any future percent-of-baseline family",
+  "dispersion_floor_all_continuous": "apply the half-A dispersion floor (IQR_A >= 2, or relIQR floor) to EVERY continuous family's instances - audit found IQR=0 shippables in NC14 and S7c at short horizons"
+ },
+ "engineering_requests": [
+  "BLOCKING (elevated 2026-08-30): per-civ eliminated-at-turn flag - now load-bearing for roughly half the bank (all population/cities/territory families), not just NW4/NC11",
+  "PROPOSAL: event-reconstructed cities_count (cities(t) = t60 count + founded - destroyed - conquered_away + conquered_in, all from the certain event channel); if it verifies against observed turns everywhere, cities questions become certain without the flag"
+ ],
+ "audit_2026_08_30": {
+  "monotonicity": "0 violations across 943 by-T question chains in 6 path families",
+  "gov_reconstruction": "modal-from dominance 1.000 everywhere",
+  "dark_contamination": "found+fixed in EX_comparative, NB4, NC9; NW4 and NC11 need the eliminated-at-turn flag",
+  "dark_exposure": "alive-but-never-observed civ rate: 9.9% at T90 falling to 0.3% at T210 (worst single civ 97% at T90)",
+  "normative_rule": "a civ's metric value is MISSING whenever its score is unobserved (sentinel) at that turn; path aggregates (min/max/range) run over observed turns only",
+  "tail_pillars_by_horizon": "NB4 84/77/51/53/53, NW2 21/39/34/30/31, tech_disc 6/9/24/20/34, gov_at 39/14/39/29/13; front-loaded minority: comparatives 103@H1, NB6 41@H1, NW5 31@H1; NW7 negligible (4)",
+  "world_balance": "NB4/NW2/NW1 usable supply varies ~2-3x by world temperament; handled by per-world caps",
+  "nb2_design_note": "K recalibrates per horizon, so each horizon is a distinct question (no cross-T chain) - intentional"
+ },
+ "natcond_window": {
+  "current": "frozen v1 cells use TWO reveal windows: (75,90) 16,930 cells and (60,75) 9,215 cells; the exact event turn is never disclosed - the reveal sentence brackets the window",
+  "decision_2026_08_30": "curator: do NOT vary the disclosed window. All v2 cells use the single fixed window (60,90): one uniform reveal sentence ('One fact about turns 60-90 has been revealed to you'), identical no-news control text, maximal n_x supply, and cross-cell comparability (every cell conditions on the same elapsed-time bracket). The event's actual turn still varies within the window but is undisclosed, as before."
+ },
+ "verification_2026_08_30": "independent double-resolution check: 960 (question, rollout) checks across all 16 blessed family-templates (20 questions x 3 half-B rollouts each), resolved twice - fresh logic on RAW rollout json vs pipeline logic on consolidated arrays. 960/960 agree, including 187 edge-flagged checks (dark data, ties, boundary turns, value==threshold, censoring). Edge prevalence notes: dark gaps are routine in path families (NB4 29/60, NC9 38/60, NC2 27/60 checks) so the dark-mask rule is load-bearing; NC3 hits the >=K boundary in 35/60 checks (techs increment by 1) so inclusive semantics are load-bearing. Script: tmp/fbsim_v2/mining/verify_resolution.py; results: verify_resolution_results.json",
+ "criteria_standard_clauses": {
+  "window": "counting every turn from 61 through {T} inclusive - an event or value on turn {T} itself counts",
+  "point": "resolved from the value recorded at exactly turn {T}",
+  "unrecorded_bin": "Values are read from the game's recorded statistics. A turn on which a civilization's statistics are not recorded is ignored; if a value needed to resolve the question is not recorded at the deciding moment, the question resolves NO.",
+  "unrecorded_cont": "Values are read from the game's recorded statistics; turns on which the civilization's statistics are not recorded are excluded from the calculation."
+ },
+ "gap_credibility_2026_08_30": {
+  "measurements": "gap length median 16 turns (p90 51, max 146, only 14% <=3); events recorded during gaps in 2022/2092 cases (engine-side); diplomacy missing 0.08%; dark-at-exactly-T: 17.9%/11.9%/7.5% of alive civ-slots at T90/T150/T210; treasury 50%-drawdown near-cutoff-with-gap rate 7.2%",
+  "gap_proof": [
+   "NB6_event",
+   "NW5_wonder",
+   "EX_tech_discovered",
+   "EX_government_at",
+   "NW1_war_at",
+   "NW2_diplo",
+   "NC5_count",
+   "NC14_wonders_built",
+   "NC3_time_to_K (after event-based resolver switch)"
+  ],
+  "convention_bound": [
+   "EX_comparative",
+   "NB1_threshold",
+   "NC4_margin"
+  ],
+  "one_sided": [
+   "NB4_drawdown",
+   "NC2_path_max",
+   "NC9_range"
+  ],
+  "note": "convention_bound: gaps before T are irrelevant; darkness AT T resolves NO/excluded by stated rule - mitigate with the observability screen. one_sided: masked resolution = 'no OBSERVED crossing/extreme'; long gaps can hide the event; do NOT drop gap-rollouts from truth (gaps correlate with war, dropping them biases toward peaceful futures) - mitigate by instance screening on low-gap subjects."
+ },
+ "selection_screens": {
+  "point_families": "EX_comparative / NB1 / NC4: subject(s) must be observed at T in >=95% of half-A rollouts (dark-at-T convention should rarely bind)",
+  "value_path_families": "NB4 / NC2 / NC9: subject's in-window dark-turn share on half A must be <=2% of turns (instance screening keeps truth unconditional; never drop gap-rollouts)",
+  "rationale": "dark-at-T is 17.9% at T90 unscreened; gaps median 16 turns; treasury near-cutoff-with-gap 7.2%"
+ },
+ "channel_map_2026_08_30": {
+  "certain": [
+   "events (all types)",
+   "diplomacy states",
+   "techs_known (0% gap anomalies; event-backed and monotone)"
+  ],
+  "partially_gated": [
+   "population",
+   "cities_count",
+   "territory_size (zeros concentrate 3-8x in dark gaps: territory 44.5% vs 5.9% observed; pop/cities 14.1% vs 3.8%)"
+  ],
+  "gated": [
+   "treasury (100% zeroed in gaps)",
+   "scores (sentinel by construction)"
+  ],
+  "probable_but_unproven": [
+   "science (zero-rates match in/out of gaps - likely real zeros; excluded under the certainty rule anyway)"
+  ],
+  "correction": "supersedes the earlier global/gated split: the first gap test conditioned on positive values around each gap, which silently excluded the gaps where these metrics zero out. Deeper test (all interior dark turns): only techs/events/diplomacy are provably observation-independent."
+ },
+ "admissibility_rule_2026_08_30": "ZERO-UNCERTAINTY RULE (curator): a question instance is admissible only if its resolution provably never depends on an unrecorded or gating-affected value in ANY of the ~1,000 rollouts. No 'recorded-value' language in criteria - inadmissible questions are filtered, not disclaimed. Unrecorded-value clauses REMOVED from all criteria templates.",
+ "sweep2_rejects_2026_08_30": {
+  "S1_met_by": "86% saturated - first contact is nearly deterministic",
+  "S8_natural_tech_race": "93% saturated - specific-tech races between civs are effectively decided by the shared t60 research state. RETRO-VALIDATES the NB2 cut: NB2's 91% usable came entirely from its manufactured half-A-median handicap, not from the world having contested races",
+  "S9_first_conquest": "relIQR .16, n=8 - too thin/deterministic",
+  "S9_tech_diversity": "relIQR .07 - deterministic",
+  "S2_war_end": "33% usable but only 70 instances and 57% saturated - flavor at best"
+ },
+ "verification_2026_08_30_v2": "certain-today slate re-verified: 732/732 (question,rollout) checks agree across 12 family-templates incl. the new NC4 techs margin (72/72 via event-reconstruction vs recorded field - proving the techs channel event-consistent). Certain-slate tails per horizon: 194/138/153/126/128 = 739. Sweep keepers use the same verified resolver shapes (event counts, state tests); formal 20-per pass to run at blessing.",
+ "audit_10plus6_2026_08_30": {
+  "anarchy_transit": "48% of government_change events are transits INTO Anarchy (revolution mechanics) -> S4 redefined to completed changes",
+  "team_state": "confirmed absent: 0 'Team' pair-turns in 78,742 sampled - NW2 mapping harmless",
+  "nc4_techs": "cramped integer support -> demoted to marginal",
+  "spelling": "game tech names kept authentic (e.g. 'Guerilla Warfare' sic)",
+  "cross_horizon_duplicates": "sampling surfaced same-pair comparatives at adjacent horizons - the bank's same-subject-across-horizons cap is the control; keep it"
+ },
+ "final_counts_2026_08_30": {
+  "tails_per_horizon": {
+   "T90": 276,
+   "T120": 185,
+   "T150": 195,
+   "T180": 156,
+   "T210": 152,
+   "total": 964
+  },
+  "tails_by_family": {
+   "NB1_techs": [
+    38,
+    37,
+    41,
+    41,
+    46
+   ],
+   "NW2": [
+    21,
+    39,
+    34,
+    30,
+    31
+   ],
+   "gov_at": [
+    39,
+    14,
+    39,
+    29,
+    13
+   ],
+   "S5": [
+    17,
+    39,
+    40,
+    30,
+    24
+   ],
+   "tech_disc": [
+    6,
+    9,
+    24,
+    20,
+    34
+   ],
+   "NW5": [
+    21,
+    20,
+    8,
+    2,
+    1
+   ],
+   "NB6": [
+    41,
+    8,
+    0,
+    0,
+    0
+   ],
+   "S6": [
+    36,
+    5,
+    0,
+    0,
+    0
+   ],
+   "S4": [
+    29,
+    3,
+    2,
+    0,
+    0
+   ],
+   "NW1": [
+    19,
+    5,
+    3,
+    3,
+    2
+   ],
+   "cmp_techs": [
+    9,
+    6,
+    4,
+    1,
+    1
+   ]
+  },
+  "continuous_floored_supply": {
+   "NC5": [
+    6,
+    8,
+    8,
+    8,
+    8
+   ],
+   "NC14": [
+    1,
+    3,
+    8,
+    8,
+    8
+   ],
+   "S7": [
+    4,
+    7,
+    8,
+    8,
+    8
+   ],
+   "NC3": [
+    0,
+    0,
+    0,
+    0,
+    40
+   ]
+  },
+  "s4_continuous": "FAILS the dispersion floor (IQR mostly 0-1) - S4 is BINARY ONLY",
+  "continuous_supply_lever": "per-civ event counts (cities X conquers / founds, wonders X completes) are certain-channel and would multiply continuous supply ~5x if a larger set is wanted - unmeasured, propose at bank build"
+ },
+ "natcond_plan_2026_08_30": {
+  "certainty": "inherits automatically: X membership from the event channel, Y from certain channels, p(Y|X) = counts over half-B rollouts where X holds",
+  "design": "fixed reveal window 61-90 (one uniform turn-2 sentence); T>=120 for revealed questions (T90 excluded: reveal window touches resolution); n_x>=100; strata on half-A delta with SE gate; null stratum per family; identity-pair exclusions; per-family/event/world caps; turn-1 shared with core bank",
+  "mini_mine": "942 candidate cells from a ~5% sample of question-event combinations: null 511, small 266(5 certified), medium 107(37 certified), large 49(49 certified - 100%), xlarge 9(9); full mine scales ~20-50x -> hundreds of certified large cells + thousands of nulls/smalls",
+  "example_cells": [
+   "Pontic conquered a city -> P(Pontic-Karen at war at 120): 0.43->0.52",
+   "Pontic LOST a city -> same question: 0.43->0.26",
+   "Karen completed a government change -> same: 0.43->0.62"
+  ],
+  "conditional_continuous": "pilot on NC5/NC14/S7 (war/wonder news shifts count distributions), same n_x floor"
+ },
+ "continuous_menu_2026_08_30": {
+  "certain_today_floored": {
+   "world_counts": {
+    "NC5": 38,
+    "NC14": 28,
+    "S7_razing": 35
+   },
+   "per_civ_counts": {
+    "P1_captures": 117,
+    "P2_losses": 126,
+    "P3_founds": 174
+   },
+   "techs": {
+    "P5_techs_at_T": 196,
+    "P6_world_techs": 40,
+    "P9_multiK_timing": 120,
+    "P7_first_capture": 40,
+    "P8_first_wonder": 24
+   },
+   "total": "~940 floored instances, per-T 64/120/150/163/358 (timing families at T210 by construction; windowed variants are a further lever)"
+  },
+  "flag_contingent_floored": {
+   "value_at_T": {
+    "population": 187,
+    "cities_count": 177,
+    "territory_size": 192
+   },
+   "path_max": {
+    "population": 188,
+    "territory_size": 192
+   },
+   "range": {
+    "population": 188,
+    "territory_size": 192
+   },
+   "margins": {
+    "population": 40,
+    "cities_count": 40,
+    "territory_size": 40,
+    "note": "relIQR 1.26-1.27 - the hardest families"
+   },
+   "world_totals": {
+    "population": 40,
+    "cities_count": 40,
+    "territory_size": 40
+   },
+   "total": 1556,
+   "caveat": "counts precede the per-instance alive-dark admissibility filter the flag enables; expect the haircut to land mostly at T90"
+  },
+  "full_menu": "certain-today ~940 + flag-contingent ~1,556 = ~2,500 floored continuous instances across ~25 families"
+ },
+ "stale_roster_finding_2026_08_30": {
+  "fork_claim": "frozen v2 question texts carry stale pre-reproduction civ names across anchors; world reports for 7 original anchors describe the wrong game",
+  "verified": "PARTIALLY - mechanism confirmed, blast radius NARROWER: seed0 ONLY. seed0 bank texts use the old roster (Formosan/Choctaw/Florentine/Lipka Tatar) while event texts in the SAME cells use the reproduced roster (Karen/Pontic/Veletian/Crimean Tatar) - mixed-roster cells confirmed; seed0's world report describes the old game. The OTHER SEVEN worlds (seed1/2/3/345/350/355/1000): question texts match reproduced rosters 5/5 and reports describe the reproduced games (verified per world).",
+  "unaffected": "truth is id-keyed everywhere (params carry player_id_a/b) - all probabilities valid; this session's mining, league, catalog examples, and specs use the reproduced corpus rosters throughout (grep-verified clean)",
+  "action": "fork's re-render from template+player_id+canonical roster is the right fix - required for seed0, verification-only for the other seven; seed0's report must be regenerated from the reproduced anchor (seed1000 recipe)"
+ },
+ "provenance_confirmation_2026_09_01": {
+  "corpus": "local tmp/fbsim_v2_corpus IS the most recent production rerun (pulled by the continuous-eng fork from RunPod volume fbsim-v2-corpus/hkwejil48w, 100GB, EU-RO-1; all pods EXITED; frozen record bench-prep-v2 @ 896b8985)",
+  "savegame_check": "t60 shared-state verification: all metrics IDENTICAL across all ~1,000 rollouts in every world - every replay provably forks from the real savegame",
+  "stale_texts": "confined to seed0's frozen bank texts + report (rev 21); irrelevant to this session's families"
+ },
+ "draft_curation_2026_09_01": {
+  "principles": "roughly equal per template; roughly equal per horizon where supply allows, documented exceptions otherwise; caps over exact equality",
+  "binary_bank": "750 = 150/horizon (5 bands x 30). 10 natural families x ~65 (~13/family/horizon), NB1 fills remaining ~100 under its 150 cap. Exceptions: W2 light at H1 (8% usable), S5 light at H1 - their shares shift to H2+, NB1 covers. Same-subject and per-world caps.",
+  "tail_set": "300 = 60/horizon. Family caps: NB1 <=45 (15%), others <=40 with <=10/family/horizon. Long horizons drawn first from all-horizon mechanisms (W6, NW2, S5, gov_at, tech_disc, W2, W3). Mirrors: 250 from the same families. Bands + bits reporting.",
+  "continuous": "300 = 240 horizon-spread (~48/T from 8 count/value families, ~25-35 each; T90 documented light at ~30) + 60 timing block (P9 40, P7 15, P8 5; T210-anchored, horizon-exempt). Flag upgrade path is additive: margins/values/ranges join later without redrawing.",
+  "natcond": "~600 cells over T120-T210: 4 strata x ~150 (~37/stratum/horizon), fixed 61-90 reveal window, n_x>=100, event caps <=8/event, <=1 reveal/question, cells drawn from bank questions only; null stratum spread across all families for per-family selectivity. + 60 dramatic-tail stratum + 60 conditional-continuous pilot (NC5/S7/P1/P2). Controls: no-news 300, single-turn 300.",
+  "totals": "turn-1 inventory ~1,600 (bank 750 + tails 300 + mirrors 250 + continuous 300); turn-2 ~720; consistent with prior cost scenarios"
+ },
+ "natcond_arms_2026_09_01": {
+  "dramatic_tail": {
+   "size": 60,
+   "composition": "~40 dramatic + ~20 tail-null",
+   "selection": "Y from the tail slice (q_B<=0.05); X from the 61-90 event window with p_A(Y|X)>=0.15 and certified (|dA|>2SE); tail-null: same Y with a certified-null X",
+   "scoring": "turn-2 excess Brier vs p_B(Y|X) is per-item valid because the conditional q is mid-band; also bits; tail-nulls measure over-reaction to irrelevant news on rare events",
+   "example": "Y: 'Will Karen and Veletian have a formal peace in effect at turn 180?' (q~0.01); X: 'Karen and Veletian reached a cease-fire (turns 61-90)' -> p(Y|X) mid-band",
+   "status": "DROPPED - see natcond_qc_2026_09_01"
+  },
+  "conditional_continuous": {
+   "size": 60,
+   "families": [
+    "NC5",
+    "S7",
+    "P1",
+    "P2"
+   ],
+   "design": "turn 1: percentiles for a count question; turn 2: 61-90 event reveal, re-elicit percentiles; truth = conditional distribution over half-B rollouts where X holds (n_x>=100); score CRPS vs conditional distribution and excess over the perfect conditional forecaster",
+   "nesting": "label pairs as NESTED (the revealed event is itself part of the counted quantity - mechanical shift, a sanity check the model must at least match) vs NON-NESTED (momentum/spillover - the real test); include both, ~half each",
+   "example": "Y: 'How many cities will Songhai capture by turn 180?'; X nested: 'Songhai captured a city (61-90)'; X non-nested: 'Karen lost a city to Crimean Tatar (61-90)'"
+  },
+  "controls": {
+   "no_news": {
+    "size": 300,
+    "text": "turn 2: 'The game has continued. No new information about turns 60-90 is available. If you wish, revise your forecast...'",
+    "measures": "drift/noise floor - movement with zero information; natcond updates are judged against it; branches off the shared turn-1 (turn-2 cost only)"
+   },
+   "single_turn": {
+    "size": 300,
+    "text": "one prompt: report + revealed fact inserted before the criteria (fact sentence word-identical to the turn-2 opener)",
+    "measures": "anchoring on one's own turn-1 answer: two-turn p2 vs single-turn p isolates conversational structure; fresh full prompt cost"
+   },
+   "null_stratum_vs_no_news": "distinct: null stratum = real news with ~zero effect (selectivity); no-news = no news at all (stability)"
+  },
+  "family_counts": "binary 11 (gov_at, NW1, NW2, NB6+grids, NW5+race, tech_disc, S5, S6, W5, W2, NB1 filler); continuous 11 (P5, P3, P2, P1, NC5, S7, NC14, P6 spread; P9, P7, P8 timing)",
+  "tail_stability": {
+   "size": 60,
+   "definition": "rare Y x certified-null X; over-reaction control on rare events; supply 9,104"
+  }
+ },
+ "natcond_qc_2026_09_01": {
+  "verification": "480/480 raw double-resolutions agree across null/small/medium/large strata (20 cells x 6 half-B rollouts each; X membership AND Y outcome re-derived from raw json); conditional-continuous 3/3 cells fully consistent (X membership + counts match on 40/40 rollouts each)",
+  "identity_filter": "4,800 naive cells -> 112 nested/identity cells detected and excluded (X literally part of Y). Refinement for curation: nesting must consider the DIRECTED conquest relation ('victim lost a city' is partially nested with 'captor captures' when the captor is the Y civ) - exclude or label",
+  "shrinkage_by_stratum": {
+   "null": ".006->.006 (noise around zero)",
+   "small": ".030->.021",
+   "medium": ".065->.047",
+   "large": ".138->.131 (real effects barely shrink)",
+   "certified": "large 128/129, medium 95/262, small 42/733, null 13/2136 (0.6% false-positive rate, consistent with the 2-SE gate)"
+  },
+  "dramatic_tail_arm": "DROPPED on evidence: across 9,563 tail-question x reveal cells (X incl. cease-fires, peace, alliances, war onsets, conquests, losses, gov changes), the largest certified conditional probability reached from a q<=5% question is 0.116; only 1 cell reaches >=0.10, 0 reach >=0.15. Early (61-90) news does not vault rare events into the mid-band in this world - rare events are robustly rare. (Empirical finding worth stating in the paper.)",
+  "tail_stability_arm": "REPLACES the dramatic-tail arm: ~60 cells of rare Y (q<=5%) x certified-irrelevant news (|dA|<=1 SE); supply 9,104 cells. Measures over-reaction on rare events: truth stays <=5%, a model that jumps on irrelevant news is penalized in bits. Same caps as the null stratum.",
+  "conditional_continuous": "VIABLE: with diplomacy/war reveals as X, 130 effect-selected non-nested cells (|median shift_A|>=1) from a partial X set, e.g. 'Ottoman and Nepali formed an alliance (61-90)' -> Nepali's captures by 210: median 2 -> 8 (IQR 5.25, n_x=144). Pilot of 60 is easy; X selection must be effect-based on half A (as for binary strata) and nesting labeled with the directed relation."
+ },
+ "techs_semantics_2026_09_01": "QC finding: the recorded techs_known FIELD is missing for eliminated civs (rare: see rate table), producing one 29/30 P5 disagreement vs event-reconstruction. NORMATIVE for all techs families (P5, P6, P9, W5, NB1-techs): resolve via EVENT RECONSTRUCTION (turn-60 count + counted tech_discovered events) - defined for every civ at every turn, dead or alive (eliminated civs keep their count); criteria wording uses 'has discovered by turn T'. Production re-mine implements this; local P5 stats dropped the rare NaN rollouts (estimand negligibly affected).",
+ "qc_2026_09_01": {
+  "verification": "P1/P2/P3/P6/P7/P8/P9 30/30 each; P5 29/30 (field-vs-reconstruction, resolved by normative rule)",
+  "monotonicity": "0 violations across all by-T families (S5, S6, W2, W3, W4, P1-P3, P5, P6, NC5, S7)",
+  "allocation_feasibility": "ALL OK - every proposed bank/continuous cell <= measured supply",
+  "text_scan": "no anomalies (timing families' 'never' parenthetical is intentional and replaced by the canonical full-sentence form)",
+  "channels": "no core resolver touches a gated metric",
+  "criteria_templates": "15 added -> all 24 blessed families have templates"
+ },
+ "derisk_2026_09_01": {
+  "spend": "$2.18 total ($0.96 lost to an unsaved first attempt; $1.22 for the complete 540-response run)",
+  "pipeline": {
+   "parse_rate": "100% for 6/9 models; qwen3.5-flash 12% and deepseek-v4-flash 7% due to hidden-reasoning truncation at max_tokens=6000 (5.9k tokens of reasoning); gpt-5-nano 4 truncations",
+   "fix": "max_tokens >= 16000 for the full run (the v2 default) or a reasoning-effort cap; otherwise 2+ panel models lose most of their data"
+  },
+  "cost": {
+   "measured_input_tokens_per_prompt": 9417,
+   "note": "1.8x the 5.2k chars/4 estimate - report tokenizes heavier (tables/numbers)",
+   "panel_22_models_1_sample_list": "$1,057",
+   "panel_2_samples": "$2,113",
+   "with_prompt_caching_1_sample": "~$508",
+   "largest": [
+    "Fable 5 $370",
+    "Opus 5 $185",
+    "GPT-5.6 Sol $128",
+    "Sonnet 5 $74"
+   ]
+  },
+  "report_defect": {
+   "finding": "world reports render unobserved civs as dead: score -1, 0 cities, 0 population, treasury 0 (Hungarian in seed1000, Otomi in seed345) while techs shows real values; 10/50 sampled questions involved such a civ and models scored catastrophically on them (corr -0.24, excess Brier .262 vs .106 baseline)",
+   "verified": "report t60 stats otherwise match the corpus t60 state exactly for every civ in both worlds - reports describe the right game",
+   "fix": "ENGINEERING REQUEST: report renderer must mark unobserved civs/fields as 'not yet observed' (or render from global channels) instead of sentinel zeros; ties into the fork's observability/death-flag work"
+  },
+  "capability_signal": {
+   "spearman_eci_vs_excess_brier": "+0.23 (n=9 models, 1 sample, 42 mid-band items) - no signal at this n, as expected",
+   "key_observation": "pooled forecast-truth correlation ~0 for every model even on clean questions (excess Brier .153 vs always-0.5 .091), BUT within-family correlations are real for half the families (tech_disc +.45, NW1 +.41, S5 +.38, gov_at +.34, NB1 +.34): models discriminate within a family but carry large family-level base-rate biases (e.g. forecast war at 0.14 vs truth 0.62; tech thresholds 0.22 vs 0.61) - they don't know FreeCiv's pace/equilibria",
+   "implication": "the full run's headline may be 'base-rate ignorance dominates discrimination'; natcond (updating) is exactly the skill that survives base-rate bias - a point for the paper"
+  },
+  "report_content_gap": {
+   "finding": "the world report has NO diplomacy section (4 incidental mentions of war/peace in 19.6KB) and no per-turn stat history beyond a government timeline that is itself riddled with -1 sentinels for unobserved civs; sections are CIVILIZATIONS, CURRENT STATE (t60), GOVERNMENT TIMELINE, TERRITORY MAPS (missing)",
+   "consequence": "war/peace families (NW1, NW2, W6 - ~3 of 11 binary families) cannot be forecast from the report; models fall back to real-world priors (forecast war 0.14 vs truth 0.62). Pace families (NB1-techs, S6, P3) suffer the same: no trend data -> models underestimate FreeCiv's expansion/tech rates",
+   "fix": "ENGINEERING REQUEST (renderer): add a t60 DIPLOMACY table (pairwise states - a certain global channel) and a compact per-turn history of the certain channels (techs known, cities founded/captured events, wonders) for turns 1-60; render unobserved civs/fields as 'not yet observed'. Estimated +1-2k tokens; caching makes it nearly free"
+  }
+ },
+ "READ_FIRST_rev27": {
+  "summary": "Rev 27 records the decisions of the 2026-09-02..04 rerun. Where this block disagrees with older sections (half split, effect-size strata, timing families, tail-inside-bank), THIS BLOCK WINS. Machine-readable sets live in tmp/fbsim_v3_corpus/draw_v1/ (README.md there has the schema); channel decisions in tmp/fbsim_v3_run/CHANNEL_READINESS.md; run history in tmp/fbsim_v3_run/state/RUN_LOG.md.",
+  "corpus": {
+   "anchors": [
+    7001,
+    7003,
+    7005,
+    7008,
+    7010,
+    7011,
+    7014,
+    7022
+   ],
+   "replays_per_anchor": 1000,
+   "rng_seeds": "5001-6000 (+6001.. substitutes, see tmp/fbsim_v3_run/state/SUBSTITUTIONS.md)",
+   "truth_source": "server savegame every turn (all channels exact); events reconstructed from savegame tables (sg_tables.py); archive volume hkwejil48w /vol/fbsim_v3",
+   "observer": "recording client attached to player 0; two observer-death forks and anchor 7016 were replaced (outcome-conditioned, documented)"
+  },
+  "truth": "ALL 1,000 replays per anchor for every set (no half split; measured selection effect <= 0.0016 in q, 0.001 bits on tails)",
+  "sets": {
+   "binary_bank": "750 = 5 horizons x 5 bands over (0.05,0.95) x 30; family-balanced per band-cell; caps: <=6/world & <=6/family per cell, one item per (world,subject,family,horizon), <=150/family",
+   "tails": "300 = 60/horizon, 0<q<=0.05, family-balanced, <=10/family/horizon, <=45/family; scored in bits + excess Brier",
+   "mirrors": "50 = 10/horizon, 0.95<=q<1 (our own top-end probe)",
+   "continuous": "300 = 60/horizon: 8 count families x 6 (P1 P2 P3 P5 P6 NC5 NC14 S7) + value-at-T (score, population, cities, territory) x 3; filters IQR>0 and median>0; timing families REMOVED (censored outcome would need special scoring)",
+   "natcond": "400 = 4 horizons (T120-T210) x 100; structural blocks A irrelevant 9 / B related-weak 9 / C1 mechanical 15 / C2 persistence 42 / D inferential 25, template-balanced, strong reveals first; NO selection on effect size; admissibility n_x>=100, 0.02<p(Y|X)<0.98, <=2 distinct reveals/question, <=8 cells/event; questions from the bank first, topped up from value-series questions (natcond_extra_turn1.json, elicited at turn 1 too); controls: no-news 300, single-prompt 300, assigned independently",
+   "conditional_continuous_pilot": "not drawn (open)"
+  },
+  "families_changed": {
+   "S4_gov_change_count": "counts EVERY recorded transition incl. into/out of anarchy; question carries \"(Anarchy counts as a form of government, for this question.)\"",
+   "W1_wonder_race": "reworded \"Will X complete the W by turn T?\"; once-per-game stated in criteria only",
+   "NW5_wonder": "\"Will the W be completed by any civilization by turn T?\"",
+   "NW2_diplo": "\"...at any point between turns 61 and T?\"; pairs already in the target state at turn 60 are not asked",
+   "EX_government_at": "\"Will X's government be G at turn T?\"",
+   "S2_war_end": "DROPPED (identical to NW2 cease-fire-by on pairs at war at t60, 110/110 cells)",
+   "P7/P8/P9 timing": "DROPPED",
+   "NC1_value_at_T": "ADDED (score, population, cities, territory)",
+   "NEW_civil_war": "ADDED (breakaway civilization by T)",
+   "NW4_survival": "re-admitted (exact alive flag)",
+   "EX_comparative/NB1_value_threshold/NB4_drawdown": "re-admitted on population, cities, territory, score, treasury, military (exact series)",
+   "techs": "\"number of technologies\" = real technologies; the savegame A_NONE placeholder is excluded in the report and every resolver",
+   "eliminated_civs": "no value/comparison/state question is asked about a civ (pair; world for world-level state) that is eliminated by T in any replay; NW4 and civil-war families exempt",
+   "captures": "city changing owner by force; barbarian-held cities count; each event counts; civil-war transfers are not captures; losses to barbarians count"
+  },
+  "criteria": "rendered from family + params by tmp/fbsim_v3_run/criteria_v1.py; state only how we resolve (recorded quantity, window/turn semantics, ties, what counts); no game teaching",
+  "world_report": "regen_reports.py: savegame-truth series, exact turn-1..60 events incl. diplomatic_change, real tech counts, great-wonder counts, BORDERS table (tile adjacency + gap), barbarians header line; RANKINGS/Adjective/Nation-ID/Metadata removed; SCIENCE and WONDERS kept; no territory maps",
+  "elicitation": "tmp/fbsim_v3_run/elicit_v1.py: report + question + criteria (derisk BASE/CONT prompts verbatim, provider-default sampling); binary -> <probability>; continuous -> p5/p25/p50/p75/p95 whole numbers; natcond turn 2 in the same conversation with one uniform reveal sentence; controls no-news / single-prompt | 2026-09-07: arms t1 (1,524) / t2 (400) / nonews (276, one per question) / single (300) = 2,500 calls per model; reasoning effort low for reasoning-capable models (models_v1.csv, 24 models); parse failures re-asked once; cost_estimate.py: ~$1.5k central for all 24 models. See tmp/fbsim_v3_run/ELICITATION.md",
+  "scoring": "binary: Brier vs qAll and EXCESS Brier (p-q)^2 (headline); tails: also expected log loss in bits with excess = KL(q||p); continuous: expected CRPS of the five reported percentiles (pinball) vs the 1,000-value truth, EXCESS over the ensemble floor (headline); natcond: turn-2 excess Brier vs p(Y|X), with the no-news and single-prompt controls; no per-family special cases | implemented in tmp/fbsim_v3_run/score_v1.py (bootstrap CIs; natcond also reports stay/gain/no-news/single comparators and move-vs-target agreement); score_selftest.py 20/20",
+  "open": [
+   "scorer implementation (rules above, pending owner confirmation)",
+   "dry run (zero API calls)",
+   "paid derisk on 2-3 models",
+   "conditional-continuous pilot (60)",
+   "paper erratum decision for seeds 0-10",
+   "volume retention"
+  ]
+ }
+}

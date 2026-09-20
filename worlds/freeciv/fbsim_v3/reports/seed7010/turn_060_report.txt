@@ -1,0 +1,325 @@
+WORLD REPORT TXT v1
+Game ID: seed7010
+Snapshot turn: 60
+Turns analyzed: 1..60
+Barbarians: default settings (barbarian and pirate raids begin around turn 60; none exist at turn 60)
+Map size: 78x52
+
+CIVILIZATIONS
+ID | Name
+---+---------------
+0  | Central American
+1  | American
+2  | Spanish
+3  | Beninese
+4  | Fijian
+
+CURRENT STATE (TURN 60)
+ID | Name             | Score | Rank | Government | Treasury | Population | Techs | Wonders | Cities | Territory | Units | Military | Science | Trade | Food | Shields
+---+------------------+-------+------+------------+----------+------------+-------+---------+--------+-----------+-------+----------+---------+-------+------+--------
+0  | Central American | 45    | 2    | Despotism  | 350      | 23         | 10    | 0       | 9      | 122       | 21    | 17       | 60      | 23.0  | 46.0 | 41.0   
+1  | American         | 49    | 1    | Despotism  | 481      | 26         | 10    | 0       | 16     | 252       | 11    | 4        | 60      | 37.0  | 74.0 | 54.0   
+2  | Spanish          | 41    | 3    | Despotism  | 317      | 22         | 9     | 0       | 13     | 198       | 3     | 0        | 60      | 28.0  | 56.0 | 30.0   
+3  | Beninese         | 39    | 4    | Despotism  | 295      | 24         | 7     | 0       | 14     | 202       | 5     | 0        | 60      | 39.0  | 78.0 | 37.0   
+4  | Fijian           | 36    | 5    | Despotism  | 381      | 21         | 7     | 0       | 16     | 197       | 6     | 2        | 60      | 45.0  | 90.0 | 43.0   
+
+DIPLOMACY (TURN 60)
+State between each pair of civilizations. 'Never met' = no contact yet; an embassy gives full intelligence on the other side.
+Civ A            | Civ B    | State      | First contact turn | Embassy
+-----------------+----------+------------+--------------------+--------
+Central American | American | War        | 13                 | no     
+Central American | Spanish  | Cease-fire | 38                 | no     
+Central American | Beninese | Cease-fire | 30                 | no     
+Central American | Fijian   | War        | 59                 | no     
+American         | Spanish  | War        | 24                 | no     
+American         | Beninese | Cease-fire | 38                 | no     
+American         | Fijian   | Peace      | 15                 | no     
+Spanish          | Beninese | Peace      | 9                  | no     
+Spanish          | Fijian   | Peace      | 21                 | no     
+Beninese         | Fijian   | Cease-fire | 25                 | no     
+
+BORDERS (TURN 60)
+Whether each pair's territories are adjacent (share a border) at turn 60, and otherwise the gap in tiles between their nearest owned tiles.
+Civ A         | Civ B         | Touch| Gap
+--------------+---------------+-----+----
+Central American| American      | yes |   0
+Central American| Spanish       | no  |   2
+Central American| Beninese      | no  |  20
+Central American| Fijian        | yes |   0
+American      | Spanish       | no  |   3
+American      | Beninese      | no  |   7
+American      | Fijian        | no  |   2
+Spanish       | Beninese      | yes |   0
+Spanish       | Fijian        | yes |   0
+Beninese      | Fijian        | no  |  18
+
+GOVERNMENT TIMELINE (derived from recordings)
+Each entry is a change point (turn number -> new government); the first entry is the first observed government.
+0 Central American: 1 Despotism
+1 American: 1 Despotism
+2 Spanish: 1 Despotism
+3 Beninese: 1 Despotism
+4 Fijian: 1 Despotism
+
+TREASURY (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Central American: 50, 53, 59, 169, 183, 197, 216, 245, 272, 301, 322, 335, 350
+1 American: 50, 81, 91, 103, 119, 139, 159, 182, 258, 285, 367, 397, 481
+2 Spanish: 50, 52, 107, 115, 125, 137, 151, 161, 179, 206, 236, 279, 317
+3 Beninese: 50, 53, 58, 63, 71, 86, 101, 125, 154, 188, 223, 255, 295
+4 Fijian: 50, 53, 58, 68, 126, 132, 194, 203, 314, 330, 350, 365, 381
+
+POPULATION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Central American: 0, 2, 3, 3, 4, 4, 9, 9, 14, 17, 19, 21, 23
+1 American: 0, 2, 2, 4, 4, 5, 9, 8, 11, 17, 16, 20, 26
+2 Spanish: 0, 2, 3, 4, 5, 5, 6, 7, 10, 10, 16, 18, 22
+3 Beninese: 0, 2, 4, 4, 4, 6, 7, 10, 11, 14, 17, 19, 24
+4 Fijian: 0, 2, 2, 3, 4, 5, 6, 6, 10, 13, 15, 18, 21
+
+TECHS KNOWN (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Central American: 0, 0, 0, 0, 1, 2, 3, 4, 5, 7, 8, 8, 10
+1 American: 0, 0, 0, 1, 1, 3, 3, 4, 5, 6, 7, 7, 10
+2 Spanish: 0, 0, 0, 0, 2, 2, 3, 4, 4, 5, 6, 7, 9
+3 Beninese: 0, 0, 0, 0, 1, 2, 2, 3, 4, 5, 6, 6, 7
+4 Fijian: 0, 0, 0, 0, 1, 1, 2, 3, 4, 5, 6, 7, 7
+
+WONDERS DISCOVERED (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Central American: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+1 American: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+2 Spanish: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+3 Beninese: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+4 Fijian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+
+CITIES COUNT (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Central American: 0, 2, 2, 2, 3, 4, 6, 7, 9, 10, 9, 9, 9
+1 American: 0, 2, 2, 3, 4, 4, 6, 6, 9, 10, 11, 14, 16
+2 Spanish: 0, 2, 2, 2, 2, 4, 4, 4, 7, 7, 9, 11, 13
+3 Beninese: 0, 2, 2, 2, 2, 4, 4, 6, 7, 8, 10, 11, 14
+4 Fijian: 0, 2, 2, 2, 3, 3, 4, 5, 8, 9, 10, 12, 16
+
+TERRITORY SIZE (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Central American: 0, 43, 45, 45, 66, 75, 88, 98, 112, 117, 116, 117, 122
+1 American: 0, 54, 55, 66, 80, 87, 126, 135, 176, 188, 211, 233, 252
+2 Spanish: 0, 58, 58, 58, 61, 93, 94, 96, 132, 133, 163, 185, 198
+3 Beninese: 0, 51, 53, 54, 59, 95, 98, 125, 133, 151, 189, 190, 202
+4 Fijian: 0, 43, 54, 55, 69, 73, 94, 102, 130, 152, 160, 173, 197
+
+SCIENCE (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Central American: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+1 American: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+2 Spanish: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+3 Beninese: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+4 Fijian: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+
+TRADE PRODUCTION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Central American: 0.0, 2.0, 3.0, 3.0, 4.0, 4.0, 9.0, 9.0, 14.0, 17.0, 19.0, 21.0, 23.0
+1 American: 0.0, 5.0, 6.0, 10.0, 10.0, 12.0, 15.0, 17.0, 18.0, 24.0, 27.0, 32.0, 37.0
+2 Spanish: 0.0, 8.0, 9.0, 10.0, 11.0, 11.0, 10.0, 15.0, 14.0, 18.0, 22.0, 24.0, 28.0
+3 Beninese: 0.0, 11.0, 13.0, 13.0, 19.0, 15.0, 22.0, 22.0, 20.0, 26.0, 26.0, 31.0, 39.0
+4 Fijian: 0.0, 14.0, 14.0, 19.0, 20.0, 21.0, 26.0, 26.0, 26.0, 29.0, 35.0, 46.0, 45.0
+
+FOOD PRODUCTION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Central American: 0.0, 4.0, 6.0, 6.0, 8.0, 8.0, 18.0, 18.0, 28.0, 34.0, 38.0, 42.0, 46.0
+1 American: 0.0, 10.0, 12.0, 20.0, 20.0, 24.0, 30.0, 34.0, 36.0, 48.0, 54.0, 64.0, 74.0
+2 Spanish: 0.0, 16.0, 18.0, 20.0, 22.0, 22.0, 20.0, 30.0, 28.0, 36.0, 44.0, 48.0, 56.0
+3 Beninese: 0.0, 22.0, 26.0, 26.0, 38.0, 30.0, 44.0, 44.0, 40.0, 52.0, 52.0, 62.0, 78.0
+4 Fijian: 0.0, 28.0, 28.0, 38.0, 40.0, 42.0, 52.0, 52.0, 52.0, 58.0, 70.0, 92.0, 90.0
+
+SHIELD PRODUCTION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Central American: 0.0, 6.0, 6.0, 6.0, 10.0, 14.0, 20.0, 20.0, 26.0, 28.0, 35.0, 37.0, 41.0
+1 American: 0.0, 7.0, 8.0, 11.0, 10.0, 11.0, 27.0, 30.0, 27.0, 36.0, 35.0, 46.0, 54.0
+2 Spanish: 0.0, 3.0, 3.0, 5.0, 7.0, 12.0, 10.0, 11.0, 18.0, 17.0, 27.0, 29.0, 30.0
+3 Beninese: 0.0, 4.0, 6.0, 6.0, 6.0, 10.0, 12.0, 15.0, 19.0, 24.0, 28.0, 26.0, 37.0
+4 Fijian: 0.0, 5.0, 5.0, 5.0, 11.0, 11.0, 10.0, 18.0, 18.0, 25.0, 36.0, 35.0, 43.0
+
+UNITS COUNT (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Central American: 5, 3, 3, 4, 4, 5, 4, 5, 4, 6, 10, 16, 21
+1 American: 5, 3, 4, 6, 6, 7, 6, 9, 7, 7, 11, 12, 11
+2 Spanish: 5, 3, 3, 3, 3, 3, 2, 4, 2, 4, 3, 3, 3
+3 Beninese: 5, 3, 3, 3, 5, 3, 5, 4, 3, 4, 3, 4, 5
+4 Fijian: 5, 3, 3, 4, 4, 4, 5, 5, 4, 4, 5, 7, 6
+
+MILITARY UNITS COUNT (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Central American: 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 7, 13, 17
+1 American: 0, 0, 1, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4
+2 Spanish: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+3 Beninese: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+4 Fijian: 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 2, 2
+
+SCORES (derived from recordings)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Central American: 0, 2, 3, 3, 6, 8, 15, 17, 24, 32, 36, 39, 45
+1 American: 0, 2, 2, 6, 6, 11, 15, 16, 21, 29, 31, 35, 49
+2 Spanish: 0, 2, 3, 4, 9, 9, 12, 15, 18, 20, 28, 33, 41
+3 Beninese: 0, 2, 4, 4, 6, 10, 11, 16, 19, 24, 29, 32, 39
+4 Fijian: 0, 2, 2, 3, 6, 7, 10, 12, 18, 23, 28, 33, 36
+
+EVENT TYPES (exhaustive)
+city_founded, city_conquered, city_destroyed, government_change, diplomatic_change, tech_discovered, wonder_completed
+If a type does not appear in EVENTS, it did not occur in the analyzed turns.
+
+EVENTS (chronological)
+Turn | Type | Civ | Description
+--------------------------------------------------------------------------------
+2 | city_founded | American | American founded New York
+3 | city_founded | Central American | Central American founded Guatemala
+3 | city_founded | Beninese | Beninese founded Cotonou
+3 | city_founded | Fijian | Fijian founded Nasinu
+4 | city_founded | Central American | Central American founded San Salvador
+4 | city_founded | American | American founded Boston
+4 | city_founded | Spanish | Spanish founded Madrid
+4 | city_founded | Spanish | Spanish founded Valencia
+4 | city_founded | Beninese | Beninese founded Parakou
+4 | city_founded | Fijian | Fijian founded Suva
+10 | diplomatic_change | Spanish | Spanish and Beninese: Never met -> Cease-fire
+14 | city_founded | American | American founded Detroit
+14 | diplomatic_change | Central American | Central American and American: Never met -> Cease-fire
+15 | tech_discovered | American | American discovered Masonry
+16 | diplomatic_change | American | American and Fijian: Never met -> Cease-fire
+17 | city_founded | Central American | Central American founded Comayagua
+17 | tech_discovered | Spanish | Spanish discovered Masonry
+17 | tech_discovered | Spanish | Spanish discovered Alphabet
+17 | tech_discovered | Beninese | Beninese discovered Masonry
+19 | city_founded | Fijian | Fijian founded Nausori
+19 | tech_discovered | Fijian | Fijian discovered Masonry
+20 | city_founded | American | American founded Washington
+20 | tech_discovered | Central American | Central American discovered Masonry
+21 | city_founded | Central American | Central American founded Cartago
+21 | city_founded | Beninese | Beninese founded Porto-Novo
+22 | city_founded | Beninese | Beninese founded Abomey
+22 | diplomatic_change | Spanish | Spanish and Fijian: Never met -> War
+22 | tech_discovered | American | American discovered Horseback Riding
+23 | diplomatic_change | Spanish | Spanish and Fijian: War -> Cease-fire
+23 | tech_discovered | American | American discovered Alphabet
+24 | city_founded | Spanish | Spanish founded Pamplona
+24 | city_founded | Spanish | Spanish founded Sevilla
+24 | diplomatic_change | Spanish | Spanish and Beninese: Cease-fire -> Armistice
+25 | diplomatic_change | American | American and Spanish: Never met -> War
+25 | tech_discovered | Central American | Central American discovered Bronze Working
+25 | tech_discovered | Beninese | Beninese discovered Alphabet
+26 | diplomatic_change | Beninese | Beninese and Fijian: Never met -> War
+26 | tech_discovered | Spanish | Spanish discovered Pottery
+27 | city_founded | Central American | Central American founded Granada
+27 | city_founded | American | American founded Philadelphia
+27 | city_founded | American | American founded Chicago
+27 | diplomatic_change | Beninese | Beninese and Fijian: War -> Cease-fire
+28 | diplomatic_change | American | American and Spanish: War -> Cease-fire
+28 | tech_discovered | Fijian | Fijian discovered Pottery
+29 | city_founded | Central American | Central American founded Heredia
+30 | city_founded | Fijian | Fijian founded Lautoka
+30 | diplomatic_change | Central American | Central American and American: Cease-fire -> War
+30 | diplomatic_change | Central American | Central American and Beninese: Never met -> War
+30 | diplomatic_change | American | American and Fijian: Cease-fire -> Armistice
+30 | tech_discovered | Central American | Central American discovered Alphabet
+31 | tech_discovered | Spanish | Spanish discovered Bronze Working
+32 | city_founded | Beninese | Beninese founded Lokossa
+32 | city_founded | Fijian | Fijian founded Nadi
+32 | tech_discovered | American | American discovered Code of Laws
+33 | city_founded | Central American | Central American founded Quetzaltenango
+33 | diplomatic_change | Central American | Central American and Beninese: War -> Cease-fire
+34 | city_founded | Beninese | Beninese founded Ouidah
+34 | tech_discovered | Central American | Central American discovered Pottery
+34 | tech_discovered | Fijian | Fijian discovered Bronze Working
+35 | diplomatic_change | Spanish | Spanish and Fijian: Cease-fire -> Armistice
+35 | tech_discovered | Beninese | Beninese discovered Code of Laws
+36 | city_founded | American | American founded Baltimore
+37 | city_founded | American | American founded Denver
+37 | city_founded | American | American founded Atlanta
+37 | city_founded | Spanish | Spanish founded Barcelona
+37 | city_founded | Beninese | Beninese founded Natitingou
+37 | tech_discovered | American | American discovered Pottery
+38 | city_founded | Spanish | Spanish founded Bilbao
+38 | diplomatic_change | Central American | Central American and Spanish: Never met -> War
+39 | city_founded | Central American | Central American founded San José
+39 | city_founded | Fijian | Fijian founded Lami
+39 | city_founded | Fijian | Fijian founded Labasa
+39 | diplomatic_change | American | American and Beninese: Never met -> War
+39 | diplomatic_change | Spanish | Spanish and Beninese: Armistice -> Peace
+39 | tech_discovered | Central American | Central American discovered Code of Laws
+39 | tech_discovered | Beninese | Beninese discovered Ceremonial Burial
+39 | tech_discovered | Fijian | Fijian discovered Alphabet
+40 | city_founded | Central American | Central American founded León
+40 | city_founded | Spanish | Spanish founded Zaragoza
+40 | city_founded | Fijian | Fijian founded Ba
+40 | diplomatic_change | Central American | Central American and Spanish: War -> Cease-fire
+41 | tech_discovered | Spanish | Spanish discovered Code of Laws
+42 | city_founded | American | American founded Miami
+42 | diplomatic_change | American | American and Beninese: War -> Cease-fire
+42 | diplomatic_change | Beninese | Beninese and Fijian: Cease-fire -> War
+42 | tech_discovered | Central American | Central American discovered Horseback Riding
+42 | tech_discovered | Beninese | Beninese discovered Pottery
+43 | diplomatic_change | American | American and Spanish: Cease-fire -> War
+43 | diplomatic_change | Beninese | Beninese and Fijian: War -> Cease-fire
+43 | tech_discovered | American | American discovered Warrior Code
+44 | city_founded | Beninese | Beninese founded Savalou
+44 | city_founded | Fijian | Fijian founded Sigatoka
+44 | diplomatic_change | American | American and Spanish: War -> Cease-fire
+45 | city_founded | Central American | Central American founded Alajuela
+45 | diplomatic_change | American | American and Fijian: Armistice -> Peace
+45 | tech_discovered | Central American | Central American discovered Warrior Code
+45 | tech_discovered | Fijian | Fijian discovered Currency
+46 | city_destroyed | Central American | León (Central American) was destroyed
+47 | city_founded | Central American | Central American founded Managua
+47 | city_founded | Spanish | Spanish founded Oviedo
+47 | city_founded | Spanish | Spanish founded Valladolid
+47 | tech_discovered | Beninese | Beninese discovered Writing
+48 | city_founded | Beninese | Beninese founded Djougou
+48 | diplomatic_change | Central American | Central American and Beninese: Cease-fire -> War
+48 | tech_discovered | American | American discovered Writing
+49 | city_destroyed | Central American | Managua (Central American) was destroyed
+49 | city_founded | American | American founded St. Louis
+49 | city_founded | Beninese | Beninese founded Aplahoué
+49 | city_founded | Fijian | Fijian founded Rakiraki
+49 | diplomatic_change | Central American | Central American and Beninese: War -> Cease-fire
+49 | tech_discovered | Central American | Central American discovered Writing
+49 | tech_discovered | Fijian | Fijian discovered Code of Laws
+50 | diplomatic_change | Spanish | Spanish and Fijian: Armistice -> Peace
+50 | tech_discovered | Spanish | Spanish discovered Mathematics
+51 | city_founded | American | American founded Las Vegas
+51 | city_founded | American | American founded Seattle
+51 | city_founded | Spanish | Spanish founded Toledo
+51 | city_founded | Beninese | Beninese founded Kandi
+52 | city_founded | American | American founded New Orleans
+54 | city_founded | Spanish | Spanish founded Santander
+54 | city_founded | Fijian | Fijian founded Savusavu
+54 | city_founded | Fijian | Fijian founded Navua
+54 | tech_discovered | Spanish | Spanish discovered Writing
+54 | tech_discovered | Fijian | Fijian discovered Writing
+55 | diplomatic_change | Central American | Central American and Spanish: Cease-fire -> War
+56 | city_founded | American | American founded Buffalo
+56 | tech_discovered | Central American | Central American discovered Iron Working
+56 | tech_discovered | Beninese | Beninese discovered Literacy
+57 | city_founded | American | American founded Los Angeles
+57 | city_founded | Spanish | Spanish founded San Sebastián
+57 | city_founded | Beninese | Beninese founded Abomey-Calavi
+57 | city_founded | Beninese | Beninese founded Pobé
+57 | city_founded | Fijian | Fijian founded Vatukoula
+57 | city_founded | Fijian | Fijian founded Levuka
+57 | diplomatic_change | American | American and Beninese: Cease-fire -> War
+57 | tech_discovered | American | American discovered Bronze Working
+57 | tech_discovered | American | American discovered Literacy
+57 | tech_discovered | Spanish | Spanish discovered Currency
+58 | diplomatic_change | Central American | Central American and Spanish: War -> Cease-fire
+58 | diplomatic_change | American | American and Beninese: War -> Cease-fire
+58 | diplomatic_change | Beninese | Beninese and Fijian: Cease-fire -> War
+58 | tech_discovered | Central American | Central American discovered Ceremonial Burial
+59 | city_founded | Fijian | Fijian founded Tavua
+59 | diplomatic_change | Central American | Central American and Fijian: Never met -> War
+59 | diplomatic_change | American | American and Spanish: Cease-fire -> War
+59 | diplomatic_change | Beninese | Beninese and Fijian: War -> Cease-fire
+59 | tech_discovered | Spanish | Spanish discovered Warrior Code
+60 | city_founded | Spanish | Spanish founded Gerona
+60 | city_founded | Beninese | Beninese founded Bohicon
+60 | city_founded | Fijian | Fijian founded Deuba
+60 | tech_discovered | American | American discovered Currency

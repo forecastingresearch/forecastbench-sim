@@ -1,0 +1,65 @@
+{
+ "rule": "Fabio-style nCRPS_global: CRPS / one fixed constant per metric (Micropolis: population 20000, traffic 20, crime/pollution/land value 60, inferred from his CSV). FreeCiv analog: one constant per family (per metric inside NC1_value_at_T) = the median over the family's items of the truth p05-p95 range, rounded to one significant figure. Fixed at draw v1.8, 2026-09-08.",
+ "constants": {
+  "NC14_world_wonders": {
+   "n": 31,
+   "median_p05_p95_range": 4.0,
+   "constant": 4.0
+  },
+  "NC5_world_captures": {
+   "n": 32,
+   "median_p05_p95_range": 46.02499999999998,
+   "constant": 50.0
+  },
+  "P1_civ_conquests": {
+   "n": 31,
+   "median_p05_p95_range": 10.0,
+   "constant": 10.0
+  },
+  "P2_civ_losses": {
+   "n": 31,
+   "median_p05_p95_range": 12.0,
+   "constant": 10.0
+  },
+  "P3_civ_founds": {
+   "n": 31,
+   "median_p05_p95_range": 15.0,
+   "constant": 20.0
+  },
+  "P5_techs_at_T": {
+   "n": 31,
+   "median_p05_p95_range": 9.0,
+   "constant": 9.0
+  },
+  "P6_world_techs": {
+   "n": 20,
+   "median_p05_p95_range": 24.5,
+   "constant": 20.0
+  },
+  "S7_world_razings": {
+   "n": 33,
+   "median_p05_p95_range": 18.0,
+   "constant": 20.0
+  },
+  "NC1_value_at_T/cities_count": {
+   "n": 15,
+   "median_p05_p95_range": 30.0,
+   "constant": 30.0
+  },
+  "NC1_value_at_T/population": {
+   "n": 15,
+   "median_p05_p95_range": 68.05,
+   "constant": 70.0
+  },
+  "NC1_value_at_T/scores": {
+   "n": 15,
+   "median_p05_p95_range": 69.0,
+   "constant": 70.0
+  },
+  "NC1_value_at_T/territory_size": {
+   "n": 15,
+   "median_p05_p95_range": 274.2,
+   "constant": 300.0
+  }
+ }
+}

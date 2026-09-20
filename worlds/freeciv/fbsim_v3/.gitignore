@@ -1,0 +1,17 @@
+# never: credentials and fleet state
+.env
+*.env
+state/
+*.pem
+*_key
+*_key.pub
+# never: bulky derived material
+__pycache__/
+*.pyc
+*.pkl
+*.tar
+*.tar.zst
+results/*/elicit_*/logs/
+
+# the root .gitignore excludes reports/ (an old CivBench convention); the eight world reports belong here
+!reports/

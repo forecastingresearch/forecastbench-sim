@@ -1,0 +1,4493 @@
+[
+{
+"world": "seed7010",
+"family": "S5_civ_wonders",
+"T": 210,
+"text": "Will Central American complete at least 3 wonders by turn 210?",
+"subj": [
+"0"
+],
+"qAll": 0.002,
+"qA": 0.002,
+"qB": 0.002004008016032064,
+"k": 3,
+"id": "seed7010:b2643",
+"criteria": "Resolves YES if Central American completes at least 3 great wonders on any turn from 61 through 210 inclusive (an event on turn 210 itself counts). Exactly 3 counts. Small wonders such as a palace do not count."
+},
+{
+"world": "seed7011",
+"family": "NW5_wonder",
+"T": 210,
+"text": "Will the Oracle be completed by any civilization by turn 210?",
+"subj": [],
+"qAll": 0.001,
+"qA": 0.002,
+"qB": 0.0,
+"wonder": "Oracle",
+"id": "seed7011:b2579",
+"criteria": "Resolves YES if any civilization completes Oracle on any turn from 61 through 210 inclusive (an event on turn 210 itself counts). Resolves NO if it has not been completed by the end of turn 210."
+},
+{
+"world": "seed7003",
+"family": "NB1_value_threshold",
+"T": 210,
+"text": "Will Crimean Tatar's treasury be at least 2481 at turn 210?",
+"subj": [
+"0"
+],
+"qAll": 0.05,
+"qA": 0.05,
+"qB": 0.04809619238476954,
+"metric": "treasury",
+"x": 2481,
+"sel_q": 0.95,
+"id": "seed7003:b3011",
+"criteria": "Resolves YES if Crimean Tatar's treasury as recorded at the end of turn 210 is 2481 or more; exactly 2481 counts. This is the same quantity the world report calls Treasury."
+},
+{
+"world": "seed7005",
+"family": "W1_wonder_race",
+"T": 210,
+"text": "Will Otom\u00ed complete Michelangelo's Chapel by turn 210?",
+"subj": [
+"1"
+],
+"qAll": 0.024,
+"qA": 0.028,
+"qB": 0.02004008016032064,
+"wonder": "Michelangelo's Chapel",
+"id": "seed7005:b2736",
+"criteria": "Resolves YES if Otom\u00ed completes Michelangelo's Chapel on any turn from 61 through 210 inclusive (an event on turn 210 itself counts). A great wonder can be completed only once per game, so this resolves NO if another civilization completes it, or if it is not completed by the end of turn 210."
+},
+{
+"world": "seed7003",
+"family": "NB4_drawdown",
+"T": 210,
+"text": "Will Crimean Tatar's population drop below 90% of its turn-60 level at any point up to turn 210?",
+"subj": [
+"0"
+],
+"qAll": 0.037,
+"qA": 0.04,
+"qB": 0.03406813627254509,
+"metric": "population",
+"f": 0.9,
+"id": "seed7003:b3046",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 210 inclusive, Crimean Tatar's population is below 90% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 90% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7003",
+"family": "NW1_war_at",
+"T": 210,
+"text": "Will Rhenish and Corsican be at war at turn 210?",
+"subj": [
+"1",
+"4"
+],
+"qAll": 0.003,
+"qA": 0.004,
+"qB": 0.002004008016032064,
+"id": "seed7003:b2842",
+"criteria": "Resolves YES if the diplomatic state between Rhenish and Corsican as recorded at the end of turn 210 is War. Cease-fire, armistice, peace, alliance, or never having met all resolve NO."
+},
+{
+"world": "seed7003",
+"family": "NW2_diplo",
+"T": 210,
+"text": "Will Rhenish and Sammarinese be at formal Peace at any point between turns 61 and 210?",
+"subj": [
+"1",
+"3"
+],
+"qAll": 0.003,
+"qA": 0.002,
+"qB": 0.004008016032064128,
+"kind": "peace_by",
+"id": "seed7003:b2830",
+"criteria": "Resolves YES if the diplomatic state between Rhenish and Sammarinese is Peace at the end of any turn from 61 through 210 inclusive. Resolves NO if the state never occurs in that window (war, cease-fire, armistice and alliance do not count)."
+},
+{
+"world": "seed7008",
+"family": "EX_tech_discovered",
+"T": 210,
+"text": "Will Somali have discovered Radio by turn 210?",
+"subj": [
+"4"
+],
+"qAll": 0.026,
+"qA": 0.022,
+"qB": 0.03006012024048096,
+"tech": "Radio",
+"id": "seed7008:b3537",
+"criteria": "Resolves YES if Somali discovers Radio on any turn from 61 through 210 inclusive (an event on turn 210 itself counts). Resolves NO if it is not discovered by the end of turn 210."
+},
+{
+"world": "seed7003",
+"family": "W5_tech_lead",
+"T": 210,
+"text": "Will Sammarinese know strictly more technologies than every other civilization at turn 210?",
+"subj": [
+"3"
+],
+"qAll": 0.028,
+"qA": 0.036,
+"qB": 0.02004008016032064,
+"id": "seed7003:b3342",
+"criteria": "Resolves YES if, as recorded at the end of turn 210, Sammarinese knows strictly more technologies than each of the other four civilizations, counting every technology known including those known at turn 60. This is the count the world report calls Techs; FreeCiv's initial 'None' entry is not a technology and is not counted. Any tie for the most resolves NO."
+},
+{
+"world": "seed7008",
+"family": "W6_peace_at",
+"T": 210,
+"text": "Will Latvian and Spanish have a formal peace in effect at turn 210?",
+"subj": [
+"0",
+"2"
+],
+"qAll": 0.002,
+"qA": 0.002,
+"qB": 0.002004008016032064,
+"id": "seed7008:b2847",
+"criteria": "Resolves YES if the diplomatic state between Latvian and Spanish as recorded at the end of turn 210 is Peace. War, cease-fire, armistice, alliance, or never having met all resolve NO."
+},
+{
+"world": "seed7010",
+"family": "EX_government_at",
+"T": 210,
+"text": "Will Central American's government be Communism at turn 210?",
+"subj": [
+"0"
+],
+"qAll": 0.042,
+"qA": 0.042,
+"qB": 0.04208416833667335,
+"gov": "Communism",
+"id": "seed7010:b2538",
+"criteria": "Resolves YES if Central American's government as recorded at the end of turn 210 is Communism. A change of government completed on turn 210 counts. Anarchy counts as a form of government. Resolves NO for any other government."
+},
+{
+"world": "seed7022",
+"family": "NW4_survival",
+"T": 210,
+"text": "Will Western Roman be eliminated (cease to exist as a civilization) by turn 210?",
+"subj": [
+"2"
+],
+"qAll": 0.003,
+"qA": 0.002,
+"qB": 0.004008016032064128,
+"id": "seed7022:b1608",
+"criteria": "Resolves YES if Western Roman is eliminated on any turn from 61 through 210 inclusive (an event on turn 210 itself counts), meaning it ceases to exist as a civilization. Losing cities, losing the capital, or a civil war split without elimination resolve NO."
+},
+{
+"world": "seed7003",
+"family": "W2_directed_conquest",
+"T": 210,
+"text": "Will Ghana capture at least one city from Corsican by turn 210?",
+"subj": [
+"2",
+"4"
+],
+"qAll": 0.002,
+"qA": 0.004,
+"qB": 0.0,
+"id": "seed7003:b2868",
+"criteria": "Resolves YES if Ghana captures at least one city whose owner at the moment of capture is Corsican, on any turn from 61 through 210 inclusive (an event on turn 210 itself counts). Recaptures count. Resolves NO otherwise."
+},
+{
+"world": "seed7005",
+"family": "NEW_civil_war",
+"T": 210,
+"text": "Will Otom\u00ed suffer a civil war (a breakaway civilization splitting off) by turn 210?",
+"subj": [
+"1"
+],
+"qAll": 0.049,
+"qA": 0.044,
+"qB": 0.05410821643286573,
+"id": "seed7005:b2951",
+"criteria": "Resolves YES if Otom\u00ed splits in a civil war on any turn from 61 through 210 inclusive (an event on turn 210 itself counts), meaning a new civilization is created out of some of Otom\u00ed's cities. Anarchy, disorder, or the loss of cities to other players without such a split resolve NO."
+},
+{
+"world": "seed7010",
+"family": "S5_civ_wonders",
+"T": 210,
+"text": "Will Fijian complete at least 3 wonders by turn 210?",
+"subj": [
+"4"
+],
+"qAll": 0.007,
+"qA": 0.01,
+"qB": 0.004008016032064128,
+"k": 3,
+"id": "seed7010:b2981",
+"criteria": "Resolves YES if Fijian completes at least 3 great wonders on any turn from 61 through 210 inclusive (an event on turn 210 itself counts). Exactly 3 counts. Small wonders such as a palace do not count."
+},
+{
+"world": "seed7022",
+"family": "NW5_wonder",
+"T": 210,
+"text": "Will Isaac Newton's College be completed by any civilization by turn 210?",
+"subj": [],
+"qAll": 0.005,
+"qA": 0.006,
+"qB": 0.004008016032064128,
+"wonder": "Isaac Newton's College",
+"id": "seed7022:b1493",
+"criteria": "Resolves YES if any civilization completes Isaac Newton's College on any turn from 61 through 210 inclusive (an event on turn 210 itself counts). Resolves NO if it has not been completed by the end of turn 210."
+},
+{
+"world": "seed7001",
+"family": "NB1_value_threshold",
+"T": 210,
+"text": "Will Estonian's treasury be at least 2218 at turn 210?",
+"subj": [
+"2"
+],
+"qAll": 0.05,
+"qA": 0.048,
+"qB": 0.052104208416833664,
+"metric": "treasury",
+"x": 2218,
+"sel_q": 0.95,
+"id": "seed7001:b2233",
+"criteria": "Resolves YES if Estonian's treasury as recorded at the end of turn 210 is 2218 or more; exactly 2218 counts. This is the same quantity the world report calls Treasury."
+},
+{
+"world": "seed7008",
+"family": "W1_wonder_race",
+"T": 210,
+"text": "Will Somali complete the Pyramids by turn 210?",
+"subj": [
+"4"
+],
+"qAll": 0.02,
+"qA": 0.02,
+"qB": 0.02004008016032064,
+"wonder": "Pyramids",
+"id": "seed7008:b3010",
+"criteria": "Resolves YES if Somali completes Pyramids on any turn from 61 through 210 inclusive (an event on turn 210 itself counts). A great wonder can be completed only once per game, so this resolves NO if another civilization completes it, or if it is not completed by the end of turn 210."
+},
+{
+"world": "seed7005",
+"family": "NB4_drawdown",
+"T": 210,
+"text": "Will Ostrogothic's population drop below 90% of its turn-60 level at any point up to turn 210?",
+"subj": [
+"4"
+],
+"qAll": 0.017,
+"qA": 0.02,
+"qB": 0.014028056112224449,
+"metric": "population",
+"f": 0.9,
+"id": "seed7005:b3152",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 210 inclusive, Ostrogothic's population is below 90% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 90% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7003",
+"family": "NW1_war_at",
+"T": 210,
+"text": "Will Ghana and Corsican be at war at turn 210?",
+"subj": [
+"2",
+"4"
+],
+"qAll": 0.002,
+"qA": 0.004,
+"qB": 0.0,
+"id": "seed7003:b2866",
+"criteria": "Resolves YES if the diplomatic state between Ghana and Corsican as recorded at the end of turn 210 is War. Cease-fire, armistice, peace, alliance, or never having met all resolve NO."
+},
+{
+"world": "seed7003",
+"family": "NW2_diplo",
+"T": 210,
+"text": "Will Ghana and Sammarinese form an Alliance at any point between turns 61 and 210?",
+"subj": [
+"2",
+"3"
+],
+"qAll": 0.001,
+"qA": 0.002,
+"qB": 0.0,
+"kind": "alliance_by",
+"id": "seed7003:b2854",
+"criteria": "Resolves YES if the diplomatic state between Ghana and Sammarinese is Alliance at the end of any turn from 61 through 210 inclusive. Resolves NO if the state never occurs in that window (every other state do not count)."
+},
+{
+"world": "seed7003",
+"family": "EX_tech_discovered",
+"T": 210,
+"text": "Will Ghana have discovered Genetic Engineering by turn 210?",
+"subj": [
+"2"
+],
+"qAll": 0.036,
+"qA": 0.036,
+"qB": 0.036072144288577156,
+"tech": "Genetic Engineering",
+"id": "seed7003:b3195",
+"criteria": "Resolves YES if Ghana discovers Genetic Engineering on any turn from 61 through 210 inclusive (an event on turn 210 itself counts). Resolves NO if it is not discovered by the end of turn 210."
+},
+{
+"world": "seed7008",
+"family": "W5_tech_lead",
+"T": 210,
+"text": "Will Latvian know strictly more technologies than every other civilization at turn 210?",
+"subj": [
+"0"
+],
+"qAll": 0.042,
+"qA": 0.044,
+"qB": 0.04008016032064128,
+"id": "seed7008:b3063",
+"criteria": "Resolves YES if, as recorded at the end of turn 210, Latvian knows strictly more technologies than each of the other four civilizations, counting every technology known including those known at turn 60. This is the count the world report calls Techs; FreeCiv's initial 'None' entry is not a technology and is not counted. Any tie for the most resolves NO."
+},
+{
+"world": "seed7014",
+"family": "W6_peace_at",
+"T": 210,
+"text": "Will Bissau-Guinean and Chinese have a formal peace in effect at turn 210?",
+"subj": [
+"0",
+"4"
+],
+"qAll": 0.003,
+"qA": 0.004,
+"qB": 0.002004008016032064,
+"id": "seed7014:b2426",
+"criteria": "Resolves YES if the diplomatic state between Bissau-Guinean and Chinese as recorded at the end of turn 210 is Peace. War, cease-fire, armistice, alliance, or never having met all resolve NO."
+},
+{
+"world": "seed7003",
+"family": "EX_government_at",
+"T": 210,
+"text": "Will Rhenish's government be Monarchy at turn 210?",
+"subj": [
+"1"
+],
+"qAll": 0.011,
+"qA": 0.014,
+"qB": 0.008016032064128256,
+"gov": "Monarchy",
+"id": "seed7003:b3062",
+"criteria": "Resolves YES if Rhenish's government as recorded at the end of turn 210 is Monarchy. A change of government completed on turn 210 counts. Anarchy counts as a form of government. Resolves NO for any other government."
+},
+{
+"world": "seed7022",
+"family": "NW4_survival",
+"T": 210,
+"text": "Will Abyssinian be eliminated (cease to exist as a civilization) by turn 210?",
+"subj": [
+"4"
+],
+"qAll": 0.002,
+"qA": 0.002,
+"qB": 0.002004008016032064,
+"id": "seed7022:b1612",
+"criteria": "Resolves YES if Abyssinian is eliminated on any turn from 61 through 210 inclusive (an event on turn 210 itself counts), meaning it ceases to exist as a civilization. Losing cities, losing the capital, or a civil war split without elimination resolve NO."
+},
+{
+"world": "seed7003",
+"family": "W2_directed_conquest",
+"T": 210,
+"text": "Will Sammarinese capture at least one city from Crimean Tatar by turn 210?",
+"subj": [
+"3",
+"0"
+],
+"qAll": 0.01,
+"qA": 0.008,
+"qB": 0.012024048096192385,
+"id": "seed7003:b2797",
+"criteria": "Resolves YES if Sammarinese captures at least one city whose owner at the moment of capture is Crimean Tatar, on any turn from 61 through 210 inclusive (an event on turn 210 itself counts). Recaptures count. Resolves NO otherwise."
+},
+{
+"world": "seed7005",
+"family": "NEW_civil_war",
+"T": 210,
+"text": "Will Greek suffer a civil war (a breakaway civilization splitting off) by turn 210?",
+"subj": [
+"2"
+],
+"qAll": 0.032,
+"qA": 0.03,
+"qB": 0.03406813627254509,
+"id": "seed7005:b2953",
+"criteria": "Resolves YES if Greek splits in a civil war on any turn from 61 through 210 inclusive (an event on turn 210 itself counts), meaning a new civilization is created out of some of Greek's cities. Anarchy, disorder, or the loss of cities to other players without such a split resolve NO."
+},
+{
+"world": "seed7003",
+"family": "S5_civ_wonders",
+"T": 210,
+"text": "Will Rhenish complete at least 3 wonders by turn 210?",
+"subj": [
+"1"
+],
+"qAll": 0.005,
+"qA": 0.006,
+"qB": 0.004008016032064128,
+"k": 3,
+"id": "seed7003:b3166",
+"criteria": "Resolves YES if Rhenish completes at least 3 great wonders on any turn from 61 through 210 inclusive (an event on turn 210 itself counts). Exactly 3 counts. Small wonders such as a palace do not count."
+},
+{
+"world": "seed7008",
+"family": "NW5_wonder",
+"T": 210,
+"text": "Will King Richard's Crusade be completed by any civilization by turn 210?",
+"subj": [],
+"qAll": 0.021,
+"qA": 0.018,
+"qB": 0.02404809619238477,
+"wonder": "King Richard's Crusade",
+"id": "seed7008:b2995",
+"criteria": "Resolves YES if any civilization completes King Richard's Crusade on any turn from 61 through 210 inclusive (an event on turn 210 itself counts). Resolves NO if it has not been completed by the end of turn 210."
+},
+{
+"world": "seed7014",
+"family": "NB1_value_threshold",
+"T": 210,
+"text": "Will Bissau-Guinean's treasury be at least 2380 at turn 210?",
+"subj": [
+"0"
+],
+"qAll": 0.05,
+"qA": 0.064,
+"qB": 0.036072144288577156,
+"metric": "treasury",
+"x": 2380,
+"sel_q": 0.95,
+"id": "seed7014:b2587",
+"criteria": "Resolves YES if Bissau-Guinean's treasury as recorded at the end of turn 210 is 2380 or more; exactly 2380 counts. This is the same quantity the world report calls Treasury."
+},
+{
+"world": "seed7011",
+"family": "W1_wonder_race",
+"T": 210,
+"text": "Will Ohlone complete Leonardo's Workshop by turn 210?",
+"subj": [
+"0"
+],
+"qAll": 0.009,
+"qA": 0.016,
+"qB": 0.002004008016032064,
+"wonder": "Leonardo's Workshop",
+"id": "seed7011:b2573",
+"criteria": "Resolves YES if Ohlone completes Leonardo's Workshop on any turn from 61 through 210 inclusive (an event on turn 210 itself counts). A great wonder can be completed only once per game, so this resolves NO if another civilization completes it, or if it is not completed by the end of turn 210."
+},
+{
+"world": "seed7014",
+"family": "NB4_drawdown",
+"T": 210,
+"text": "Will Chinese's number of cities drop below 70% of its turn-60 level at any point up to turn 210?",
+"subj": [
+"4"
+],
+"qAll": 0.042,
+"qA": 0.052,
+"qB": 0.03206412825651302,
+"metric": "cities_count",
+"f": 0.7,
+"id": "seed7014:b2955",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 210 inclusive, Chinese's number of cities is below 70% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 70% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7008",
+"family": "NW2_diplo",
+"T": 210,
+"text": "Will Spanish and Peruvian form an Alliance at any point between turns 61 and 210?",
+"subj": [
+"2",
+"3"
+],
+"qAll": 0.037,
+"qA": 0.03,
+"qB": 0.04408817635270541,
+"kind": "alliance_by",
+"id": "seed7008:b2928",
+"criteria": "Resolves YES if the diplomatic state between Spanish and Peruvian is Alliance at the end of any turn from 61 through 210 inclusive. Resolves NO if the state never occurs in that window (every other state do not count)."
+},
+{
+"world": "seed7011",
+"family": "EX_tech_discovered",
+"T": 210,
+"text": "Will Libyan have discovered Combustion by turn 210?",
+"subj": [
+"1"
+],
+"qAll": 0.029,
+"qA": 0.024,
+"qB": 0.03406813627254509,
+"tech": "Combustion",
+"id": "seed7011:b2718",
+"criteria": "Resolves YES if Libyan discovers Combustion on any turn from 61 through 210 inclusive (an event on turn 210 itself counts). Resolves NO if it is not discovered by the end of turn 210."
+},
+{
+"world": "seed7010",
+"family": "W6_peace_at",
+"T": 210,
+"text": "Will Spanish and Fijian have a formal peace in effect at turn 210?",
+"subj": [
+"2",
+"4"
+],
+"qAll": 0.004,
+"qA": 0.002,
+"qB": 0.006012024048096192,
+"id": "seed7010:b2488",
+"criteria": "Resolves YES if the diplomatic state between Spanish and Fijian as recorded at the end of turn 210 is Peace. War, cease-fire, armistice, alliance, or never having met all resolve NO."
+},
+{
+"world": "seed7011",
+"family": "EX_government_at",
+"T": 210,
+"text": "Will Ohlone's government be Monarchy at turn 210?",
+"subj": [
+"0"
+],
+"qAll": 0.013,
+"qA": 0.018,
+"qB": 0.008016032064128256,
+"gov": "Monarchy",
+"id": "seed7011:b2588",
+"criteria": "Resolves YES if Ohlone's government as recorded at the end of turn 210 is Monarchy. A change of government completed on turn 210 counts. Anarchy counts as a form of government. Resolves NO for any other government."
+},
+{
+"world": "seed7001",
+"family": "NW4_survival",
+"T": 210,
+"text": "Will Guinean be eliminated (cease to exist as a civilization) by turn 210?",
+"subj": [
+"3"
+],
+"qAll": 0.004,
+"qA": 0.004,
+"qB": 0.004008016032064128,
+"id": "seed7001:b2280",
+"criteria": "Resolves YES if Guinean is eliminated on any turn from 61 through 210 inclusive (an event on turn 210 itself counts), meaning it ceases to exist as a civilization. Losing cities, losing the capital, or a civil war split without elimination resolve NO."
+},
+{
+"world": "seed7008",
+"family": "W2_directed_conquest",
+"T": 210,
+"text": "Will Spanish capture at least one city from Latvian by turn 210?",
+"subj": [
+"2",
+"0"
+],
+"qAll": 0.01,
+"qA": 0.01,
+"qB": 0.01002004008016032,
+"id": "seed7008:b2849",
+"criteria": "Resolves YES if Spanish captures at least one city whose owner at the moment of capture is Latvian, on any turn from 61 through 210 inclusive (an event on turn 210 itself counts). Recaptures count. Resolves NO otherwise."
+},
+{
+"world": "seed7010",
+"family": "NEW_civil_war",
+"T": 210,
+"text": "Will Fijian suffer a civil war (a breakaway civilization splitting off) by turn 210?",
+"subj": [
+"4"
+],
+"qAll": 0.05,
+"qA": 0.052,
+"qB": 0.04809619238476954,
+"id": "seed7010:b2991",
+"criteria": "Resolves YES if Fijian splits in a civil war on any turn from 61 through 210 inclusive (an event on turn 210 itself counts), meaning a new civilization is created out of some of Fijian's cities. Anarchy, disorder, or the loss of cities to other players without such a split resolve NO."
+},
+{
+"world": "seed7022",
+"family": "S5_civ_wonders",
+"T": 210,
+"text": "Will Boian complete at least 2 wonders by turn 210?",
+"subj": [
+"0"
+],
+"qAll": 0.029,
+"qA": 0.018,
+"qB": 0.04008016032064128,
+"k": 2,
+"id": "seed7022:b1599",
+"criteria": "Resolves YES if Boian completes at least 2 great wonders on any turn from 61 through 210 inclusive (an event on turn 210 itself counts). Exactly 2 counts. Small wonders such as a palace do not count."
+},
+{
+"world": "seed7014",
+"family": "NW5_wonder",
+"T": 210,
+"text": "Will Sun Tzu's War Academy be completed by any civilization by turn 210?",
+"subj": [],
+"qAll": 0.029,
+"qA": 0.024,
+"qB": 0.03406813627254509,
+"wonder": "Sun Tzu's War Academy",
+"id": "seed7014:b2511",
+"criteria": "Resolves YES if any civilization completes Sun Tzu's War Academy on any turn from 61 through 210 inclusive (an event on turn 210 itself counts). Resolves NO if it has not been completed by the end of turn 210."
+},
+{
+"world": "seed7011",
+"family": "NB1_value_threshold",
+"T": 210,
+"text": "Will Ohlone's treasury be at least 2460 at turn 210?",
+"subj": [
+"0"
+],
+"qAll": 0.05,
+"qA": 0.046,
+"qB": 0.05410821643286573,
+"metric": "treasury",
+"x": 2460,
+"sel_q": 0.95,
+"id": "seed7011:b2658",
+"criteria": "Resolves YES if Ohlone's treasury as recorded at the end of turn 210 is 2460 or more; exactly 2460 counts. This is the same quantity the world report calls Treasury."
+},
+{
+"world": "seed7008",
+"family": "W1_wonder_race",
+"T": 210,
+"text": "Will Spanish complete King Richard's Crusade by turn 210?",
+"subj": [
+"2"
+],
+"qAll": 0.002,
+"qA": 0.002,
+"qB": 0.002004008016032064,
+"wonder": "King Richard's Crusade",
+"id": "seed7008:b2997",
+"criteria": "Resolves YES if Spanish completes King Richard's Crusade on any turn from 61 through 210 inclusive (an event on turn 210 itself counts). A great wonder can be completed only once per game, so this resolves NO if another civilization completes it, or if it is not completed by the end of turn 210."
+},
+{
+"world": "seed7011",
+"family": "NB4_drawdown",
+"T": 210,
+"text": "Will Ohlone's population drop below 75% of its turn-60 level at any point up to turn 210?",
+"subj": [
+"0"
+],
+"qAll": 0.048,
+"qA": 0.06,
+"qB": 0.036072144288577156,
+"metric": "population",
+"f": 0.75,
+"id": "seed7011:b2694",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 210 inclusive, Ohlone's population is below 75% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 75% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7008",
+"family": "NW2_diplo",
+"T": 210,
+"text": "Will Belgian and Peruvian form an Alliance at any point between turns 61 and 210?",
+"subj": [
+"1",
+"3"
+],
+"qAll": 0.005,
+"qA": 0.008,
+"qB": 0.002004008016032064,
+"kind": "alliance_by",
+"id": "seed7008:b2902",
+"criteria": "Resolves YES if the diplomatic state between Belgian and Peruvian is Alliance at the end of any turn from 61 through 210 inclusive. Resolves NO if the state never occurs in that window (every other state do not count)."
+},
+{
+"world": "seed7001",
+"family": "EX_tech_discovered",
+"T": 210,
+"text": "Will Estonian have discovered Automobile by turn 210?",
+"subj": [
+"2"
+],
+"qAll": 0.03,
+"qA": 0.026,
+"qB": 0.03406813627254509,
+"tech": "Automobile",
+"id": "seed7001:b2177",
+"criteria": "Resolves YES if Estonian discovers Automobile on any turn from 61 through 210 inclusive (an event on turn 210 itself counts). Resolves NO if it is not discovered by the end of turn 210."
+},
+{
+"world": "seed7008",
+"family": "W6_peace_at",
+"T": 210,
+"text": "Will Belgian and Spanish have a formal peace in effect at turn 210?",
+"subj": [
+"1",
+"2"
+],
+"qAll": 0.004,
+"qA": 0.006,
+"qB": 0.002004008016032064,
+"id": "seed7008:b2886",
+"criteria": "Resolves YES if the diplomatic state between Belgian and Spanish as recorded at the end of turn 210 is Peace. War, cease-fire, armistice, alliance, or never having met all resolve NO."
+},
+{
+"world": "seed7014",
+"family": "EX_government_at",
+"T": 210,
+"text": "Will Chinese's government be Despotism at turn 210?",
+"subj": [
+"4"
+],
+"qAll": 0.021,
+"qA": 0.024,
+"qB": 0.018036072144288578,
+"gov": "Despotism",
+"id": "seed7014:b2860",
+"criteria": "Resolves YES if Chinese's government as recorded at the end of turn 210 is Despotism. A change of government completed on turn 210 counts. Anarchy counts as a form of government. Resolves NO for any other government."
+},
+{
+"world": "seed7022",
+"family": "NW4_survival",
+"T": 210,
+"text": "Will Hunnic be eliminated (cease to exist as a civilization) by turn 210?",
+"subj": [
+"3"
+],
+"qAll": 0.003,
+"qA": 0.002,
+"qB": 0.004008016032064128,
+"id": "seed7022:b1610",
+"criteria": "Resolves YES if Hunnic is eliminated on any turn from 61 through 210 inclusive (an event on turn 210 itself counts), meaning it ceases to exist as a civilization. Losing cities, losing the capital, or a civil war split without elimination resolve NO."
+},
+{
+"world": "seed7008",
+"family": "W2_directed_conquest",
+"T": 210,
+"text": "Will Spanish capture at least one city from Somali by turn 210?",
+"subj": [
+"2",
+"4"
+],
+"qAll": 0.019,
+"qA": 0.016,
+"qB": 0.022044088176352707,
+"id": "seed7008:b2944",
+"criteria": "Resolves YES if Spanish captures at least one city whose owner at the moment of capture is Somali, on any turn from 61 through 210 inclusive (an event on turn 210 itself counts). Recaptures count. Resolves NO otherwise."
+},
+{
+"world": "seed7005",
+"family": "NEW_civil_war",
+"T": 210,
+"text": "Will Saka suffer a civil war (a breakaway civilization splitting off) by turn 210?",
+"subj": [
+"0"
+],
+"qAll": 0.019,
+"qA": 0.012,
+"qB": 0.026052104208416832,
+"id": "seed7005:b2849",
+"criteria": "Resolves YES if Saka splits in a civil war on any turn from 61 through 210 inclusive (an event on turn 210 itself counts), meaning a new civilization is created out of some of Saka's cities. Anarchy, disorder, or the loss of cities to other players without such a split resolve NO."
+},
+{
+"world": "seed7008",
+"family": "S5_civ_wonders",
+"T": 210,
+"text": "Will Peruvian complete at least 3 wonders by turn 210?",
+"subj": [
+"3"
+],
+"qAll": 0.044,
+"qA": 0.032,
+"qB": 0.056112224448897796,
+"k": 3,
+"id": "seed7008:b3484",
+"criteria": "Resolves YES if Peruvian completes at least 3 great wonders on any turn from 61 through 210 inclusive (an event on turn 210 itself counts). Exactly 3 counts. Small wonders such as a palace do not count."
+},
+{
+"world": "seed7005",
+"family": "NW5_wonder",
+"T": 210,
+"text": "Will J.S. Bach's Cathedral be completed by any civilization by turn 210?",
+"subj": [],
+"qAll": 0.001,
+"qA": 0.002,
+"qB": 0.0,
+"wonder": "J.S. Bach's Cathedral",
+"id": "seed7005:b2729",
+"criteria": "Resolves YES if any civilization completes J.S. Bach's Cathedral on any turn from 61 through 210 inclusive (an event on turn 210 itself counts). Resolves NO if it has not been completed by the end of turn 210."
+},
+{
+"world": "seed7010",
+"family": "NB1_value_threshold",
+"T": 210,
+"text": "Will American's treasury be at least 2047 at turn 210?",
+"subj": [
+"1"
+],
+"qAll": 0.05,
+"qA": 0.04,
+"qB": 0.05811623246492986,
+"metric": "treasury",
+"x": 2047,
+"sel_q": 0.95,
+"id": "seed7010:b2715",
+"criteria": "Resolves YES if American's treasury as recorded at the end of turn 210 is 2047 or more; exactly 2047 counts. This is the same quantity the world report calls Treasury."
+},
+{
+"world": "seed7014",
+"family": "W1_wonder_race",
+"T": 210,
+"text": "Will Bissau-Guinean complete King Richard's Crusade by turn 210?",
+"subj": [
+"0"
+],
+"qAll": 0.002,
+"qA": 0.002,
+"qB": 0.002004008016032064,
+"wonder": "King Richard's Crusade",
+"id": "seed7014:b2500",
+"criteria": "Resolves YES if Bissau-Guinean completes King Richard's Crusade on any turn from 61 through 210 inclusive (an event on turn 210 itself counts). A great wonder can be completed only once per game, so this resolves NO if another civilization completes it, or if it is not completed by the end of turn 210."
+},
+{
+"world": "seed7010",
+"family": "NB4_drawdown",
+"T": 210,
+"text": "Will Fijian's population drop below 75% of its turn-60 level at any point up to turn 210?",
+"subj": [
+"4"
+],
+"qAll": 0.005,
+"qA": 0.002,
+"qB": 0.008016032064128256,
+"metric": "population",
+"f": 0.75,
+"id": "seed7010:b2978",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 210 inclusive, Fijian's population is below 75% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 75% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7014",
+"family": "NW2_diplo",
+"T": 210,
+"text": "Will Bissau-Guinean and Trinidadian and Tobagonian be at formal Peace at any point between turns 61 and 210?",
+"subj": [
+"0",
+"1"
+],
+"qAll": 0.007,
+"qA": 0.006,
+"qB": 0.008016032064128256,
+"kind": "peace_by",
+"id": "seed7014:b2399",
+"criteria": "Resolves YES if the diplomatic state between Bissau-Guinean and Trinidadian and Tobagonian is Peace at the end of any turn from 61 through 210 inclusive. Resolves NO if the state never occurs in that window (war, cease-fire, armistice and alliance do not count)."
+},
+{
+"world": "seed7014",
+"family": "EX_tech_discovered",
+"T": 210,
+"text": "Will Tajik have discovered Radio by turn 210?",
+"subj": [
+"2"
+],
+"qAll": 0.003,
+"qA": 0.002,
+"qB": 0.004008016032064128,
+"tech": "Radio",
+"id": "seed7014:b2777",
+"criteria": "Resolves YES if Tajik discovers Radio on any turn from 61 through 210 inclusive (an event on turn 210 itself counts). Resolves NO if it is not discovered by the end of turn 210."
+},
+{
+"world": "seed7011",
+"family": "W6_peace_at",
+"T": 210,
+"text": "Will Equatoguinean and American have a formal peace in effect at turn 210?",
+"subj": [
+"3",
+"4"
+],
+"qAll": 0.006,
+"qA": 0.006,
+"qB": 0.006012024048096192,
+"id": "seed7011:b2533",
+"criteria": "Resolves YES if the diplomatic state between Equatoguinean and American as recorded at the end of turn 210 is Peace. War, cease-fire, armistice, alliance, or never having met all resolve NO."
+},
+{
+"world": "seed7008",
+"family": "W5_tech_lead",
+"T": 180,
+"text": "Will Belgian know strictly more technologies than every other civilization at turn 180?",
+"subj": [
+"1"
+],
+"qAll": 0.037,
+"qA": 0.04,
+"qB": 0.03406813627254509,
+"id": "seed7008:b2414",
+"criteria": "Resolves YES if, as recorded at the end of turn 180, Belgian knows strictly more technologies than each of the other four civilizations, counting every technology known including those known at turn 60. This is the count the world report calls Techs; FreeCiv's initial 'None' entry is not a technology and is not counted. Any tie for the most resolves NO."
+},
+{
+"world": "seed7008",
+"family": "EX_government_at",
+"T": 180,
+"text": "Will Latvian's government be Despotism at turn 180?",
+"subj": [
+"0"
+],
+"qAll": 0.012,
+"qA": 0.014,
+"qB": 0.01002004008016032,
+"gov": "Despotism",
+"id": "seed7008:b2245",
+"criteria": "Resolves YES if Latvian's government as recorded at the end of turn 180 is Despotism. A change of government completed on turn 180 counts. Anarchy counts as a form of government. Resolves NO for any other government."
+},
+{
+"world": "seed7008",
+"family": "NEW_civil_war",
+"T": 180,
+"text": "Will Latvian suffer a civil war (a breakaway civilization splitting off) by turn 180?",
+"subj": [
+"0"
+],
+"qAll": 0.029,
+"qA": 0.032,
+"qB": 0.026052104208416832,
+"id": "seed7008:b2362",
+"criteria": "Resolves YES if Latvian splits in a civil war on any turn from 61 through 180 inclusive (an event on turn 180 itself counts), meaning a new civilization is created out of some of Latvian's cities. Anarchy, disorder, or the loss of cities to other players without such a split resolve NO."
+},
+{
+"world": "seed7003",
+"family": "NW1_war_at",
+"T": 180,
+"text": "Will Ghana and Corsican be at war at turn 180?",
+"subj": [
+"2",
+"4"
+],
+"qAll": 0.001,
+"qA": 0.002,
+"qB": 0.0,
+"id": "seed7003:b2123",
+"criteria": "Resolves YES if the diplomatic state between Ghana and Corsican as recorded at the end of turn 180 is War. Cease-fire, armistice, peace, alliance, or never having met all resolve NO."
+},
+{
+"world": "seed7001",
+"family": "NW5_wonder",
+"T": 180,
+"text": "Will Sun Tzu's War Academy be completed by any civilization by turn 180?",
+"subj": [],
+"qAll": 0.031,
+"qA": 0.028,
+"qB": 0.03406813627254509,
+"wonder": "Sun Tzu's War Academy",
+"id": "seed7001:b1778",
+"criteria": "Resolves YES if any civilization completes Sun Tzu's War Academy on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). Resolves NO if it has not been completed by the end of turn 180."
+},
+{
+"world": "seed7003",
+"family": "EX_tech_discovered",
+"T": 180,
+"text": "Will Ghana have discovered Genetic Engineering by turn 180?",
+"subj": [
+"2"
+],
+"qAll": 0.001,
+"qA": 0.002,
+"qB": 0.0,
+"tech": "Genetic Engineering",
+"id": "seed7003:b2442",
+"criteria": "Resolves YES if Ghana discovers Genetic Engineering on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). Resolves NO if it is not discovered by the end of turn 180."
+},
+{
+"world": "seed7003",
+"family": "W2_directed_conquest",
+"T": 180,
+"text": "Will Crimean Tatar capture at least one city from Sammarinese by turn 180?",
+"subj": [
+"0",
+"3"
+],
+"qAll": 0.009,
+"qA": 0.006,
+"qB": 0.012024048096192385,
+"id": "seed7003:b2054",
+"criteria": "Resolves YES if Crimean Tatar captures at least one city whose owner at the moment of capture is Sammarinese, on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). Recaptures count. Resolves NO otherwise."
+},
+{
+"world": "seed7008",
+"family": "NW2_diplo",
+"T": 180,
+"text": "Will Belgian and Spanish be at formal Peace at any point between turns 61 and 180?",
+"subj": [
+"1",
+"2"
+],
+"qAll": 0.006,
+"qA": 0.006,
+"qB": 0.006012024048096192,
+"kind": "peace_by",
+"id": "seed7008:b2122",
+"criteria": "Resolves YES if the diplomatic state between Belgian and Spanish is Peace at the end of any turn from 61 through 180 inclusive. Resolves NO if the state never occurs in that window (war, cease-fire, armistice and alliance do not count)."
+},
+{
+"world": "seed7008",
+"family": "S5_civ_wonders",
+"T": 180,
+"text": "Will Latvian complete at least 2 wonders by turn 180?",
+"subj": [
+"0"
+],
+"qAll": 0.025,
+"qA": 0.028,
+"qB": 0.022044088176352707,
+"k": 2,
+"id": "seed7008:b2349",
+"criteria": "Resolves YES if Latvian completes at least 2 great wonders on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). Exactly 2 counts. Small wonders such as a palace do not count."
+},
+{
+"world": "seed7011",
+"family": "W1_wonder_race",
+"T": 180,
+"text": "Will Equatoguinean complete Leonardo's Workshop by turn 180?",
+"subj": [
+"3"
+],
+"qAll": 0.008,
+"qA": 0.01,
+"qB": 0.006012024048096192,
+"wonder": "Leonardo's Workshop",
+"id": "seed7011:b1990",
+"criteria": "Resolves YES if Equatoguinean completes Leonardo's Workshop on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). A great wonder can be completed only once per game, so this resolves NO if another civilization completes it, or if it is not completed by the end of turn 180."
+},
+{
+"world": "seed7010",
+"family": "NW4_survival",
+"T": 180,
+"text": "Will Beninese be eliminated (cease to exist as a civilization) by turn 180?",
+"subj": [
+"3"
+],
+"qAll": 0.003,
+"qA": 0.004,
+"qB": 0.002004008016032064,
+"id": "seed7010:b2314",
+"criteria": "Resolves YES if Beninese is eliminated on any turn from 61 through 180 inclusive (an event on turn 180 itself counts), meaning it ceases to exist as a civilization. Losing cities, losing the capital, or a civil war split without elimination resolve NO."
+},
+{
+"world": "seed7005",
+"family": "W6_peace_at",
+"T": 180,
+"text": "Will Saka and Ca\u00f1ari have a formal peace in effect at turn 180?",
+"subj": [
+"0",
+"3"
+],
+"qAll": 0.003,
+"qA": 0.0,
+"qB": 0.006012024048096192,
+"id": "seed7005:b1976",
+"criteria": "Resolves YES if the diplomatic state between Saka and Ca\u00f1ari as recorded at the end of turn 180 is Peace. War, cease-fire, armistice, alliance, or never having met all resolve NO."
+},
+{
+"world": "seed7011",
+"family": "NB1_value_threshold",
+"T": 180,
+"text": "Will Libyan's treasury be at least 2854 at turn 180?",
+"subj": [
+"1"
+],
+"qAll": 0.05,
+"qA": 0.046,
+"qB": 0.05410821643286573,
+"metric": "treasury",
+"x": 2854,
+"sel_q": 0.95,
+"id": "seed7011:b2178",
+"criteria": "Resolves YES if Libyan's treasury as recorded at the end of turn 180 is 2854 or more; exactly 2854 counts. This is the same quantity the world report calls Treasury."
+},
+{
+"world": "seed7010",
+"family": "NB4_drawdown",
+"T": 180,
+"text": "Will Fijian's population drop below 90% of its turn-60 level at any point up to turn 180?",
+"subj": [
+"4"
+],
+"qAll": 0.006,
+"qA": 0.002,
+"qB": 0.01002004008016032,
+"metric": "population",
+"f": 0.9,
+"id": "seed7010:b2408",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 180 inclusive, Fijian's population is below 90% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 90% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7008",
+"family": "W5_tech_lead",
+"T": 180,
+"text": "Will Latvian know strictly more technologies than every other civilization at turn 180?",
+"subj": [
+"0"
+],
+"qAll": 0.04,
+"qA": 0.04,
+"qB": 0.04008016032064128,
+"id": "seed7008:b2290",
+"criteria": "Resolves YES if, as recorded at the end of turn 180, Latvian knows strictly more technologies than each of the other four civilizations, counting every technology known including those known at turn 60. This is the count the world report calls Techs; FreeCiv's initial 'None' entry is not a technology and is not counted. Any tie for the most resolves NO."
+},
+{
+"world": "seed7014",
+"family": "EX_government_at",
+"T": 180,
+"text": "Will Chinese's government be Despotism at turn 180?",
+"subj": [
+"4"
+],
+"qAll": 0.025,
+"qA": 0.032,
+"qB": 0.018036072144288578,
+"gov": "Despotism",
+"id": "seed7014:b2291",
+"criteria": "Resolves YES if Chinese's government as recorded at the end of turn 180 is Despotism. A change of government completed on turn 180 counts. Anarchy counts as a form of government. Resolves NO for any other government."
+},
+{
+"world": "seed7005",
+"family": "NEW_civil_war",
+"T": 180,
+"text": "Will Saka suffer a civil war (a breakaway civilization splitting off) by turn 180?",
+"subj": [
+"0"
+],
+"qAll": 0.015,
+"qA": 0.008,
+"qB": 0.022044088176352707,
+"id": "seed7005:b2219",
+"criteria": "Resolves YES if Saka splits in a civil war on any turn from 61 through 180 inclusive (an event on turn 180 itself counts), meaning a new civilization is created out of some of Saka's cities. Anarchy, disorder, or the loss of cities to other players without such a split resolve NO."
+},
+{
+"world": "seed7003",
+"family": "NW1_war_at",
+"T": 180,
+"text": "Will Rhenish and Corsican be at war at turn 180?",
+"subj": [
+"1",
+"4"
+],
+"qAll": 0.001,
+"qA": 0.002,
+"qB": 0.0,
+"id": "seed7003:b2099",
+"criteria": "Resolves YES if the diplomatic state between Rhenish and Corsican as recorded at the end of turn 180 is War. Cease-fire, armistice, peace, alliance, or never having met all resolve NO."
+},
+{
+"world": "seed7014",
+"family": "NW5_wonder",
+"T": 180,
+"text": "Will Sun Tzu's War Academy be completed by any civilization by turn 180?",
+"subj": [],
+"qAll": 0.018,
+"qA": 0.016,
+"qB": 0.02004008016032064,
+"wonder": "Sun Tzu's War Academy",
+"id": "seed7014:b1951",
+"criteria": "Resolves YES if any civilization completes Sun Tzu's War Academy on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). Resolves NO if it has not been completed by the end of turn 180."
+},
+{
+"world": "seed7014",
+"family": "EX_tech_discovered",
+"T": 180,
+"text": "Will Chinese have discovered Combustion by turn 180?",
+"subj": [
+"4"
+],
+"qAll": 0.002,
+"qA": 0.002,
+"qB": 0.002004008016032064,
+"tech": "Combustion",
+"id": "seed7014:b2300",
+"criteria": "Resolves YES if Chinese discovers Combustion on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). Resolves NO if it is not discovered by the end of turn 180."
+},
+{
+"world": "seed7008",
+"family": "W2_directed_conquest",
+"T": 180,
+"text": "Will Latvian capture at least one city from Spanish by turn 180?",
+"subj": [
+"0",
+"2"
+],
+"qAll": 0.009,
+"qA": 0.008,
+"qB": 0.01002004008016032,
+"id": "seed7008:b2083",
+"criteria": "Resolves YES if Latvian captures at least one city whose owner at the moment of capture is Spanish, on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). Recaptures count. Resolves NO otherwise."
+},
+{
+"world": "seed7003",
+"family": "NW2_diplo",
+"T": 180,
+"text": "Will Rhenish and Sammarinese form an Alliance at any point between turns 61 and 180?",
+"subj": [
+"1",
+"3"
+],
+"qAll": 0.001,
+"qA": 0.002,
+"qB": 0.0,
+"kind": "alliance_by",
+"id": "seed7003:b2088",
+"criteria": "Resolves YES if the diplomatic state between Rhenish and Sammarinese is Alliance at the end of any turn from 61 through 180 inclusive. Resolves NO if the state never occurs in that window (every other state do not count)."
+},
+{
+"world": "seed7003",
+"family": "S5_civ_wonders",
+"T": 180,
+"text": "Will Corsican complete at least 3 wonders by turn 180?",
+"subj": [
+"4"
+],
+"qAll": 0.048,
+"qA": 0.054,
+"qB": 0.04208416833667335,
+"k": 3,
+"id": "seed7003:b2761",
+"criteria": "Resolves YES if Corsican completes at least 3 great wonders on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). Exactly 3 counts. Small wonders such as a palace do not count."
+},
+{
+"world": "seed7014",
+"family": "W1_wonder_race",
+"T": 180,
+"text": "Will Trinidadian and Tobagonian complete Sun Tzu's War Academy by turn 180?",
+"subj": [
+"1"
+],
+"qAll": 0.007,
+"qA": 0.006,
+"qB": 0.008016032064128256,
+"wonder": "Sun Tzu's War Academy",
+"id": "seed7014:b1952",
+"criteria": "Resolves YES if Trinidadian and Tobagonian completes Sun Tzu's War Academy on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). A great wonder can be completed only once per game, so this resolves NO if another civilization completes it, or if it is not completed by the end of turn 180."
+},
+{
+"world": "seed7014",
+"family": "NW4_survival",
+"T": 180,
+"text": "Will Swazi be eliminated (cease to exist as a civilization) by turn 180?",
+"subj": [
+"3"
+],
+"qAll": 0.004,
+"qA": 0.008,
+"qB": 0.0,
+"id": "seed7014:b2288",
+"criteria": "Resolves YES if Swazi is eliminated on any turn from 61 through 180 inclusive (an event on turn 180 itself counts), meaning it ceases to exist as a civilization. Losing cities, losing the capital, or a civil war split without elimination resolve NO."
+},
+{
+"world": "seed7003",
+"family": "W6_peace_at",
+"T": 180,
+"text": "Will Rhenish and Ghana have a formal peace in effect at turn 180?",
+"subj": [
+"1",
+"2"
+],
+"qAll": 0.006,
+"qA": 0.01,
+"qB": 0.002004008016032064,
+"id": "seed7003:b2075",
+"criteria": "Resolves YES if the diplomatic state between Rhenish and Ghana as recorded at the end of turn 180 is Peace. War, cease-fire, armistice, alliance, or never having met all resolve NO."
+},
+{
+"world": "seed7003",
+"family": "NB1_value_threshold",
+"T": 180,
+"text": "Will Sammarinese's treasury be at least 822 at turn 180?",
+"subj": [
+"3"
+],
+"qAll": 0.05,
+"qA": 0.054,
+"qB": 0.04609218436873747,
+"metric": "treasury",
+"x": 822,
+"sel_q": 0.95,
+"id": "seed7003:b2606",
+"criteria": "Resolves YES if Sammarinese's treasury as recorded at the end of turn 180 is 822 or more; exactly 822 counts. This is the same quantity the world report calls Treasury."
+},
+{
+"world": "seed7014",
+"family": "NB4_drawdown",
+"T": 180,
+"text": "Will Tajik's number of cities drop below 70% of its turn-60 level at any point up to turn 180?",
+"subj": [
+"2"
+],
+"qAll": 0.012,
+"qA": 0.014,
+"qB": 0.01002004008016032,
+"metric": "cities_count",
+"f": 0.7,
+"id": "seed7014:b2273",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 180 inclusive, Tajik's number of cities is below 70% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 70% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7008",
+"family": "EX_government_at",
+"T": 180,
+"text": "Will Somali's government be Communism at turn 180?",
+"subj": [
+"4"
+],
+"qAll": 0.029,
+"qA": 0.032,
+"qB": 0.026052104208416832,
+"gov": "Communism",
+"id": "seed7008:b2716",
+"criteria": "Resolves YES if Somali's government as recorded at the end of turn 180 is Communism. A change of government completed on turn 180 counts. Anarchy counts as a form of government. Resolves NO for any other government."
+},
+{
+"world": "seed7010",
+"family": "NEW_civil_war",
+"T": 180,
+"text": "Will Fijian suffer a civil war (a breakaway civilization splitting off) by turn 180?",
+"subj": [
+"4"
+],
+"qAll": 0.042,
+"qA": 0.044,
+"qB": 0.04008016032064128,
+"id": "seed7010:b2422",
+"criteria": "Resolves YES if Fijian splits in a civil war on any turn from 61 through 180 inclusive (an event on turn 180 itself counts), meaning a new civilization is created out of some of Fijian's cities. Anarchy, disorder, or the loss of cities to other players without such a split resolve NO."
+},
+{
+"world": "seed7005",
+"family": "NW1_war_at",
+"T": 180,
+"text": "Will Greek and Ostrogothic be at war at turn 180?",
+"subj": [
+"2",
+"4"
+],
+"qAll": 0.025,
+"qA": 0.024,
+"qB": 0.026052104208416832,
+"id": "seed7005:b2051",
+"criteria": "Resolves YES if the diplomatic state between Greek and Ostrogothic as recorded at the end of turn 180 is War. Cease-fire, armistice, peace, alliance, or never having met all resolve NO."
+},
+{
+"world": "seed7011",
+"family": "NW5_wonder",
+"T": 180,
+"text": "Will King Richard's Crusade be completed by any civilization by turn 180?",
+"subj": [],
+"qAll": 0.018,
+"qA": 0.018,
+"qB": 0.018036072144288578,
+"wonder": "King Richard's Crusade",
+"id": "seed7011:b1987",
+"criteria": "Resolves YES if any civilization completes King Richard's Crusade on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). Resolves NO if it has not been completed by the end of turn 180."
+},
+{
+"world": "seed7005",
+"family": "EX_tech_discovered",
+"T": 180,
+"text": "Will Greek have discovered Amphibious Warfare by turn 180?",
+"subj": [
+"2"
+],
+"qAll": 0.006,
+"qA": 0.004,
+"qB": 0.008016032064128256,
+"tech": "Amphibious Warfare",
+"id": "seed7005:b2327",
+"criteria": "Resolves YES if Greek discovers Amphibious Warfare on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). Resolves NO if it is not discovered by the end of turn 180."
+},
+{
+"world": "seed7003",
+"family": "W2_directed_conquest",
+"T": 180,
+"text": "Will Ghana capture at least one city from Crimean Tatar by turn 180?",
+"subj": [
+"2",
+"0"
+],
+"qAll": 0.032,
+"qA": 0.032,
+"qB": 0.03206412825651302,
+"id": "seed7003:b2041",
+"criteria": "Resolves YES if Ghana captures at least one city whose owner at the moment of capture is Crimean Tatar, on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). Recaptures count. Resolves NO otherwise."
+},
+{
+"world": "seed7005",
+"family": "NW2_diplo",
+"T": 180,
+"text": "Will Greek and Ca\u00f1ari form an Alliance at any point between turns 61 and 180?",
+"subj": [
+"2",
+"3"
+],
+"qAll": 0.008,
+"qA": 0.012,
+"qB": 0.004008016032064128,
+"kind": "alliance_by",
+"id": "seed7005:b2040",
+"criteria": "Resolves YES if the diplomatic state between Greek and Ca\u00f1ari is Alliance at the end of any turn from 61 through 180 inclusive. Resolves NO if the state never occurs in that window (every other state do not count)."
+},
+{
+"world": "seed7001",
+"family": "S5_civ_wonders",
+"T": 180,
+"text": "Will Estonian complete at least 3 wonders by turn 180?",
+"subj": [
+"2"
+],
+"qAll": 0.005,
+"qA": 0.008,
+"qB": 0.002004008016032064,
+"k": 3,
+"id": "seed7001:b2000",
+"criteria": "Resolves YES if Estonian completes at least 3 great wonders on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). Exactly 3 counts. Small wonders such as a palace do not count."
+},
+{
+"world": "seed7008",
+"family": "W1_wonder_race",
+"T": 180,
+"text": "Will Spanish complete King Richard's Crusade by turn 180?",
+"subj": [
+"2"
+],
+"qAll": 0.002,
+"qA": 0.002,
+"qB": 0.002004008016032064,
+"wonder": "King Richard's Crusade",
+"id": "seed7008:b2228",
+"criteria": "Resolves YES if Spanish completes King Richard's Crusade on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). A great wonder can be completed only once per game, so this resolves NO if another civilization completes it, or if it is not completed by the end of turn 180."
+},
+{
+"world": "seed7022",
+"family": "NW4_survival",
+"T": 180,
+"text": "Will Western Roman be eliminated (cease to exist as a civilization) by turn 180?",
+"subj": [
+"2"
+],
+"qAll": 0.003,
+"qA": 0.002,
+"qB": 0.004008016032064128,
+"id": "seed7022:b1480",
+"criteria": "Resolves YES if Western Roman is eliminated on any turn from 61 through 180 inclusive (an event on turn 180 itself counts), meaning it ceases to exist as a civilization. Losing cities, losing the capital, or a civil war split without elimination resolve NO."
+},
+{
+"world": "seed7008",
+"family": "W6_peace_at",
+"T": 180,
+"text": "Will Belgian and Somali have a formal peace in effect at turn 180?",
+"subj": [
+"1",
+"4"
+],
+"qAll": 0.018,
+"qA": 0.014,
+"qB": 0.022044088176352707,
+"id": "seed7008:b2149",
+"criteria": "Resolves YES if the diplomatic state between Belgian and Somali as recorded at the end of turn 180 is Peace. War, cease-fire, armistice, alliance, or never having met all resolve NO."
+},
+{
+"world": "seed7010",
+"family": "NB1_value_threshold",
+"T": 180,
+"text": "Will Fijian's treasury be at least 995 at turn 180?",
+"subj": [
+"4"
+],
+"qAll": 0.05,
+"qA": 0.056,
+"qB": 0.04408817635270541,
+"metric": "treasury",
+"x": 995,
+"sel_q": 0.95,
+"id": "seed7010:b2375",
+"criteria": "Resolves YES if Fijian's treasury as recorded at the end of turn 180 is 995 or more; exactly 995 counts. This is the same quantity the world report calls Treasury."
+},
+{
+"world": "seed7001",
+"family": "NB4_drawdown",
+"T": 180,
+"text": "Will Brazzaville-Congolese's population drop below 75% of its turn-60 level at any point up to turn 180?",
+"subj": [
+"0"
+],
+"qAll": 0.032,
+"qA": 0.038,
+"qB": 0.026052104208416832,
+"metric": "population",
+"f": 0.75,
+"id": "seed7001:b1886",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 180 inclusive, Brazzaville-Congolese's population is below 75% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 75% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7010",
+"family": "EX_government_at",
+"T": 180,
+"text": "Will American's government be Despotism at turn 180?",
+"subj": [
+"1"
+],
+"qAll": 0.022,
+"qA": 0.022,
+"qB": 0.022044088176352707,
+"gov": "Despotism",
+"id": "seed7010:b2095",
+"criteria": "Resolves YES if American's government as recorded at the end of turn 180 is Despotism. A change of government completed on turn 180 counts. Anarchy counts as a form of government. Resolves NO for any other government."
+},
+{
+"world": "seed7005",
+"family": "NEW_civil_war",
+"T": 180,
+"text": "Will Otom\u00ed suffer a civil war (a breakaway civilization splitting off) by turn 180?",
+"subj": [
+"1"
+],
+"qAll": 0.045,
+"qA": 0.038,
+"qB": 0.052104208416833664,
+"id": "seed7005:b2322",
+"criteria": "Resolves YES if Otom\u00ed splits in a civil war on any turn from 61 through 180 inclusive (an event on turn 180 itself counts), meaning a new civilization is created out of some of Otom\u00ed's cities. Anarchy, disorder, or the loss of cities to other players without such a split resolve NO."
+},
+{
+"world": "seed7003",
+"family": "NW5_wonder",
+"T": 180,
+"text": "Will Isaac Newton's College be completed by any civilization by turn 180?",
+"subj": [],
+"qAll": 0.014,
+"qA": 0.018,
+"qB": 0.01002004008016032,
+"wonder": "Isaac Newton's College",
+"id": "seed7003:b2162",
+"criteria": "Resolves YES if any civilization completes Isaac Newton's College on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). Resolves NO if it has not been completed by the end of turn 180."
+},
+{
+"world": "seed7005",
+"family": "EX_tech_discovered",
+"T": 180,
+"text": "Will Otom\u00ed have discovered Explosives by turn 180?",
+"subj": [
+"1"
+],
+"qAll": 0.016,
+"qA": 0.018,
+"qB": 0.014028056112224449,
+"tech": "Explosives",
+"id": "seed7005:b2233",
+"criteria": "Resolves YES if Otom\u00ed discovers Explosives on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). Resolves NO if it is not discovered by the end of turn 180."
+},
+{
+"world": "seed7003",
+"family": "W2_directed_conquest",
+"T": 180,
+"text": "Will Rhenish capture at least one city from Sammarinese by turn 180?",
+"subj": [
+"1",
+"3"
+],
+"qAll": 0.049,
+"qA": 0.036,
+"qB": 0.06212424849699399,
+"id": "seed7003:b2089",
+"criteria": "Resolves YES if Rhenish captures at least one city whose owner at the moment of capture is Sammarinese, on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). Recaptures count. Resolves NO otherwise."
+},
+{
+"world": "seed7003",
+"family": "NW2_diplo",
+"T": 180,
+"text": "Will Crimean Tatar and Sammarinese form an Alliance at any point between turns 61 and 180?",
+"subj": [
+"0",
+"3"
+],
+"qAll": 0.034,
+"qA": 0.038,
+"qB": 0.03006012024048096,
+"kind": "alliance_by",
+"id": "seed7003:b2053",
+"criteria": "Resolves YES if the diplomatic state between Crimean Tatar and Sammarinese is Alliance at the end of any turn from 61 through 180 inclusive. Resolves NO if the state never occurs in that window (every other state do not count)."
+},
+{
+"world": "seed7005",
+"family": "S5_civ_wonders",
+"T": 180,
+"text": "Will Ca\u00f1ari complete at least 2 wonders by turn 180?",
+"subj": [
+"3"
+],
+"qAll": 0.032,
+"qA": 0.042,
+"qB": 0.022044088176352707,
+"k": 2,
+"id": "seed7005:b2530",
+"criteria": "Resolves YES if Ca\u00f1ari completes at least 2 great wonders on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). Exactly 2 counts. Small wonders such as a palace do not count."
+},
+{
+"world": "seed7008",
+"family": "W1_wonder_race",
+"T": 180,
+"text": "Will Peruvian complete Darwin's Voyage by turn 180?",
+"subj": [
+"3"
+],
+"qAll": 0.046,
+"qA": 0.03,
+"qB": 0.06212424849699399,
+"wonder": "Darwin's Voyage",
+"id": "seed7008:b2214",
+"criteria": "Resolves YES if Peruvian completes Darwin's Voyage on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). A great wonder can be completed only once per game, so this resolves NO if another civilization completes it, or if it is not completed by the end of turn 180."
+},
+{
+"world": "seed7001",
+"family": "NW4_survival",
+"T": 180,
+"text": "Will Santomean be eliminated (cease to exist as a civilization) by turn 180?",
+"subj": [
+"1"
+],
+"qAll": 0.004,
+"qA": 0.002,
+"qB": 0.006012024048096192,
+"id": "seed7001:b1899",
+"criteria": "Resolves YES if Santomean is eliminated on any turn from 61 through 180 inclusive (an event on turn 180 itself counts), meaning it ceases to exist as a civilization. Losing cities, losing the capital, or a civil war split without elimination resolve NO."
+},
+{
+"world": "seed7010",
+"family": "W6_peace_at",
+"T": 180,
+"text": "Will American and Spanish have a formal peace in effect at turn 180?",
+"subj": [
+"1",
+"2"
+],
+"qAll": 0.014,
+"qA": 0.018,
+"qB": 0.01002004008016032,
+"id": "seed7010:b1910",
+"criteria": "Resolves YES if the diplomatic state between American and Spanish as recorded at the end of turn 180 is Peace. War, cease-fire, armistice, alliance, or never having met all resolve NO."
+},
+{
+"world": "seed7001",
+"family": "NB1_value_threshold",
+"T": 180,
+"text": "Will Estonian's treasury be at least 2385 at turn 180?",
+"subj": [
+"2"
+],
+"qAll": 0.05,
+"qA": 0.056,
+"qB": 0.04408817635270541,
+"metric": "treasury",
+"x": 2385,
+"sel_q": 0.95,
+"id": "seed7001:b1961",
+"criteria": "Resolves YES if Estonian's treasury as recorded at the end of turn 180 is 2385 or more; exactly 2385 counts. This is the same quantity the world report calls Treasury."
+},
+{
+"world": "seed7011",
+"family": "NB4_drawdown",
+"T": 180,
+"text": "Will Ohlone's population drop below 75% of its turn-60 level at any point up to turn 180?",
+"subj": [
+"0"
+],
+"qAll": 0.034,
+"qA": 0.042,
+"qB": 0.026052104208416832,
+"metric": "population",
+"f": 0.75,
+"id": "seed7011:b2103",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 180 inclusive, Ohlone's population is below 75% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 75% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7010",
+"family": "EX_government_at",
+"T": 180,
+"text": "Will Spanish's government be Despotism at turn 180?",
+"subj": [
+"2"
+],
+"qAll": 0.043,
+"qA": 0.036,
+"qB": 0.050100200400801605,
+"gov": "Despotism",
+"id": "seed7010:b2204",
+"criteria": "Resolves YES if Spanish's government as recorded at the end of turn 180 is Despotism. A change of government completed on turn 180 counts. Anarchy counts as a form of government. Resolves NO for any other government."
+},
+{
+"world": "seed7005",
+"family": "NEW_civil_war",
+"T": 180,
+"text": "Will Greek suffer a civil war (a breakaway civilization splitting off) by turn 180?",
+"subj": [
+"2"
+],
+"qAll": 0.025,
+"qA": 0.022,
+"qB": 0.028056112224448898,
+"id": "seed7005:b2436",
+"criteria": "Resolves YES if Greek splits in a civil war on any turn from 61 through 180 inclusive (an event on turn 180 itself counts), meaning a new civilization is created out of some of Greek's cities. Anarchy, disorder, or the loss of cities to other players without such a split resolve NO."
+},
+{
+"world": "seed7005",
+"family": "NW5_wonder",
+"T": 180,
+"text": "Will A.Smith's Trading Co. be completed by any civilization by turn 180?",
+"subj": [],
+"qAll": 0.029,
+"qA": 0.026,
+"qB": 0.03206412825651302,
+"wonder": "A.Smith's Trading Co.",
+"id": "seed7005:b2074",
+"criteria": "Resolves YES if any civilization completes A.Smith's Trading Co. on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). Resolves NO if it has not been completed by the end of turn 180."
+},
+{
+"world": "seed7011",
+"family": "EX_tech_discovered",
+"T": 180,
+"text": "Will American have discovered Combustion by turn 180?",
+"subj": [
+"4"
+],
+"qAll": 0.003,
+"qA": 0.002,
+"qB": 0.004008016032064128,
+"tech": "Combustion",
+"id": "seed7011:b2363",
+"criteria": "Resolves YES if American discovers Combustion on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). Resolves NO if it is not discovered by the end of turn 180."
+},
+{
+"world": "seed7008",
+"family": "W2_directed_conquest",
+"T": 180,
+"text": "Will Spanish capture at least one city from Somali by turn 180?",
+"subj": [
+"2",
+"4"
+],
+"qAll": 0.01,
+"qA": 0.01,
+"qB": 0.01002004008016032,
+"id": "seed7008:b2179",
+"criteria": "Resolves YES if Spanish captures at least one city whose owner at the moment of capture is Somali, on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). Recaptures count. Resolves NO otherwise."
+},
+{
+"world": "seed7014",
+"family": "NW2_diplo",
+"T": 180,
+"text": "Will Bissau-Guinean and Trinidadian and Tobagonian be at formal Peace at any point between turns 61 and 180?",
+"subj": [
+"0",
+"1"
+],
+"qAll": 0.002,
+"qA": 0.0,
+"qB": 0.004008016032064128,
+"kind": "peace_by",
+"id": "seed7014:b1846",
+"criteria": "Resolves YES if the diplomatic state between Bissau-Guinean and Trinidadian and Tobagonian is Peace at the end of any turn from 61 through 180 inclusive. Resolves NO if the state never occurs in that window (war, cease-fire, armistice and alliance do not count)."
+},
+{
+"world": "seed7010",
+"family": "S5_civ_wonders",
+"T": 180,
+"text": "Will Fijian complete at least 3 wonders by turn 180?",
+"subj": [
+"4"
+],
+"qAll": 0.003,
+"qA": 0.006,
+"qB": 0.0,
+"k": 3,
+"id": "seed7010:b2412",
+"criteria": "Resolves YES if Fijian completes at least 3 great wonders on any turn from 61 through 180 inclusive (an event on turn 180 itself counts). Exactly 3 counts. Small wonders such as a palace do not count."
+},
+{
+"world": "seed7011",
+"family": "NW4_survival",
+"T": 150,
+"text": "Will Guyanese be eliminated (cease to exist as a civilization) by turn 150?",
+"subj": [
+"2"
+],
+"qAll": 0.007,
+"qA": 0.004,
+"qB": 0.01002004008016032,
+"id": "seed7011:b1667",
+"criteria": "Resolves YES if Guyanese is eliminated on any turn from 61 through 150 inclusive (an event on turn 150 itself counts), meaning it ceases to exist as a civilization. Losing cities, losing the capital, or a civil war split without elimination resolve NO."
+},
+{
+"world": "seed7010",
+"family": "EX_government_at",
+"T": 150,
+"text": "Will Central American's government be Monarchy at turn 150?",
+"subj": [
+"0"
+],
+"qAll": 0.001,
+"qA": 0.0,
+"qB": 0.002004008016032064,
+"gov": "Monarchy",
+"id": "seed7010:b1442",
+"criteria": "Resolves YES if Central American's government as recorded at the end of turn 150 is Monarchy. A change of government completed on turn 150 counts. Anarchy counts as a form of government. Resolves NO for any other government."
+},
+{
+"world": "seed7011",
+"family": "NB1_value_threshold",
+"T": 150,
+"text": "Will American's treasury be at least 2043 at turn 150?",
+"subj": [
+"4"
+],
+"qAll": 0.05,
+"qA": 0.056,
+"qB": 0.04408817635270541,
+"metric": "treasury",
+"x": 2043,
+"sel_q": 0.95,
+"id": "seed7011:b1844",
+"criteria": "Resolves YES if American's treasury as recorded at the end of turn 150 is 2043 or more; exactly 2043 counts. This is the same quantity the world report calls Treasury."
+},
+{
+"world": "seed7022",
+"family": "NW1_war_at",
+"T": 150,
+"text": "Will Boian and Hunnic be at war at turn 150?",
+"subj": [
+"0",
+"3"
+],
+"qAll": 0.003,
+"qA": 0.002,
+"qB": 0.004008016032064128,
+"id": "seed7022:b864",
+"criteria": "Resolves YES if the diplomatic state between Boian and Hunnic as recorded at the end of turn 150 is War. Cease-fire, armistice, peace, alliance, or never having met all resolve NO."
+},
+{
+"world": "seed7005",
+"family": "EX_tech_discovered",
+"T": 150,
+"text": "Will Otom\u00ed have discovered Tactics by turn 150?",
+"subj": [
+"1"
+],
+"qAll": 0.004,
+"qA": 0.006,
+"qB": 0.002004008016032064,
+"tech": "Tactics",
+"id": "seed7005:b1551",
+"criteria": "Resolves YES if Otom\u00ed discovers Tactics on any turn from 61 through 150 inclusive (an event on turn 150 itself counts). Resolves NO if it is not discovered by the end of turn 150."
+},
+{
+"world": "seed7011",
+"family": "W1_wonder_race",
+"T": 150,
+"text": "Will Equatoguinean complete Leonardo's Workshop by turn 150?",
+"subj": [
+"3"
+],
+"qAll": 0.001,
+"qA": 0.002,
+"qB": 0.0,
+"wonder": "Leonardo's Workshop",
+"id": "seed7011:b1436",
+"criteria": "Resolves YES if Equatoguinean completes Leonardo's Workshop on any turn from 61 through 150 inclusive (an event on turn 150 itself counts). A great wonder can be completed only once per game, so this resolves NO if another civilization completes it, or if it is not completed by the end of turn 150."
+},
+{
+"world": "seed7005",
+"family": "W2_directed_conquest",
+"T": 150,
+"text": "Will Otom\u00ed capture at least one city from Saka by turn 150?",
+"subj": [
+"1",
+"0"
+],
+"qAll": 0.01,
+"qA": 0.006,
+"qB": 0.014028056112224449,
+"id": "seed7005:b1265",
+"criteria": "Resolves YES if Otom\u00ed captures at least one city whose owner at the moment of capture is Saka, on any turn from 61 through 150 inclusive (an event on turn 150 itself counts). Recaptures count. Resolves NO otherwise."
+},
+{
+"world": "seed7003",
+"family": "NW2_diplo",
+"T": 150,
+"text": "Will Ghana and Sammarinese form an Alliance at any point between turns 61 and 150?",
+"subj": [
+"2",
+"3"
+],
+"qAll": 0.001,
+"qA": 0.002,
+"qB": 0.0,
+"kind": "alliance_by",
+"id": "seed7003:b1395",
+"criteria": "Resolves YES if the diplomatic state between Ghana and Sammarinese is Alliance at the end of any turn from 61 through 150 inclusive. Resolves NO if the state never occurs in that window (every other state do not count)."
+},
+{
+"world": "seed7014",
+"family": "S5_civ_wonders",
+"T": 150,
+"text": "Will Bissau-Guinean complete at least 2 wonders by turn 150?",
+"subj": [
+"0"
+],
+"qAll": 0.012,
+"qA": 0.018,
+"qB": 0.006012024048096192,
+"k": 2,
+"id": "seed7014:b1517",
+"criteria": "Resolves YES if Bissau-Guinean completes at least 2 great wonders on any turn from 61 through 150 inclusive (an event on turn 150 itself counts). Exactly 2 counts. Small wonders such as a palace do not count."
+},
+{
+"world": "seed7003",
+"family": "W5_tech_lead",
+"T": 150,
+"text": "Will Sammarinese know strictly more technologies than every other civilization at turn 150?",
+"subj": [
+"3"
+],
+"qAll": 0.041,
+"qA": 0.05,
+"qB": 0.03206412825651302,
+"id": "seed7003:b1846",
+"criteria": "Resolves YES if, as recorded at the end of turn 150, Sammarinese knows strictly more technologies than each of the other four civilizations, counting every technology known including those known at turn 60. This is the count the world report calls Techs; FreeCiv's initial 'None' entry is not a technology and is not counted. Any tie for the most resolves NO."
+},
+{
+"world": "seed7003",
+"family": "W6_peace_at",
+"T": 150,
+"text": "Will Crimean Tatar and Sammarinese have a formal peace in effect at turn 150?",
+"subj": [
+"0",
+"3"
+],
+"qAll": 0.026,
+"qA": 0.03,
+"qB": 0.022044088176352707,
+"id": "seed7003:b1336",
+"criteria": "Resolves YES if the diplomatic state between Crimean Tatar and Sammarinese as recorded at the end of turn 150 is Peace. War, cease-fire, armistice, alliance, or never having met all resolve NO."
+},
+{
+"world": "seed7005",
+"family": "NB4_drawdown",
+"T": 150,
+"text": "Will Ostrogothic's population drop below 90% of its turn-60 level at any point up to turn 150?",
+"subj": [
+"4"
+],
+"qAll": 0.009,
+"qA": 0.008,
+"qB": 0.01002004008016032,
+"metric": "population",
+"f": 0.9,
+"id": "seed7005:b1936",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 150 inclusive, Ostrogothic's population is below 90% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 90% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7022",
+"family": "NEW_civil_war",
+"T": 150,
+"text": "Will Western Roman suffer a civil war (a breakaway civilization splitting off) by turn 150?",
+"subj": [
+"2"
+],
+"qAll": 0.039,
+"qA": 0.034,
+"qB": 0.04408817635270541,
+"id": "seed7022:b1113",
+"criteria": "Resolves YES if Western Roman splits in a civil war on any turn from 61 through 150 inclusive (an event on turn 150 itself counts), meaning a new civilization is created out of some of Western Roman's cities. Anarchy, disorder, or the loss of cities to other players without such a split resolve NO."
+},
+{
+"world": "seed7010",
+"family": "NW5_wonder",
+"T": 150,
+"text": "Will Darwin's Voyage be completed by any civilization by turn 150?",
+"subj": [],
+"qAll": 0.015,
+"qA": 0.016,
+"qB": 0.014028056112224449,
+"wonder": "Darwin's Voyage",
+"id": "seed7010:b1419",
+"criteria": "Resolves YES if any civilization completes Darwin's Voyage on any turn from 61 through 150 inclusive (an event on turn 150 itself counts). Resolves NO if it has not been completed by the end of turn 150."
+},
+{
+"world": "seed7022",
+"family": "EX_comparative",
+"T": 150,
+"text": "Will Hunnic have a higher score than Pelasgian at turn 150?",
+"subj": [
+"3",
+"1"
+],
+"qAll": 0.037,
+"qA": 0.036,
+"qB": 0.03807615230460922,
+"metric": "scores",
+"id": "seed7022:b883",
+"criteria": "Resolves YES if Hunnic's score as recorded at the end of turn 150 is strictly greater than Pelasgian's. Equal values resolve NO. The quantity is the same quantity the world report calls Score."
+},
+{
+"world": "seed7014",
+"family": "NW4_survival",
+"T": 150,
+"text": "Will Swazi be eliminated (cease to exist as a civilization) by turn 150?",
+"subj": [
+"3"
+],
+"qAll": 0.003,
+"qA": 0.006,
+"qB": 0.0,
+"id": "seed7014:b1740",
+"criteria": "Resolves YES if Swazi is eliminated on any turn from 61 through 150 inclusive (an event on turn 150 itself counts), meaning it ceases to exist as a civilization. Losing cities, losing the capital, or a civil war split without elimination resolve NO."
+},
+{
+"world": "seed7005",
+"family": "EX_government_at",
+"T": 150,
+"text": "Will Ostrogothic's government be Despotism at turn 150?",
+"subj": [
+"4"
+],
+"qAll": 0.023,
+"qA": 0.026,
+"qB": 0.02004008016032064,
+"gov": "Despotism",
+"id": "seed7005:b1844",
+"criteria": "Resolves YES if Ostrogothic's government as recorded at the end of turn 150 is Despotism. A change of government completed on turn 150 counts. Anarchy counts as a form of government. Resolves NO for any other government."
+},
+{
+"world": "seed7014",
+"family": "NB1_value_threshold",
+"T": 150,
+"text": "Will Trinidadian and Tobagonian's treasury be at least 2004 at turn 150?",
+"subj": [
+"1"
+],
+"qAll": 0.05,
+"qA": 0.058,
+"qB": 0.04008016032064128,
+"metric": "treasury",
+"x": 2004,
+"sel_q": 0.95,
+"id": "seed7014:b1587",
+"criteria": "Resolves YES if Trinidadian and Tobagonian's treasury as recorded at the end of turn 150 is 2004 or more; exactly 2004 counts. This is the same quantity the world report calls Treasury."
+},
+{
+"world": "seed7005",
+"family": "NW1_war_at",
+"T": 150,
+"text": "Will Greek and Ostrogothic be at war at turn 150?",
+"subj": [
+"2",
+"4"
+],
+"qAll": 0.023,
+"qA": 0.024,
+"qB": 0.022044088176352707,
+"id": "seed7005:b1359",
+"criteria": "Resolves YES if the diplomatic state between Greek and Ostrogothic as recorded at the end of turn 150 is War. Cease-fire, armistice, peace, alliance, or never having met all resolve NO."
+},
+{
+"world": "seed7010",
+"family": "EX_tech_discovered",
+"T": 150,
+"text": "Will Central American have discovered Atomic Theory by turn 150?",
+"subj": [
+"0"
+],
+"qAll": 0.012,
+"qA": 0.014,
+"qB": 0.01002004008016032,
+"tech": "Atomic Theory",
+"id": "seed7010:b1449",
+"criteria": "Resolves YES if Central American discovers Atomic Theory on any turn from 61 through 150 inclusive (an event on turn 150 itself counts). Resolves NO if it is not discovered by the end of turn 150."
+},
+{
+"world": "seed7010",
+"family": "W1_wonder_race",
+"T": 150,
+"text": "Will Spanish complete Copernicus' Observatory by turn 150?",
+"subj": [
+"2"
+],
+"qAll": 0.047,
+"qA": 0.036,
+"qB": 0.05811623246492986,
+"wonder": "Copernicus' Observatory",
+"id": "seed7010:b1418",
+"criteria": "Resolves YES if Spanish completes Copernicus' Observatory on any turn from 61 through 150 inclusive (an event on turn 150 itself counts). A great wonder can be completed only once per game, so this resolves NO if another civilization completes it, or if it is not completed by the end of turn 150."
+},
+{
+"world": "seed7003",
+"family": "W2_directed_conquest",
+"T": 150,
+"text": "Will Ghana capture at least one city from Corsican by turn 150?",
+"subj": [
+"2",
+"4"
+],
+"qAll": 0.001,
+"qA": 0.002,
+"qB": 0.0,
+"id": "seed7003:b1408",
+"criteria": "Resolves YES if Ghana captures at least one city whose owner at the moment of capture is Corsican, on any turn from 61 through 150 inclusive (an event on turn 150 itself counts). Recaptures count. Resolves NO otherwise."
+},
+{
+"world": "seed7001",
+"family": "NW2_diplo",
+"T": 150,
+"text": "Will Brazzaville-Congolese and Estonian form an Alliance at any point between turns 61 and 150?",
+"subj": [
+"0",
+"2"
+],
+"qAll": 0.001,
+"qA": 0.0,
+"qB": 0.002004008016032064,
+"kind": "alliance_by",
+"id": "seed7001:b1345",
+"criteria": "Resolves YES if the diplomatic state between Brazzaville-Congolese and Estonian is Alliance at the end of any turn from 61 through 150 inclusive. Resolves NO if the state never occurs in that window (every other state do not count)."
+},
+{
+"world": "seed7003",
+"family": "S5_civ_wonders",
+"T": 150,
+"text": "Will Sammarinese complete at least 2 wonders by turn 150?",
+"subj": [
+"3"
+],
+"qAll": 0.038,
+"qA": 0.036,
+"qB": 0.04008016032064128,
+"k": 2,
+"id": "seed7003:b1905",
+"criteria": "Resolves YES if Sammarinese completes at least 2 great wonders on any turn from 61 through 150 inclusive (an event on turn 150 itself counts). Exactly 2 counts. Small wonders such as a palace do not count."
+},
+{
+"world": "seed7008",
+"family": "W5_tech_lead",
+"T": 150,
+"text": "Will Belgian know strictly more technologies than every other civilization at turn 150?",
+"subj": [
+"1"
+],
+"qAll": 0.037,
+"qA": 0.036,
+"qB": 0.03807615230460922,
+"id": "seed7008:b1658",
+"criteria": "Resolves YES if, as recorded at the end of turn 150, Belgian knows strictly more technologies than each of the other four civilizations, counting every technology known including those known at turn 60. This is the count the world report calls Techs; FreeCiv's initial 'None' entry is not a technology and is not counted. Any tie for the most resolves NO."
+},
+{
+"world": "seed7014",
+"family": "W6_peace_at",
+"T": 150,
+"text": "Will Bissau-Guinean and Tajik have a formal peace in effect at turn 150?",
+"subj": [
+"0",
+"2"
+],
+"qAll": 0.019,
+"qA": 0.026,
+"qB": 0.012024048096192385,
+"id": "seed7014:b1319",
+"criteria": "Resolves YES if the diplomatic state between Bissau-Guinean and Tajik as recorded at the end of turn 150 is Peace. War, cease-fire, armistice, alliance, or never having met all resolve NO."
+},
+{
+"world": "seed7011",
+"family": "NB4_drawdown",
+"T": 150,
+"text": "Will Equatoguinean's population drop below 90% of its turn-60 level at any point up to turn 150?",
+"subj": [
+"3"
+],
+"qAll": 0.047,
+"qA": 0.05,
+"qB": 0.04408817635270541,
+"metric": "population",
+"f": 0.9,
+"id": "seed7011:b1769",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 150 inclusive, Equatoguinean's population is below 90% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 90% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7003",
+"family": "NEW_civil_war",
+"T": 150,
+"text": "Will Crimean Tatar suffer a civil war (a breakaway civilization splitting off) by turn 150?",
+"subj": [
+"0"
+],
+"qAll": 0.041,
+"qA": 0.046,
+"qB": 0.036072144288577156,
+"id": "seed7003:b1586",
+"criteria": "Resolves YES if Crimean Tatar splits in a civil war on any turn from 61 through 150 inclusive (an event on turn 150 itself counts), meaning a new civilization is created out of some of Crimean Tatar's cities. Anarchy, disorder, or the loss of cities to other players without such a split resolve NO."
+},
+{
+"world": "seed7022",
+"family": "NW5_wonder",
+"T": 150,
+"text": "Will J.S. Bach's Cathedral be completed by any civilization by turn 150?",
+"subj": [],
+"qAll": 0.001,
+"qA": 0.002,
+"qB": 0.0,
+"wonder": "J.S. Bach's Cathedral",
+"id": "seed7022:b896",
+"criteria": "Resolves YES if any civilization completes J.S. Bach's Cathedral on any turn from 61 through 150 inclusive (an event on turn 150 itself counts). Resolves NO if it has not been completed by the end of turn 150."
+},
+{
+"world": "seed7001",
+"family": "NW4_survival",
+"T": 150,
+"text": "Will Guinean be eliminated (cease to exist as a civilization) by turn 150?",
+"subj": [
+"3"
+],
+"qAll": 0.001,
+"qA": 0.0,
+"qB": 0.002004008016032064,
+"id": "seed7001:b1637",
+"criteria": "Resolves YES if Guinean is eliminated on any turn from 61 through 150 inclusive (an event on turn 150 itself counts), meaning it ceases to exist as a civilization. Losing cities, losing the capital, or a civil war split without elimination resolve NO."
+},
+{
+"world": "seed7008",
+"family": "EX_government_at",
+"T": 150,
+"text": "Will Somali's government be Despotism at turn 150?",
+"subj": [
+"4"
+],
+"qAll": 0.029,
+"qA": 0.026,
+"qB": 0.03206412825651302,
+"gov": "Despotism",
+"id": "seed7008:b1954",
+"criteria": "Resolves YES if Somali's government as recorded at the end of turn 150 is Despotism. A change of government completed on turn 150 counts. Anarchy counts as a form of government. Resolves NO for any other government."
+},
+{
+"world": "seed7005",
+"family": "NB1_value_threshold",
+"T": 150,
+"text": "Will Otom\u00ed's treasury be at least 1049 at turn 150?",
+"subj": [
+"1"
+],
+"qAll": 0.05,
+"qA": 0.048,
+"qB": 0.052104208416833664,
+"metric": "treasury",
+"x": 1049,
+"sel_q": 0.95,
+"id": "seed7005:b1575",
+"criteria": "Resolves YES if Otom\u00ed's treasury as recorded at the end of turn 150 is 1049 or more; exactly 1049 counts. This is the same quantity the world report calls Treasury."
+},
+{
+"world": "seed7005",
+"family": "NW1_war_at",
+"T": 150,
+"text": "Will Saka and Otom\u00ed be at war at turn 150?",
+"subj": [
+"0",
+"1"
+],
+"qAll": 0.048,
+"qA": 0.038,
+"qB": 0.05811623246492986,
+"id": "seed7005:b1260",
+"criteria": "Resolves YES if the diplomatic state between Saka and Otom\u00ed as recorded at the end of turn 150 is War. Cease-fire, armistice, peace, alliance, or never having met all resolve NO."
+},
+{
+"world": "seed7022",
+"family": "EX_tech_discovered",
+"T": 150,
+"text": "Will Boian have discovered Electricity by turn 150?",
+"subj": [
+"0"
+],
+"qAll": 0.028,
+"qA": 0.03,
+"qB": 0.026052104208416832,
+"tech": "Electricity",
+"id": "seed7022:b922",
+"criteria": "Resolves YES if Boian discovers Electricity on any turn from 61 through 150 inclusive (an event on turn 150 itself counts). Resolves NO if it is not discovered by the end of turn 150."
+},
+{
+"world": "seed7010",
+"family": "W1_wonder_race",
+"T": 150,
+"text": "Will American complete the Colossus by turn 150?",
+"subj": [
+"1"
+],
+"qAll": 0.026,
+"qA": 0.026,
+"qB": 0.026052104208416832,
+"wonder": "Colossus",
+"id": "seed7010:b1414",
+"criteria": "Resolves YES if American completes Colossus on any turn from 61 through 150 inclusive (an event on turn 150 itself counts). A great wonder can be completed only once per game, so this resolves NO if another civilization completes it, or if it is not completed by the end of turn 150."
+},
+{
+"world": "seed7008",
+"family": "W2_directed_conquest",
+"T": 150,
+"text": "Will Peruvian capture at least one city from Latvian by turn 150?",
+"subj": [
+"3",
+"0"
+],
+"qAll": 0.042,
+"qA": 0.034,
+"qB": 0.050100200400801605,
+"id": "seed7008:b1354",
+"criteria": "Resolves YES if Peruvian captures at least one city whose owner at the moment of capture is Latvian, on any turn from 61 through 150 inclusive (an event on turn 150 itself counts). Recaptures count. Resolves NO otherwise."
+},
+{
+"world": "seed7008",
+"family": "NW2_diplo",
+"T": 150,
+"text": "Will Spanish and Peruvian reach a cease-fire or armistice at any point between turns 61 and 150?",
+"subj": [
+"2",
+"3"
+],
+"qAll": 0.003,
+"qA": 0.004,
+"qB": 0.002004008016032064,
+"kind": "ceasefire_by",
+"id": "seed7008:b1421",
+"criteria": "Resolves YES if the diplomatic state between Spanish and Peruvian is Cease-fire or Armistice at the end of any turn from 61 through 150 inclusive. Resolves NO if the state never occurs in that window (war, peace and alliance do not count)."
+},
+{
+"world": "seed7008",
+"family": "S5_civ_wonders",
+"T": 150,
+"text": "Will Spanish complete at least 3 wonders by turn 150?",
+"subj": [
+"2"
+],
+"qAll": 0.007,
+"qA": 0.008,
+"qB": 0.006012024048096192,
+"k": 3,
+"id": "seed7008:b1826",
+"criteria": "Resolves YES if Spanish completes at least 3 great wonders on any turn from 61 through 150 inclusive (an event on turn 150 itself counts). Exactly 3 counts. Small wonders such as a palace do not count."
+},
+{
+"world": "seed7008",
+"family": "W5_tech_lead",
+"T": 150,
+"text": "Will Latvian know strictly more technologies than every other civilization at turn 150?",
+"subj": [
+"0"
+],
+"qAll": 0.027,
+"qA": 0.034,
+"qB": 0.02004008016032064,
+"id": "seed7008:b1541",
+"criteria": "Resolves YES if, as recorded at the end of turn 150, Latvian knows strictly more technologies than each of the other four civilizations, counting every technology known including those known at turn 60. This is the count the world report calls Techs; FreeCiv's initial 'None' entry is not a technology and is not counted. Any tie for the most resolves NO."
+},
+{
+"world": "seed7005",
+"family": "W6_peace_at",
+"T": 150,
+"text": "Will Greek and Ostrogothic have a formal peace in effect at turn 150?",
+"subj": [
+"2",
+"4"
+],
+"qAll": 0.036,
+"qA": 0.04,
+"qB": 0.03206412825651302,
+"id": "seed7005:b1360",
+"criteria": "Resolves YES if the diplomatic state between Greek and Ostrogothic as recorded at the end of turn 150 is Peace. War, cease-fire, armistice, alliance, or never having met all resolve NO."
+},
+{
+"world": "seed7008",
+"family": "NB4_drawdown",
+"T": 150,
+"text": "Will Peruvian's population drop below 75% of its turn-60 level at any point up to turn 150?",
+"subj": [
+"3"
+],
+"qAll": 0.012,
+"qA": 0.012,
+"qB": 0.012024048096192385,
+"metric": "population",
+"f": 0.75,
+"id": "seed7008:b1940",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 150 inclusive, Peruvian's population is below 75% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 75% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7022",
+"family": "NEW_civil_war",
+"T": 150,
+"text": "Will Pelasgian suffer a civil war (a breakaway civilization splitting off) by turn 150?",
+"subj": [
+"1"
+],
+"qAll": 0.032,
+"qA": 0.03,
+"qB": 0.03406813627254509,
+"id": "seed7022:b1111",
+"criteria": "Resolves YES if Pelasgian splits in a civil war on any turn from 61 through 150 inclusive (an event on turn 150 itself counts), meaning a new civilization is created out of some of Pelasgian's cities. Anarchy, disorder, or the loss of cities to other players without such a split resolve NO."
+},
+{
+"world": "seed7005",
+"family": "NW5_wonder",
+"T": 150,
+"text": "Will King Richard's Crusade be completed by any civilization by turn 150?",
+"subj": [],
+"qAll": 0.005,
+"qA": 0.002,
+"qB": 0.008016032064128256,
+"wonder": "King Richard's Crusade",
+"id": "seed7005:b1396",
+"criteria": "Resolves YES if any civilization completes King Richard's Crusade on any turn from 61 through 150 inclusive (an event on turn 150 itself counts). Resolves NO if it has not been completed by the end of turn 150."
+},
+{
+"world": "seed7001",
+"family": "NW4_survival",
+"T": 150,
+"text": "Will Santomean be eliminated (cease to exist as a civilization) by turn 150?",
+"subj": [
+"1"
+],
+"qAll": 0.002,
+"qA": 0.002,
+"qB": 0.002004008016032064,
+"id": "seed7001:b1526",
+"criteria": "Resolves YES if Santomean is eliminated on any turn from 61 through 150 inclusive (an event on turn 150 itself counts), meaning it ceases to exist as a civilization. Losing cities, losing the capital, or a civil war split without elimination resolve NO."
+},
+{
+"world": "seed7014",
+"family": "EX_government_at",
+"T": 150,
+"text": "Will Bissau-Guinean's government be Monarchy at turn 150?",
+"subj": [
+"0"
+],
+"qAll": 0.007,
+"qA": 0.004,
+"qB": 0.01002004008016032,
+"gov": "Monarchy",
+"id": "seed7014:b1414",
+"criteria": "Resolves YES if Bissau-Guinean's government as recorded at the end of turn 150 is Monarchy. A change of government completed on turn 150 counts. Anarchy counts as a form of government. Resolves NO for any other government."
+},
+{
+"world": "seed7003",
+"family": "NB1_value_threshold",
+"T": 150,
+"text": "Will Crimean Tatar's treasury be at least 2628 at turn 150?",
+"subj": [
+"0"
+],
+"qAll": 0.05,
+"qA": 0.042,
+"qB": 0.05811623246492986,
+"metric": "treasury",
+"x": 2628,
+"sel_q": 0.95,
+"id": "seed7003:b1538",
+"criteria": "Resolves YES if Crimean Tatar's treasury as recorded at the end of turn 150 is 2628 or more; exactly 2628 counts. This is the same quantity the world report calls Treasury."
+},
+{
+"world": "seed7001",
+"family": "EX_tech_discovered",
+"T": 150,
+"text": "Will Brazzaville-Congolese have discovered Espionage by turn 150?",
+"subj": [
+"0"
+],
+"qAll": 0.001,
+"qA": 0.0,
+"qB": 0.002004008016032064,
+"tech": "Espionage",
+"id": "seed7001:b1431",
+"criteria": "Resolves YES if Brazzaville-Congolese discovers Espionage on any turn from 61 through 150 inclusive (an event on turn 150 itself counts). Resolves NO if it is not discovered by the end of turn 150."
+},
+{
+"world": "seed7014",
+"family": "W1_wonder_race",
+"T": 150,
+"text": "Will Chinese complete the Colossus by turn 150?",
+"subj": [
+"4"
+],
+"qAll": 0.013,
+"qA": 0.014,
+"qB": 0.012024048096192385,
+"wonder": "Colossus",
+"id": "seed7014:b1387",
+"criteria": "Resolves YES if Chinese completes Colossus on any turn from 61 through 150 inclusive (an event on turn 150 itself counts). A great wonder can be completed only once per game, so this resolves NO if another civilization completes it, or if it is not completed by the end of turn 150."
+},
+{
+"world": "seed7022",
+"family": "W2_directed_conquest",
+"T": 150,
+"text": "Will Boian capture at least one city from Hunnic by turn 150?",
+"subj": [
+"0",
+"3"
+],
+"qAll": 0.001,
+"qA": 0.002,
+"qB": 0.0,
+"id": "seed7022:b865",
+"criteria": "Resolves YES if Boian captures at least one city whose owner at the moment of capture is Hunnic, on any turn from 61 through 150 inclusive (an event on turn 150 itself counts). Recaptures count. Resolves NO otherwise."
+},
+{
+"world": "seed7008",
+"family": "NW2_diplo",
+"T": 150,
+"text": "Will Belgian and Spanish be at formal Peace at any point between turns 61 and 150?",
+"subj": [
+"1",
+"2"
+],
+"qAll": 0.003,
+"qA": 0.004,
+"qB": 0.002004008016032064,
+"kind": "peace_by",
+"id": "seed7008:b1379",
+"criteria": "Resolves YES if the diplomatic state between Belgian and Spanish is Peace at the end of any turn from 61 through 150 inclusive. Resolves NO if the state never occurs in that window (war, cease-fire, armistice and alliance do not count)."
+},
+{
+"world": "seed7008",
+"family": "S5_civ_wonders",
+"T": 150,
+"text": "Will Belgian complete at least 2 wonders by turn 150?",
+"subj": [
+"1"
+],
+"qAll": 0.017,
+"qA": 0.016,
+"qB": 0.018036072144288578,
+"k": 2,
+"id": "seed7008:b1717",
+"criteria": "Resolves YES if Belgian completes at least 2 great wonders on any turn from 61 through 150 inclusive (an event on turn 150 itself counts). Exactly 2 counts. Small wonders such as a palace do not count."
+},
+{
+"world": "seed7003",
+"family": "W5_tech_lead",
+"T": 150,
+"text": "Will Rhenish know strictly more technologies than every other civilization at turn 150?",
+"subj": [
+"1"
+],
+"qAll": 0.042,
+"qA": 0.044,
+"qB": 0.04008016032064128,
+"id": "seed7003:b1627",
+"criteria": "Resolves YES if, as recorded at the end of turn 150, Rhenish knows strictly more technologies than each of the other four civilizations, counting every technology known including those known at turn 60. This is the count the world report calls Techs; FreeCiv's initial 'None' entry is not a technology and is not counted. Any tie for the most resolves NO."
+},
+{
+"world": "seed7014",
+"family": "W6_peace_at",
+"T": 150,
+"text": "Will Tajik and Chinese have a formal peace in effect at turn 150?",
+"subj": [
+"2",
+"4"
+],
+"qAll": 0.008,
+"qA": 0.008,
+"qB": 0.008016032064128256,
+"id": "seed7014:b1369",
+"criteria": "Resolves YES if the diplomatic state between Tajik and Chinese as recorded at the end of turn 150 is Peace. War, cease-fire, armistice, alliance, or never having met all resolve NO."
+},
+{
+"world": "seed7022",
+"family": "NB4_drawdown",
+"T": 150,
+"text": "Will Pelasgian's population drop below 75% of its turn-60 level at any point up to turn 150?",
+"subj": [
+"1"
+],
+"qAll": 0.005,
+"qA": 0.004,
+"qB": 0.006012024048096192,
+"metric": "population",
+"f": 0.75,
+"id": "seed7022:b1099",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 150 inclusive, Pelasgian's population is below 75% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 75% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7003",
+"family": "NEW_civil_war",
+"T": 150,
+"text": "Will Ghana suffer a civil war (a breakaway civilization splitting off) by turn 150?",
+"subj": [
+"2"
+],
+"qAll": 0.044,
+"qA": 0.062,
+"qB": 0.026052104208416832,
+"id": "seed7003:b1804",
+"criteria": "Resolves YES if Ghana splits in a civil war on any turn from 61 through 150 inclusive (an event on turn 150 itself counts), meaning a new civilization is created out of some of Ghana's cities. Anarchy, disorder, or the loss of cities to other players without such a split resolve NO."
+},
+{
+"world": "seed7011",
+"family": "NW5_wonder",
+"T": 150,
+"text": "Will J.S. Bach's Cathedral be completed by any civilization by turn 150?",
+"subj": [],
+"qAll": 0.007,
+"qA": 0.008,
+"qB": 0.006012024048096192,
+"wonder": "J.S. Bach's Cathedral",
+"id": "seed7011:b1430",
+"criteria": "Resolves YES if any civilization completes J.S. Bach's Cathedral on any turn from 61 through 150 inclusive (an event on turn 150 itself counts). Resolves NO if it has not been completed by the end of turn 150."
+},
+{
+"world": "seed7022",
+"family": "NW4_survival",
+"T": 150,
+"text": "Will Abyssinian be eliminated (cease to exist as a civilization) by turn 150?",
+"subj": [
+"4"
+],
+"qAll": 0.002,
+"qA": 0.002,
+"qB": 0.002004008016032064,
+"id": "seed7022:b1234",
+"criteria": "Resolves YES if Abyssinian is eliminated on any turn from 61 through 150 inclusive (an event on turn 150 itself counts), meaning it ceases to exist as a civilization. Losing cities, losing the capital, or a civil war split without elimination resolve NO."
+},
+{
+"world": "seed7003",
+"family": "EX_government_at",
+"T": 150,
+"text": "Will Rhenish's government be Despotism at turn 150?",
+"subj": [
+"1"
+],
+"qAll": 0.039,
+"qA": 0.04,
+"qB": 0.03807615230460922,
+"gov": "Despotism",
+"id": "seed7003:b1588",
+"criteria": "Resolves YES if Rhenish's government as recorded at the end of turn 150 is Despotism. A change of government completed on turn 150 counts. Anarchy counts as a form of government. Resolves NO for any other government."
+},
+{
+"world": "seed7011",
+"family": "NB1_value_threshold",
+"T": 150,
+"text": "Will Libyan's treasury be at least 2556 at turn 150?",
+"subj": [
+"1"
+],
+"qAll": 0.05,
+"qA": 0.046,
+"qB": 0.05410821643286573,
+"metric": "treasury",
+"x": 2556,
+"sel_q": 0.95,
+"id": "seed7011:b1614",
+"criteria": "Resolves YES if Libyan's treasury as recorded at the end of turn 150 is 2556 or more; exactly 2556 counts. This is the same quantity the world report calls Treasury."
+},
+{
+"world": "seed7001",
+"family": "EX_tech_discovered",
+"T": 150,
+"text": "Will Sahrawi have discovered Communism by turn 150?",
+"subj": [
+"4"
+],
+"qAll": 0.026,
+"qA": 0.03,
+"qB": 0.022044088176352707,
+"tech": "Communism",
+"id": "seed7001:b1651",
+"criteria": "Resolves YES if Sahrawi discovers Communism on any turn from 61 through 150 inclusive (an event on turn 150 itself counts). Resolves NO if it is not discovered by the end of turn 150."
+},
+{
+"world": "seed7022",
+"family": "W6_peace_at",
+"T": 120,
+"text": "Will Boian and Hunnic have a formal peace in effect at turn 120?",
+"subj": [
+"0",
+"3"
+],
+"qAll": 0.003,
+"qA": 0.002,
+"qB": 0.004008016032064128,
+"id": "seed7022:b486",
+"criteria": "Resolves YES if the diplomatic state between Boian and Hunnic as recorded at the end of turn 120 is Peace. War, cease-fire, armistice, alliance, or never having met all resolve NO."
+},
+{
+"world": "seed7001",
+"family": "W1_wonder_race",
+"T": 120,
+"text": "Will Sahrawi complete the Pyramids by turn 120?",
+"subj": [
+"4"
+],
+"qAll": 0.001,
+"qA": 0.002,
+"qB": 0.0,
+"wonder": "Pyramids",
+"id": "seed7001:b791",
+"criteria": "Resolves YES if Sahrawi completes Pyramids on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). A great wonder can be completed only once per game, so this resolves NO if another civilization completes it, or if it is not completed by the end of turn 120."
+},
+{
+"world": "seed7003",
+"family": "NW2_diplo",
+"T": 120,
+"text": "Will Crimean Tatar and Sammarinese be at formal Peace at any point between turns 61 and 120?",
+"subj": [
+"0",
+"3"
+],
+"qAll": 0.027,
+"qA": 0.028,
+"qB": 0.026052104208416832,
+"kind": "peace_by",
+"id": "seed7003:b630",
+"criteria": "Resolves YES if the diplomatic state between Crimean Tatar and Sammarinese is Peace at the end of any turn from 61 through 120 inclusive. Resolves NO if the state never occurs in that window (war, cease-fire, armistice and alliance do not count)."
+},
+{
+"world": "seed7011",
+"family": "W5_tech_lead",
+"T": 120,
+"text": "Will Libyan know strictly more technologies than every other civilization at turn 120?",
+"subj": [
+"1"
+],
+"qAll": 0.032,
+"qA": 0.028,
+"qB": 0.036072144288577156,
+"id": "seed7011:b935",
+"criteria": "Resolves YES if, as recorded at the end of turn 120, Libyan knows strictly more technologies than each of the other four civilizations, counting every technology known including those known at turn 60. This is the count the world report calls Techs; FreeCiv's initial 'None' entry is not a technology and is not counted. Any tie for the most resolves NO."
+},
+{
+"world": "seed7014",
+"family": "NB4_drawdown",
+"T": 120,
+"text": "Will Chinese's territory size drop below 70% of its turn-60 level at any point up to turn 120?",
+"subj": [
+"4"
+],
+"qAll": 0.01,
+"qA": 0.014,
+"qB": 0.006012024048096192,
+"metric": "territory_size",
+"f": 0.7,
+"id": "seed7014:b1290",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 120 inclusive, Chinese's territory size is below 70% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 70% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7022",
+"family": "NW4_survival",
+"T": 120,
+"text": "Will Abyssinian be eliminated (cease to exist as a civilization) by turn 120?",
+"subj": [
+"4"
+],
+"qAll": 0.001,
+"qA": 0.002,
+"qB": 0.0,
+"id": "seed7022:b850",
+"criteria": "Resolves YES if Abyssinian is eliminated on any turn from 61 through 120 inclusive (an event on turn 120 itself counts), meaning it ceases to exist as a civilization. Losing cities, losing the capital, or a civil war split without elimination resolve NO."
+},
+{
+"world": "seed7022",
+"family": "EX_comparative",
+"T": 120,
+"text": "Will Hunnic have a higher score than Boian at turn 120?",
+"subj": [
+"3",
+"0"
+],
+"qAll": 0.033,
+"qA": 0.028,
+"qB": 0.03807615230460922,
+"metric": "scores",
+"id": "seed7022:b495",
+"criteria": "Resolves YES if Hunnic's score as recorded at the end of turn 120 is strictly greater than Boian's. Equal values resolve NO. The quantity is the same quantity the world report calls Score."
+},
+{
+"world": "seed7010",
+"family": "NEW_civil_war",
+"T": 120,
+"text": "Will Central American suffer a civil war (a breakaway civilization splitting off) by turn 120?",
+"subj": [
+"0"
+],
+"qAll": 0.018,
+"qA": 0.014,
+"qB": 0.022044088176352707,
+"id": "seed7010:b896",
+"criteria": "Resolves YES if Central American splits in a civil war on any turn from 61 through 120 inclusive (an event on turn 120 itself counts), meaning a new civilization is created out of some of Central American's cities. Anarchy, disorder, or the loss of cities to other players without such a split resolve NO."
+},
+{
+"world": "seed7005",
+"family": "NW5_wonder",
+"T": 120,
+"text": "Will Sun Tzu's War Academy be completed by any civilization by turn 120?",
+"subj": [],
+"qAll": 0.006,
+"qA": 0.006,
+"qB": 0.006012024048096192,
+"wonder": "Sun Tzu's War Academy",
+"id": "seed7005:b720",
+"criteria": "Resolves YES if any civilization completes Sun Tzu's War Academy on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). Resolves NO if it has not been completed by the end of turn 120."
+},
+{
+"world": "seed7003",
+"family": "EX_tech_discovered",
+"T": 120,
+"text": "Will Crimean Tatar have discovered Conscription by turn 120?",
+"subj": [
+"0"
+],
+"qAll": 0.03,
+"qA": 0.04,
+"qB": 0.02004008016032064,
+"tech": "Conscription",
+"id": "seed7003:b770",
+"criteria": "Resolves YES if Crimean Tatar discovers Conscription on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). Resolves NO if it is not discovered by the end of turn 120."
+},
+{
+"world": "seed7011",
+"family": "NB1_value_threshold",
+"T": 120,
+"text": "Will American's treasury be at least 1949 at turn 120?",
+"subj": [
+"4"
+],
+"qAll": 0.05,
+"qA": 0.046,
+"qB": 0.05410821643286573,
+"metric": "treasury",
+"x": 1949,
+"sel_q": 0.95,
+"id": "seed7011:b1289",
+"criteria": "Resolves YES if American's treasury as recorded at the end of turn 120 is 1949 or more; exactly 1949 counts. This is the same quantity the world report calls Treasury."
+},
+{
+"world": "seed7011",
+"family": "W2_directed_conquest",
+"T": 120,
+"text": "Will Equatoguinean capture at least one city from Ohlone by turn 120?",
+"subj": [
+"3",
+"0"
+],
+"qAll": 0.048,
+"qA": 0.038,
+"qB": 0.05811623246492986,
+"id": "seed7011:b662",
+"criteria": "Resolves YES if Equatoguinean captures at least one city whose owner at the moment of capture is Ohlone, on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). Recaptures count. Resolves NO otherwise."
+},
+{
+"world": "seed7022",
+"family": "NW1_war_at",
+"T": 120,
+"text": "Will Boian and Hunnic be at war at turn 120?",
+"subj": [
+"0",
+"3"
+],
+"qAll": 0.001,
+"qA": 0.0,
+"qB": 0.002004008016032064,
+"id": "seed7022:b485",
+"criteria": "Resolves YES if the diplomatic state between Boian and Hunnic as recorded at the end of turn 120 is War. Cease-fire, armistice, peace, alliance, or never having met all resolve NO."
+},
+{
+"world": "seed7003",
+"family": "S5_civ_wonders",
+"T": 120,
+"text": "Will Corsican complete at least 2 wonders by turn 120?",
+"subj": [
+"4"
+],
+"qAll": 0.009,
+"qA": 0.014,
+"qB": 0.004008016032064128,
+"k": 2,
+"id": "seed7003:b1302",
+"criteria": "Resolves YES if Corsican completes at least 2 great wonders on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). Exactly 2 counts. Small wonders such as a palace do not count."
+},
+{
+"world": "seed7008",
+"family": "EX_government_at",
+"T": 120,
+"text": "Will Somali's government be Monarchy at turn 120?",
+"subj": [
+"4"
+],
+"qAll": 0.001,
+"qA": 0.0,
+"qB": 0.002004008016032064,
+"gov": "Monarchy",
+"id": "seed7008:b1218",
+"criteria": "Resolves YES if Somali's government as recorded at the end of turn 120 is Monarchy. A change of government completed on turn 120 counts. Anarchy counts as a form of government. Resolves NO for any other government."
+},
+{
+"world": "seed7003",
+"family": "S4_gov_change_count",
+"T": 120,
+"text": "Will Crimean Tatar's government change at least 3 times by turn 120? (Anarchy counts as a form of government, for this question.)",
+"subj": [
+"0"
+],
+"qAll": 0.024,
+"qA": 0.02,
+"qB": 0.028056112224448898,
+"k": 3,
+"id": "seed7003:b764",
+"criteria": "Resolves YES if Crimean Tatar's government changes at least 3 times on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). Every recorded change counts, including a change into anarchy and a change out of it, so one revolution normally counts twice. Exactly 3 counts."
+},
+{
+"world": "seed7001",
+"family": "W6_peace_at",
+"T": 120,
+"text": "Will Brazzaville-Congolese and Sahrawi have a formal peace in effect at turn 120?",
+"subj": [
+"0",
+"4"
+],
+"qAll": 0.012,
+"qA": 0.014,
+"qB": 0.01002004008016032,
+"id": "seed7001:b663",
+"criteria": "Resolves YES if the diplomatic state between Brazzaville-Congolese and Sahrawi as recorded at the end of turn 120 is Peace. War, cease-fire, armistice, alliance, or never having met all resolve NO."
+},
+{
+"world": "seed7010",
+"family": "W1_wonder_race",
+"T": 120,
+"text": "Will American complete the Colossus by turn 120?",
+"subj": [
+"1"
+],
+"qAll": 0.005,
+"qA": 0.004,
+"qB": 0.006012024048096192,
+"wonder": "Colossus",
+"id": "seed7010:b762",
+"criteria": "Resolves YES if American completes Colossus on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). A great wonder can be completed only once per game, so this resolves NO if another civilization completes it, or if it is not completed by the end of turn 120."
+},
+{
+"world": "seed7001",
+"family": "NW2_diplo",
+"T": 120,
+"text": "Will Santomean and Estonian form an Alliance at any point between turns 61 and 120?",
+"subj": [
+"1",
+"2"
+],
+"qAll": 0.042,
+"qA": 0.038,
+"qB": 0.04609218436873747,
+"kind": "alliance_by",
+"id": "seed7001:b680",
+"criteria": "Resolves YES if the diplomatic state between Santomean and Estonian is Alliance at the end of any turn from 61 through 120 inclusive. Resolves NO if the state never occurs in that window (every other state do not count)."
+},
+{
+"world": "seed7001",
+"family": "W5_tech_lead",
+"T": 120,
+"text": "Will Brazzaville-Congolese know strictly more technologies than every other civilization at turn 120?",
+"subj": [
+"0"
+],
+"qAll": 0.034,
+"qA": 0.036,
+"qB": 0.03206412825651302,
+"id": "seed7001:b835",
+"criteria": "Resolves YES if, as recorded at the end of turn 120, Brazzaville-Congolese knows strictly more technologies than each of the other four civilizations, counting every technology known including those known at turn 60. This is the count the world report calls Techs; FreeCiv's initial 'None' entry is not a technology and is not counted. Any tie for the most resolves NO."
+},
+{
+"world": "seed7008",
+"family": "NB4_drawdown",
+"T": 120,
+"text": "Will Latvian's population drop below 90% of its turn-60 level at any point up to turn 120?",
+"subj": [
+"0"
+],
+"qAll": 0.004,
+"qA": 0.002,
+"qB": 0.006012024048096192,
+"metric": "population",
+"f": 0.9,
+"id": "seed7008:b872",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 120 inclusive, Latvian's population is below 90% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 90% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7022",
+"family": "NW4_survival",
+"T": 120,
+"text": "Will Western Roman be eliminated (cease to exist as a civilization) by turn 120?",
+"subj": [
+"2"
+],
+"qAll": 0.001,
+"qA": 0.0,
+"qB": 0.002004008016032064,
+"id": "seed7022:b734",
+"criteria": "Resolves YES if Western Roman is eliminated on any turn from 61 through 120 inclusive (an event on turn 120 itself counts), meaning it ceases to exist as a civilization. Losing cities, losing the capital, or a civil war split without elimination resolve NO."
+},
+{
+"world": "seed7008",
+"family": "EX_comparative",
+"T": 120,
+"text": "Will Latvian have a higher number of cities than Somali at turn 120?",
+"subj": [
+"0",
+"4"
+],
+"qAll": 0.035,
+"qA": 0.028,
+"qB": 0.04208416833667335,
+"metric": "cities_count",
+"id": "seed7008:b668",
+"criteria": "Resolves YES if Latvian's number of cities as recorded at the end of turn 120 is strictly greater than Somali's. Equal values resolve NO. The quantity is the same quantity the world report calls Cities."
+},
+{
+"world": "seed7008",
+"family": "NEW_civil_war",
+"T": 120,
+"text": "Will Somali suffer a civil war (a breakaway civilization splitting off) by turn 120?",
+"subj": [
+"4"
+],
+"qAll": 0.016,
+"qA": 0.022,
+"qB": 0.01002004008016032,
+"id": "seed7008:b1325",
+"criteria": "Resolves YES if Somali splits in a civil war on any turn from 61 through 120 inclusive (an event on turn 120 itself counts), meaning a new civilization is created out of some of Somali's cities. Anarchy, disorder, or the loss of cities to other players without such a split resolve NO."
+},
+{
+"world": "seed7011",
+"family": "NW5_wonder",
+"T": 120,
+"text": "Will Darwin's Voyage be completed by any civilization by turn 120?",
+"subj": [],
+"qAll": 0.001,
+"qA": 0.002,
+"qB": 0.0,
+"wonder": "Darwin's Voyage",
+"id": "seed7011:b771",
+"criteria": "Resolves YES if any civilization completes Darwin's Voyage on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). Resolves NO if it has not been completed by the end of turn 120."
+},
+{
+"world": "seed7003",
+"family": "EX_tech_discovered",
+"T": 120,
+"text": "Will Ghana have discovered Conscription by turn 120?",
+"subj": [
+"2"
+],
+"qAll": 0.01,
+"qA": 0.008,
+"qB": 0.012024048096192385,
+"tech": "Conscription",
+"id": "seed7003:b992",
+"criteria": "Resolves YES if Ghana discovers Conscription on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). Resolves NO if it is not discovered by the end of turn 120."
+},
+{
+"world": "seed7011",
+"family": "NB1_value_threshold",
+"T": 120,
+"text": "Will Libyan's treasury be at least 2229 at turn 120?",
+"subj": [
+"1"
+],
+"qAll": 0.05,
+"qA": 0.054,
+"qB": 0.04609218436873747,
+"metric": "treasury",
+"x": 2229,
+"sel_q": 0.95,
+"id": "seed7011:b955",
+"criteria": "Resolves YES if Libyan's treasury as recorded at the end of turn 120 is 2229 or more; exactly 2229 counts. This is the same quantity the world report calls Treasury."
+},
+{
+"world": "seed7005",
+"family": "W2_directed_conquest",
+"T": 120,
+"text": "Will Otom\u00ed capture at least one city from Saka by turn 120?",
+"subj": [
+"1",
+"0"
+],
+"qAll": 0.005,
+"qA": 0.004,
+"qB": 0.006012024048096192,
+"id": "seed7005:b590",
+"criteria": "Resolves YES if Otom\u00ed captures at least one city whose owner at the moment of capture is Saka, on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). Recaptures count. Resolves NO otherwise."
+},
+{
+"world": "seed7014",
+"family": "NW1_war_at",
+"T": 120,
+"text": "Will Tajik and Chinese be at war at turn 120?",
+"subj": [
+"2",
+"4"
+],
+"qAll": 0.019,
+"qA": 0.014,
+"qB": 0.02404809619238477,
+"id": "seed7014:b713",
+"criteria": "Resolves YES if the diplomatic state between Tajik and Chinese as recorded at the end of turn 120 is War. Cease-fire, armistice, peace, alliance, or never having met all resolve NO."
+},
+{
+"world": "seed7010",
+"family": "S5_civ_wonders",
+"T": 120,
+"text": "Will Central American complete at least 2 wonders by turn 120?",
+"subj": [
+"0"
+],
+"qAll": 0.001,
+"qA": 0.0,
+"qB": 0.002004008016032064,
+"k": 2,
+"id": "seed7010:b885",
+"criteria": "Resolves YES if Central American completes at least 2 great wonders on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). Exactly 2 counts. Small wonders such as a palace do not count."
+},
+{
+"world": "seed7010",
+"family": "EX_government_at",
+"T": 120,
+"text": "Will Central American's government be Anarchy at turn 120?",
+"subj": [
+"0"
+],
+"qAll": 0.003,
+"qA": 0.004,
+"qB": 0.002004008016032064,
+"gov": "Anarchy",
+"id": "seed7010:b785",
+"criteria": "Resolves YES if Central American's government as recorded at the end of turn 120 is Anarchy. A change of government completed on turn 120 counts. Anarchy counts as a form of government. Resolves NO for any other government."
+},
+{
+"world": "seed7001",
+"family": "S4_gov_change_count",
+"T": 120,
+"text": "Will Brazzaville-Congolese's government change at least 3 times by turn 120? (Anarchy counts as a form of government, for this question.)",
+"subj": [
+"0"
+],
+"qAll": 0.015,
+"qA": 0.014,
+"qB": 0.01603206412825651,
+"k": 3,
+"id": "seed7001:b798",
+"criteria": "Resolves YES if Brazzaville-Congolese's government changes at least 3 times on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). Every recorded change counts, including a change into anarchy and a change out of it, so one revolution normally counts twice. Exactly 3 counts."
+},
+{
+"world": "seed7011",
+"family": "W6_peace_at",
+"T": 120,
+"text": "Will Libyan and American have a formal peace in effect at turn 120?",
+"subj": [
+"1",
+"4"
+],
+"qAll": 0.002,
+"qA": 0.002,
+"qB": 0.002004008016032064,
+"id": "seed7011:b707",
+"criteria": "Resolves YES if the diplomatic state between Libyan and American as recorded at the end of turn 120 is Peace. War, cease-fire, armistice, alliance, or never having met all resolve NO."
+},
+{
+"world": "seed7014",
+"family": "W1_wonder_race",
+"T": 120,
+"text": "Will Tajik complete Copernicus' Observatory by turn 120?",
+"subj": [
+"2"
+],
+"qAll": 0.012,
+"qA": 0.008,
+"qB": 0.014028056112224449,
+"wonder": "Copernicus' Observatory",
+"id": "seed7014:b748",
+"criteria": "Resolves YES if Tajik completes Copernicus' Observatory on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). A great wonder can be completed only once per game, so this resolves NO if another civilization completes it, or if it is not completed by the end of turn 120."
+},
+{
+"world": "seed7003",
+"family": "NW2_diplo",
+"T": 120,
+"text": "Will Rhenish and Sammarinese form an Alliance at any point between turns 61 and 120?",
+"subj": [
+"1",
+"3"
+],
+"qAll": 0.001,
+"qA": 0.002,
+"qB": 0.0,
+"kind": "alliance_by",
+"id": "seed7003:b665",
+"criteria": "Resolves YES if the diplomatic state between Rhenish and Sammarinese is Alliance at the end of any turn from 61 through 120 inclusive. Resolves NO if the state never occurs in that window (every other state do not count)."
+},
+{
+"world": "seed7008",
+"family": "W5_tech_lead",
+"T": 120,
+"text": "Will Belgian know strictly more technologies than every other civilization at turn 120?",
+"subj": [
+"1"
+],
+"qAll": 0.012,
+"qA": 0.012,
+"qB": 0.012024048096192385,
+"id": "seed7008:b927",
+"criteria": "Resolves YES if, as recorded at the end of turn 120, Belgian knows strictly more technologies than each of the other four civilizations, counting every technology known including those known at turn 60. This is the count the world report calls Techs; FreeCiv's initial 'None' entry is not a technology and is not counted. Any tie for the most resolves NO."
+},
+{
+"world": "seed7005",
+"family": "NB4_drawdown",
+"T": 120,
+"text": "Will Ca\u00f1ari's population drop below 75% of its turn-60 level at any point up to turn 120?",
+"subj": [
+"3"
+],
+"qAll": 0.018,
+"qA": 0.02,
+"qB": 0.01603206412825651,
+"metric": "population",
+"f": 0.75,
+"id": "seed7005:b1139",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 120 inclusive, Ca\u00f1ari's population is below 75% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 75% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7008",
+"family": "EX_comparative",
+"T": 120,
+"text": "Will Latvian have a higher number of cities than Peruvian at turn 120?",
+"subj": [
+"0",
+"3"
+],
+"qAll": 0.05,
+"qA": 0.046,
+"qB": 0.05410821643286573,
+"metric": "cities_count",
+"id": "seed7008:b654",
+"criteria": "Resolves YES if Latvian's number of cities as recorded at the end of turn 120 is strictly greater than Peruvian's. Equal values resolve NO. The quantity is the same quantity the world report calls Cities."
+},
+{
+"world": "seed7003",
+"family": "NEW_civil_war",
+"T": 120,
+"text": "Will Crimean Tatar suffer a civil war (a breakaway civilization splitting off) by turn 120?",
+"subj": [
+"0"
+],
+"qAll": 0.029,
+"qA": 0.032,
+"qB": 0.026052104208416832,
+"id": "seed7003:b868",
+"criteria": "Resolves YES if Crimean Tatar splits in a civil war on any turn from 61 through 120 inclusive (an event on turn 120 itself counts), meaning a new civilization is created out of some of Crimean Tatar's cities. Anarchy, disorder, or the loss of cities to other players without such a split resolve NO."
+},
+{
+"world": "seed7014",
+"family": "NW5_wonder",
+"T": 120,
+"text": "Will Copernicus' Observatory be completed by any civilization by turn 120?",
+"subj": [],
+"qAll": 0.045,
+"qA": 0.042,
+"qB": 0.04609218436873747,
+"wonder": "Copernicus' Observatory",
+"id": "seed7014:b746",
+"criteria": "Resolves YES if any civilization completes Copernicus' Observatory on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). Resolves NO if it has not been completed by the end of turn 120."
+},
+{
+"world": "seed7011",
+"family": "EX_tech_discovered",
+"T": 120,
+"text": "Will Guyanese have discovered Chemistry by turn 120?",
+"subj": [
+"2"
+],
+"qAll": 0.048,
+"qA": 0.046,
+"qB": 0.050100200400801605,
+"tech": "Chemistry",
+"id": "seed7011:b1017",
+"criteria": "Resolves YES if Guyanese discovers Chemistry on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). Resolves NO if it is not discovered by the end of turn 120."
+},
+{
+"world": "seed7008",
+"family": "NB1_value_threshold",
+"T": 120,
+"text": "Will Peruvian's treasury be at least 1836 at turn 120?",
+"subj": [
+"3"
+],
+"qAll": 0.05,
+"qA": 0.048,
+"qB": 0.052104208416833664,
+"metric": "treasury",
+"x": 1836,
+"sel_q": 0.95,
+"id": "seed7008:b1167",
+"criteria": "Resolves YES if Peruvian's treasury as recorded at the end of turn 120 is 1836 or more; exactly 1836 counts. This is the same quantity the world report calls Treasury."
+},
+{
+"world": "seed7005",
+"family": "W2_directed_conquest",
+"T": 120,
+"text": "Will Otom\u00ed capture at least one city from Ostrogothic by turn 120?",
+"subj": [
+"1",
+"4"
+],
+"qAll": 0.034,
+"qA": 0.034,
+"qB": 0.03406813627254509,
+"id": "seed7005:b657",
+"criteria": "Resolves YES if Otom\u00ed captures at least one city whose owner at the moment of capture is Ostrogothic, on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). Recaptures count. Resolves NO otherwise."
+},
+{
+"world": "seed7011",
+"family": "NW1_war_at",
+"T": 120,
+"text": "Will Guyanese and American be at war at turn 120?",
+"subj": [
+"2",
+"4"
+],
+"qAll": 0.031,
+"qA": 0.032,
+"qB": 0.03006012024048096,
+"id": "seed7011:b733",
+"criteria": "Resolves YES if the diplomatic state between Guyanese and American as recorded at the end of turn 120 is War. Cease-fire, armistice, peace, alliance, or never having met all resolve NO."
+},
+{
+"world": "seed7010",
+"family": "S5_civ_wonders",
+"T": 120,
+"text": "Will Beninese complete at least 3 wonders by turn 120?",
+"subj": [
+"3"
+],
+"qAll": 0.002,
+"qA": 0.004,
+"qB": 0.0,
+"k": 3,
+"id": "seed7010:b1210",
+"criteria": "Resolves YES if Beninese completes at least 3 great wonders on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). Exactly 3 counts. Small wonders such as a palace do not count."
+},
+{
+"world": "seed7003",
+"family": "EX_government_at",
+"T": 120,
+"text": "Will Rhenish's government be Monarchy at turn 120?",
+"subj": [
+"1"
+],
+"qAll": 0.019,
+"qA": 0.022,
+"qB": 0.01603206412825651,
+"gov": "Monarchy",
+"id": "seed7003:b871",
+"criteria": "Resolves YES if Rhenish's government as recorded at the end of turn 120 is Monarchy. A change of government completed on turn 120 counts. Anarchy counts as a form of government. Resolves NO for any other government."
+},
+{
+"world": "seed7008",
+"family": "W6_peace_at",
+"T": 120,
+"text": "Will Belgian and Somali have a formal peace in effect at turn 120?",
+"subj": [
+"1",
+"4"
+],
+"qAll": 0.006,
+"qA": 0.006,
+"qB": 0.006012024048096192,
+"id": "seed7008:b700",
+"criteria": "Resolves YES if the diplomatic state between Belgian and Somali as recorded at the end of turn 120 is Peace. War, cease-fire, armistice, alliance, or never having met all resolve NO."
+},
+{
+"world": "seed7014",
+"family": "W1_wonder_race",
+"T": 120,
+"text": "Will Swazi complete Sun Tzu's War Academy by turn 120?",
+"subj": [
+"3"
+],
+"qAll": 0.001,
+"qA": 0.002,
+"qB": 0.0,
+"wonder": "Sun Tzu's War Academy",
+"id": "seed7014:b766",
+"criteria": "Resolves YES if Swazi completes Sun Tzu's War Academy on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). A great wonder can be completed only once per game, so this resolves NO if another civilization completes it, or if it is not completed by the end of turn 120."
+},
+{
+"world": "seed7001",
+"family": "NW2_diplo",
+"T": 120,
+"text": "Will Brazzaville-Congolese and Santomean reach a cease-fire or armistice at any point between turns 61 and 120?",
+"subj": [
+"0",
+"1"
+],
+"qAll": 0.046,
+"qA": 0.05,
+"qB": 0.04208416833667335,
+"kind": "ceasefire_by",
+"id": "seed7001:b623",
+"criteria": "Resolves YES if the diplomatic state between Brazzaville-Congolese and Santomean is Cease-fire or Armistice at the end of any turn from 61 through 120 inclusive. Resolves NO if the state never occurs in that window (war, peace and alliance do not count)."
+},
+{
+"world": "seed7003",
+"family": "W5_tech_lead",
+"T": 120,
+"text": "Will Sammarinese know strictly more technologies than every other civilization at turn 120?",
+"subj": [
+"3"
+],
+"qAll": 0.031,
+"qA": 0.03,
+"qB": 0.03206412825651302,
+"id": "seed7003:b1131",
+"criteria": "Resolves YES if, as recorded at the end of turn 120, Sammarinese knows strictly more technologies than each of the other four civilizations, counting every technology known including those known at turn 60. This is the count the world report calls Techs; FreeCiv's initial 'None' entry is not a technology and is not counted. Any tie for the most resolves NO."
+},
+{
+"world": "seed7001",
+"family": "NB4_drawdown",
+"T": 120,
+"text": "Will Santomean's territory size drop below 70% of its turn-60 level at any point up to turn 120?",
+"subj": [
+"1"
+],
+"qAll": 0.037,
+"qA": 0.032,
+"qB": 0.04208416833667335,
+"metric": "territory_size",
+"f": 0.7,
+"id": "seed7001:b1004",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 120 inclusive, Santomean's territory size is below 70% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 70% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7022",
+"family": "EX_comparative",
+"T": 120,
+"text": "Will Hunnic have a higher score than Pelasgian at turn 120?",
+"subj": [
+"3",
+"1"
+],
+"qAll": 0.012,
+"qA": 0.006,
+"qB": 0.018036072144288578,
+"metric": "scores",
+"id": "seed7022:b505",
+"criteria": "Resolves YES if Hunnic's score as recorded at the end of turn 120 is strictly greater than Pelasgian's. Equal values resolve NO. The quantity is the same quantity the world report calls Score."
+},
+{
+"world": "seed7014",
+"family": "NEW_civil_war",
+"T": 120,
+"text": "Will Trinidadian and Tobagonian suffer a civil war (a breakaway civilization splitting off) by turn 120?",
+"subj": [
+"1"
+],
+"qAll": 0.034,
+"qA": 0.042,
+"qB": 0.026052104208416832,
+"id": "seed7014:b981",
+"criteria": "Resolves YES if Trinidadian and Tobagonian splits in a civil war on any turn from 61 through 120 inclusive (an event on turn 120 itself counts), meaning a new civilization is created out of some of Trinidadian and Tobagonian's cities. Anarchy, disorder, or the loss of cities to other players without such a split resolve NO."
+},
+{
+"world": "seed7022",
+"family": "NW5_wonder",
+"T": 120,
+"text": "Will Michelangelo's Chapel be completed by any civilization by turn 120?",
+"subj": [],
+"qAll": 0.02,
+"qA": 0.022,
+"qB": 0.018036072144288578,
+"wonder": "Michelangelo's Chapel",
+"id": "seed7022:b520",
+"criteria": "Resolves YES if any civilization completes Michelangelo's Chapel on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). Resolves NO if it has not been completed by the end of turn 120."
+},
+{
+"world": "seed7022",
+"family": "EX_tech_discovered",
+"T": 120,
+"text": "Will Boian have discovered Magnetism by turn 120?",
+"subj": [
+"0"
+],
+"qAll": 0.007,
+"qA": 0.004,
+"qB": 0.01002004008016032,
+"tech": "Magnetism",
+"id": "seed7022:b545",
+"criteria": "Resolves YES if Boian discovers Magnetism on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). Resolves NO if it is not discovered by the end of turn 120."
+},
+{
+"world": "seed7022",
+"family": "NB1_value_threshold",
+"T": 120,
+"text": "Will Pelasgian's treasury be at least 2708 at turn 120?",
+"subj": [
+"1"
+],
+"qAll": 0.05,
+"qA": 0.048,
+"qB": 0.052104208416833664,
+"metric": "treasury",
+"x": 2708,
+"sel_q": 0.95,
+"id": "seed7022:b684",
+"criteria": "Resolves YES if Pelasgian's treasury as recorded at the end of turn 120 is 2708 or more; exactly 2708 counts. This is the same quantity the world report calls Treasury."
+},
+{
+"world": "seed7003",
+"family": "W2_directed_conquest",
+"T": 120,
+"text": "Will Crimean Tatar capture at least one city from Sammarinese by turn 120?",
+"subj": [
+"0",
+"3"
+],
+"qAll": 0.004,
+"qA": 0.004,
+"qB": 0.004008016032064128,
+"id": "seed7003:b632",
+"criteria": "Resolves YES if Crimean Tatar captures at least one city whose owner at the moment of capture is Sammarinese, on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). Recaptures count. Resolves NO otherwise."
+},
+{
+"world": "seed7005",
+"family": "NW1_war_at",
+"T": 120,
+"text": "Will Greek and Ostrogothic be at war at turn 120?",
+"subj": [
+"2",
+"4"
+],
+"qAll": 0.005,
+"qA": 0.006,
+"qB": 0.004008016032064128,
+"id": "seed7005:b678",
+"criteria": "Resolves YES if the diplomatic state between Greek and Ostrogothic as recorded at the end of turn 120 is War. Cease-fire, armistice, peace, alliance, or never having met all resolve NO."
+},
+{
+"world": "seed7005",
+"family": "S5_civ_wonders",
+"T": 120,
+"text": "Will Saka complete at least 1 wonder by turn 120?",
+"subj": [
+"0"
+],
+"qAll": 0.033,
+"qA": 0.034,
+"qB": 0.03206412825651302,
+"k": 1,
+"id": "seed7005:b821",
+"criteria": "Resolves YES if Saka completes at least 1 great wonder on any turn from 61 through 120 inclusive (an event on turn 120 itself counts). Exactly 1 counts. Small wonders such as a palace do not count."
+},
+{
+"world": "seed7003",
+"family": "EX_government_at",
+"T": 120,
+"text": "Will Ghana's government be Monarchy at turn 120?",
+"subj": [
+"2"
+],
+"qAll": 0.001,
+"qA": 0.0,
+"qB": 0.002004008016032064,
+"gov": "Monarchy",
+"id": "seed7003:b983",
+"criteria": "Resolves YES if Ghana's government as recorded at the end of turn 120 is Monarchy. A change of government completed on turn 120 counts. Anarchy counts as a form of government. Resolves NO for any other government."
+},
+{
+"world": "seed7022",
+"family": "EX_comparative",
+"T": 90,
+"text": "Will Hunnic have a higher population than Pelasgian at turn 90?",
+"subj": [
+"3",
+"1"
+],
+"qAll": 0.003,
+"qA": 0.002,
+"qB": 0.004008016032064128,
+"metric": "population",
+"id": "seed7022:b40",
+"criteria": "Resolves YES if Hunnic's population as recorded at the end of turn 90 is strictly greater than Pelasgian's. Equal values resolve NO. The quantity is the same quantity the world report calls Population."
+},
+{
+"world": "seed7008",
+"family": "S6_city_founding",
+"T": 90,
+"text": "Will Spanish found at least 8 new cities by turn 90?",
+"subj": [
+"2"
+],
+"qAll": 0.017,
+"qA": 0.02,
+"qB": 0.014028056112224449,
+"k": 8,
+"id": "seed7008:b416",
+"criteria": "Resolves YES if Spanish founds at least 8 new cities on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). Cities held at turn 60 and cities captured do not count. Exactly 8 counts."
+},
+{
+"world": "seed7011",
+"family": "EX_government_at",
+"T": 90,
+"text": "Will Guyanese's government be Despotism at turn 90?",
+"subj": [
+"2"
+],
+"qAll": 0.016,
+"qA": 0.024,
+"qB": 0.008016032064128256,
+"gov": "Despotism",
+"id": "seed7011:b342",
+"criteria": "Resolves YES if Guyanese's government as recorded at the end of turn 90 is Despotism. A change of government completed on turn 90 counts. Anarchy counts as a form of government. Resolves NO for any other government."
+},
+{
+"world": "seed7005",
+"family": "S4_gov_change_count",
+"T": 90,
+"text": "Will Greek's government change at least 3 times by turn 90? (Anarchy counts as a form of government, for this question.)",
+"subj": [
+"2"
+],
+"qAll": 0.022,
+"qA": 0.022,
+"qB": 0.022044088176352707,
+"k": 3,
+"id": "seed7005:b302",
+"criteria": "Resolves YES if Greek's government changes at least 3 times on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). Every recorded change counts, including a change into anarchy and a change out of it, so one revolution normally counts twice. Exactly 3 counts."
+},
+{
+"world": "seed7011",
+"family": "W1_wonder_race",
+"T": 90,
+"text": "Will Libyan complete the Colossus by turn 90?",
+"subj": [
+"1"
+],
+"qAll": 0.003,
+"qA": 0.002,
+"qB": 0.004008016032064128,
+"wonder": "Colossus",
+"id": "seed7011:b125",
+"criteria": "Resolves YES if Libyan completes Colossus on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). A great wonder can be completed only once per game, so this resolves NO if another civilization completes it, or if it is not completed by the end of turn 90."
+},
+{
+"world": "seed7001",
+"family": "EX_tech_discovered",
+"T": 90,
+"text": "Will Guinean have discovered Theology by turn 90?",
+"subj": [
+"3"
+],
+"qAll": 0.004,
+"qA": 0.002,
+"qB": 0.006012024048096192,
+"tech": "Theology",
+"id": "seed7001:b455",
+"criteria": "Resolves YES if Guinean discovers Theology on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). Resolves NO if it is not discovered by the end of turn 90."
+},
+{
+"world": "seed7011",
+"family": "W6_peace_at",
+"T": 90,
+"text": "Will Ohlone and Libyan have a formal peace in effect at turn 90?",
+"subj": [
+"0",
+"1"
+],
+"qAll": 0.005,
+"qA": 0.006,
+"qB": 0.004008016032064128,
+"id": "seed7011:b1",
+"criteria": "Resolves YES if the diplomatic state between Ohlone and Libyan as recorded at the end of turn 90 is Peace. War, cease-fire, armistice, alliance, or never having met all resolve NO."
+},
+{
+"world": "seed7011",
+"family": "W3_capture_k",
+"T": 90,
+"text": "Will Ohlone capture at least 5 cities by turn 90?",
+"subj": [
+"0"
+],
+"qAll": 0.005,
+"qA": 0.008,
+"qB": 0.002004008016032064,
+"k": 5,
+"id": "seed7011:b233",
+"criteria": "Resolves YES if Ohlone captures at least 5 cities on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). A capture is a city changing owner by force. Captures of cities held by barbarians count. Each capture event counts separately, so a city captured, lost and captured again counts twice. Cities that change hands when a civilization splits in a civil war are not captures. Exactly 5 counts."
+},
+{
+"world": "seed7014",
+"family": "NB1_value_threshold",
+"T": 90,
+"text": "Will Tajik's treasury be at least 895 at turn 90?",
+"subj": [
+"2"
+],
+"qAll": 0.05,
+"qA": 0.046,
+"qB": 0.05410821643286573,
+"metric": "treasury",
+"x": 895,
+"sel_q": 0.95,
+"id": "seed7014:b373",
+"criteria": "Resolves YES if Tajik's treasury as recorded at the end of turn 90 is 895 or more; exactly 895 counts. This is the same quantity the world report calls Treasury."
+},
+{
+"world": "seed7008",
+"family": "NB6_event",
+"T": 90,
+"text": "Will at least 20 cities be conquered (in total) by turn 90?",
+"subj": [],
+"qAll": 0.009,
+"qA": 0.008,
+"qB": 0.01002004008016032,
+"kind": "ge20",
+"id": "seed7008:b130",
+"criteria": "Resolves YES if at least 20 city captures occur in total across all players on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). A capture is a city changing owner by force. Captures of cities held by barbarians count. Each capture event counts separately, so a city captured, lost and captured again counts twice. Cities that change hands when a civilization splits in a civil war are not captures. Exactly 20 counts."
+},
+{
+"world": "seed7001",
+"family": "S5_civ_wonders",
+"T": 90,
+"text": "Will Brazzaville-Congolese complete at least 1 wonder by turn 90?",
+"subj": [
+"0"
+],
+"qAll": 0.011,
+"qA": 0.012,
+"qB": 0.01002004008016032,
+"k": 1,
+"id": "seed7001:b220",
+"criteria": "Resolves YES if Brazzaville-Congolese completes at least 1 great wonder on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). Exactly 1 counts. Small wonders such as a palace do not count."
+},
+{
+"world": "seed7005",
+"family": "W4_lose_k",
+"T": 90,
+"text": "Will Greek lose at least 5 cities by turn 90?",
+"subj": [
+"2"
+],
+"qAll": 0.001,
+"qA": 0.0,
+"qB": 0.002004008016032064,
+"k": 5,
+"id": "seed7005:b395",
+"criteria": "Resolves YES if Greek loses at least 5 cities to capture on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). Losses to any player count, including to barbarians. Each loss event counts separately, so a city lost, retaken and lost again counts twice. A city destroyed rather than captured, or lost through a civil war split, does not count. Exactly 5 counts."
+},
+{
+"world": "seed7011",
+"family": "NW2_diplo",
+"T": 90,
+"text": "Will Equatoguinean and American form an Alliance at any point between turns 61 and 90?",
+"subj": [
+"3",
+"4"
+],
+"qAll": 0.038,
+"qA": 0.04,
+"qB": 0.036072144288577156,
+"kind": "alliance_by",
+"id": "seed7011:b106",
+"criteria": "Resolves YES if the diplomatic state between Equatoguinean and American is Alliance at the end of any turn from 61 through 90 inclusive. Resolves NO if the state never occurs in that window (every other state do not count)."
+},
+{
+"world": "seed7022",
+"family": "NW4_survival",
+"T": 90,
+"text": "Will Western Roman be eliminated (cease to exist as a civilization) by turn 90?",
+"subj": [
+"2"
+],
+"qAll": 0.001,
+"qA": 0.0,
+"qB": 0.002004008016032064,
+"id": "seed7022:b276",
+"criteria": "Resolves YES if Western Roman is eliminated on any turn from 61 through 90 inclusive (an event on turn 90 itself counts), meaning it ceases to exist as a civilization. Losing cities, losing the capital, or a civil war split without elimination resolve NO."
+},
+{
+"world": "seed7001",
+"family": "NEW_civil_war",
+"T": 90,
+"text": "Will Brazzaville-Congolese suffer a civil war (a breakaway civilization splitting off) by turn 90?",
+"subj": [
+"0"
+],
+"qAll": 0.012,
+"qA": 0.014,
+"qB": 0.01002004008016032,
+"id": "seed7001:b231",
+"criteria": "Resolves YES if Brazzaville-Congolese splits in a civil war on any turn from 61 through 90 inclusive (an event on turn 90 itself counts), meaning a new civilization is created out of some of Brazzaville-Congolese's cities. Anarchy, disorder, or the loss of cities to other players without such a split resolve NO."
+},
+{
+"world": "seed7008",
+"family": "W2_directed_conquest",
+"T": 90,
+"text": "Will Belgian capture at least one city from Peruvian by turn 90?",
+"subj": [
+"1",
+"3"
+],
+"qAll": 0.01,
+"qA": 0.008,
+"qB": 0.012024048096192385,
+"id": "seed7008:b63",
+"criteria": "Resolves YES if Belgian captures at least one city whose owner at the moment of capture is Peruvian, on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). Recaptures count. Resolves NO otherwise."
+},
+{
+"world": "seed7001",
+"family": "NB4_drawdown",
+"T": 90,
+"text": "Will Sahrawi's number of cities drop below 99% of its turn-60 level at any point up to turn 90?",
+"subj": [
+"4"
+],
+"qAll": 0.035,
+"qA": 0.038,
+"qB": 0.03206412825651302,
+"metric": "cities_count",
+"f": 0.99,
+"id": "seed7001:b604",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 90 inclusive, Sahrawi's number of cities is below 99% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 99% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7003",
+"family": "NW5_wonder",
+"T": 90,
+"text": "Will King Richard's Crusade be completed by any civilization by turn 90?",
+"subj": [],
+"qAll": 0.002,
+"qA": 0.0,
+"qB": 0.004008016032064128,
+"wonder": "King Richard's Crusade",
+"id": "seed7003:b110",
+"criteria": "Resolves YES if any civilization completes King Richard's Crusade on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). Resolves NO if it has not been completed by the end of turn 90."
+},
+{
+"world": "seed7001",
+"family": "NW1_war_at",
+"T": 90,
+"text": "Will Estonian and Guinean be at war at turn 90?",
+"subj": [
+"2",
+"3"
+],
+"qAll": 0.026,
+"qA": 0.032,
+"qB": 0.02004008016032064,
+"id": "seed7001:b81",
+"criteria": "Resolves YES if the diplomatic state between Estonian and Guinean as recorded at the end of turn 90 is War. Cease-fire, armistice, peace, alliance, or never having met all resolve NO."
+},
+{
+"world": "seed7003",
+"family": "W5_tech_lead",
+"T": 90,
+"text": "Will Rhenish know strictly more technologies than every other civilization at turn 90?",
+"subj": [
+"1"
+],
+"qAll": 0.023,
+"qA": 0.03,
+"qB": 0.01603206412825651,
+"id": "seed7003:b251",
+"criteria": "Resolves YES if, as recorded at the end of turn 90, Rhenish knows strictly more technologies than each of the other four civilizations, counting every technology known including those known at turn 60. This is the count the world report calls Techs; FreeCiv's initial 'None' entry is not a technology and is not counted. Any tie for the most resolves NO."
+},
+{
+"world": "seed7014",
+"family": "EX_comparative",
+"T": 90,
+"text": "Will Swazi have a higher population than Trinidadian and Tobagonian at turn 90?",
+"subj": [
+"3",
+"1"
+],
+"qAll": 0.014,
+"qA": 0.02,
+"qB": 0.008016032064128256,
+"metric": "population",
+"id": "seed7014:b55",
+"criteria": "Resolves YES if Swazi's population as recorded at the end of turn 90 is strictly greater than Trinidadian and Tobagonian's. Equal values resolve NO. The quantity is the same quantity the world report calls Population."
+},
+{
+"world": "seed7005",
+"family": "S6_city_founding",
+"T": 90,
+"text": "Will Greek found at least 8 new cities by turn 90?",
+"subj": [
+"2"
+],
+"qAll": 0.025,
+"qA": 0.026,
+"qB": 0.02404809619238477,
+"k": 8,
+"id": "seed7005:b387",
+"criteria": "Resolves YES if Greek founds at least 8 new cities on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). Cities held at turn 60 and cities captured do not count. Exactly 8 counts."
+},
+{
+"world": "seed7005",
+"family": "EX_government_at",
+"T": 90,
+"text": "Will Ostrogothic's government be Despotism at turn 90?",
+"subj": [
+"4"
+],
+"qAll": 0.007,
+"qA": 0.014,
+"qB": 0.0,
+"gov": "Despotism",
+"id": "seed7005:b487",
+"criteria": "Resolves YES if Ostrogothic's government as recorded at the end of turn 90 is Despotism. A change of government completed on turn 90 counts. Anarchy counts as a form of government. Resolves NO for any other government."
+},
+{
+"world": "seed7003",
+"family": "S4_gov_change_count",
+"T": 90,
+"text": "Will Crimean Tatar's government change at least 2 times by turn 90? (Anarchy counts as a form of government, for this question.)",
+"subj": [
+"0"
+],
+"qAll": 0.029,
+"qA": 0.03,
+"qB": 0.028056112224448898,
+"k": 2,
+"id": "seed7003:b122",
+"criteria": "Resolves YES if Crimean Tatar's government changes at least 2 times on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). Every recorded change counts, including a change into anarchy and a change out of it, so one revolution normally counts twice. Exactly 2 counts."
+},
+{
+"world": "seed7001",
+"family": "W1_wonder_race",
+"T": 90,
+"text": "Will Sahrawi complete Copernicus' Observatory by turn 90?",
+"subj": [
+"4"
+],
+"qAll": 0.001,
+"qA": 0.0,
+"qB": 0.002004008016032064,
+"wonder": "Copernicus' Observatory",
+"id": "seed7001:b120",
+"criteria": "Resolves YES if Sahrawi completes Copernicus' Observatory on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). A great wonder can be completed only once per game, so this resolves NO if another civilization completes it, or if it is not completed by the end of turn 90."
+},
+{
+"world": "seed7001",
+"family": "EX_tech_discovered",
+"T": 90,
+"text": "Will Estonian have discovered Astronomy by turn 90?",
+"subj": [
+"2"
+],
+"qAll": 0.034,
+"qA": 0.04,
+"qB": 0.028056112224448898,
+"tech": "Astronomy",
+"id": "seed7001:b339",
+"criteria": "Resolves YES if Estonian discovers Astronomy on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). Resolves NO if it is not discovered by the end of turn 90."
+},
+{
+"world": "seed7010",
+"family": "W6_peace_at",
+"T": 90,
+"text": "Will Central American and Fijian have a formal peace in effect at turn 90?",
+"subj": [
+"0",
+"4"
+],
+"qAll": 0.002,
+"qA": 0.002,
+"qB": 0.002004008016032064,
+"id": "seed7010:b34",
+"criteria": "Resolves YES if the diplomatic state between Central American and Fijian as recorded at the end of turn 90 is Peace. War, cease-fire, armistice, alliance, or never having met all resolve NO."
+},
+{
+"world": "seed7003",
+"family": "W3_capture_k",
+"T": 90,
+"text": "Will Crimean Tatar capture at least 3 cities by turn 90?",
+"subj": [
+"0"
+],
+"qAll": 0.012,
+"qA": 0.008,
+"qB": 0.01603206412825651,
+"k": 3,
+"id": "seed7003:b212",
+"criteria": "Resolves YES if Crimean Tatar captures at least 3 cities on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). A capture is a city changing owner by force. Captures of cities held by barbarians count. Each capture event counts separately, so a city captured, lost and captured again counts twice. Cities that change hands when a civilization splits in a civil war are not captures. Exactly 3 counts."
+},
+{
+"world": "seed7008",
+"family": "NB1_value_threshold",
+"T": 90,
+"text": "Will Spanish's treasury be at least 1340 at turn 90?",
+"subj": [
+"2"
+],
+"qAll": 0.05,
+"qA": 0.058,
+"qB": 0.04208416833667335,
+"metric": "treasury",
+"x": 1340,
+"sel_q": 0.95,
+"id": "seed7008:b381",
+"criteria": "Resolves YES if Spanish's treasury as recorded at the end of turn 90 is 1340 or more; exactly 1340 counts. This is the same quantity the world report calls Treasury."
+},
+{
+"world": "seed7011",
+"family": "NB6_event",
+"T": 90,
+"text": "Will at least 20 cities be conquered (in total) by turn 90?",
+"subj": [],
+"qAll": 0.018,
+"qA": 0.02,
+"qB": 0.01603206412825651,
+"kind": "ge20",
+"id": "seed7011:b122",
+"criteria": "Resolves YES if at least 20 city captures occur in total across all players on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). A capture is a city changing owner by force. Captures of cities held by barbarians count. Each capture event counts separately, so a city captured, lost and captured again counts twice. Cities that change hands when a civilization splits in a civil war are not captures. Exactly 20 counts."
+},
+{
+"world": "seed7008",
+"family": "S5_civ_wonders",
+"T": 90,
+"text": "Will Latvian complete at least 1 wonder by turn 90?",
+"subj": [
+"0"
+],
+"qAll": 0.001,
+"qA": 0.0,
+"qB": 0.002004008016032064,
+"k": 1,
+"id": "seed7008:b227",
+"criteria": "Resolves YES if Latvian completes at least 1 great wonder on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). Exactly 1 counts. Small wonders such as a palace do not count."
+},
+{
+"world": "seed7001",
+"family": "W4_lose_k",
+"T": 90,
+"text": "Will Sahrawi lose at least 5 cities by turn 90?",
+"subj": [
+"4"
+],
+"qAll": 0.014,
+"qA": 0.018,
+"qB": 0.01002004008016032,
+"k": 5,
+"id": "seed7001:b620",
+"criteria": "Resolves YES if Sahrawi loses at least 5 cities to capture on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). Losses to any player count, including to barbarians. Each loss event counts separately, so a city lost, retaken and lost again counts twice. A city destroyed rather than captured, or lost through a civil war split, does not count. Exactly 5 counts."
+},
+{
+"world": "seed7010",
+"family": "NW2_diplo",
+"T": 90,
+"text": "Will American and Beninese be at formal Peace at any point between turns 61 and 90?",
+"subj": [
+"1",
+"3"
+],
+"qAll": 0.002,
+"qA": 0.0,
+"qB": 0.004008016032064128,
+"kind": "peace_by",
+"id": "seed7010:b59",
+"criteria": "Resolves YES if the diplomatic state between American and Beninese is Peace at the end of any turn from 61 through 90 inclusive. Resolves NO if the state never occurs in that window (war, cease-fire, armistice and alliance do not count)."
+},
+{
+"world": "seed7022",
+"family": "NEW_civil_war",
+"T": 90,
+"text": "Will Abyssinian suffer a civil war (a breakaway civilization splitting off) by turn 90?",
+"subj": [
+"4"
+],
+"qAll": 0.011,
+"qA": 0.006,
+"qB": 0.01603206412825651,
+"id": "seed7022:b472",
+"criteria": "Resolves YES if Abyssinian splits in a civil war on any turn from 61 through 90 inclusive (an event on turn 90 itself counts), meaning a new civilization is created out of some of Abyssinian's cities. Anarchy, disorder, or the loss of cities to other players without such a split resolve NO."
+},
+{
+"world": "seed7008",
+"family": "W2_directed_conquest",
+"T": 90,
+"text": "Will Latvian capture at least one city from Somali by turn 90?",
+"subj": [
+"0",
+"4"
+],
+"qAll": 0.013,
+"qA": 0.012,
+"qB": 0.014028056112224449,
+"id": "seed7008:b39",
+"criteria": "Resolves YES if Latvian captures at least one city whose owner at the moment of capture is Somali, on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). Recaptures count. Resolves NO otherwise."
+},
+{
+"world": "seed7022",
+"family": "NB4_drawdown",
+"T": 90,
+"text": "Will Pelasgian's number of cities drop below 70% of its turn-60 level at any point up to turn 90?",
+"subj": [
+"1"
+],
+"qAll": 0.004,
+"qA": 0.004,
+"qB": 0.004008016032064128,
+"metric": "cities_count",
+"f": 0.7,
+"id": "seed7022:b261",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 90 inclusive, Pelasgian's number of cities is below 70% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 70% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7008",
+"family": "NW5_wonder",
+"T": 90,
+"text": "Will Marco Polo's Embassy be completed by any civilization by turn 90?",
+"subj": [],
+"qAll": 0.003,
+"qA": 0.004,
+"qB": 0.002004008016032064,
+"wonder": "Marco Polo's Embassy",
+"id": "seed7008:b139",
+"criteria": "Resolves YES if any civilization completes Marco Polo's Embassy on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). Resolves NO if it has not been completed by the end of turn 90."
+},
+{
+"world": "seed7001",
+"family": "NW1_war_at",
+"T": 90,
+"text": "Will Santomean and Guinean be at war at turn 90?",
+"subj": [
+"1",
+"3"
+],
+"qAll": 0.049,
+"qA": 0.044,
+"qB": 0.05410821643286573,
+"id": "seed7001:b58",
+"criteria": "Resolves YES if the diplomatic state between Santomean and Guinean as recorded at the end of turn 90 is War. Cease-fire, armistice, peace, alliance, or never having met all resolve NO."
+},
+{
+"world": "seed7005",
+"family": "W5_tech_lead",
+"T": 90,
+"text": "Will Ca\u00f1ari know strictly more technologies than every other civilization at turn 90?",
+"subj": [
+"3"
+],
+"qAll": 0.022,
+"qA": 0.016,
+"qB": 0.028056112224448898,
+"id": "seed7005:b419",
+"criteria": "Resolves YES if, as recorded at the end of turn 90, Ca\u00f1ari knows strictly more technologies than each of the other four civilizations, counting every technology known including those known at turn 60. This is the count the world report calls Techs; FreeCiv's initial 'None' entry is not a technology and is not counted. Any tie for the most resolves NO."
+},
+{
+"world": "seed7003",
+"family": "EX_comparative",
+"T": 90,
+"text": "Will Ghana have a higher population than Rhenish at turn 90?",
+"subj": [
+"2",
+"1"
+],
+"qAll": 0.029,
+"qA": 0.03,
+"qB": 0.028056112224448898,
+"metric": "population",
+"id": "seed7003:b42",
+"criteria": "Resolves YES if Ghana's population as recorded at the end of turn 90 is strictly greater than Rhenish's. Equal values resolve NO. The quantity is the same quantity the world report calls Population."
+},
+{
+"world": "seed7022",
+"family": "EX_government_at",
+"T": 90,
+"text": "Will Abyssinian's government be Monarchy at turn 90?",
+"subj": [
+"4"
+],
+"qAll": 0.002,
+"qA": 0.0,
+"qB": 0.004008016032064128,
+"gov": "Monarchy",
+"id": "seed7022:b379",
+"criteria": "Resolves YES if Abyssinian's government as recorded at the end of turn 90 is Monarchy. A change of government completed on turn 90 counts. Anarchy counts as a form of government. Resolves NO for any other government."
+},
+{
+"world": "seed7014",
+"family": "S4_gov_change_count",
+"T": 90,
+"text": "Will Bissau-Guinean's government change at least 2 times by turn 90? (Anarchy counts as a form of government, for this question.)",
+"subj": [
+"0"
+],
+"qAll": 0.042,
+"qA": 0.036,
+"qB": 0.04809619238476954,
+"k": 2,
+"id": "seed7014:b137",
+"criteria": "Resolves YES if Bissau-Guinean's government changes at least 2 times on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). Every recorded change counts, including a change into anarchy and a change out of it, so one revolution normally counts twice. Exactly 2 counts."
+},
+{
+"world": "seed7014",
+"family": "W1_wonder_race",
+"T": 90,
+"text": "Will Tajik complete Copernicus' Observatory by turn 90?",
+"subj": [
+"2"
+],
+"qAll": 0.001,
+"qA": 0.002,
+"qB": 0.0,
+"wonder": "Copernicus' Observatory",
+"id": "seed7014:b120",
+"criteria": "Resolves YES if Tajik completes Copernicus' Observatory on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). A great wonder can be completed only once per game, so this resolves NO if another civilization completes it, or if it is not completed by the end of turn 90."
+},
+{
+"world": "seed7008",
+"family": "EX_tech_discovered",
+"T": 90,
+"text": "Will Latvian have discovered University by turn 90?",
+"subj": [
+"0"
+],
+"qAll": 0.001,
+"qA": 0.002,
+"qB": 0.0,
+"tech": "University",
+"id": "seed7008:b169",
+"criteria": "Resolves YES if Latvian discovers University on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). Resolves NO if it is not discovered by the end of turn 90."
+},
+{
+"world": "seed7022",
+"family": "W6_peace_at",
+"T": 90,
+"text": "Will Boian and Pelasgian have a formal peace in effect at turn 90?",
+"subj": [
+"0",
+"1"
+],
+"qAll": 0.008,
+"qA": 0.008,
+"qB": 0.008016032064128256,
+"id": "seed7022:b1",
+"criteria": "Resolves YES if the diplomatic state between Boian and Pelasgian as recorded at the end of turn 90 is Peace. War, cease-fire, armistice, alliance, or never having met all resolve NO."
+},
+{
+"world": "seed7005",
+"family": "W3_capture_k",
+"T": 90,
+"text": "Will Saka capture at least 5 cities by turn 90?",
+"subj": [
+"0"
+],
+"qAll": 0.002,
+"qA": 0.0,
+"qB": 0.004008016032064128,
+"k": 5,
+"id": "seed7005:b204",
+"criteria": "Resolves YES if Saka captures at least 5 cities on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). A capture is a city changing owner by force. Captures of cities held by barbarians count. Each capture event counts separately, so a city captured, lost and captured again counts twice. Cities that change hands when a civilization splits in a civil war are not captures. Exactly 5 counts."
+},
+{
+"world": "seed7005",
+"family": "NB6_event",
+"T": 90,
+"text": "Will at least 20 cities be conquered (in total) by turn 90?",
+"subj": [],
+"qAll": 0.001,
+"qA": 0.0,
+"qB": 0.002004008016032064,
+"kind": "ge20",
+"id": "seed7005:b105",
+"criteria": "Resolves YES if at least 20 city captures occur in total across all players on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). A capture is a city changing owner by force. Captures of cities held by barbarians count. Each capture event counts separately, so a city captured, lost and captured again counts twice. Cities that change hands when a civilization splits in a civil war are not captures. Exactly 20 counts."
+},
+{
+"world": "seed7011",
+"family": "S5_civ_wonders",
+"T": 90,
+"text": "Will Ohlone complete at least 2 wonders by turn 90?",
+"subj": [
+"0"
+],
+"qAll": 0.026,
+"qA": 0.02,
+"qB": 0.03206412825651302,
+"k": 2,
+"id": "seed7011:b229",
+"criteria": "Resolves YES if Ohlone completes at least 2 great wonders on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). Exactly 2 counts. Small wonders such as a palace do not count."
+},
+{
+"world": "seed7008",
+"family": "W4_lose_k",
+"T": 90,
+"text": "Will Spanish lose at least 3 cities by turn 90?",
+"subj": [
+"2"
+],
+"qAll": 0.026,
+"qA": 0.03,
+"qB": 0.022044088176352707,
+"k": 3,
+"id": "seed7008:b423",
+"criteria": "Resolves YES if Spanish loses at least 3 cities to capture on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). Losses to any player count, including to barbarians. Each loss event counts separately, so a city lost, retaken and lost again counts twice. A city destroyed rather than captured, or lost through a civil war split, does not count. Exactly 3 counts."
+},
+{
+"world": "seed7010",
+"family": "NW2_diplo",
+"T": 90,
+"text": "Will Central American and Spanish form an Alliance at any point between turns 61 and 90?",
+"subj": [
+"0",
+"2"
+],
+"qAll": 0.038,
+"qA": 0.034,
+"qB": 0.04008016032064128,
+"kind": "alliance_by",
+"id": "seed7010:b13",
+"criteria": "Resolves YES if the diplomatic state between Central American and Spanish is Alliance at the end of any turn from 61 through 90 inclusive. Resolves NO if the state never occurs in that window (every other state do not count)."
+},
+{
+"world": "seed7011",
+"family": "NEW_civil_war",
+"T": 90,
+"text": "Will Libyan suffer a civil war (a breakaway civilization splitting off) by turn 90?",
+"subj": [
+"1"
+],
+"qAll": 0.001,
+"qA": 0.0,
+"qB": 0.002004008016032064,
+"id": "seed7011:b340",
+"criteria": "Resolves YES if Libyan splits in a civil war on any turn from 61 through 90 inclusive (an event on turn 90 itself counts), meaning a new civilization is created out of some of Libyan's cities. Anarchy, disorder, or the loss of cities to other players without such a split resolve NO."
+},
+{
+"world": "seed7001",
+"family": "W2_directed_conquest",
+"T": 90,
+"text": "Will Estonian capture at least one city from Sahrawi by turn 90?",
+"subj": [
+"2",
+"4"
+],
+"qAll": 0.004,
+"qA": 0.002,
+"qB": 0.006012024048096192,
+"id": "seed7001:b93",
+"criteria": "Resolves YES if Estonian captures at least one city whose owner at the moment of capture is Sahrawi, on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). Recaptures count. Resolves NO otherwise."
+},
+{
+"world": "seed7008",
+"family": "NB4_drawdown",
+"T": 90,
+"text": "Will Somali's population drop below 75% of its turn-60 level at any point up to turn 90?",
+"subj": [
+"4"
+],
+"qAll": 0.002,
+"qA": 0.004,
+"qB": 0.0,
+"metric": "population",
+"f": 0.75,
+"id": "seed7008:b611",
+"criteria": "Resolves YES if, at the end of any turn from 61 through 90 inclusive, Somali's population is below 75% of its value at the end of turn 60 (the value shown in the world report). Being exactly at 75% does not count. A later recovery does not change the result."
+},
+{
+"world": "seed7001",
+"family": "NW5_wonder",
+"T": 90,
+"text": "Will Copernicus' Observatory be completed by any civilization by turn 90?",
+"subj": [],
+"qAll": 0.002,
+"qA": 0.002,
+"qB": 0.002004008016032064,
+"wonder": "Copernicus' Observatory",
+"id": "seed7001:b119",
+"criteria": "Resolves YES if any civilization completes Copernicus' Observatory on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). Resolves NO if it has not been completed by the end of turn 90."
+},
+{
+"world": "seed7001",
+"family": "NW1_war_at",
+"T": 90,
+"text": "Will Estonian and Sahrawi be at war at turn 90?",
+"subj": [
+"2",
+"4"
+],
+"qAll": 0.01,
+"qA": 0.006,
+"qB": 0.014028056112224449,
+"id": "seed7001:b91",
+"criteria": "Resolves YES if the diplomatic state between Estonian and Sahrawi as recorded at the end of turn 90 is War. Cease-fire, armistice, peace, alliance, or never having met all resolve NO."
+},
+{
+"world": "seed7011",
+"family": "W5_tech_lead",
+"T": 90,
+"text": "Will Guyanese know strictly more technologies than every other civilization at turn 90?",
+"subj": [
+"2"
+],
+"qAll": 0.013,
+"qA": 0.004,
+"qB": 0.022044088176352707,
+"id": "seed7011:b374",
+"criteria": "Resolves YES if, as recorded at the end of turn 90, Guyanese knows strictly more technologies than each of the other four civilizations, counting every technology known including those known at turn 60. This is the count the world report calls Techs; FreeCiv's initial 'None' entry is not a technology and is not counted. Any tie for the most resolves NO."
+},
+{
+"world": "seed7003",
+"family": "EX_comparative",
+"T": 90,
+"text": "Will Ghana have a higher number of cities than Sammarinese at turn 90?",
+"subj": [
+"2",
+"3"
+],
+"qAll": 0.049,
+"qA": 0.05,
+"qB": 0.04809619238476954,
+"metric": "cities_count",
+"id": "seed7003:b72",
+"criteria": "Resolves YES if Ghana's number of cities as recorded at the end of turn 90 is strictly greater than Sammarinese's. Equal values resolve NO. The quantity is the same quantity the world report calls Cities."
+},
+{
+"world": "seed7011",
+"family": "EX_government_at",
+"T": 90,
+"text": "Will American's government be Anarchy at turn 90?",
+"subj": [
+"4"
+],
+"qAll": 0.025,
+"qA": 0.02,
+"qB": 0.03006012024048096,
+"gov": "Anarchy",
+"id": "seed7011:b540",
+"criteria": "Resolves YES if American's government as recorded at the end of turn 90 is Anarchy. A change of government completed on turn 90 counts. Anarchy counts as a form of government. Resolves NO for any other government."
+},
+{
+"world": "seed7022",
+"family": "S4_gov_change_count",
+"T": 90,
+"text": "Will Hunnic's government change at least 3 times by turn 90? (Anarchy counts as a form of government, for this question.)",
+"subj": [
+"3"
+],
+"qAll": 0.041,
+"qA": 0.036,
+"qB": 0.04609218436873747,
+"k": 3,
+"id": "seed7022:b281",
+"criteria": "Resolves YES if Hunnic's government changes at least 3 times on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). Every recorded change counts, including a change into anarchy and a change out of it, so one revolution normally counts twice. Exactly 3 counts."
+},
+{
+"world": "seed7003",
+"family": "W1_wonder_race",
+"T": 90,
+"text": "Will Sammarinese complete the Great Library by turn 90?",
+"subj": [
+"3"
+],
+"qAll": 0.009,
+"qA": 0.004,
+"qB": 0.014028056112224449,
+"wonder": "Great Library",
+"id": "seed7003:b107",
+"criteria": "Resolves YES if Sammarinese completes Great Library on any turn from 61 through 90 inclusive (an event on turn 90 itself counts). A great wonder can be completed only once per game, so this resolves NO if another civilization completes it, or if it is not completed by the end of turn 90."
+}
+]

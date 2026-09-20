@@ -1,0 +1,329 @@
+WORLD REPORT TXT v1
+Game ID: seed7022
+Snapshot turn: 60
+Turns analyzed: 1..60
+Barbarians: default settings (barbarian and pirate raids begin around turn 60; none exist at turn 60)
+Map size: 78x52
+
+CIVILIZATIONS
+ID | Name
+---+---------------
+0  | Boian
+1  | Pelasgian
+2  | Western Roman
+3  | Hunnic
+4  | Abyssinian
+
+CURRENT STATE (TURN 60)
+ID | Name          | Score | Rank | Government | Treasury | Population | Techs | Wonders | Cities | Territory | Units | Military | Science | Trade | Food  | Shields
+---+---------------+-------+------+------------+----------+------------+-------+---------+--------+-----------+-------+----------+---------+-------+-------+--------
+0  | Boian         | 51    | 2    | Despotism  | 238      | 27         | 11    | 0       | 19     | 254       | 10    | 3        | 60      | 27.0  | 54.0  | 45.0   
+1  | Pelasgian     | 55    | 1    | Monarchy   | 550      | 33         | 10    | 0       | 19     | 264       | 8     | 2        | 70      | 41.0  | 82.0  | 58.0   
+2  | Western Roman | 35    | 4    | Despotism  | 275      | 18         | 8     | 0       | 11     | 142       | 3     | 0        | 60      | 24.0  | 48.0  | 25.0   
+3  | Hunnic        | 29    | 5    | Despotism  | 184      | 16         | 6     | 0       | 8      | 115       | 9     | 5        | 60      | 43.0  | 86.0  | 26.0   
+4  | Abyssinian    | 36    | 3    | Despotism  | 271      | 19         | 8     | 0       | 11     | 190       | 8     | 4        | 60      | 51.0  | 102.0 | 26.0   
+
+DIPLOMACY (TURN 60)
+State between each pair of civilizations. 'Never met' = no contact yet; an embassy gives full intelligence on the other side.
+Civ A         | Civ B         | State      | First contact turn | Embassy
+--------------+---------------+------------+--------------------+--------
+Boian         | Pelasgian     | Armistice  | 34                 | no     
+Boian         | Western Roman | Peace      | 19                 | no     
+Boian         | Hunnic        | Armistice  | 33                 | no     
+Boian         | Abyssinian    | Armistice  | 17                 | no     
+Pelasgian     | Western Roman | Cease-fire | 27                 | no     
+Pelasgian     | Hunnic        | War        | 30                 | no     
+Pelasgian     | Abyssinian    | Armistice  | 41                 | no     
+Western Roman | Hunnic        | Cease-fire | 26                 | no     
+Western Roman | Abyssinian    | War        | 8                  | no     
+Hunnic        | Abyssinian    | Peace      | 28                 | no     
+
+BORDERS (TURN 60)
+Whether each pair's territories are adjacent (share a border) at turn 60, and otherwise the gap in tiles between their nearest owned tiles.
+Civ A         | Civ B         | Touch| Gap
+--------------+---------------+-----+----
+Boian         | Pelasgian     | no  |   6
+Boian         | Western Roman | yes |   0
+Boian         | Hunnic        | no  |   4
+Boian         | Abyssinian    | no  |   1
+Pelasgian     | Western Roman | no  |  14
+Pelasgian     | Hunnic        | yes |   0
+Pelasgian     | Abyssinian    | no  |  13
+Western Roman | Hunnic        | no  |  17
+Western Roman | Abyssinian    | no  |  15
+Hunnic        | Abyssinian    | no  |  14
+
+GOVERNMENT TIMELINE (derived from recordings)
+Each entry is a change point (turn number -> new government); the first entry is the first observed government.
+0 Boian: 1 Despotism
+1 Pelasgian: 1 Despotism; 52 Anarchy; 53 Monarchy
+2 Western Roman: 1 Despotism
+3 Hunnic: 1 Despotism
+4 Abyssinian: 1 Despotism
+
+TREASURY (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Boian: 50, 53, 63, 72, 102, 108, 114, 122, 136, 157, 180, 210, 238
+1 Pelasgian: 50, 53, 158, 163, 277, 297, 320, 342, 370, 398, 430, 479, 550
+2 Western Roman: 50, 50, 55, 65, 78, 86, 121, 140, 158, 184, 214, 239, 275
+3 Hunnic: 50, 50, 50, 55, 65, 76, 88, 111, 132, 148, 165, 173, 184
+4 Abyssinian: 50, 52, 61, 70, 80, 90, 154, 172, 197, 221, 234, 253, 271
+
+POPULATION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Boian: 0, 3, 3, 6, 6, 6, 8, 8, 12, 15, 19, 23, 27
+1 Pelasgian: 0, 2, 3, 3, 4, 5, 9, 8, 12, 14, 15, 26, 33
+2 Western Roman: 0, 2, 2, 3, 2, 3, 4, 5, 8, 11, 10, 15, 18
+3 Hunnic: 0, 2, 2, 3, 3, 6, 5, 7, 11, 11, 16, 15, 16
+4 Abyssinian: 0, 2, 2, 4, 4, 5, 7, 7, 11, 12, 16, 15, 19
+
+TECHS KNOWN (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Boian: 0, 0, 0, 2, 4, 5, 5, 7, 8, 9, 10, 10, 11
+1 Pelasgian: 0, 0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 9, 10
+2 Western Roman: 0, 0, 0, 0, 1, 1, 2, 3, 4, 5, 6, 7, 8
+3 Hunnic: 0, 0, 0, 0, 1, 2, 2, 3, 4, 4, 5, 5, 6
+4 Abyssinian: 0, 0, 0, 0, 1, 2, 4, 5, 5, 6, 7, 8, 8
+
+WONDERS DISCOVERED (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Boian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+1 Pelasgian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+2 Western Roman: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+3 Hunnic: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+4 Abyssinian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+
+CITIES COUNT (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Boian: 0, 3, 3, 4, 4, 5, 6, 7, 10, 11, 13, 16, 19
+1 Pelasgian: 0, 2, 2, 2, 3, 4, 5, 6, 8, 9, 11, 17, 19
+2 Western Roman: 0, 2, 2, 2, 2, 3, 3, 5, 6, 6, 7, 10, 11
+3 Hunnic: 0, 2, 2, 2, 3, 4, 5, 6, 7, 8, 9, 8, 8
+4 Abyssinian: 0, 2, 2, 2, 3, 3, 5, 6, 6, 7, 8, 8, 11
+
+TERRITORY SIZE (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Boian: 0, 42, 47, 82, 82, 104, 111, 130, 169, 191, 208, 228, 254
+1 Pelasgian: 0, 54, 60, 60, 74, 78, 85, 93, 113, 113, 141, 240, 264
+2 Western Roman: 0, 36, 37, 37, 32, 55, 58, 70, 91, 91, 103, 126, 142
+3 Hunnic: 0, 36, 40, 44, 61, 69, 98, 119, 121, 121, 133, 113, 115
+4 Abyssinian: 0, 46, 46, 52, 60, 60, 93, 105, 108, 121, 139, 154, 190
+
+SCIENCE (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Boian: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+1 Pelasgian: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 70, 70
+2 Western Roman: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+3 Hunnic: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+4 Abyssinian: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+
+TRADE PRODUCTION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Boian: 0.0, 3.0, 3.0, 6.0, 6.0, 6.0, 8.0, 8.0, 12.0, 15.0, 19.0, 23.0, 27.0
+1 Pelasgian: 0.0, 5.0, 6.0, 7.0, 10.0, 11.0, 14.0, 14.0, 18.0, 21.0, 24.0, 32.0, 41.0
+2 Western Roman: 0.0, 8.0, 8.0, 11.0, 8.0, 7.0, 8.0, 9.0, 10.0, 15.0, 16.0, 17.0, 24.0
+3 Hunnic: 0.0, 11.0, 11.0, 15.0, 15.0, 18.0, 20.0, 16.0, 20.0, 20.0, 31.0, 33.0, 43.0
+4 Abyssinian: 0.0, 18.0, 18.0, 20.0, 20.0, 21.0, 23.0, 27.0, 35.0, 40.0, 44.0, 55.0, 51.0
+
+FOOD PRODUCTION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Boian: 0.0, 6.0, 6.0, 12.0, 12.0, 12.0, 16.0, 16.0, 24.0, 30.0, 38.0, 46.0, 54.0
+1 Pelasgian: 0.0, 10.0, 12.0, 14.0, 20.0, 22.0, 28.0, 28.0, 36.0, 42.0, 48.0, 64.0, 82.0
+2 Western Roman: 0.0, 16.0, 16.0, 22.0, 16.0, 14.0, 16.0, 18.0, 20.0, 30.0, 32.0, 34.0, 48.0
+3 Hunnic: 0.0, 22.0, 22.0, 30.0, 30.0, 36.0, 40.0, 32.0, 40.0, 40.0, 62.0, 66.0, 86.0
+4 Abyssinian: 0.0, 36.0, 36.0, 40.0, 40.0, 42.0, 46.0, 54.0, 70.0, 80.0, 88.0, 110.0, 102.0
+
+SHIELD PRODUCTION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Boian: 0.0, 5.0, 5.0, 13.0, 11.0, 12.0, 20.0, 19.0, 23.0, 33.0, 34.0, 42.0, 45.0
+1 Pelasgian: 0.0, 5.0, 5.0, 6.0, 9.0, 13.0, 13.0, 15.0, 25.0, 28.0, 30.0, 48.0, 58.0
+2 Western Roman: 0.0, 4.0, 4.0, 7.0, 8.0, 12.0, 11.0, 15.0, 16.0, 23.0, 20.0, 31.0, 25.0
+3 Hunnic: 0.0, 8.0, 7.0, 9.0, 11.0, 17.0, 15.0, 17.0, 22.0, 24.0, 31.0, 28.0, 26.0
+4 Abyssinian: 0.0, 2.0, 2.0, 10.0, 10.0, 10.0, 15.0, 14.0, 16.0, 19.0, 26.0, 27.0, 26.0
+
+UNITS COUNT (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Boian: 5, 4, 4, 5, 7, 6, 6, 8, 6, 7, 7, 8, 10
+1 Pelasgian: 5, 3, 3, 4, 6, 6, 5, 6, 6, 7, 9, 6, 8
+2 Western Roman: 5, 3, 3, 4, 3, 2, 2, 2, 1, 2, 3, 1, 3
+3 Hunnic: 5, 3, 3, 4, 4, 4, 5, 3, 3, 3, 5, 6, 9
+4 Abyssinian: 5, 4, 4, 4, 4, 4, 4, 5, 6, 7, 7, 10, 8
+
+MILITARY UNITS COUNT (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Boian: 0, 1, 1, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3
+1 Pelasgian: 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2
+2 Western Roman: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+3 Hunnic: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 3, 5
+4 Abyssinian: 0, 1, 1, 1, 1, 1, 1, 2, 2, 3, 4, 4, 4
+
+SCORES (derived from recordings)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Boian: 0, 3, 3, 10, 14, 16, 18, 22, 28, 34, 40, 44, 51
+1 Pelasgian: 0, 2, 3, 3, 6, 9, 15, 16, 20, 24, 27, 46, 55
+2 Western Roman: 0, 2, 2, 3, 5, 5, 8, 11, 16, 21, 22, 29, 35
+3 Hunnic: 0, 2, 2, 3, 5, 10, 9, 13, 19, 19, 27, 26, 29
+4 Abyssinian: 0, 2, 2, 4, 6, 9, 15, 17, 21, 24, 30, 32, 36
+
+EVENT TYPES (exhaustive)
+city_founded, city_conquered, city_destroyed, government_change, diplomatic_change, tech_discovered, wonder_completed
+If a type does not appear in EVENTS, it did not occur in the analyzed turns.
+
+EVENTS (chronological)
+Turn | Type | Civ | Description
+--------------------------------------------------------------------------------
+2 | city_founded | Boian | Boian founded Boiodurum
+3 | city_founded | Boian | Boian founded Vindobona
+3 | city_founded | Pelasgian | Pelasgian founded Pharsalos
+3 | city_founded | Western Roman | Western Roman founded Mediolanum
+3 | city_founded | Western Roman | Western Roman founded Neapolis
+3 | city_founded | Hunnic | Hunnic founded Castellum
+3 | city_founded | Abyssinian | Abyssinian founded Aksum
+4 | city_founded | Pelasgian | Pelasgian founded Korinthos
+4 | city_founded | Hunnic | Hunnic founded Aquincum
+4 | city_founded | Abyssinian | Abyssinian founded Yeha
+5 | city_founded | Boian | Boian founded Bononia
+9 | diplomatic_change | Western Roman | Western Roman and Abyssinian: Never met -> War
+10 | diplomatic_change | Western Roman | Western Roman and Abyssinian: War -> Cease-fire
+11 | city_founded | Boian | Boian founded Noreia
+13 | tech_discovered | Boian | Boian discovered Horseback Riding
+13 | tech_discovered | Boian | Boian discovered Masonry
+16 | city_founded | Hunnic | Hunnic founded Castra Martis
+16 | tech_discovered | Western Roman | Western Roman discovered Masonry
+16 | tech_discovered | Hunnic | Hunnic discovered Masonry
+16 | tech_discovered | Abyssinian | Abyssinian discovered Masonry
+17 | city_founded | Pelasgian | Pelasgian founded Zakynthos
+17 | tech_discovered | Pelasgian | Pelasgian discovered Masonry
+18 | city_founded | Western Roman | Western Roman founded Roma
+18 | diplomatic_change | Boian | Boian and Abyssinian: Never met -> War
+18 | tech_discovered | Boian | Boian discovered Pottery
+18 | tech_discovered | Boian | Boian discovered Bronze Working
+19 | city_founded | Abyssinian | Abyssinian founded Adulis
+19 | diplomatic_change | Boian | Boian and Western Roman: Never met -> War
+20 | city_destroyed | Western Roman | Roma (Western Roman) was destroyed
+21 | diplomatic_change | Boian | Boian and Western Roman: War -> Cease-fire
+21 | diplomatic_change | Boian | Boian and Abyssinian: War -> Cease-fire
+22 | city_founded | Boian | Boian founded Carnuntum
+22 | city_founded | Pelasgian | Pelasgian founded Athenai
+22 | city_founded | Hunnic | Hunnic founded Gorsium
+23 | city_founded | Western Roman | Western Roman founded Augusta Treverorum
+23 | tech_discovered | Abyssinian | Abyssinian discovered Horseback Riding
+24 | tech_discovered | Boian | Boian discovered Warrior Code
+24 | tech_discovered | Pelasgian | Pelasgian discovered Ceremonial Burial
+25 | diplomatic_change | Western Roman | Western Roman and Abyssinian: Cease-fire -> War
+25 | tech_discovered | Hunnic | Hunnic discovered Alphabet
+26 | diplomatic_change | Western Roman | Western Roman and Abyssinian: War -> Cease-fire
+26 | tech_discovered | Western Roman | Western Roman discovered Horseback Riding
+27 | city_founded | Boian | Boian founded Telamon
+27 | diplomatic_change | Western Roman | Western Roman and Hunnic: Never met -> Cease-fire
+27 | tech_discovered | Abyssinian | Abyssinian discovered Pottery
+28 | city_founded | Pelasgian | Pelasgian founded Mykenai
+28 | diplomatic_change | Pelasgian | Pelasgian and Western Roman: Never met -> War
+29 | city_founded | Hunnic | Hunnic founded Margus
+29 | city_founded | Abyssinian | Abyssinian founded Wukro
+29 | diplomatic_change | Hunnic | Hunnic and Abyssinian: Never met -> War
+30 | city_founded | Abyssinian | Abyssinian founded Matara
+30 | diplomatic_change | Hunnic | Hunnic and Abyssinian: War -> Cease-fire
+30 | tech_discovered | Pelasgian | Pelasgian discovered Pottery
+30 | tech_discovered | Abyssinian | Abyssinian discovered Alphabet
+31 | city_founded | Western Roman | Western Roman founded Ravenna
+31 | city_founded | Hunnic | Hunnic founded Sirmium
+31 | diplomatic_change | Pelasgian | Pelasgian and Western Roman: War -> Cease-fire
+31 | diplomatic_change | Pelasgian | Pelasgian and Hunnic: Never met -> War
+31 | tech_discovered | Boian | Boian discovered Currency
+32 | city_destroyed | Hunnic | Sirmium (Hunnic) was destroyed
+32 | city_founded | Hunnic | Hunnic founded Scarbantia
+33 | city_founded | Abyssinian | Abyssinian founded Qohaito
+34 | city_founded | Western Roman | Western Roman founded Verona
+34 | diplomatic_change | Boian | Boian and Pelasgian: Never met -> War
+34 | diplomatic_change | Boian | Boian and Hunnic: Never met -> War
+34 | diplomatic_change | Pelasgian | Pelasgian and Hunnic: War -> Cease-fire
+34 | tech_discovered | Boian | Boian discovered Alphabet
+34 | tech_discovered | Western Roman | Western Roman discovered Pottery
+34 | tech_discovered | Abyssinian | Abyssinian discovered Bronze Working
+35 | city_founded | Boian | Boian founded Hallstatt
+35 | city_founded | Pelasgian | Pelasgian founded Amarynthos
+35 | diplomatic_change | Boian | Boian and Pelasgian: War -> Cease-fire
+35 | diplomatic_change | Boian | Boian and Western Roman: Cease-fire -> Armistice
+35 | tech_discovered | Pelasgian | Pelasgian discovered Alphabet
+35 | tech_discovered | Hunnic | Hunnic discovered Code of Laws
+36 | city_founded | Boian | Boian founded Gorgobina
+36 | city_founded | Pelasgian | Pelasgian founded Brilettos
+36 | diplomatic_change | Boian | Boian and Hunnic: War -> Cease-fire
+36 | diplomatic_change | Western Roman | Western Roman and Abyssinian: Cease-fire -> War
+37 | diplomatic_change | Boian | Boian and Abyssinian: Cease-fire -> War
+38 | city_founded | Western Roman | Western Roman founded Sirmium
+38 | diplomatic_change | Boian | Boian and Abyssinian: War -> Cease-fire
+39 | city_founded | Boian | Boian founded Manching
+39 | city_founded | Boian | Boian founded Placentia
+39 | tech_discovered | Western Roman | Western Roman discovered Warrior Code
+39 | tech_discovered | Hunnic | Hunnic discovered Bronze Working
+40 | city_founded | Pelasgian | Pelasgian founded Tirynsos
+40 | city_founded | Hunnic | Hunnic founded Valcum
+40 | tech_discovered | Boian | Boian discovered Writing
+41 | tech_discovered | Pelasgian | Pelasgian discovered Code of Laws
+42 | city_founded | Abyssinian | Abyssinian founded Hawulti
+42 | diplomatic_change | Pelasgian | Pelasgian and Abyssinian: Never met -> Cease-fire
+43 | diplomatic_change | Western Roman | Western Roman and Hunnic: Cease-fire -> War
+43 | tech_discovered | Western Roman | Western Roman discovered Alphabet
+44 | city_founded | Boian | Boian founded Bratislava
+44 | city_founded | Pelasgian | Pelasgian founded Lykabettos
+44 | city_founded | Hunnic | Hunnic founded Sopianae
+44 | diplomatic_change | Hunnic | Hunnic and Abyssinian: Cease-fire -> Armistice
+44 | tech_discovered | Boian | Boian discovered Code of Laws
+45 | tech_discovered | Abyssinian | Abyssinian discovered Mathematics
+46 | city_founded | Boian | Boian founded Nevězice
+46 | diplomatic_change | Pelasgian | Pelasgian and Western Roman: Cease-fire -> War
+46 | tech_discovered | Hunnic | Hunnic discovered Writing
+47 | city_founded | Western Roman | Western Roman founded Roma
+47 | diplomatic_change | Boian | Boian and Pelasgian: Cease-fire -> Armistice
+47 | diplomatic_change | Western Roman | Western Roman and Hunnic: War -> Cease-fire
+48 | city_founded | Pelasgian | Pelasgian founded Gargettos
+48 | city_founded | Abyssinian | Abyssinian founded Mendefera
+48 | diplomatic_change | Pelasgian | Pelasgian and Western Roman: War -> Cease-fire
+49 | city_founded | Pelasgian | Pelasgian founded Larissa
+49 | city_founded | Hunnic | Hunnic founded Intercisa
+49 | diplomatic_change | Pelasgian | Pelasgian and Hunnic: Cease-fire -> War
+50 | city_founded | Boian | Boian founded Stradonice
+50 | tech_discovered | Boian | Boian discovered Iron Working
+50 | tech_discovered | Western Roman | Western Roman discovered Map Making
+50 | tech_discovered | Abyssinian | Abyssinian discovered Writing
+51 | city_founded | Boian | Boian founded Hrazany
+51 | city_founded | Western Roman | Western Roman founded Aquileia
+51 | city_founded | Western Roman | Western Roman founded Emerita Augusta
+51 | diplomatic_change | Boian | Boian and Western Roman: Armistice -> Peace
+51 | diplomatic_change | Boian | Boian and Hunnic: Cease-fire -> Armistice
+51 | diplomatic_change | Boian | Boian and Abyssinian: Cease-fire -> Armistice
+51 | tech_discovered | Pelasgian | Pelasgian discovered Monarchy
+52 | city_founded | Boian | Boian founded Sandberg
+52 | city_founded | Pelasgian | Pelasgian founded Ilissos
+52 | city_founded | Pelasgian | Pelasgian founded Parnassos
+52 | government_change | Pelasgian | Pelasgian changed government from Despotism to Anarchy
+53 | city_conquered | Pelasgian | Pelasgian captured Margus from Hunnic
+53 | city_founded | Pelasgian | Pelasgian founded Amnissos
+53 | city_founded | Hunnic | Hunnic founded Brigetio
+53 | government_change | Pelasgian | Pelasgian changed government from Anarchy to Monarchy
+53 | tech_discovered | Pelasgian | Pelasgian discovered Bronze Working
+54 | city_conquered | Pelasgian | Pelasgian captured Sopianae from Hunnic
+54 | city_founded | Boian | Boian founded Zavist
+54 | city_founded | Pelasgian | Pelasgian founded Kephissos
+54 | city_founded | Western Roman | Western Roman founded Carthago
+54 | tech_discovered | Pelasgian | Pelasgian discovered Currency
+54 | tech_discovered | Pelasgian | Pelasgian discovered Writing
+55 | tech_discovered | Western Roman | Western Roman discovered Code of Laws
+55 | tech_discovered | Abyssinian | Abyssinian discovered Code of Laws
+56 | city_founded | Boian | Boian founded Staré Hradisko
+56 | city_founded | Abyssinian | Abyssinian founded Zula
+57 | city_founded | Boian | Boian founded Třísov
+57 | diplomatic_change | Pelasgian | Pelasgian and Abyssinian: Cease-fire -> Armistice
+58 | city_founded | Boian | Boian founded Hradiště
+58 | city_founded | Abyssinian | Abyssinian founded Dungur
+59 | city_founded | Pelasgian | Pelasgian founded Tylissos
+59 | city_founded | Western Roman | Western Roman founded Capua
+59 | city_founded | Abyssinian | Abyssinian founded Lalibela
+59 | diplomatic_change | Hunnic | Hunnic and Abyssinian: Armistice -> Peace
+59 | tech_discovered | Boian | Boian discovered Trade
+59 | tech_discovered | Pelasgian | Pelasgian discovered Trade
+59 | tech_discovered | Western Roman | Western Roman discovered Writing
+59 | tech_discovered | Hunnic | Hunnic discovered Literacy
+60 | city_founded | Pelasgian | Pelasgian founded Messene

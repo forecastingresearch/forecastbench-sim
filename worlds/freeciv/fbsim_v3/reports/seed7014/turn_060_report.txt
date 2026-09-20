@@ -1,0 +1,315 @@
+WORLD REPORT TXT v1
+Game ID: seed7014
+Snapshot turn: 60
+Turns analyzed: 1..60
+Barbarians: default settings (barbarian and pirate raids begin around turn 60; none exist at turn 60)
+Map size: 78x52
+
+CIVILIZATIONS
+ID | Name
+---+---------------
+0  | Bissau-Guinean
+1  | Trinidadian and Tobagonian
+2  | Tajik
+3  | Swazi
+4  | Chinese
+
+CURRENT STATE (TURN 60)
+ID | Name                       | Score | Rank | Government | Treasury | Population | Techs | Wonders | Cities | Territory | Units | Military | Science | Trade | Food | Shields
+---+----------------------------+-------+------+------------+----------+------------+-------+---------+--------+-----------+-------+----------+---------+-------+------+--------
+0  | Bissau-Guinean             | 41    | 3    | Despotism  | 237      | 21         | 9     | 0       | 10     | 170       | 14    | 11       | 60      | 21.0  | 42.0 | 40.0   
+1  | Trinidadian and Tobagonian | 50    | 1    | Despotism  | 267      | 32         | 8     | 0       | 20     | 280       | 6     | 0        | 60      | 38.0  | 76.0 | 51.0   
+2  | Tajik                      | 43    | 2    | Despotism  | 189      | 26         | 8     | 0       | 11     | 226       | 10    | 5        | 60      | 46.0  | 92.0 | 35.0   
+3  | Swazi                      | 29    | 5    | Monarchy   | 280      | 14         | 7     | 0       | 9      | 116       | 4     | 1        | 70      | 26.0  | 52.0 | 24.0   
+4  | Chinese                    | 31    | 4    | Despotism  | 377      | 18         | 6     | 0       | 11     | 177       | 6     | 1        | 60      | 42.0  | 84.0 | 29.0   
+
+DIPLOMACY (TURN 60)
+State between each pair of civilizations. 'Never met' = no contact yet; an embassy gives full intelligence on the other side.
+Civ A                      | Civ B                      | State      | First contact turn | Embassy
+---------------------------+----------------------------+------------+--------------------+--------
+Bissau-Guinean             | Trinidadian and Tobagonian | Cease-fire | 30                 | no     
+Bissau-Guinean             | Tajik                      | Cease-fire | 27                 | no     
+Bissau-Guinean             | Swazi                      | Cease-fire | 34                 | no     
+Bissau-Guinean             | Chinese                    | Cease-fire | 9                  | no     
+Trinidadian and Tobagonian | Tajik                      | Cease-fire | 45                 | no     
+Trinidadian and Tobagonian | Swazi                      | War        | 41                 | no     
+Trinidadian and Tobagonian | Chinese                    | War        | 21                 | no     
+Tajik                      | Swazi                      | War        | 7                  | no     
+Tajik                      | Chinese                    | Alliance   | 16                 | no     
+Swazi                      | Chinese                    | Armistice  | 17                 | no     
+
+BORDERS (TURN 60)
+Whether each pair's territories are adjacent (share a border) at turn 60, and otherwise the gap in tiles between their nearest owned tiles.
+Civ A         | Civ B         | Touch| Gap
+--------------+---------------+-----+----
+Bissau-Guinean| Trinidadian and Tobagonian| no  |  11
+Bissau-Guinean| Tajik         | no  |   4
+Bissau-Guinean| Swazi         | no  |  20
+Bissau-Guinean| Chinese       | no  |   6
+Trinidadian and Tobagonian| Tajik         | no  |   1
+Trinidadian and Tobagonian| Swazi         | no  |  17
+Trinidadian and Tobagonian| Chinese       | no  |   5
+Tajik         | Swazi         | no  |   2
+Tajik         | Chinese       | no  |   2
+Swazi         | Chinese       | no  |   4
+
+GOVERNMENT TIMELINE (derived from recordings)
+Each entry is a change point (turn number -> new government); the first entry is the first observed government.
+0 Bissau-Guinean: 1 Despotism
+1 Trinidadian and Tobagonian: 1 Despotism
+2 Tajik: 1 Despotism
+3 Swazi: 1 Despotism; 49 Anarchy; 50 Monarchy
+4 Chinese: 1 Despotism
+
+TREASURY (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Bissau-Guinean: 50, 58, 68, 78, 118, 133, 151, 162, 177, 198, 214, 224, 237
+1 Trinidadian and Tobagonian: 50, 53, 58, 63, 93, 98, 110, 124, 141, 160, 184, 227, 267
+2 Tajik: 50, 52, 62, 72, 82, 95, 119, 144, 166, 174, 179, 184, 189
+3 Swazi: 50, 104, 114, 124, 132, 141, 156, 166, 180, 198, 213, 240, 280
+4 Chinese: 50, 53, 58, 63, 68, 80, 193, 258, 271, 296, 321, 347, 377
+
+POPULATION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Bissau-Guinean: 0, 2, 2, 3, 4, 6, 7, 8, 9, 11, 14, 14, 21
+1 Trinidadian and Tobagonian: 0, 2, 2, 4, 6, 7, 9, 11, 15, 17, 20, 24, 32
+2 Tajik: 0, 2, 2, 3, 5, 6, 9, 12, 13, 16, 17, 19, 26
+3 Swazi: 0, 2, 2, 3, 2, 3, 4, 5, 6, 7, 9, 11, 14
+4 Chinese: 0, 2, 3, 3, 3, 4, 4, 7, 8, 11, 14, 15, 18
+
+TECHS KNOWN (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Bissau-Guinean: 0, 0, 0, 1, 1, 2, 2, 3, 4, 5, 6, 8, 9
+1 Trinidadian and Tobagonian: 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 6, 7, 8
+2 Tajik: 0, 0, 0, 1, 1, 3, 3, 4, 5, 6, 7, 8, 8
+3 Swazi: 0, 0, 0, 1, 2, 2, 3, 3, 4, 4, 5, 6, 7
+4 Chinese: 0, 0, 0, 0, 1, 2, 3, 3, 4, 5, 5, 6, 6
+
+WONDERS DISCOVERED (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Bissau-Guinean: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+1 Trinidadian and Tobagonian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+2 Tajik: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+3 Swazi: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+4 Chinese: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+
+CITIES COUNT (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Bissau-Guinean: 0, 2, 2, 2, 4, 4, 5, 5, 5, 7, 9, 9, 10
+1 Trinidadian and Tobagonian: 0, 2, 2, 3, 4, 5, 7, 7, 8, 11, 13, 15, 20
+2 Tajik: 0, 2, 2, 2, 3, 4, 6, 7, 7, 7, 7, 8, 11
+3 Swazi: 0, 2, 2, 2, 2, 2, 3, 3, 4, 5, 5, 7, 9
+4 Chinese: 0, 2, 2, 2, 2, 3, 4, 5, 6, 7, 9, 10, 11
+
+TERRITORY SIZE (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Bissau-Guinean: 0, 62, 62, 62, 100, 102, 112, 112, 114, 146, 157, 161, 170
+1 Trinidadian and Tobagonian: 0, 43, 46, 81, 100, 113, 139, 148, 167, 186, 214, 238, 280
+2 Tajik: 0, 49, 49, 52, 64, 95, 130, 149, 149, 155, 155, 182, 226
+3 Swazi: 0, 41, 41, 41, 41, 41, 57, 60, 75, 89, 91, 108, 116
+4 Chinese: 0, 48, 49, 49, 50, 67, 87, 108, 121, 129, 153, 167, 177
+
+SCIENCE (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Bissau-Guinean: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+1 Trinidadian and Tobagonian: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+2 Tajik: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+3 Swazi: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 70, 70, 70
+4 Chinese: 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60
+
+TRADE PRODUCTION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Bissau-Guinean: 0.0, 2.0, 2.0, 3.0, 4.0, 6.0, 7.0, 8.0, 9.0, 11.0, 14.0, 14.0, 21.0
+1 Trinidadian and Tobagonian: 0.0, 5.0, 5.0, 8.0, 10.0, 11.0, 12.0, 15.0, 19.0, 21.0, 25.0, 31.0, 38.0
+2 Tajik: 0.0, 10.0, 10.0, 13.0, 15.0, 20.0, 23.0, 24.0, 27.0, 30.0, 35.0, 41.0, 46.0
+3 Swazi: 0.0, 11.0, 11.0, 12.0, 14.0, 18.0, 16.0, 20.0, 21.0, 19.0, 24.0, 26.0, 26.0
+4 Chinese: 0.0, 18.0, 19.0, 19.0, 23.0, 24.0, 24.0, 23.0, 28.0, 31.0, 30.0, 35.0, 42.0
+
+FOOD PRODUCTION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Bissau-Guinean: 0.0, 4.0, 4.0, 6.0, 8.0, 12.0, 14.0, 16.0, 18.0, 22.0, 28.0, 28.0, 42.0
+1 Trinidadian and Tobagonian: 0.0, 10.0, 10.0, 16.0, 20.0, 22.0, 24.0, 30.0, 38.0, 42.0, 50.0, 62.0, 76.0
+2 Tajik: 0.0, 20.0, 20.0, 26.0, 30.0, 40.0, 46.0, 48.0, 54.0, 60.0, 70.0, 82.0, 92.0
+3 Swazi: 0.0, 22.0, 22.0, 24.0, 28.0, 36.0, 32.0, 40.0, 42.0, 38.0, 48.0, 52.0, 52.0
+4 Chinese: 0.0, 36.0, 38.0, 38.0, 46.0, 48.0, 48.0, 46.0, 56.0, 62.0, 60.0, 70.0, 84.0
+
+SHIELD PRODUCTION (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Bissau-Guinean: 0.0, 5.0, 5.0, 7.0, 11.0, 13.0, 14.0, 14.0, 18.0, 22.0, 28.0, 29.0, 40.0
+1 Trinidadian and Tobagonian: 0.0, 5.0, 5.0, 9.0, 13.0, 17.0, 19.0, 20.0, 25.0, 33.0, 37.0, 45.0, 51.0
+2 Tajik: 0.0, 5.0, 5.0, 5.0, 9.0, 11.0, 19.0, 21.0, 23.0, 25.0, 26.0, 28.0, 35.0
+3 Swazi: 0.0, 7.0, 7.0, 7.0, 10.0, 3.0, 4.0, 11.0, 6.0, 15.0, 10.0, 21.0, 24.0
+4 Chinese: 0.0, 9.0, 9.0, 9.0, 11.0, 7.0, 15.0, 18.0, 17.0, 17.0, 27.0, 28.0, 29.0
+
+UNITS COUNT (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Bissau-Guinean: 5, 3, 3, 4, 3, 4, 5, 7, 9, 9, 10, 11, 14
+1 Trinidadian and Tobagonian: 5, 3, 3, 4, 4, 4, 3, 4, 4, 4, 5, 7, 6
+2 Tajik: 5, 4, 4, 5, 5, 7, 7, 6, 7, 7, 9, 11, 10
+3 Swazi: 5, 3, 3, 3, 4, 5, 4, 5, 5, 4, 5, 5, 4
+4 Chinese: 5, 4, 4, 4, 5, 5, 5, 4, 5, 5, 4, 5, 6
+
+MILITARY UNITS COUNT (sampled every 5 turns)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Bissau-Guinean: 0, 0, 0, 0, 0, 0, 2, 4, 4, 5, 7, 7, 11
+1 Trinidadian and Tobagonian: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+2 Tajik: 0, 1, 1, 1, 2, 2, 3, 3, 3, 3, 5, 5, 5
+3 Swazi: 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1
+4 Chinese: 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+
+SCORES (derived from recordings)
+turns: 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
+0 Bissau-Guinean: 0, 2, 2, 5, 6, 10, 11, 14, 18, 22, 27, 31, 41
+1 Trinidadian and Tobagonian: 0, 2, 2, 4, 8, 11, 15, 19, 25, 29, 33, 39, 50
+2 Tajik: 0, 2, 2, 5, 7, 12, 15, 20, 23, 28, 31, 36, 43
+3 Swazi: 0, 2, 2, 5, 6, 7, 10, 11, 14, 15, 19, 23, 29
+4 Chinese: 0, 2, 3, 3, 5, 8, 10, 13, 16, 21, 24, 27, 31
+
+EVENT TYPES (exhaustive)
+city_founded, city_conquered, city_destroyed, government_change, diplomatic_change, tech_discovered, wonder_completed
+If a type does not appear in EVENTS, it did not occur in the analyzed turns.
+
+EVENTS (chronological)
+Turn | Type | Civ | Description
+--------------------------------------------------------------------------------
+2 | city_founded | Bissau-Guinean | Bissau-Guinean founded Gabú
+2 | city_founded | Bissau-Guinean | Bissau-Guinean founded Bissau
+2 | city_founded | Tajik | Tajik founded Dushanbe
+3 | city_founded | Trinidadian and Tobagonian | Trinidadian and Tobagonian founded Port of Spain
+3 | city_founded | Trinidadian and Tobagonian | Trinidadian and Tobagonian founded San Fernando
+3 | city_founded | Swazi | Swazi founded Lobamba
+3 | city_founded | Chinese | Chinese founded Shanghai
+3 | city_founded | Chinese | Chinese founded Beijing
+4 | city_founded | Tajik | Tajik founded Khujand
+5 | city_founded | Swazi | Swazi founded Mbabane
+8 | diplomatic_change | Tajik | Tajik and Swazi: Never met -> War
+9 | diplomatic_change | Bissau-Guinean | Bissau-Guinean and Chinese: Never met -> War
+9 | diplomatic_change | Tajik | Tajik and Swazi: War -> Cease-fire
+13 | diplomatic_change | Bissau-Guinean | Bissau-Guinean and Chinese: War -> Cease-fire
+15 | city_founded | Trinidadian and Tobagonian | Trinidadian and Tobagonian founded Chaguanas
+15 | tech_discovered | Bissau-Guinean | Bissau-Guinean discovered Masonry
+15 | tech_discovered | Tajik | Tajik discovered Masonry
+15 | tech_discovered | Swazi | Swazi discovered Masonry
+16 | city_founded | Bissau-Guinean | Bissau-Guinean founded Bafatá
+16 | city_founded | Trinidadian and Tobagonian | Trinidadian and Tobagonian founded Chaguaramas
+16 | tech_discovered | Trinidadian and Tobagonian | Trinidadian and Tobagonian discovered Masonry
+16 | tech_discovered | Swazi | Swazi discovered Ceremonial Burial
+16 | tech_discovered | Chinese | Chinese discovered Masonry
+17 | city_founded | Tajik | Tajik founded Istaravshan
+17 | diplomatic_change | Tajik | Tajik and Chinese: Never met -> War
+18 | city_founded | Bissau-Guinean | Bissau-Guinean founded Cacheu
+18 | diplomatic_change | Tajik | Tajik and Chinese: War -> Cease-fire
+18 | diplomatic_change | Swazi | Swazi and Chinese: Never met -> War
+20 | diplomatic_change | Swazi | Swazi and Chinese: War -> Cease-fire
+21 | tech_discovered | Tajik | Tajik discovered Alphabet
+22 | diplomatic_change | Trinidadian and Tobagonian | Trinidadian and Tobagonian and Chinese: Never met -> War
+22 | tech_discovered | Tajik | Tajik discovered Pottery
+23 | city_founded | Trinidadian and Tobagonian | Trinidadian and Tobagonian founded Point Fortin
+23 | city_founded | Tajik | Tajik founded Qurghonteppa
+23 | city_founded | Chinese | Chinese founded Tianjin
+23 | diplomatic_change | Trinidadian and Tobagonian | Trinidadian and Tobagonian and Chinese: War -> Cease-fire
+23 | tech_discovered | Bissau-Guinean | Bissau-Guinean discovered Horseback Riding
+24 | diplomatic_change | Tajik | Tajik and Swazi: Cease-fire -> War
+24 | tech_discovered | Chinese | Chinese discovered Alphabet
+25 | diplomatic_change | Tajik | Tajik and Swazi: War -> Cease-fire
+25 | tech_discovered | Trinidadian and Tobagonian | Trinidadian and Tobagonian discovered Horseback Riding
+26 | city_founded | Tajik | Tajik founded Kulob
+26 | city_founded | Swazi | Swazi founded Manzini
+26 | tech_discovered | Swazi | Swazi discovered Alphabet
+27 | city_founded | Bissau-Guinean | Bissau-Guinean founded Bolama
+27 | city_founded | Trinidadian and Tobagonian | Trinidadian and Tobagonian founded Scarborough
+27 | city_founded | Tajik | Tajik founded Konibodom
+27 | city_founded | Chinese | Chinese founded Guangzhou
+28 | diplomatic_change | Bissau-Guinean | Bissau-Guinean and Tajik: Never met -> War
+28 | diplomatic_change | Bissau-Guinean | Bissau-Guinean and Chinese: Cease-fire -> War
+29 | diplomatic_change | Bissau-Guinean | Bissau-Guinean and Tajik: War -> Cease-fire
+29 | tech_discovered | Chinese | Chinese discovered Pottery
+30 | city_founded | Trinidadian and Tobagonian | Trinidadian and Tobagonian founded San Juan
+30 | diplomatic_change | Tajik | Tajik and Chinese: Cease-fire -> Armistice
+30 | tech_discovered | Trinidadian and Tobagonian | Trinidadian and Tobagonian discovered Pottery
+31 | diplomatic_change | Bissau-Guinean | Bissau-Guinean and Trinidadian and Tobagonian: Never met -> Cease-fire
+32 | tech_discovered | Bissau-Guinean | Bissau-Guinean discovered The Wheel
+32 | tech_discovered | Tajik | Tajik discovered Code of Laws
+33 | city_founded | Chinese | Chinese founded Nanjing
+34 | city_founded | Tajik | Tajik founded Vakhdat
+35 | diplomatic_change | Bissau-Guinean | Bissau-Guinean and Swazi: Never met -> War
+35 | diplomatic_change | Swazi | Swazi and Chinese: Cease-fire -> War
+35 | tech_discovered | Trinidadian and Tobagonian | Trinidadian and Tobagonian discovered Alphabet
+36 | tech_discovered | Tajik | Tajik discovered Horseback Riding
+37 | diplomatic_change | Bissau-Guinean | Bissau-Guinean and Swazi: War -> Cease-fire
+37 | tech_discovered | Bissau-Guinean | Bissau-Guinean discovered Alphabet
+38 | city_founded | Trinidadian and Tobagonian | Trinidadian and Tobagonian founded Arima
+38 | city_founded | Swazi | Swazi founded Big Bend
+38 | diplomatic_change | Trinidadian and Tobagonian | Trinidadian and Tobagonian and Chinese: Cease-fire -> War
+38 | diplomatic_change | Swazi | Swazi and Chinese: War -> Cease-fire
+38 | tech_discovered | Swazi | Swazi discovered Code of Laws
+38 | tech_discovered | Chinese | Chinese discovered Code of Laws
+39 | tech_discovered | Trinidadian and Tobagonian | Trinidadian and Tobagonian discovered Code of Laws
+40 | city_founded | Chinese | Chinese founded Xi'an
+40 | diplomatic_change | Tajik | Tajik and Swazi: Cease-fire -> War
+41 | city_founded | Bissau-Guinean | Bissau-Guinean founded Catió
+41 | diplomatic_change | Trinidadian and Tobagonian | Trinidadian and Tobagonian and Chinese: War -> Cease-fire
+41 | tech_discovered | Tajik | Tajik discovered Warrior Code
+42 | city_founded | Trinidadian and Tobagonian | Trinidadian and Tobagonian founded Penal
+42 | city_founded | Swazi | Swazi founded Nhlangano
+42 | diplomatic_change | Trinidadian and Tobagonian | Trinidadian and Tobagonian and Swazi: Never met -> War
+43 | city_founded | Bissau-Guinean | Bissau-Guinean founded Buba
+43 | city_founded | Chinese | Chinese founded Chongqing
+43 | tech_discovered | Trinidadian and Tobagonian | Trinidadian and Tobagonian discovered Writing
+44 | city_founded | Trinidadian and Tobagonian | Trinidadian and Tobagonian founded Princes Town
+44 | tech_discovered | Bissau-Guinean | Bissau-Guinean discovered Writing
+44 | tech_discovered | Chinese | Chinese discovered Writing
+45 | city_founded | Trinidadian and Tobagonian | Trinidadian and Tobagonian founded Diego Martin
+45 | diplomatic_change | Trinidadian and Tobagonian | Trinidadian and Tobagonian and Swazi: War -> Cease-fire
+45 | diplomatic_change | Tajik | Tajik and Swazi: War -> Cease-fire
+45 | diplomatic_change | Tajik | Tajik and Chinese: Armistice -> Peace
+46 | city_founded | Trinidadian and Tobagonian | Trinidadian and Tobagonian founded Couva
+46 | city_founded | Chinese | Chinese founded Jinan
+46 | diplomatic_change | Trinidadian and Tobagonian | Trinidadian and Tobagonian and Tajik: Never met -> War
+47 | city_founded | Bissau-Guinean | Bissau-Guinean founded Farim
+47 | diplomatic_change | Bissau-Guinean | Bissau-Guinean and Trinidadian and Tobagonian: Cease-fire -> War
+47 | tech_discovered | Bissau-Guinean | Bissau-Guinean discovered Bronze Working
+48 | diplomatic_change | Trinidadian and Tobagonian | Trinidadian and Tobagonian and Tajik: War -> Cease-fire
+48 | tech_discovered | Tajik | Tajik discovered The Wheel
+48 | tech_discovered | Swazi | Swazi discovered Monarchy
+49 | city_founded | Trinidadian and Tobagonian | Trinidadian and Tobagonian founded Siparia
+49 | government_change | Swazi | Swazi changed government from Despotism to Anarchy
+50 | city_founded | Bissau-Guinean | Bissau-Guinean founded Quinhámel
+50 | city_founded | Chinese | Chinese founded Chengdu
+50 | government_change | Swazi | Swazi changed government from Anarchy to Monarchy
+51 | city_founded | Trinidadian and Tobagonian | Trinidadian and Tobagonian founded Rio Claro
+51 | city_founded | Tajik | Tajik founded Isfara
+51 | diplomatic_change | Swazi | Swazi and Chinese: Cease-fire -> Armistice
+52 | city_founded | Trinidadian and Tobagonian | Trinidadian and Tobagonian founded Crown Point
+52 | city_founded | Swazi | Swazi founded Malkerns
+52 | diplomatic_change | Bissau-Guinean | Bissau-Guinean and Trinidadian and Tobagonian: War -> Cease-fire
+52 | tech_discovered | Bissau-Guinean | Bissau-Guinean discovered Code of Laws
+53 | diplomatic_change | Bissau-Guinean | Bissau-Guinean and Swazi: Cease-fire -> War
+53 | tech_discovered | Tajik | Tajik discovered Writing
+54 | city_founded | Chinese | Chinese founded Shijiazhuang
+54 | tech_discovered | Trinidadian and Tobagonian | Trinidadian and Tobagonian discovered Literacy
+54 | tech_discovered | Swazi | Swazi discovered Writing
+55 | city_founded | Swazi | Swazi founded Mhlume
+55 | diplomatic_change | Tajik | Tajik and Chinese: Peace -> Alliance
+55 | tech_discovered | Bissau-Guinean | Bissau-Guinean discovered Warrior Code
+55 | tech_discovered | Chinese | Chinese discovered Literacy
+56 | city_founded | Bissau-Guinean | Bissau-Guinean founded Canghungo
+56 | city_founded | Tajik | Tajik founded Khorugh
+56 | city_founded | Tajik | Tajik founded Panjakent
+56 | city_founded | Swazi | Swazi founded Hluti
+56 | city_founded | Swazi | Swazi founded Siteki
+56 | city_founded | Chinese | Chinese founded Wuhan
+56 | diplomatic_change | Bissau-Guinean | Bissau-Guinean and Swazi: War -> Cease-fire
+56 | diplomatic_change | Bissau-Guinean | Bissau-Guinean and Chinese: War -> Cease-fire
+56 | diplomatic_change | Trinidadian and Tobagonian | Trinidadian and Tobagonian and Chinese: Cease-fire -> War
+56 | tech_discovered | Trinidadian and Tobagonian | Trinidadian and Tobagonian discovered Ceremonial Burial
+56 | tech_discovered | Swazi | Swazi discovered Bronze Working
+57 | city_founded | Trinidadian and Tobagonian | Trinidadian and Tobagonian founded Tunapuna
+57 | city_founded | Trinidadian and Tobagonian | Trinidadian and Tobagonian founded Sangre Grande
+57 | tech_discovered | Bissau-Guinean | Bissau-Guinean discovered Ceremonial Burial
+58 | city_founded | Trinidadian and Tobagonian | Trinidadian and Tobagonian founded Speyside
+59 | city_founded | Trinidadian and Tobagonian | Trinidadian and Tobagonian founded Tacarigua
+59 | city_founded | Trinidadian and Tobagonian | Trinidadian and Tobagonian founded Marabella
+59 | city_founded | Tajik | Tajik founded Hisor
+60 | diplomatic_change | Trinidadian and Tobagonian | Trinidadian and Tobagonian and Swazi: Cease-fire -> War
+60 | diplomatic_change | Tajik | Tajik and Swazi: Cease-fire -> War

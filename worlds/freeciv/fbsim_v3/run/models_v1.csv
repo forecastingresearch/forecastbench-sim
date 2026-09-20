@@ -1,0 +1,25 @@
+name,eci,openrouter_id,reasoning,reasoning_mode,effort,budget,max_tokens,provider,ignore,workers,in_per_M,out_per_M,cache_read_per_M,note
+Meta: Llama 4 Scout,130.52,meta-llama/llama-4-scout,no,none,,,,DeepInfra,,14,0.10,0.30,0,DeepInfra fp8 pinned (Novita bf16 avoided; Google caps output at 8192)
+DeepSeek: DeepSeek V3,133.03,deepseek/deepseek-chat,no,none,,,,DeepInfra,,19,0.32,0.89,0,"OpenRouter's ""DeepSeek V3"" = deepseek/deepseek-chat (the 0324 refresh is deepseek/deepseek-chat-v3-0324); only DeepInfra (fp4) and StreamLake (quant unknown) host the original V3 on OpenRouter; DeepInfra pinned for consistency, owner to confirm"
+OpenAI: GPT-4.1,137.52,openai/gpt-4.1,no,none,,,,OpenAI,,16,2.00,8.00,0.50,
+Qwen: Qwen3 235B A22B,139.61,qwen/qwen3-235b-a22b,yes,budget,,1024,,Alibaba,,32,0.455,1.82,0,budget-style thinking (Fabio): reasoning.max_tokens 1024 = LiteLLM 'low'
+Google: Gemini 2.5 Flash,140.31,google/gemini-2.5-flash,yes,budget,,1024,,Google AI Studio|Google,,16,0.30,2.50,0.03,budget-style thinking (Fabio): reasoning.max_tokens 1024 = LiteLLM 'low'
+MoonshotAI: Kimi K2,140.42,moonshotai/kimi-k2,no,none,,,6000,Novita,,32,0.57,2.30,0,"Kimi K2 0711 is hosted ONLY by Novita on OpenRouter; pinned there as an interim choice (owner to decide: keep, switch to kimi-k2-0905, or drop); max_tokens 6000: ~1% of answers run away to the cap with empty content (normal answers ~1,300 tokens)"
+OpenAI: GPT-5 Nano,140.85,openai/gpt-5-nano,yes,effort,minimal,,,OpenAI,,16,0.05,0.40,0.005,supports minimal below low
+Anthropic: Claude Haiku 4.5,142.91,anthropic/claude-haiku-4.5,yes,budget,,1024,,Anthropic,,16,1.00,5.00,0.10,budget-style thinking (Fabio): reasoning.max_tokens 1024 = LiteLLM 'low'
+Qwen: Qwen3.5-Flash,144.12,qwen/qwen3.5-flash-02-23,yes,budget,,1024,,Alibaba,,21,0.065,0.26,0,budget-style thinking (Fabio): reasoning.max_tokens 1024 = LiteLLM 'low'
+Google: Gemini 3.1 Flash Lite Preview,144.66,google/gemini-3.1-flash-lite-preview,yes,effort,minimal,,,Google AI Studio|Google,,16,0.25,1.50,0.025,supports minimal below low
+OpenAI: GPT-5 Mini,145.83,openai/gpt-5-mini,yes,effort,minimal,,,OpenAI,,16,0.25,2.00,0.025,supports minimal below low
+OpenAI: o4 Mini,146.53,openai/o4-mini,yes,effort,low,,,OpenAI,,16,1.10,4.40,0.275,low is the minimum
+OpenAI: GPT-5.4 Nano,146.54,openai/gpt-5.4-nano,yes,effort,low,,,OpenAI,,16,0.20,1.25,0.02,supports none below low
+OpenAI: o3,147.10,openai/o3,yes,effort,low,,,OpenAI,,16,2.00,8.00,0.50,low is the minimum
+OpenAI: GPT-5,150.00,openai/gpt-5,yes,effort,minimal,,,OpenAI,,16,1.25,10.00,0.125,supports minimal below low
+Google: Gemini 3 Flash Preview,150.71,google/gemini-3-flash-preview,yes,effort,minimal,,,Google AI Studio|Google,,16,0.50,3.00,0.05,supports minimal below low
+DeepSeek: DeepSeek V4 Flash 0731,154.43,deepseek/deepseek-v4-flash-0731,yes,effort,low,,24000,DeepSeek,,128,0.44,1.32,0.028,"first-party DeepSeek endpoint (reachable since 2026-09-09; 122 s/call). The model ignores effort and budget (10-15k reasoning tokens) and sometimes runs to the cap with no answer; reasoning_mode=disabled gives 7 s / 600-token answers. Owner decision pending; default = effort low per Fabio's table. Third-party hosts: OpenInference and DigitalOcean lose the question (8k prompts), others 90-540 s."
+Anthropic: Claude Sonnet 5,155.90,anthropic/claude-sonnet-5,yes,effort,low,,,Anthropic,,16,2.00,10.00,0.20,
+OpenAI: GPT-5.6 Luna,156.22,openai/gpt-5.6-luna,yes,effort,low,,,OpenAI,,16,0.20,1.20,0.02,supports none below low
+Google: Gemini 3.7 Flash,156.85,google/gemini-3.7-flash,yes,effort,low,,,Google AI Studio|Google,,16,0.75,3.75,0.075,
+OpenAI: GPT-5.5,158.63,openai/gpt-5.5,yes,effort,low,,,OpenAI,,17,5.00,30.00,0.50,supports none below low
+OpenAI: GPT-5.6 Sol,161.08,openai/gpt-5.6-sol,yes,effort,low,,,OpenAI,,16,2.00,10.00,0.20,supports none below low
+Claude Opus 5,161.54,anthropic/claude-opus-5,yes,effort,low,,,Anthropic,,16,5.00,25.00,0.50,
+Anthropic: Claude Fable,162.49,anthropic/claude-fable-5,yes,effort,low,,,Anthropic,,16,10.00,50.00,1.00,CSV slug claude-fable-5; claude-fable-5.1 is listed at the same price

@@ -1,0 +1,25 @@
+name,eci,openrouter_id,reasoning,reasoning_mode,effort,budget,max_tokens,endpoint,quantizations,ignore,workers,in_per_M,out_per_M,cache_read_per_M,note
+Meta: Llama 4 Scout,130.52,meta-llama/llama-4-scout,no,none,,,,deepinfra,,,14,0.10,0.30,0,as in run 1
+DeepSeek: DeepSeek V3,133.03,deepseek/deepseek-chat,no,none,,,,streamlake,,,19,0.32,0.89,0,pin DeepInfra -> streamlake
+OpenAI: GPT-4.1,137.52,openai/gpt-4.1,no,none,,,,openai,,,16,2.00,8.00,0.50,as in run 1
+Qwen: Qwen3 235B A22B,139.61,qwen/qwen3-235b-a22b,yes,budget,,1024,,alibaba,,,32,0.455,1.82,0,as in run 1
+Google: Gemini 2.5 Flash,140.31,google/gemini-2.5-flash,yes,budget,,1024,,google-ai-studio,,google-ai-studio/flex|google-ai-studio/priority,16,0.30,2.50,0.03,as in run 1
+MoonshotAI: Kimi K2,140.42,moonshotai/kimi-k2,no,none,,,16384,novita,,,32,0.57,2.30,0,max_tokens 6000 -> 16384: a batched answer to 50 questions needs room
+OpenAI: GPT-5 Nano,140.85,openai/gpt-5-nano,yes,effort,minimal,,,openai,,openai/flex,16,0.05,0.40,0.005,as in run 1
+Anthropic: Claude Haiku 4.5,142.91,anthropic/claude-haiku-4.5,yes,budget,,1024,,anthropic,,,16,1.00,5.00,0.10,as in run 1
+Qwen: Qwen3.5-Flash,144.12,qwen/qwen3.5-flash-02-23,yes,budget,,1024,,alibaba,,,21,0.065,0.26,0,as in run 1
+Google: Gemini 3.1 Flash Lite Preview,144.66,google/gemini-3.1-flash-lite-preview,yes,effort,minimal,,,google-ai-studio,,google-ai-studio/flex|google-ai-studio/priority,16,0.25,1.50,0.025,as in run 1
+OpenAI: GPT-5 Mini,145.83,openai/gpt-5-mini,yes,effort,minimal,,,openai,,openai/flex,16,0.25,2.00,0.025,as in run 1
+OpenAI: o4 Mini,146.53,openai/o4-mini,yes,effort,low,,,openai,,,16,1.10,4.40,0.275,as in run 1
+OpenAI: GPT-5.4 Nano,146.54,openai/gpt-5.4-nano,yes,effort,low,,,openai,,openai/flex,16,0.20,1.25,0.02,as in run 1
+OpenAI: o3,147.10,openai/o3,yes,effort,low,,,openai,,,16,2.00,8.00,0.50,as in run 1
+OpenAI: GPT-5,150.00,openai/gpt-5,yes,effort,minimal,,,openai/default,,,16,1.25,10.00,0.125,as in run 1
+Google: Gemini 3 Flash Preview,150.71,google/gemini-3-flash-preview,yes,effort,minimal,,,google-ai-studio,,google-ai-studio/flex|google-ai-studio/priority,16,0.50,3.00,0.05,as in run 1
+DeepSeek: DeepSeek V4 Flash 0731,154.43,deepseek/deepseek-v4-flash-0731,yes,effort,low,,24000,streamlake,fp8,,32,0.44,1.32,0.028,pin DeepSeek -> streamlake/fp8
+Anthropic: Claude Sonnet 5,155.90,anthropic/claude-sonnet-5,yes,effort,low,,,anthropic,,,16,2.00,10.00,0.20,as in run 1
+OpenAI: GPT-5.6 Luna,156.22,openai/gpt-5.6-luna,yes,effort,low,,,openai,,openai/flex|openai/fast,16,0.20,1.20,0.02,as in run 1
+Google: Gemini 3.7 Flash,156.85,google/gemini-3.7-flash,yes,effort,low,,,google-ai-studio,,google-ai-studio/flex|google-ai-studio/priority,16,0.75,3.75,0.075,as in run 1
+OpenAI: GPT-5.5,158.63,openai/gpt-5.5,yes,effort,low,,,openai,,openai/flex|openai/fast,17,5.00,30.00,0.50,as in run 1
+OpenAI: GPT-5.6 Sol,161.08,openai/gpt-5.6-sol,yes,effort,low,,,openai,,openai/flex|openai/fast,16,2.00,10.00,0.20,as in run 1
+Claude Opus 5,161.54,anthropic/claude-opus-5,yes,effort,low,,,anthropic,,anthropic/fast,16,5.00,25.00,0.50,as in run 1
+Anthropic: Claude Fable,162.49,anthropic/claude-fable-5,yes,effort,low,,,anthropic,,,16,10.00,50.00,1.00,as in run 1
