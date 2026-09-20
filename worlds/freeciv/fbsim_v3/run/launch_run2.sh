@@ -4,6 +4,8 @@
 # (the same batches of the same design, so they are simply not re-asked) and the natcond folder with run 1's rows for the
 # other 22 models.  Idempotent: rerunning resumes.
 #   bash launch_run2.sh run2_2026-09-20 ~/path/to/.env
+# The natcond rerun runs 48 workers because DeepSeek V4 Flash on StreamLake streams at about 26 tokens/s and spends
+# 9,000 to 15,000 reasoning tokens per call (345 to 413 s each in the smoke); at 48 in flight the 854 calls take about 2 h.
 set -u
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"; RUN="$HERE/../results/$1"; ENVF="$2"
 mkdir -p "$RUN/batched" "$RUN/natcond"
@@ -14,7 +16,7 @@ if [ -d "$HERE/../results/run2_smoke/batched" ]; then
 fi
 [ -d "$RUN/natcond/from_run1" ] || cp -R "$HERE/../results/run2_natcond/from_run1" "$RUN/natcond/from_run1"
 T0=$(date +%s)
-( cd "$HERE" && python3 elicit_natcond_v1.py --models "DeepSeek: DeepSeek V3,DeepSeek: DeepSeek V4 Flash 0731" --out "$RUN/natcond/repinned" --workers 16 --env-file "$ENVF" > "$RUN/natcond_repinned.log" 2>&1 ) &
+( cd "$HERE" && python3 elicit_natcond_v1.py --models "DeepSeek: DeepSeek V3,DeepSeek: DeepSeek V4 Flash 0731" --out "$RUN/natcond/repinned" --workers 48 --env-file "$ENVF" > "$RUN/natcond_repinned.log" 2>&1 ) &
 NCPID=$!
 bash "$HERE/launch_v2.sh" "$RUN/batched" "$ENVF"
 wait $NCPID; echo "natcond rerun finished; $(tail -n 2 "$RUN/natcond_repinned.log" | cut -c1-160)"

@@ -63,3 +63,16 @@ the questions asked (`cost_share`); the per-set cost columns come from summing i
 
 Paper: Section 2 and Appendix A state that the natural-conditional arm was asked one question per prompt because
 turn 2 continues the conversation about one question, and that the other four sets were batched at up to 50.
+
+## E. Smoke test, 2026-09-19/20 (2 batched prompts per model, 48 calls; natcond: 3 questions with cells for the 2 re-pinned models)
+
+- First attempt, non-streamed calls fired at once from 24 processes: 13 calls returned within 15 s, the other 35 sat on
+  established connections for over 20 minutes with nothing coming back, while the same request bodies through curl
+  completed in 22 to 29 s. Stopped after $1.88. Fix: streamed completions with a 180 s idle timeout per read, one process
+  per model started 2 s apart, a progress line per call (`elicit_v2.py`, `launch_v2.sh`).
+- Second attempt (resumed): every returned call parsed completely (50/50 or 34/34), finish `stop`, no retries; the answer
+  block was omitted twice (GPT-5.4 Nano, Qwen3.5 Flash) and the lenient parser read the Q lines correctly. Calls took
+  3 to 82 s except Kimi K2 (71 s binary) and DeepSeek V4 Flash on StreamLake (about 26 tokens/s: a single natural-
+  conditional question took 345 s with 9,000 reasoning tokens).
+- Cost per question is far below the pre-run estimate: the projection from the smoke is a few dollars for the whole
+  batched arm, plus the DeepSeek natcond reruns.
