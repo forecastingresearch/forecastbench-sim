@@ -76,3 +76,16 @@ turn 2 continues the conversation about one question, and that the other four se
   conditional question took 345 s with 9,000 reasoning tokens).
 - Cost per question is far below the pre-run estimate: the projection from the smoke is a few dollars for the whole
   batched arm, plus the DeepSeek natcond reruns.
+
+## F. Matched rerun (2026-09-20, Jaeho's decision after the first batched arm)
+
+The first batched arm (results/run2_2026-09-20/batched, 34 prompts per model, seeded shuffle, cap 50 for both kinds) is
+complete for all 24 models and is kept as an ablation of order and cap. It showed o4-mini refusing 4 of its 8 continuous
+prompts of 38 to 48 questions. The run that the paper uses matches Micropolis's batching exactly where batching is
+concerned (results/run2b_2026-09-20/batched, 44 prompts per model): binary cap 50 with horizon-major order (all questions
+of one horizon, families in name order, then the next horizon), continuous cap 20 with metric-major order, Fabio's
+`1. question` numbering with an indented resolution-criteria line, each prompt sent once with no re-ask (a missing
+answer stays missing and is reported in the parse rate), the same answer blocks and parsing rules. Kept from FreeCiv:
+the run-1 wording (no persona, scoring rule unnamed), resolution criteria, percentiles p5 to p95, sorting of
+non-monotone percentiles (flagged), the 32,768-token output cap, cached report prefixes on first-party hosts,
+streamed transport. The natural-conditional arm is unchanged (results/run2_2026-09-20/natcond).

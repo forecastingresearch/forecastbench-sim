@@ -15,9 +15,11 @@ one prompt, up to --per-prompt of them, following Fabio's Micropolis batching:
     conditional extra questions) forms one group; the continuous questions of a world form another;
   * a group larger than the cap is split into ceil(n / cap) consecutive chunks whose sizes differ by at most one
     (36 to 49 questions here), each its own prompt, cache key and retry unit;
-  * inside a group the questions are in one random order fixed by seed 2026, so tail, bank and mirror items are
-    mixed and a batch never consists of one set (a deliberate difference from Micropolis, whose corpus order
-    already mixes templates).
+  * inside a group the questions follow Micropolis's corpus order: binary horizon-major (every question of one
+    horizon, families in name order, before the next horizon), continuous metric-major; bank, tail and mirror items
+    of one horizon therefore sit together (--order shuffle gives the seeded random order of the first run-2 attempt);
+  * continuous prompts are capped at 20 (Micropolis's effective cap: 5 metrics x 4 horizons per snapshot), binary at 50;
+  * each prompt is sent once; an answer that does not parse stays missing (--reask N to re-ask, as run 1 did).
 The prompt keeps the run-1 wording: intro, "Question Background", the world report, then the numbered questions
 each with its resolution criteria, then the instruction and an answer block modelled on Fabio's
 (<<<PROBABILITIES>>> Q1: 0.65 ... <<<END>>>, or <<<PERCENTILES>>> Q1: p5=.., p25=.., p50=.., p75=.., p95=.. <<<END>>>).
@@ -94,7 +96,7 @@ Q1: p5=5, p25=10, p50=15, p75=20, p95=25
 Q2: p5=100, p25=200, p50=300, p75=400, p95=500
 <<<END>>>
 Provide one such line for each of the {n} questions, replacing the example values with your actual percentile estimates."""
-QUESTION = "Q{k}. Question Title: {question}\nResolution Criteria: {criteria}\n"
+QUESTION = "{k}. {question}\n   Resolution Criteria: {criteria}\n"
 TURN2 = """{preamble}
 
 Given this, please answer the following question{s} from the list above again: {qlist}. Reason about what, if anything, this changes, and end your response with your updated probabilit{ies} in this exact format:
@@ -196,7 +198,8 @@ def even_split(seq, cap):
     return out
 
 
-def build_batches(sets, cap, t2_mode):
+def build_batches(sets, cap, t2_mode, cap_cont=None):
+    cap_cont = cap if cap_cont is None else cap_cont
     """-> dict(t1=[batch...], t2=[job...], nonews=[job...]).  A batch: id, world, kind, items (list of set items),
     prefix, tail.  A t2 job: id, batch_id, cells [(cell, position)], preamble.  A nonews job: id, batch_id, [(qid, position)]."""
     sets = set(sets.split(",") if isinstance(sets, str) else sets)
@@ -219,8 +222,13 @@ def build_batches(sets, cap, t2_mode):
     batches, pos_of = [], {}
     for (world, kind) in sorted(by):
         items = sorted(by[(world, kind)], key=lambda i: i["id"])
-        random.Random(f"{SEED}:{world}:{kind}").shuffle(items)
-        chunks = even_split(items, cap)
+        if ORDER == "shuffle":
+            random.Random(f"{SEED}:{world}:{kind}").shuffle(items)
+        elif kind == "bin":     # Micropolis "turn" sort: every question of one horizon before the next horizon; families in name order inside it
+            items.sort(key=lambda i: (i["T"], i["family"], i["id"]))
+        else:                   # Micropolis "metric" sort: every horizon of one quantity first
+            items.sort(key=lambda i: (i["family"], i.get("metric") or "", i["T"], i["id"]))
+        chunks = even_split(items, cap_cont if kind == 'cont' else cap)
         for ci, chunk in enumerate(chunks, 1):
             bid = f"{world}_{kind}_c{ci}of{len(chunks)}"
             pre, tail = make_prompt(kind, world, chunk)
@@ -297,6 +305,8 @@ def build_body(model, messages, max_tokens_default=32768):
 
 
 STREAM = True          # --no-stream turns it off
+ORDER = "fabio"
+REASK = 0
 IDLE_TIMEOUT = 180     # seconds without a byte from the server before the attempt is abandoned and retried
 
 
@@ -383,6 +393,9 @@ def main():
     ap.add_argument("--sets", default="bank,tails,mirrors,continuous", help="run 2 default: the natural conditionals stay unbatched (elicit_natcond_v1.py); add natcond to batch them")
     ap.add_argument("--out", required=True)
     ap.add_argument("--per-prompt", type=int, default=50)
+    ap.add_argument("--per-prompt-cont", type=int, default=20, help="cap for continuous prompts (Micropolis: 20; 0 = same as --per-prompt)")
+    ap.add_argument("--order", default="fabio", choices=["fabio", "shuffle"], help="question order inside a prompt: Micropolis corpus order (horizon-major binary, metric-major continuous) or a seeded shuffle")
+    ap.add_argument("--reask", type=int, default=0, help="re-ask a prompt whose answers did not all parse this many times (Micropolis: 0, each prompt sent once)")
     ap.add_argument("--t2", default="grouped", choices=["grouped", "percell"])
     ap.add_argument("--workers", type=int, default=0, help="override the models-file workers column")
     ap.add_argument("--limit-batches", type=int, default=0, help="only the first N turn-1 batches (and their follow-ups)")
@@ -394,6 +407,8 @@ def main():
     a = ap.parse_args()
     global STREAM, IDLE_TIMEOUT
     STREAM, IDLE_TIMEOUT = not a.no_stream, a.idle_timeout
+    global ORDER, REASK
+    ORDER, REASK = a.order, a.reask
     KEY = os.environ.get("OPENROUTER_API_KEY")
     if not KEY and a.env_file:
         for l in open(os.path.expanduser(a.env_file)):
@@ -406,7 +421,7 @@ def main():
         missing = [w for w in want if not any(m["name"] == w or m["openrouter_id"] == w for m in models)]
         if missing:
             sys.exit(f"not in models file: {missing}")
-    jobs, pos_of = build_batches(a.sets, a.per_prompt, a.t2)
+    jobs, pos_of = build_batches(a.sets, a.per_prompt, a.t2, a.per_prompt_cont or None)
     if a.smoke:
         jobs = smoke_filter(jobs)
     if a.limit_batches:
@@ -477,7 +492,7 @@ def main():
             if prev and prev.get("complete"):
                 return prev
             best, best_parsed = None, {}
-            for attempt in range(2):
+            for attempt in range(1 + REASK):
                 r = call(model, messages)
                 parsed, mode = parse_block(r["text"], set(asked), kind)
                 if len(parsed) > len(best_parsed) or best is None:
