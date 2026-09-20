@@ -25,18 +25,18 @@ PROV_YELLOW = "\\yellow{Provisional: one question per prompt; batched rerun pend
 PROV_GREEN_A = "\\green{Provisional: one question per prompt; a second run at 50 questions per prompt is pending. "
 PROV_GREEN_B = "\\green{Provisional: one question per prompt. "
 
-RUN2_SETUP = ("The bank, tail, mirror and continuous questions of a game share its report and were asked in numbered prompts, "
-              "up to 50 binary or 20 continuous questions each, the caps of the Micropolis run; binary questions are listed in horizon "
-              "order and continuous questions by quantity. Each natural-conditional question went in its own prompt, since turn 2 of a "
-              "cell continues that exchange with one revealed sentence and asks the question again; a no-news control on 100 cells "
-              "continues it with no new information (\\cref{app:worlds}).")
+RUN2_SETUP = ("The questions of one game share its report. We asked the bank, tail, mirror and continuous questions in prompts of "
+              "at most 50 binary or 20 continuous questions, the limits of the Micropolis run, in horizon order for binary questions "
+              "and by quantity for continuous ones. Each natural-conditional question had its own prompt, because turn 2 of a cell "
+              "continues that exchange: it reveals one sentence and asks the question again. A no-news control on 100 cells continues "
+              "the exchange with no new information (\\cref{app:worlds}).")
 
 # (file, old, new); `new` may hold {placeholders} filled from the numbers file
 R = [
     # Section 2: protocol sentence
     ("sections/03_benchmark_design.tex",
      "\\yellow{FreeCiv is still to be rerun at 50 per prompt; its numbers here come from a one-question-per-prompt run and are provisional.}",
-     "\\green{FreeCiv uses the same caps for its unconditional sets, 50 binary and 20 continuous questions per prompt, and one question per prompt for its natural conditionals, whose second turn continues the conversation about one question.}"),
+     "\\green{FreeCiv uses the same limits for its unconditional sets, 50 binary and 20 continuous questions per prompt. Its natural conditionals keep one question per prompt, since the second turn continues the conversation about that question.}"),
     # Section 4: setup and the provisional sentence
     ("sections/05_freeciv.tex",
      "Each question went in its own prompt with no persona; turn 2 of a cell continues the exchange with one revealed sentence and asks again, and a no-news control on 100 cells continues it with no new information (\\cref{app:worlds}). \\yellow{Every FreeCiv result below is provisional until the rerun at 50 questions per prompt.}",
@@ -49,16 +49,16 @@ R = [
      "\\textbf{Elicitation.}\nWe send every prompt through OpenRouter with the report before the questions."),
     ("appendix/A_worlds_and_protocol.tex",
      "A turn-1 prompt is 7,565 to 8,544 tokens. There is no system message and no persona. The prompt says a proper scoring rule will evaluate the answer, names none, gives no example, and asks for the probability inside a tag, or the five percentiles in a labelled block. Every request sets an output limit of 16,384 tokens (24,000 for DeepSeek V4 Flash, 6,000 for Kimi K2) and provider-default sampling.",
-     "A batched prompt is {prompt_tokens_lo} to {prompt_tokens_hi} tokens, a natural-conditional prompt 7,565 to 8,544. There is no system message and no persona. The prompt says a proper scoring rule will evaluate the answers, names none, gives no example, and asks for one line per question in a delimited block: a probability, or the five percentiles. A natural-conditional prompt asks for the probability inside a tag. Every request sets an output limit of 32,768 tokens and provider-default sampling."),
+     "A prompt with several questions has {prompt_tokens_lo} to {prompt_tokens_hi} tokens; a natural-conditional prompt has 7,565 to 8,544. There is no system message and no persona. The prompt says a proper scoring rule will evaluate the answers and names none. It asks for one line per question in a delimited block, a probability or the five percentiles; a natural-conditional prompt asks for the probability inside a tag. Every request sets an output limit of 32,768 tokens and provider-default sampling."),
     ("appendix/A_worlds_and_protocol.tex",
      "We pin proprietary models to their first-party host and open-weight models to one host each (\\cref{tab:hosting}).",
-     "We pin every model to the host of the Micropolis registry (\\cref{tab:hosting}), so the two worlds queried the same endpoints."),
+     "We pin every model to the host that Micropolis used (\\cref{tab:hosting}), so the two worlds queried the same endpoints."),
     ("appendix/A_worlds_and_protocol.tex",
      "The scored rows cost \\$393.83 across the 24 models. A check at medium effort on 7 models and 200 bank items cost a further \\$34 (\\cref{app:ablation-effort}). All FreeCiv results are provisional pending the rerun at 50 questions per prompt.",
-     "The scored rows cost \\$393.83 across the 24 models. A check at medium effort on 7 models and 200 bank items cost a further \\$34 (\\cref{app:ablation-effort}). That run asked one question per prompt.\n\nThe run of 20 September 2026 is the one the paper reports. Its bank, tail, mirror and continuous questions were asked in batches with the caps of the Micropolis run: {n_bin_prompts} binary prompts of {bin_lo} to {bin_hi} questions and {n_cont_prompts} continuous prompts of {cont_lo} to {cont_hi}, one game's questions per prompt, {n_prompts} prompts per model. Each prompt was sent once, and an answer we could not read stays missing. Every model answered at least {parse_min} percent of its questions, {parse_mean} percent on average; {parse_note} The natural-conditional arm kept the protocol of 9 September, one question per prompt, and we reuse its forecasts for the 22 models whose host did not change; DeepSeek V3 and DeepSeek V4 Flash, moved to the hosts of the Micropolis registry, answered them again. DeepSeek V4 Flash ran at effort low, as in the other two worlds; the setting has no effect on it, and it returned about {dsv4_reasoning} reasoning tokens per batched call. The batched calls cost \\${cost_batched} and the two natural-conditional reruns \\${cost_natcond}."),
+     "The scored rows cost \\$393.83 across the 24 models. A check at medium effort on 7 models and 200 bank items cost a further \\$34 (\\cref{app:ablation-effort}). That run asked one question per prompt.\n\nThe run of 20 September 2026 is the one the paper reports. It asked the bank, tail, mirror and continuous questions in groups, with the limits of the Micropolis run: {n_bin_prompts} binary prompts of {bin_lo} to {bin_hi} questions and {n_cont_prompts} continuous prompts of {cont_lo} to {cont_hi}, one game per prompt and {n_prompts} prompts per model. We sent each prompt once, and an answer we could not read stays missing. Every model answered at least {parse_min} percent of its questions, and {parse_mean} percent on average. {parse_note} The natural-conditional arm kept the protocol of 9 September, one question per prompt. We reuse its forecasts for the 22 models whose host did not change. DeepSeek V3 and DeepSeek V4 Flash moved to the hosts that Micropolis used and answered them again. DeepSeek V4 Flash ran at effort low, as in the other two worlds; the setting has no effect on it, and it returned about {dsv4_reasoning} reasoning tokens per grouped call. The grouped calls cost \\${cost_batched} and the two natural-conditional reruns \\${cost_natcond}."),
     ("appendix/A_worlds_and_protocol.tex",
      "Needs (Jaeho): (1) the Freeciv server version and ruleset of the container; (2) one-sentence definitions of the five natural-conditional groups A, B, C1, C2 and D; (3) the decision on the DeepSeek V4 Flash regime (effort low, which the model ignores, or reasoning disabled), stated here and told to Fabio and Nick; (4) after the rerun at 50 questions per prompt, the calls per model, the cost, the parse rates and the turn-2 design when 50 questions share one prompt.",
-     "Needs (Jaeho): the Freeciv server version and ruleset of the container. Done on 20 September 2026: the group definitions (Question sets, above), the DeepSeek V4 Flash regime (effort low, as in Micropolis and StarSim) and the record of the batched run."),
+     "Needs (Jaeho): the Freeciv server version and ruleset of the container. Done on 20 September 2026: the group definitions (Question sets, above), the DeepSeek V4 Flash regime (effort low, as in Micropolis and StarSim) and the record of the grouped run."),
     ("appendix/A_worlds_and_protocol.tex", "About: the items above marked in dark yellow, and the version of this subsection for the batched rerun.", "About: the one item above still marked in dark yellow."),
     # protocol table
     ("appendix/A_worlds_and_protocol.tex", " & \\green{Micropolis} & \\green{FreeCiv (provisional)} & \\green{StarSim} \\\\", " & \\green{Micropolis} & \\green{FreeCiv} & \\green{StarSim} \\\\"),

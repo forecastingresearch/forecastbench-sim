@@ -2,7 +2,7 @@
 """rebuild_rows_v2.py BATCHED_DIR — regenerate results.jsonl (and the complete/parse_mode fields of calls.jsonl) for every
 model folder from the stored calls, with the current parse_block of elicit_v2.py.  No API calls.  Rows are a pure function
 of the stored responses, so a parser improvement is applied by re-reading, never by re-asking.  Prints per-model parse counts."""
-import glob, json, os, sys, collections
+import glob, gzip, json, os, sys, collections
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import elicit_v2 as e
 
@@ -15,9 +15,10 @@ jobs, _ = e.build_batches("bank,tails,mirrors,continuous", 50, "grouped", 20)
 batches = {b["id"]: b for b in jobs["t1"]}
 tot = collections.Counter()
 for d in sorted(glob.glob(f"{D}/*/")):
-    if os.path.basename(d.rstrip("/")) == "logs" or not os.path.exists(f"{d}/calls.jsonl"):
+    if os.path.basename(d.rstrip("/")) == "logs" or not (os.path.exists(f"{d}/calls.jsonl") or os.path.exists(f"{d}/calls.jsonl.gz")):
         continue
-    calls = [json.loads(l) for l in open(f"{d}/calls.jsonl")]
+    src = f"{d}/calls.jsonl" if os.path.exists(f"{d}/calls.jsonl") else f"{d}/calls.jsonl.gz"
+    calls = [json.loads(l) for l in (gzip.open(src, "rt") if src.endswith(".gz") else open(src))]
     rows, new_calls, n_ok, n_q = [], [], 0, 0
     for c in calls:
         b = batches.get(c["call_id"].split(":", 1)[1])
@@ -41,7 +42,7 @@ for d in sorted(glob.glob(f"{D}/*/")):
     with open(f"{d}/results.jsonl", "w") as f:
         for r in rows:
             f.write(json.dumps(r) + "\n")
-    with open(f"{d}/calls.jsonl", "w") as f:
+    with (gzip.open(src, "wt") if src.endswith(".gz") else open(src, "w")) as f:
         for c in new_calls:
             f.write(json.dumps(c) + "\n")
     tot["calls"] += len(calls); tot["answers"] += n_ok; tot["questions"] += n_q

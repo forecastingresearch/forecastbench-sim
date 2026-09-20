@@ -15,3 +15,7 @@ results/*/elicit_*/logs/
 
 # the root .gitignore excludes reports/ (an old CivBench convention); the eight world reports belong here
 !reports/
+
+# raw call records are committed gzipped (calls.jsonl.gz); the harness writes the plain file while a run is live
+results/*/batched/*/calls.jsonl
+results/*/batched/logs/
