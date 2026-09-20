@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """elicit_v2.py — batched elicitation over the draw v1 sets via OpenRouter (run 2, 2026-09-19).
 
+Run 2 (Jaeho, 2026-09-19): bank, tails, mirrors and continuous are batched here; the natural-conditional arm stays
+unbatched as in run 1 (elicit_natcond_v1.py for the re-pinned models, rebuild_natcond_rows.py for the rest).  The
+grouped turn-2 code below is kept for a fully batched variant (--sets ...,natcond) but is not the run-2 design.
+
   python elicit_v2.py --out DIR [--models NAME_OR_ID,...] [--models-file models_v2.csv]
                       [--sets bank,tails,mirrors,continuous,natcond] [--per-prompt 50] [--t2 grouped|percell]
                       [--workers W] [--limit-batches N] [--smoke] [--dry-run] [--env-file PATH]
@@ -337,7 +341,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--models", default="", help="comma list of names or OpenRouter ids from the models file; default = every row")
     ap.add_argument("--models-file", default=str(HERE / "models_v2.csv"))
-    ap.add_argument("--sets", default="bank,tails,mirrors,continuous,natcond")
+    ap.add_argument("--sets", default="bank,tails,mirrors,continuous", help="run 2 default: the natural conditionals stay unbatched (elicit_natcond_v1.py); add natcond to batch them")
     ap.add_argument("--out", required=True)
     ap.add_argument("--per-prompt", type=int, default=50)
     ap.add_argument("--t2", default="grouped", choices=["grouped", "percell"])
