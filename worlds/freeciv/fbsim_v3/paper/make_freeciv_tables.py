@@ -60,7 +60,7 @@ for m in fc_models:
                     natcond_excess_t2=float(vals[4]), natcond_gain=float(vals[5]), parsed_share=float(n_valid / n_items),
                     n_items_five_sets=int(n_items), total_calls=int(fw.loc[m, "total_calls"]), cost_usd=cost)
 write_tabular(TABLES / "freeciv_models.tex", "lrrrrrrrrr",
-              ["Model & ECI & Bank & Tails & \\multicolumn{2}{c}{Continuous} & \\multicolumn{2}{c}{Natural conditional} & Parsed & Cost",
+              ["Model & ECI & Mid-range & Tails & \\multicolumn{2}{c}{Continuous} & \\multicolumn{2}{c}{Natural conditional} & Parsed & Cost",
                "\\cmidrule(lr){5-6}\\cmidrule(lr){7-8}",
                " & & excess Brier & bits & nCRPS & excess & excess Brier & gain & (\\%) & (\\$)"],
               rows, comment=("FreeCiv per model (provisional, one question per prompt). Source: " if RUN.startswith("run1") else "FreeCiv per model (run 2: batched at up to 50 binary / 20 continuous questions per prompt; natural conditionals one per prompt). Source: ") + " freeciv_results_wide.csv, columns "
@@ -139,10 +139,10 @@ for m in fc_models:
     hb_rec[m] = dict(bank=dict(zip(map(str, FT), b)), tails=dict(zip(map(str, FT), t_)),
                      continuous=dict(zip(map(str, FT), c)), natcond=dict(zip(map(str, FT_NC), n)))
 write_tabular(TABLES / "freeciv_horizon_binary.tex", "lrrrrrrrrrrr",
-              ["Model & ECI & \\multicolumn{5}{c}{Bank excess Brier, by horizon (turn)} & \\multicolumn{5}{c}{Tail excess bits, by horizon (turn)}",
+              ["Model & ECI & \\multicolumn{5}{c}{Mid-range excess Brier, by horizon (turn)} & \\multicolumn{5}{c}{Tail excess bits, by horizon (turn)}",
                "\\cmidrule(lr){3-7}\\cmidrule(lr){8-12}",
                " & & 90 & 120 & 150 & 180 & 210 & 90 & 120 & 150 & 180 & 210"],
-              rows, comment="FreeCiv bank (150 questions per horizon) and tails (60 per horizon) by resolution turn. Source: "
+              rows, comment="FreeCiv mid-range set (150 questions per horizon) and tails (60 per horizon) by resolution turn. Source: "
                             "freeciv_results_wide.csv, columns bank_{T}_excess_brier and tails_{T}_excess_bits; cross-checked against SCORES.md.")
 write_tabular(TABLES / "freeciv_horizon_cont.tex", "lrrrrrrrrrr",
               ["Model & ECI & \\multicolumn{5}{c}{Continuous nCRPS, by horizon (turn)} & \\multicolumn{4}{c}{Natural-conditional excess Brier}",

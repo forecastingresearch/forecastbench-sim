@@ -42,13 +42,13 @@ CHECK = "--check" in sys.argv[1:]
 
 # The four FreeCiv headline rows: (table label, wide column, score_items set, score_items column).
 FREECIV_SETS = [
-    ("nCRPS", "continuous_all_ncrps_global", "continuous", "ncrps_global"),
+    ("Excess nCRPS", "continuous_all_excess_ncrps_global", "continuous", "excess_ncrps_global"),
     ("Tail excess bits", "tails_all_excess_bits", "tails", "excess_bits"),
     ("Natural-conditional excess Brier", "natcond_all_excess_t2", "natcond", "excess_t2"),
-    ("Bank excess Brier", "bank_all_excess_brier", "bank", "excess_brier"),
+    ("Mid-range excess Brier", "bank_all_excess_brier", "bank", "excess_brier"),
 ]
 WORLD_LABEL = "FreeCiv" if FINAL else "\\shortstack[l]{FreeCiv\\\\(provisional)}"
-FC_SETS_COST = [("Binary bank", 750), ("Tail set", 300), ("Mirror set", 50), ("Extra value questions (seed conditionals)", 124),
+FC_SETS_COST = [("Mid-range set", 750), ("Tail set", 300), ("Mirror set", 50), ("Extra value questions (seed conditionals)", 124),
                 ("Continuous set", 300), ("Natural conditionals, turn 2", 400), ("No-news control", 99)]
 
 
@@ -170,7 +170,8 @@ def update_validation(rows):
         start = next(i for i, l in enumerate(lines) if "multirow" in l and "FreeCiv" in l)
         block = lines[start:start + 4]
         assert all(l.rstrip().endswith("\\\\") for l in block), block
-        assert [cells_of(l)[1] for l in block] == [r["score"] for r in rows], [cells_of(l)[1] for l in block]
+        OLD_LABELS = {"nCRPS": "Excess nCRPS", "Bank excess Brier": "Mid-range excess Brier"}   # labels before 21 September 2026
+        assert [OLD_LABELS.get(cells_of(l)[1], cells_of(l)[1]) for l in block] == [r["score"] for r in rows], [cells_of(l)[1] for l in block]
         new_block = []
         for gi, r in enumerate(rows):
             cells = make_cells(r)
@@ -179,6 +180,7 @@ def update_validation(rows):
         lines[start:start + 4] = new_block
         if FINAL:
             lines = [re.sub(r"; FreeCiv is provisional \(one question per prompt\)", "", l) if l.startswith("%") else l for l in lines]
+        lines = [l.replace("one CI column (models for Micropolis and StarSim; eight-game cluster bootstrap for FreeCiv)", "one CI column, the bootstrap over models in every row (Appendix C adds FreeCiv's interval over its eight worlds)") if l.startswith("%") else l for l in lines]
         write_lines(path, lines, old)
 
     def full(axis):
@@ -190,7 +192,7 @@ def update_validation(rows):
 
     def main_(r):
         st, cl = r["eci"], r["eci_cluster"]
-        return [r["score"], str(st["n"]), f"${st['rho']:.2f}$", fmt_ci(cl["ci_lo"], cl["ci_hi"]), fmt_p(st["p"])]
+        return [r["score"], str(st["n"]), f"${st['rho']:.2f}$", fmt_ci(st["ci_lo"], st["ci_hi"]), fmt_p(st["p"])]   # 21 September 2026: the interval over models, as in every other row
 
     replace_block(PAPER_DATA / "validation_table.tex", full("eci"))
     replace_block(PAPER_DATA / "validation_table_forecastbench.tex", full("fb"))
@@ -279,7 +281,7 @@ def update_roster(fc):
     write_lines(path, lines, old)
 
 
-RUN2_ROWS = [("Binary bank", 750, "bank"), ("Tail set", 300, "tails"), ("Mirror set", 50, "mirrors"), ("Continuous set", 300, "continuous"),
+RUN2_ROWS = [("Mid-range set", 750, "bank"), ("Tail set", 300, "tails"), ("Mirror set", 50, "mirrors"), ("Continuous set", 300, "continuous"),
              ("Natural conditionals, turn 1 (one question per prompt)", 355, "t1nc"), ("Natural conditionals, turn 2", 400, "t2"), ("No-news control", 99, "nonews")]
 
 

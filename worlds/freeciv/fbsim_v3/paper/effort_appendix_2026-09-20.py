@@ -38,7 +38,7 @@ if "run1_check" in J:
     RUN1_SENT = (f"A first check on the one-question run of 9 September, at the same levels, drew its 200 questions in turn from each family without stratifying by horizon ({R1['in_common']} of them are in this sample); "
                  f"it moved excess Brier by between ${c1[lo1]:+.3f}$ ({lo1}) and ${c1[hi1]:+.3f}$ ({hi1}), left the bias between ${min(b1):+.2f}$ and ${max(b1):+.2f}$, and put the correlation of excess Brier with ECI at ${R1['rho_eci']['excess']['low']:+.2f}$ and ${R1['rho_eci']['excess']['next']:+.2f}$. ")
 PARA = (f"The FreeCiv runs set every model to its lowest reasoning effort (\\cref{{sec:freeciv}}). Because the binary forecasts are compressed and biased low, we checked whether more reasoning changes them. "
-        f"We drew 200 bank questions, 40 per horizon in turn from each family, and asked them again of seven models at the next level: effort medium where the provider exposes a level, and a 2,048-token budget for Haiku 4.5 and Qwen3 235B. "
+        f"We drew 200 mid-range questions, 40 per horizon in turn from each family, and asked them again of seven models at the next level: effort medium where the provider exposes a level, and a 2,048-token budget for Haiku 4.5 and Qwen3 235B. "
         f"The questions went in grouped prompts of the main run's kind, one game per prompt" + (f" with {sizes[0]} to {sizes[-1]} questions" if sizes else "") + f". The check cost \\${cost:.2f}" + (" and every answer parsed" if unparsed == 0 else f" and {unparsed} answers did not parse") + ". "
         f"\\Cref{{tab:effort}} gives the result. Excess Brier moved by between ${chg[best]:+.3f}$ ({best}) and ${chg[worst]:+.3f}$ ({worst}); {WORDS[n_better]} of the seven models improved. "
         f"Reasoning tokens per question rose from {min(reas_low):.0f} to {max(reas_low):.0f} at the lowest level to {min(reas_next):.0f} to {max(reas_next):.0f} at the next; GPT-5, which the main run had at effort minimal, went from {gpt5['low']['reas_per_q']:.0f} to {gpt5['next']['reas_per_q']:.0f}. "
@@ -47,7 +47,7 @@ PARA = (f"The FreeCiv runs set every model to its lowest reasoning effort (\\cre
         f"Across the seven models the correlation of excess Brier with ECI was ${rho['excess']['low']:+.2f}$ at the lowest level and ${rho['excess']['next']:+.2f}$ at the next, and that of discrimination ${rho['disc']['low']:+.2f}$ and ${rho['disc']['next']:+.2f}$. "
         + RUN1_SENT
         + "At these levels the effort setting does not produce the compression.")
-CAPTION = (r"\caption{\green{Excess Brier score on the same 200 FreeCiv bank questions at the lowest reasoning effort of the main run and at the next level (effort medium, or a 2,048-token budget for Haiku 4.5 and Qwen3 235B), "
+CAPTION = (r"\caption{\green{Excess Brier score on the same 200 FreeCiv mid-range questions at the lowest reasoning effort of the main run and at the next level (effort medium, or a 2,048-token budget for Haiku 4.5 and Qwen3 235B), "
            r"asked in grouped prompts of the main run's kind; lower is better. Bias is the mean of forecast minus truth; reasoning tokens are per question, a prompt's reasoning tokens divided by its questions. "
            f"A constant forecast of 0.5 scores {J['flat_excess']:.3f} on these questions. Source: \\texttt{{freeciv\\_effort\\_check.json}}.}}}}")
 TABLE = "\\begin{table}[t]\n" + CAPTION + "\n\\label{tab:effort}\n\\centering\n\\small\n\\setlength{\\tabcolsep}{4pt}\n{\\color{draftgreen}\\input{data/appendix_tables/freeciv_effort}}\n\\end{table}"
@@ -56,7 +56,7 @@ f = "appendix/D_ablations.tex"; s = (P / f).read_text()
 m = re.search(r"(\\subsection\{Reasoning effort \(FreeCiv\)\}\n\\label\{app:ablation-effort\}\n\n\\begin\{greentext\}\n)(.*?)(\n\\end\{greentext\})", s, re.S)
 if not m: print("ABORT: paragraph anchor"); sys.exit(1)
 s = s[:m.start(2)] + PARA + s[m.end(2):]
-t = re.search(r"\\begin\{table\}\[t\]\n\\caption\{\\green\{Excess Brier score on the same 200 FreeCiv bank questions.*?\\label\{tab:effort\}.*?\\end\{table\}", s, re.S)
+t = re.search(r"\\begin\{table\}\[t\]\n\\caption\{\\green\{Excess Brier score on the same 200 FreeCiv mid-range questions.*?\\label\{tab:effort\}.*?\\end\{table\}", s, re.S)
 if not t: print("ABORT: table anchor"); sys.exit(1)
 s = s[:t.start()] + TABLE + s[t.end():]
 readme = P / "data/freeciv/README.md"; r = readme.read_text()

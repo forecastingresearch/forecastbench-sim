@@ -93,7 +93,7 @@ def tex(s: str) -> str:
 
 
 lines = [r"\begin{tabular}{@{}l >{\raggedright\arraybackslash}p{5.4cm} r r r r@{}}", r"\toprule",
-         r"Family & Resolves YES if \ldots & Bank & Tail & Mirror & Nat.\ cond. \\", r"\midrule"]
+         r"Family & Resolves YES if \ldots & Mid-range & Tail & Mirror & Nat.\ cond. \\", r"\midrule"]
 for f in families:
     lines.append(
         f"\\texttt{{{tex(f)}}} & {BINARY[f]} & {bank.get(f, 0)} & {tails.get(f, 0)} & "

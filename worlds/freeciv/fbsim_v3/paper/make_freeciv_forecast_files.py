@@ -31,7 +31,7 @@ RES, SETS, OUT = Path(a.results), Path(a.sets), Path(a.out)
 OUT.mkdir(parents=True, exist_ok=True)
 
 si = pd.read_csv(RES / "scores_v1" / "score_items.csv.gz", low_memory=False)
-SECTION = {"bank": "bank", "tails": "tail", "mirrors": "mirror", "extra": "extra"}
+SECTION = {"bank": "mid-range", "tails": "tail", "mirrors": "mirror", "extra": "extra"}
 b = si[si.set.isin(SECTION)].copy()
 b["section"] = b.set.map(SECTION)
 b["prompt"] = np.where(b.set == "extra", "single", "grouped")
@@ -44,7 +44,7 @@ nc["question_id"] = nc.item.str.split("|").str[0]
 bank_ids = set(b[b.set == "bank"].item)
 single = nc[nc.question_id.isin(bank_ids)].drop_duplicates(["model", "question_id"])[["model", "question_id", "world", "family", "T", "p1", "q"]].copy()
 single = single.rename(columns={"T": "horizon", "p1": "forecast", "q": "real_prob"})
-single["section"] = "bank"; single["prompt"] = "single"; single["parsed"] = single.forecast.notna().astype(int)
+single["section"] = "mid-range"; single["prompt"] = "single"; single["parsed"] = single.forecast.notna().astype(int)
 f, q = single.forecast, single.real_prob
 single["expected_brier"] = (f - q) ** 2 + q * (1 - q); single["excess_brier"] = (f - q) ** 2
 fc, qc = f.clip(0.001, 0.999), q
@@ -63,7 +63,7 @@ nat.to_csv(OUT / "freeciv_natcond_forecasts.csv", index=False, float_format="%.6
 
 # question text
 rows = []
-for fname, section in (("bank_750.json", "bank"), ("tails_300.json", "tail"), ("mirrors_50.json", "mirror"), ("natcond_extra_turn1.json", "extra")):
+for fname, section in (("bank_750.json", "mid-range"), ("tails_300.json", "tail"), ("mirrors_50.json", "mirror"), ("natcond_extra_turn1.json", "extra")):
     for r in json.load(open(SETS / fname)):
         rows.append(dict(question_id=r["id"], cell_id="", world=r["world"], family=r["family"], section=section, horizon=r["T"], real_prob=r["qAll"], real_prob_given="", revealed_fact="", question=r["text"], criteria=r["criteria"]))
 for cid, c in cells.items():
@@ -73,7 +73,7 @@ pd.DataFrame(rows).to_csv(OUT / "freeciv_questions.csv", index=False)
 # checks against the paper's wide file
 w = pd.read_csv(RES / "results_v1" / "freeciv_results_wide.csv").set_index("model")
 g = bin_rows[bin_rows.prompt == "grouped"].groupby(["model", "section"])
-chk = {("bank", "bank_all_excess_brier", "excess_brier"), ("tail", "tails_all_excess_bits", "excess_bits"), ("mirror", "mirrors_all_excess_brier", "excess_brier")}
+chk = {("mid-range", "bank_all_excess_brier", "excess_brier"), ("tail", "tails_all_excess_bits", "excess_bits"), ("mirror", "mirrors_all_excess_brier", "excess_brier")}
 for sec, col, val in chk:
     mine = bin_rows[(bin_rows.prompt == "grouped") & (bin_rows.section == sec)].groupby("model")[val].mean().reindex(w.index)
     assert np.allclose(mine, w[col].astype(float), atol=1e-6), sec

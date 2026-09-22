@@ -16,7 +16,7 @@ TABLES.mkdir(parents=True, exist_ok=True)
 f = pd.read_csv(FAMILY_HORIZON)
 print(f.set.unique(), f.model.nunique(), "models")
 H = [90, 120, 150, 180, 210]
-spec = {"bank": ("excess", "Bank: excess Brier score"), "tails": ("bits", "Tail set: excess bits"),
+spec = {"bank": ("excess", "Mid-range: excess Brier score"), "tails": ("bits", "Tail set: excess bits"),
         "continuous": ("ncrps", "Continuous set: normalised CRPS")}
 rows_out = []
 
