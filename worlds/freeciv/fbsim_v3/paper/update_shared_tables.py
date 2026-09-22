@@ -43,9 +43,9 @@ CHECK = "--check" in sys.argv[1:]
 # The four FreeCiv headline rows: (table label, wide column, score_items set, score_items column).
 FREECIV_SETS = [
     ("Excess nCRPS", "continuous_all_excess_ncrps_global", "continuous", "excess_ncrps_global"),
-    ("Tail excess bits", "tails_all_excess_bits", "tails", "excess_bits"),
-    ("Natural-conditional excess Brier", "natcond_all_excess_t2", "natcond", "excess_t2"),
-    ("Mid-range excess Brier", "bank_all_excess_brier", "bank", "excess_brier"),
+    ("Excess bits, tail", "tails_all_excess_bits", "tails", "excess_bits"),
+    ("Excess Brier, natural conditional", "natcond_all_excess_t2", "natcond", "excess_t2"),
+    ("Excess Brier, mid-range", "bank_all_excess_brier", "bank", "excess_brier"),
 ]
 WORLD_LABEL = "FreeCiv" if FINAL else "\\shortstack[l]{FreeCiv\\\\(provisional)}"
 FC_SETS_COST = [("Mid-range set", 750), ("Tail set", 300), ("Mirror set", 50), ("Extra value questions (seed conditionals)", 124),
@@ -170,7 +170,8 @@ def update_validation(rows):
         start = next(i for i, l in enumerate(lines) if "multirow" in l and "FreeCiv" in l)
         block = lines[start:start + 4]
         assert all(l.rstrip().endswith("\\\\") for l in block), block
-        OLD_LABELS = {"nCRPS": "Excess nCRPS", "Bank excess Brier": "Mid-range excess Brier"}   # labels before 21 September 2026
+        OLD_LABELS = {"nCRPS": "Excess nCRPS", "Bank excess Brier": "Excess Brier, mid-range", "Mid-range excess Brier": "Excess Brier, mid-range",   # labels before 21 September 2026
+                      "Tail excess bits": "Excess bits, tail", "Natural-conditional excess Brier": "Excess Brier, natural conditional"}
         assert [OLD_LABELS.get(cells_of(l)[1], cells_of(l)[1]) for l in block] == [r["score"] for r in rows], [cells_of(l)[1] for l in block]
         new_block = []
         for gi, r in enumerate(rows):
