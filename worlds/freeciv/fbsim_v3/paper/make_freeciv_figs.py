@@ -271,8 +271,8 @@ summary = dict(
 )
 
 # ================================================================ Figure 1: capability 2x2
-fig, axes = plt.subplots(1, 4, figsize=(5.5, 2.4))
-fig.subplots_adjust(left=0.09, right=0.995, top=0.87, bottom=0.29, wspace=0.55)
+fig, axes = plt.subplots(1, 4, figsize=(5.5, 2.15))
+fig.subplots_adjust(left=0.09, right=0.995, top=0.86, bottom=0.31, wspace=0.55)
 cap = {}
 for ax, (key, spec) in zip(axes.ravel(), PANELS.items()):
     piv, worlds, Ts = per_model_matrix(spec["set"], spec["col"])
