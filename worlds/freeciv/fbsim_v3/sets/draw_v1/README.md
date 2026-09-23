@@ -14,6 +14,7 @@ relation); no item was chosen by its measured effect.
 | natcond_600.json | 400 | turn-2 reveal cells at T120–T210, 100/horizon in blocks A9 B9 C1 15 C2 42 D25 (strong-first) |
 | natcond_extra_turn1.json | 124 | value-series questions used only by natcond cells; need turn-1 elicitation too |
 | COMPOSITION.md, QC_SAMPLES.md, report.html | | tables and random QC samples (report.html = the published page) |
+| natcond_replays.npz | 400 × 1,000 | per-replay outcomes behind the natcond cells: boolean `Y` (question) and `X` (revealed fact) in the world's replay order, with `cell_id` (= qid\|rev_id), `world`, `p`, `p_given`, `nx`, and per world the 1,000 `replay_tags` and split halves; `natcond_replays_cells.csv` lists the rows, `natcond_replay_tags.csv` the columns (made by draw/export_natcond_replays.py from the bank and consol pickles) |
 
 Item fields: `id` (world:index), `world`, `family`, `T`, `text`, `criteria`, `subj` (civ ids), family params
 (`k`, `metric`, `x`, `wonder`, `gov`, `tech`, `kind`, `f`), truth `qAll` (binary) or `medAll/iqrAll/p05/p95/values`
