@@ -1,0 +1,26 @@
+name: Offline benchmark tests
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  installed-fixtures:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.11", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv python install ${{ matrix.python }}
+      - run: uv venv --python ${{ matrix.python }} .venv-offline
+      # Installation uses the index; test commands use fixtures only, never providers/engines.
+      - run: uv run --no-project --python .venv-offline/bin/python packages/fbsim-benchmark/tools/build_wheels.py --output dist/offline-wheels
+      - run: uv pip install --python .venv-offline/bin/python --find-links dist/offline-wheels 'fbsim-core==0.1.0' 'fbsim-benchmark[test]==0.3.0'
+      - run: git diff --exit-code
+      - run: uv run --offline --no-project --python .venv-offline/bin/python -m fbsim_benchmark docs --name PROVENANCE.json
+      - run: uv pip check --python .venv-offline/bin/python
+      - run: uv run --offline --no-project --python .venv-offline/bin/python -m fbsim_benchmark smoke
+      - run: uv run --offline --no-project --python .venv-offline/bin/python -m pytest -q --import-mode=importlib packages/fbsim-core/tests packages/fbsim-benchmark/tests

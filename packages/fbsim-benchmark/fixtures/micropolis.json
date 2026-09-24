@@ -1,0 +1,7 @@
+{
+  "schema_version": "1",
+  "world": "micropolis",
+  "metric": "excess_brier",
+  "forecast": 0.2,
+  "truth": 0.5
+}

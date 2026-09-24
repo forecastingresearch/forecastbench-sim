@@ -1,0 +1,132 @@
+{
+  "schema_version": "1",
+  "packaging_source_commit": "7d4169d4aa607cae4b97f1d93ef9b57857817f2c",
+  "upstream_base": "a5b446cdbe6302302bed51616d0ced3b3f5239ed",
+  "attribution": {
+    "micropolis": "Fabio Rocha and contributors; micropolis source 8c70972b698f079d54b8a2255c81fbefc55e7d99",
+    "freeciv": "Jaeho Lee and contributors; FreeCiv source 4e35dd20ebc64dbaec28839fafcb88561664e3e1",
+    "starsim": "Nick Merrill and contributors; accepted paper source f214afe3c7ac7c4d7a00120197dc4fd512243d47; cached world converter by Fabio Rocha, preserved from the public pandemic implementation"
+  },
+  "license": "Repository GPL-3.0; original notices retained. Paper-derived Starsim parsing/scoring routines are included under this license with author permission dated 2026-09-24. No license grant for independent engines, data or provider responses.",
+  "files": [
+    {
+      "source_path": "src/fbsim_benchmark/__init__.py",
+      "destination_path": "src/fbsim_benchmark/__init__.py",
+      "packaging_source_sha256": "667d4a15b970b851e20d17510224670c14646cfb6d5a1e388ca6b9cc6da8bf41",
+      "sha256": "667d4a15b970b851e20d17510224670c14646cfb6d5a1e388ca6b9cc6da8bf41"
+    },
+    {
+      "source_path": "src/fbsim_benchmark/__main__.py",
+      "destination_path": "src/fbsim_benchmark/__main__.py",
+      "packaging_source_sha256": "082c0fd5d4bfe833686b23045a3981fee917248870305ac8b06d8f7239b17f5e",
+      "sha256": "511f5f38138eb246e5741ca2ff87eba56904dc97ba7752c9d30e8d344e4911e8"
+    },
+    {
+      "source_path": "src/fbsim_benchmark/adapters.py",
+      "destination_path": "src/fbsim_benchmark/adapters.py",
+      "packaging_source_sha256": "4660e6d270d95f949ebefd5fb830c71d9ba3e1545b64d92da38910d42a254c5a",
+      "sha256": "4660e6d270d95f949ebefd5fb830c71d9ba3e1545b64d92da38910d42a254c5a"
+    },
+    {
+      "source_path": "src/fbsim_benchmark/parsing/__init__.py",
+      "destination_path": "src/fbsim_benchmark/parsing/__init__.py",
+      "packaging_source_sha256": "01a1539356c511036c79cdc5f3b4cbe4d90e773ecfd33f2e73d288ba0df5c0d0",
+      "sha256": "01a1539356c511036c79cdc5f3b4cbe4d90e773ecfd33f2e73d288ba0df5c0d0"
+    },
+    {
+      "source_path": "src/fbsim_benchmark/parsing/freeciv_batch.py",
+      "destination_path": "src/fbsim_benchmark/parsing/freeciv_batch.py",
+      "packaging_source_sha256": "4dc07986d177e79328bad4bf5cb47c086cb88d1c67510862e769a9ee0c54eac9",
+      "sha256": "4dc07986d177e79328bad4bf5cb47c086cb88d1c67510862e769a9ee0c54eac9"
+    },
+    {
+      "source_path": "src/fbsim_benchmark/parsing/freeciv_single.py",
+      "destination_path": "src/fbsim_benchmark/parsing/freeciv_single.py",
+      "packaging_source_sha256": "a3b88cc719fb18da09061f8b37488f71e6ad446c1ffb462164f0ea994a6e4ab5",
+      "sha256": "a3b88cc719fb18da09061f8b37488f71e6ad446c1ffb462164f0ea994a6e4ab5"
+    },
+    {
+      "source_path": "src/fbsim_benchmark/parsing/micropolis.py",
+      "destination_path": "src/fbsim_benchmark/parsing/micropolis.py",
+      "packaging_source_sha256": "f04c6ea238511e556e8dcd73b4e0ce3c9bda56adb6734b7f0f412dd0e4b82798",
+      "sha256": "eb9cc70a6304a8df2bb4dca4a418ea48665482879ddaadb189a30833ef26bb20"
+    },
+    {
+      "source_path": "src/fbsim_benchmark/parsing/registry.py",
+      "destination_path": "src/fbsim_benchmark/parsing/registry.py",
+      "packaging_source_sha256": "fe72750fbec8a4edce31e94c5b32d2396ce72b167ced6b443dafd0261e78672c",
+      "sha256": "2f5f040978006b62e9d68cd107a0fe3277ce0bbb4deca6033c12c0a6882c548d"
+    },
+    {
+      "source_path": "src/fbsim_benchmark/parsing/starsim_binary.py",
+      "destination_path": "src/fbsim_benchmark/parsing/starsim_binary.py",
+      "packaging_source_sha256": "03bcb98152191de0fba5e6300da6f04f2c2726757a2e750d3440681955951e86",
+      "sha256": "03bcb98152191de0fba5e6300da6f04f2c2726757a2e750d3440681955951e86"
+    },
+    {
+      "source_path": "src/fbsim_benchmark/parsing/starsim_continuous.py",
+      "destination_path": "src/fbsim_benchmark/parsing/starsim_continuous.py",
+      "packaging_source_sha256": "b20d2253ee180341d200c837e9c650b8baa58cbf4a53c2b1e846dcf2e835bfe6",
+      "sha256": "b20d2253ee180341d200c837e9c650b8baa58cbf4a53c2b1e846dcf2e835bfe6"
+    },
+    {
+      "source_path": "src/fbsim_benchmark/scoring/__init__.py",
+      "destination_path": "src/fbsim_benchmark/scoring/__init__.py",
+      "packaging_source_sha256": "8c295d59aa2db3b4cdc4d85185b38f53bbfe58257e860352a71013bdd83300d5",
+      "sha256": "8c295d59aa2db3b4cdc4d85185b38f53bbfe58257e860352a71013bdd83300d5"
+    },
+    {
+      "source_path": "src/fbsim_benchmark/scoring/freeciv.py",
+      "destination_path": "src/fbsim_benchmark/scoring/freeciv.py",
+      "packaging_source_sha256": "66c3cbaaa3921cadbc6c32d72bfb24a9bb4e30792db51a1cbd02e27538cc3942",
+      "sha256": "66c3cbaaa3921cadbc6c32d72bfb24a9bb4e30792db51a1cbd02e27538cc3942"
+    },
+    {
+      "source_path": "src/fbsim_benchmark/scoring/micropolis.py",
+      "destination_path": "src/fbsim_benchmark/scoring/micropolis.py",
+      "packaging_source_sha256": "d7ec7285e6ec74989df02c75abb8076410c650633825ae209064a487b61b9046",
+      "sha256": "d7ec7285e6ec74989df02c75abb8076410c650633825ae209064a487b61b9046"
+    },
+    {
+      "source_path": "src/fbsim_benchmark/scoring/pandemic.py",
+      "destination_path": "src/fbsim_benchmark/scoring/pandemic.py",
+      "packaging_source_sha256": "59060b38dd678faa6fb955648d59757daf7469bb3c5382490f5ad7f6a651c65a",
+      "sha256": "59060b38dd678faa6fb955648d59757daf7469bb3c5382490f5ad7f6a651c65a"
+    },
+    {
+      "source_path": "src/fbsim_benchmark/worlds/__init__.py",
+      "destination_path": "src/fbsim_benchmark/worlds/__init__.py",
+      "packaging_source_sha256": "8ee5c42faf6d374c44a095c92cf82ecf641922070b22749485af57fa8391359e",
+      "sha256": "8ee5c42faf6d374c44a095c92cf82ecf641922070b22749485af57fa8391359e"
+    },
+    {
+      "source_path": "src/fbsim_benchmark/worlds/micropolis.py",
+      "destination_path": "src/fbsim_benchmark/worlds/micropolis.py",
+      "packaging_source_sha256": "e2ea39aa9a37faadda6c3e1781267e95d58d07deefd388fedf9fdb1c1ecbb729",
+      "sha256": "e2ea39aa9a37faadda6c3e1781267e95d58d07deefd388fedf9fdb1c1ecbb729"
+    },
+    {
+      "source_path": "src/fbsim_benchmark/worlds/starsim.py",
+      "destination_path": "src/fbsim_benchmark/worlds/starsim.py",
+      "packaging_source_sha256": "c610518c93c70e5d138fa23269f3196eac684eefa2545300ca5a364d50be2721",
+      "sha256": "c610518c93c70e5d138fa23269f3196eac684eefa2545300ca5a364d50be2721"
+    }
+  ],
+  "review_changes": {
+    "starsim_strict.py": "New strict public interface; original starsim_binary.parse preserved under binary-historical.",
+    "__main__.py": "Reject nonfinite JSON output; expose installed documentation.",
+    "parsing/micropolis.py": "Only replace nonfunctional illustrative docstring tag with invented Example Metric @ 2."
+  },
+  "new_sources": [
+    {
+      "path": "src/fbsim_benchmark/parsing/starsim_strict.py",
+      "sha256": "61ad1825bfa4d41463d0aa71402cf90ccb6f375c325b5a00e50b97cdc3dc9960",
+      "origin": "New integration boundary validation; no scientific scoring change."
+    }
+  ],
+  "release_disposition": {
+    "date": "2026-09-24",
+    "paper_derived_starsim": "Author authorized publication under the existing ForecastBench-Sim GPL license.",
+    "scope": "Source integration branch only; no simulator, dataset, provider responses or private production artifacts included."
+  }
+}

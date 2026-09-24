@@ -1,0 +1,25 @@
+{
+  "schema_version": "1",
+  "workflows": [
+    {
+      "id": "fixture-smoke",
+      "command": "uv run --offline --no-project --python .venv-offline/bin/python -m fbsim_benchmark smoke",
+      "inputs": "invented inline fixture",
+      "outputs": "stdout JSON",
+      "network": false,
+      "simulations": 0,
+      "cost_usd": 0
+    },
+    {
+      "id": "tests",
+      "command": "uv run --offline --no-project --python .venv-offline/bin/python -m pytest -q --import-mode=importlib packages/fbsim-core/tests packages/fbsim-benchmark/tests",
+      "inputs": "synthetic fixtures",
+      "outputs": "test report",
+      "network": false,
+      "simulations": 0,
+      "cost_usd": 0
+    }
+  ],
+  "installation": "README.md; dependency installation may need network unless cached/offline flag is used",
+  "production": "Retained upstream; not invoked by this package. See docs/WORKFLOWS.md."
+}

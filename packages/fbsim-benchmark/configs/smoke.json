@@ -1,0 +1,7 @@
+{
+  "schema_version": "1",
+  "world": "starsim",
+  "metric": "excess_brier",
+  "forecast": 0.4,
+  "truth": 0.6
+}

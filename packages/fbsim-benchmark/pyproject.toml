@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fbsim-benchmark"
+version = "0.3.0"
+description = "Offline cached-forecast interfaces for ForecastBench-Sim"
+requires-python = ">=3.11"
+dependencies = ["fbsim-core==0.1.0", "numpy>=2.2.6,<3"]
+
+[project.optional-dependencies]
+test = ["pytest>=8.3.5", "jsonschema>=4.23,<5"]
+
+[tool.uv.sources]
+fbsim-core = { workspace = true }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["fbsim_benchmark*"]
+
+[tool.pytest.ini_options]
+addopts = "--import-mode=importlib"
+
+[tool.setuptools.package-data]
+fbsim_benchmark = ["docs/*.md", "docs/*.json"]
