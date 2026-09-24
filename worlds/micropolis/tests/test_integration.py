@@ -1,0 +1,193 @@
+"""Installation/entrypoint boundaries and end-to-end synthetic cached inputs."""
+import importlib.util
+import json
+import os
+from pathlib import Path
+import subprocess
+import sys
+import pytest
+import micropolis_world.module_globals as g
+from micropolis_world.city_sim import CitySimulation
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+def test_all_entrypoints_help_without_engine_or_keys(tmp_path):
+    env = {k: v for k, v in os.environ.items() if not k.endswith("API_KEY") and k not in {"MICROPOLIS_CORE_PATH", "PYTHONPATH"}}
+    env.update(FBSIM_DATA_ROOT=str(tmp_path), LITELLM_LOCAL_MODEL_COST_MAP="True")
+    for script in sorted((ROOT / "scripts").glob("*.py")):
+        result = subprocess.run([sys.executable, str(script), "--help"], env=env, capture_output=True, text=True, timeout=30)
+        assert result.returncode == 0, (script.name, result.stderr)
+    assert list(tmp_path.iterdir()) == []
+
+
+def test_missing_engine_fails_at_invocation(monkeypatch):
+    monkeypatch.delenv("MICROPOLIS_CORE_PATH", raising=False)
+    with pytest.raises(RuntimeError, match="MICROPOLIS_CORE_PATH"):
+        g.engine_app_path()
+
+
+def test_incompatible_engine_explains_missing_producer(monkeypatch, tmp_path):
+    cli = tmp_path / "apps/micropolis/cli"
+    cli.mkdir(parents=True)
+    (cli / "run_sim.js").write_text("// synthetic interface fixture")
+    monkeypatch.setenv("MICROPOLIS_CORE_PATH", str(tmp_path))
+    assert g.engine_app_path() == cli.parent
+    with pytest.raises(RuntimeError, match="continuation producer"):
+        g.engine_app_path(continuations=True)
+
+
+def test_credentials_are_explicit(monkeypatch):
+    monkeypatch.delenv("OPENROUTER_API_KEY", raising=False)
+    with pytest.raises(RuntimeError, match="OPENROUTER_API_KEY"):
+        g.ensure_api_keys()
+
+
+def test_live_runner_command_contract(monkeypatch, tmp_path):
+    """Mocked process contract only, not a live engine smoke."""
+    cli = tmp_path / "apps/micropolis/cli"
+    cli.mkdir(parents=True)
+    (cli / "run_sim.js").write_text("// synthetic interface fixture")
+    monkeypatch.setenv("MICROPOLIS_CORE_PATH", str(tmp_path))
+    monkeypatch.setattr(g, "RUNS_DIR", tmp_path / "out")
+    # Autouse guard blocks CitySimulation.run. Test the original implementation
+    # through its source module with a fake subprocess, never executing pnpm.
+    spec = importlib.util.spec_from_file_location("micropolis_world._runner_test", ROOT / "micropolis_world/city_sim.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    calls = []
+    def fake_run(args, **kw):
+        calls.append((args, kw))
+        return subprocess.CompletedProcess(args, 0)
+    monkeypatch.setattr(module.subprocess, "run", fake_run)
+    module.CitySimulation("kyoto", 7).run(6)
+    args, kw = calls[0]
+    assert args[:3] == ["pnpm", "run", "run-sim"]
+    assert args[args.index("--turns") + 1] == "6"
+    assert "--no-disasters" in args
+    assert kw["cwd"] == cli.parent
+
+
+def test_cached_pipeline(tmp_path, synthetic_corpus):
+    """Real corpus/IO/parsers/scorers; only the trajectory source is invented."""
+    from micropolis_world.scenarios import build_corpus, build_batch_prompt_continuous, parse_batch_percentiles
+    from micropolis_world.continuous_eval import Response, ResponseId, save_dataset
+    from micropolis_world.gather import EvalPaths, gather_raw_responses, group_into_batches
+    from micropolis_world.cache_keys import prompt_hash
+    corpus = build_corpus([CitySimulation("kyoto", 7)], [1], [4], 1, "synthetic")
+    model = "example/model"
+    paths = EvalPaths("continuous")
+    for bid, batch in group_into_batches(corpus).items():
+        prompt = build_batch_prompt_continuous(batch[0]["context"], batch)
+        path = paths.response_path(bid, model, prompt_hash(prompt))
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("\n".join(f"Q{i}: p10=1,p25=2,p50=3,p75=4,p90=5" for i in range(1, len(batch)+1)))
+    batches, raw, _ = gather_raw_responses(corpus, [model], paths=paths, build_prompt=build_batch_prompt_continuous, cache_only=True)
+    responses = {}
+    for bid, batch in batches.items():
+        parsed = parse_batch_percentiles(raw[(bid, model)], [q["question_id"] for q in batch])
+        for question, value in zip(batch, parsed):
+            responses[ResponseId(model, question["question_id"])] = Response(question["value"], value)
+    data = tmp_path / "data.json"
+    save_dataset(corpus, responses, [model], data)
+    result = subprocess.run([sys.executable, str(ROOT / "scripts/score_cached.py"), "--input", str(data), "--kind", "continuous"], capture_output=True, text=True, check=True)
+    rows = json.loads(result.stdout)
+    assert len(rows) == len(corpus)
+    assert all(r["status"] == "scored" and r["score"] >= 0 for r in rows)
+
+
+def test_installed_default_reaches_engine_diagnostic(tmp_path):
+    env = {k: v for k, v in os.environ.items() if k not in {"MICROPOLIS_CORE_PATH", "PYTHONPATH"}}
+    env.update(FBSIM_DATA_ROOT=str(tmp_path), LITELLM_LOCAL_MODEL_COST_MAP="True")
+    result = subprocess.run([sys.executable, str(ROOT / "scripts/run_sim.py"), "--no-plot"], env=env, capture_output=True, text=True, timeout=30)
+    assert result.returncode != 0
+    assert "Set MICROPOLIS_CORE_PATH" in result.stderr
+    assert "config file not found" not in result.stderr
+    assert list(tmp_path.iterdir()) == []
+
+
+def test_raw_binary_scoring_preserves_missingness(tmp_path):
+    data = tmp_path / "binary.json"
+    data.write_text(json.dumps({"questions": [{"question_id": "q", "answer": True}], "forecasts": [{"question_id": "q", "model_id": "a", "probability": 0.4}, {"question_id": "q", "model_id": "b", "probability": None}]}))
+    result = subprocess.run([sys.executable, str(ROOT / "scripts/score_cached.py"), "--input", str(data), "--kind", "binary"], capture_output=True, text=True, check=True)
+    rows = json.loads(result.stdout)
+    assert rows[0]["metric"] == "realized_brier"
+    assert rows[0]["score"] == pytest.approx(.36)
+    assert rows[1]["status"] == "unparsed" and rows[1]["score"] is None
+
+
+def _guarded_entrypoint(name, monkeypatch, tmp_path):
+    """Load the actual CLI, then forbid external work during initialization."""
+    monkeypatch.setattr(g, "DATA_ROOT", tmp_path)
+    monkeypatch.setattr(g, "DATA_DIR", tmp_path)
+    monkeypatch.setattr(g, "RUNS_DIR", tmp_path / "runs")
+    monkeypatch.setattr(g, "_data_dir_source", None)
+    spec = importlib.util.spec_from_file_location(name, ROOT / "scripts" / f"{name}.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+
+    def forbidden(*args, **kwargs):
+        pytest.fail("Initialization regression attempted engine/provider/process work")
+
+    monkeypatch.setattr(subprocess, "Popen", forbidden)
+    monkeypatch.setattr(g, "ensure_api_keys", forbidden)
+    if hasattr(module, "gather_responses_binary"):
+        monkeypatch.setattr(module, "gather_responses_binary", forbidden)
+    if hasattr(module, "ProcessPoolExecutor"):
+        monkeypatch.setattr(module, "ProcessPoolExecutor", forbidden)
+        monkeypatch.setattr(module, "git_commit_note", lambda: "synthetic")
+    return module
+
+
+def test_binary_default_actual_dry_run(monkeypatch, synthetic_corpus, capsys, tmp_path):
+    """Real config/corpus/resolvers, invented cached trajectory, no live work."""
+    module = _guarded_entrypoint("run_eval_binary", monkeypatch, tmp_path)
+    monkeypatch.setattr(sys, "argv", ["run_eval_binary.py", "--dry-run"])
+    module.main()
+    assert "Dry run. Exiting" in capsys.readouterr().out
+
+
+def test_continuation_default_reaches_engine_boundary(monkeypatch, tmp_path):
+    """Validate the installed default, stopping before engine inspection/work."""
+    module = _guarded_entrypoint("extract_ground_truth", monkeypatch, tmp_path)
+    monkeypatch.setattr(sys, "argv", ["extract_ground_truth.py", "--jobs", "1"])
+
+    class EngineBoundary(Exception):
+        pass
+
+    def boundary(*args, **kwargs):
+        raise EngineBoundary
+
+    monkeypatch.setattr(g, "engine_app_path", boundary)
+    with pytest.raises(EngineBoundary):
+        module.main()
+
+
+@pytest.mark.parametrize("name", ["run_eval_binary", "extract_ground_truth"])
+def test_short_horizon_still_rejected(name, monkeypatch, synthetic_corpus, capsys, tmp_path):
+    from micropolis_world.config import CONFIG_DIR
+    module = _guarded_entrypoint(name, monkeypatch, tmp_path)
+    args = [name, str(CONFIG_DIR / "example.json5")]
+    if name == "run_eval_binary":
+        args.append("--dry-run")
+    monkeypatch.setattr(sys, "argv", args)
+    if name == "run_eval_binary":
+        with pytest.raises(ValueError, match="horizons must be >= 48"):
+            module.main()
+    else:
+        with pytest.raises(SystemExit) as exc:
+            module.main()
+        assert exc.value.code == 2
+        assert "horizons must be >= 48" in capsys.readouterr().err
+
+
+def test_binary_example_packaged_and_source_match():
+    from micropolis_world.config import CONFIG_DIR
+    import json5
+    packaged = (CONFIG_DIR / "example-binary.json5").read_text()
+    assert packaged == (ROOT / "configs/example-binary.json5").read_text()
+    cfg = json5.loads(packaged)
+    assert cfg["snapshot_turns"] == [48]
+    assert cfg["horizons"] == [48]
+    assert cfg["turns"] > max(cfg["snapshot_turns"]) + max(cfg["horizons"])
+    assert cfg["branch_nseeds"] == 1

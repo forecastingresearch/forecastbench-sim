@@ -1,0 +1,1 @@
+Return {n} answers using each requested semantic tag and p10, p25, p50, p75, p90.
