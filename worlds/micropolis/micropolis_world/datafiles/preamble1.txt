@@ -1,0 +1,1 @@
+Forecast the requested city measurements from the supplied report.

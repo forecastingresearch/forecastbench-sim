@@ -1,0 +1,203 @@
+{
+  "source_repository": "https://github.com/fdrocha/forecastbench-sim",
+  "source_commit": "8c70972b698f079d54b8a2255c81fbefc55e7d99",
+  "author": "Fabio Rocha and contributors",
+  "license": "GPL-3.0 (source repository LICENSE; copied here)",
+  "files": [
+    {
+      "path": "pyproject.toml",
+      "source_sha256": "bdaef90ed5934654399bad186d5655103dcd59f3f90c2994ed714ae130b30f38"
+    },
+    {
+      "path": "micropolis_world/__init__.py",
+      "source_sha256": "7aadf72c57a9188addb4193d272debfb7b266fce2cd31b72eeb95ca9775639fb"
+    },
+    {
+      "path": "micropolis_world/binary_eval.py",
+      "source_sha256": "cf409f3d39645f9ae16de5a459eeb3c10be83ac59d1929d09007ead579cb00d8"
+    },
+    {
+      "path": "micropolis_world/binary_questions.py",
+      "source_sha256": "f7e693ebfd3b98bcc6716cc0e6595713f6ff142df8248f86258636b785558b8e"
+    },
+    {
+      "path": "micropolis_world/city_sim.py",
+      "source_sha256": "12d98e07eba382e123d479c6809104452bd489ddcaf0ea549d38d95e31199d75"
+    },
+    {
+      "path": "micropolis_world/config.py",
+      "source_sha256": "4055ab7664503e4a353d650de928dffaca85d2dbe5d46da061ecb82073481073"
+    },
+    {
+      "path": "micropolis_world/continuous_eval.py",
+      "source_sha256": "70b41e5227b1e8dade6565c973c821efb61901091209b32d143607f457f5daa4"
+    },
+    {
+      "path": "micropolis_world/gather.py",
+      "source_sha256": "9ada49b2d03ae59f00c2ae6e390ed1b98b62525d500b35df8791cba5b7d9a307"
+    },
+    {
+      "path": "micropolis_world/ground_truth.py",
+      "source_sha256": "b8c98a68a35e63f0c9594c2a11e22c82acbd00ff4bf230d589e117cd23db5c4e"
+    },
+    {
+      "path": "micropolis_world/llm_backend.py",
+      "source_sha256": "496235292c859be15f05d5ed834cd3d025d7e3a2bbc0510da26f145cbaf07940"
+    },
+    {
+      "path": "micropolis_world/messages.py",
+      "source_sha256": "7a9c7df336f069e42bb0cad6f06024a207e1683fd84ce6acb3c9eb0b0dd2dbe8"
+    },
+    {
+      "path": "micropolis_world/model_ids.py",
+      "source_sha256": "02eb778c7b4a720ce85ec7b93ee80e3ff36955f4bd20a005102c37cd8dc728b8"
+    },
+    {
+      "path": "micropolis_world/module_globals.py",
+      "source_sha256": "9aeb37a1a9841682bd1646d260fd841b48e0872c9f86adf95c4990b6266b6f3a"
+    },
+    {
+      "path": "micropolis_world/openrouter_completion.py",
+      "source_sha256": "73dbe773c323792aca0a26558f5a87c6ca8dd4d7fb50d703620d4102d81719d4"
+    },
+    {
+      "path": "micropolis_world/plot_sim.py",
+      "source_sha256": "c124911f9bbeaec06f7214debe90314f5492f1c006283fffbe4fd83a8aa0775c"
+    },
+    {
+      "path": "micropolis_world/prompting.py",
+      "source_sha256": "1689b6b6edf4b3487566718880bae565b47f4d4f65b15de70809b040399b9901"
+    },
+    {
+      "path": "micropolis_world/report.py",
+      "source_sha256": "b3459d262c284618cd6145e6a74380dc21c70eb85a52046b99c4426dd50b8abb"
+    },
+    {
+      "path": "micropolis_world/scenarios.py",
+      "source_sha256": "6fc75760fa0f7ba562f451164f8318163c8404feacd0b36e1b55582ba645e90a"
+    },
+    {
+      "path": "micropolis_world/templates.py",
+      "source_sha256": "1bf4edcecae573a262ec3c5f181b512514b1670b9df8a2c65ca113c8fe527089"
+    },
+    {
+      "path": "micropolis_world/usage.py",
+      "source_sha256": "6288a2ca387a4f689a95f43d6e5763b9c07f98f9827c1bf0c65056057be02390"
+    },
+    {
+      "path": "scripts/run_sim.py",
+      "source_sha256": "562d2742caa8335114a683faa2fd1953762af6ee7e59dd5d010c4c8154cfa67d"
+    },
+    {
+      "path": "scripts/gen_corpus.py",
+      "source_sha256": "31e728d8992032f4ceb99ff38ac63a330cf44dcd4e3254fcdf5eca59c5d077cf"
+    },
+    {
+      "path": "scripts/gen_report.py",
+      "source_sha256": "2100df8afc751d7b27cdeecf4241a196d48776ddb585a99df1af26a424aab098"
+    },
+    {
+      "path": "scripts/generate_prompt.py",
+      "source_sha256": "a9cb81d5056e9ac4d9f34010c5228fa63f20c51ed1674f66850a192350fba640"
+    },
+    {
+      "path": "scripts/run_eval_binary.py",
+      "source_sha256": "0b25c1d36e47973018f2d1538a6009d723cd1e80bc8b0233ab6e29db3b34f472"
+    },
+    {
+      "path": "scripts/run_eval_continuous.py",
+      "source_sha256": "c4822d84c82225f692ed851b5e1c1003a0d527dd09087e1bda0a1e4ddb32a517"
+    },
+    {
+      "path": "scripts/extract_ground_truth.py",
+      "source_sha256": "953be01b90d29b1164ec2a189e779d70bae6abba6d6e5eff59f895b948aa8b8a"
+    },
+    {
+      "path": "scripts/check_determinism.py",
+      "source_sha256": "afce560f79d7b2a9c16c28fd834cf215918b0a2d5418e4ebe8b12d1da3f6e876"
+    },
+    {
+      "path": "tests/conftest.py",
+      "source_sha256": "416d14442e5b36383b50ccdf4ee9b62bcabd883e7b3924c07c2576a9395ca317"
+    },
+    {
+      "path": "tests/test_binary_questions.py",
+      "source_sha256": "74e2913f54183b4c197f4d0c4fbec49ff5e0ef5268d1da02dbe7e0195b17a26e"
+    },
+    {
+      "path": "tests/test_binary_batching.py",
+      "source_sha256": "34166e2d825d49360324499600e787b85f4a1e2b5fe807979957947a88775102"
+    },
+    {
+      "path": "tests/test_continuous_batching.py",
+      "source_sha256": "9e10df31705ef61124e30a537a7c3f80ea8f2a3f677b886ce3334553663a2be7"
+    },
+    {
+      "path": "tests/test_ground_truth.py",
+      "source_sha256": "6e189455c6f6af4c2c7c28a8cd606c2be92ceb3ccf44a19b129f1bef43fb1c92"
+    },
+    {
+      "path": "tests/test_messages.py",
+      "source_sha256": "2c8754f1d396ec3c59b40fcce7ed1ea08e470bb93e0dcf2a16d198b4aabbfda8"
+    },
+    {
+      "path": "tests/test_metric_ranges.py",
+      "source_sha256": "0b7c4925483a574b13e656e10c65fb318810d42ee72ded3b07214951350c7a20"
+    },
+    {
+      "path": "tests/test_model_ids.py",
+      "source_sha256": "bc4b51d231d54e925e4fbe1d9df57dfa45fc790581c09c200c09eabbb05e7c8e"
+    },
+    {
+      "path": "tests/test_openrouter_build.py",
+      "source_sha256": "61de9d4b7cc48fed73cffdd4e551fbb2dffe5072d3c00ef7f5fc3cfda7f6d518"
+    },
+    {
+      "path": "tests/test_plot_repeats.py",
+      "source_sha256": "cd588d74bc72f6ff819c080a41404257301d64f33949b588d73251259852e71b"
+    },
+    {
+      "path": "tests/test_prompting.py",
+      "source_sha256": "cf5bb7c5a928f5d7d0b24e4d1ec00ef8ee933ec1270f88caced814beb6ee94f8"
+    },
+    {
+      "path": "tests/test_report.py",
+      "source_sha256": "73e30d8fce3894bc48a296553ca9129aad56243f9ae03d3f37d7e3751478a8a8"
+    },
+    {
+      "path": "tests/test_select_incomplete.py",
+      "source_sha256": "856017c160b462509335941eb76b38b56656733b4b4af60ac5376ca78e2efcbd"
+    },
+    {
+      "path": "tests/test_usage.py",
+      "source_sha256": "3e39e90152e3614b9433fff6886e2d50396609c00cd2c165c549428f6bee0e74"
+    },
+    {
+      "path": "tests/test_determinism_check.py",
+      "source_sha256": "1bb898e179c7073d924d0920c1257f198b99bd728fc2450121cbb11512f9e253"
+    }
+  ],
+  "excluded": [
+    "production configs",
+    "administered prompt files and knowledge statements",
+    "model panel and routing specs",
+    "paper reporting/gathering scripts and fitted normalization constants",
+    "engine binaries/maps and raw datasets"
+  ],
+  "adaptations": [
+    "Lazy engine configuration and explicit credential validation; no cloud lookup",
+    "Canonical fbsim-core and fbsim-benchmark imports",
+    "Standalone cache digest instead of importing knowledge dataset",
+    "Synthetic example config and prompt wrappers",
+    "Dataset/gather APIs retained; paper normalization/report analysis excluded",
+    "Inherited engine-dependent tests converted to invented trajectories; real-response fixture replaced with invented text",
+    "Installed synthetic example and safe CLI diagnostics",
+    "Raw scoring command preserves realized Brier versus raw quantile CRPS distinction; no paper normalization"
+  ],
+  "engine_interface_reference": {
+    "repository": "https://github.com/fdrocha/MicropolisCore",
+    "branch": "exploration",
+    "commit": "4fe3a7238b735f9cdd3ec13c957ccc8a3a3b0481",
+    "validation": "source interface inspected only; no historical producer pin or live run established"
+  }
+}

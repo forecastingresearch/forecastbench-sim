@@ -1,0 +1,1 @@
+Return {n} numbered probabilities between 0 and 1 inside <<<PROBABILITIES>>> and <<<END>>>. Example: Q1: 0.5

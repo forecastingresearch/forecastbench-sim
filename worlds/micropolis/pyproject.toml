@@ -1,0 +1,50 @@
+[project]
+name = "micropolis-world"
+version = "0.1.0"
+readme = "README.md"
+description = "Micropolis (city simulation) world for ForecastBench-Sim. Plugs into fbsim-core."
+requires-python = ">=3.11"
+dependencies = [
+    "fbsim-core==0.1.0",
+    "fbsim-benchmark==0.3.0",
+    "json5",
+    "numpy",
+    "scipy",
+    "matplotlib",
+    "python-dotenv>=1.0.1",
+    "httpx"
+]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["micropolis_world*"]
+
+# The package's data files, which the code reads by path at runtime and so must
+# ship in the wheel. datafiles/ carries no __init__.py, so it is not a package
+# of its own — it is reached as a subdirectory glob of micropolis_world, which
+# is. configs/ sits outside the package, at the world root.
+[tool.setuptools.package-data]
+micropolis_world = [
+    "*.json5",
+    "PROVENANCE.json",
+    "examples/*.json5",
+    "datafiles/*.txt",
+    "datafiles/*.csv",
+]
+
+[tool.uv.sources]
+fbsim-core = { workspace = true }
+fbsim-benchmark = { workspace = true }
+
+# run_continuations.md's Python snippets are hand-aligned illustrations, not
+# source; ruff >=0.16 formats fenced code in Markdown by default, which would
+# expand them into something less readable as documentation.
+[tool.ruff]
+extend-exclude = ["*.md"]

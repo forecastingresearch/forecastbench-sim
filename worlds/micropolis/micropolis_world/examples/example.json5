@@ -1,0 +1,26 @@
+// Invented tiny example; not a paper/production configuration.
+{
+  "label": "example",
+  "data_dir": "micropolis-example",
+  "seed": 7,
+  "cities": [
+    "kyoto"
+  ],
+  "disasters": [
+    false
+  ],
+  "turns": 6,
+  "snapshot_turns": [
+    1
+  ],
+  "horizons": [
+    4
+  ],
+  "history_freq": 1,
+  "history_length": 1,
+  "models": [
+    "example/model"
+  ],
+  "branch_nseeds": 1,
+  "concurrency": 1
+}

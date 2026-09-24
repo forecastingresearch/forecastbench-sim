@@ -63,3 +63,7 @@ Both worlds resolve through the *same* core resolver and registry — that's the
 ## Offline cached-forecast interfaces
 
 The additive [fbsim-benchmark package](packages/fbsim-benchmark/README.md) provides installed-package examples and synthetic fixture tests for FreeCiv, Micropolis and Starsim without running engines or calling models. It depends on the existing core; world and human-subject workflows remain in place. See its [workflow map](packages/fbsim-benchmark/docs/WORKFLOWS.md) for retained, migrated and legacy routes.
+
+### Micropolis world
+
+[Micropolis setup and workflows](worlds/micropolis/README.md) cover the external engine, question generation, cached/model gathering and raw scoring. Synthetic offline tests do not validate a live engine or reproduce paper results.
