@@ -67,8 +67,10 @@ def test_cli_options_and_input_errors(tmp_path):
 
 def test_noneditable_installed_packages():
     for name in ['fbsim-core', 'fbsim-benchmark']:
-        direct = json.loads(metadata.distribution(name).read_text('direct_url.json'))
-        assert not direct.get('dir_info', {}).get('editable', False)
+        direct_text = metadata.distribution(name).read_text('direct_url.json')
+        # Named wheels resolved through --find-links need not have direct_url.
+        if direct_text is not None:
+            assert not json.loads(direct_text).get('dir_info', {}).get('editable', False)
     import fbsim_core, fbsim_benchmark
     assert Path(fbsim_core.__file__).is_relative_to(sys.prefix)
     assert Path(fbsim_benchmark.__file__).is_relative_to(sys.prefix)
