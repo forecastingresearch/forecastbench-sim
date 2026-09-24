@@ -7,7 +7,7 @@
     "freeciv": "Jaeho Lee and contributors; FreeCiv source 4e35dd20ebc64dbaec28839fafcb88561664e3e1",
     "starsim": "Nick Merrill and contributors; accepted paper source f214afe3c7ac7c4d7a00120197dc4fd512243d47; cached world converter by Fabio Rocha, preserved from the public pandemic implementation"
   },
-  "license": "Repository GPL-3.0; preserved notices. No license grant for independent engines, data or provider responses.",
+  "license": "Repository GPL-3.0; original notices retained. Paper-derived Starsim parsing/scoring routines are included under this license with author permission dated 2026-09-24. No license grant for independent engines, data or provider responses.",
   "files": [
     {
       "source_path": "src/fbsim_benchmark/__init__.py",
@@ -123,5 +123,10 @@
       "sha256": "61ad1825bfa4d41463d0aa71402cf90ccb6f375c325b5a00e50b97cdc3dc9960",
       "origin": "New integration boundary validation; no scientific scoring change."
     }
-  ]
+  ],
+  "release_disposition": {
+    "date": "2026-09-24",
+    "paper_derived_starsim": "Author authorized publication under the existing ForecastBench-Sim GPL license.",
+    "scope": "Source integration branch only; no simulator, dataset, provider responses or private production artifacts included."
+  }
 }
