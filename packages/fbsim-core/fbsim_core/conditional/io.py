@@ -486,7 +486,7 @@ def save_as_question_bank(
         path: Output path (e.g., 'conditional_questions.json')
         civilizations: Optional civ info
     """
-    from .io import save_question_bank
+    from ..questions.io import save_question_bank
 
     qbank = to_question_bank(conditional_bank, civilizations)
     save_question_bank(qbank, path)
