@@ -15,8 +15,8 @@ least branch_nseeds continuations is skipped unless --force-regen is given.
 Horizon 0 is a read-off, not a forecast, and is dropped.
 
 Usage:
-    scripts/extract_ground_truth.py                    # configs/binary.json5
-    scripts/extract_ground_truth.py configs/default.json5 --branch-nseeds 500
+    scripts/extract_ground_truth.py                    # packaged example-binary.json5
+    scripts/extract_ground_truth.py configs/example-binary.json5 --branch-nseeds 1
     scripts/extract_ground_truth.py --cities kyoto --jobs 4 --force-regen
 """
 
@@ -46,7 +46,7 @@ from micropolis_world.ground_truth import (
 )
 from micropolis_world.scenarios import get_base_scenarios
 
-DEFAULT_CONFIG_PATH = CONFIG_DIR / "example.json5"
+DEFAULT_CONFIG_PATH = CONFIG_DIR / "example-binary.json5"
 
 
 @main_with_config

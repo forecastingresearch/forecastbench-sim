@@ -114,3 +114,80 @@ def test_raw_binary_scoring_preserves_missingness(tmp_path):
     assert rows[0]["metric"] == "realized_brier"
     assert rows[0]["score"] == pytest.approx(.36)
     assert rows[1]["status"] == "unparsed" and rows[1]["score"] is None
+
+
+def _guarded_entrypoint(name, monkeypatch, tmp_path):
+    """Load the actual CLI, then forbid external work during initialization."""
+    monkeypatch.setattr(g, "DATA_ROOT", tmp_path)
+    monkeypatch.setattr(g, "DATA_DIR", tmp_path)
+    monkeypatch.setattr(g, "RUNS_DIR", tmp_path / "runs")
+    monkeypatch.setattr(g, "_data_dir_source", None)
+    spec = importlib.util.spec_from_file_location(name, ROOT / "scripts" / f"{name}.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+
+    def forbidden(*args, **kwargs):
+        pytest.fail("Initialization regression attempted engine/provider/process work")
+
+    monkeypatch.setattr(subprocess, "Popen", forbidden)
+    monkeypatch.setattr(g, "ensure_api_keys", forbidden)
+    if hasattr(module, "gather_responses_binary"):
+        monkeypatch.setattr(module, "gather_responses_binary", forbidden)
+    if hasattr(module, "ProcessPoolExecutor"):
+        monkeypatch.setattr(module, "ProcessPoolExecutor", forbidden)
+        monkeypatch.setattr(module, "git_commit_note", lambda: "synthetic")
+    return module
+
+
+def test_binary_default_actual_dry_run(monkeypatch, synthetic_corpus, capsys, tmp_path):
+    """Real config/corpus/resolvers, invented cached trajectory, no live work."""
+    module = _guarded_entrypoint("run_eval_binary", monkeypatch, tmp_path)
+    monkeypatch.setattr(sys, "argv", ["run_eval_binary.py", "--dry-run"])
+    module.main()
+    assert "Dry run. Exiting" in capsys.readouterr().out
+
+
+def test_continuation_default_reaches_engine_boundary(monkeypatch, tmp_path):
+    """Validate the installed default, stopping before engine inspection/work."""
+    module = _guarded_entrypoint("extract_ground_truth", monkeypatch, tmp_path)
+    monkeypatch.setattr(sys, "argv", ["extract_ground_truth.py", "--jobs", "1"])
+
+    class EngineBoundary(Exception):
+        pass
+
+    def boundary(*args, **kwargs):
+        raise EngineBoundary
+
+    monkeypatch.setattr(g, "engine_app_path", boundary)
+    with pytest.raises(EngineBoundary):
+        module.main()
+
+
+@pytest.mark.parametrize("name", ["run_eval_binary", "extract_ground_truth"])
+def test_short_horizon_still_rejected(name, monkeypatch, synthetic_corpus, capsys, tmp_path):
+    from micropolis_world.config import CONFIG_DIR
+    module = _guarded_entrypoint(name, monkeypatch, tmp_path)
+    args = [name, str(CONFIG_DIR / "example.json5")]
+    if name == "run_eval_binary":
+        args.append("--dry-run")
+    monkeypatch.setattr(sys, "argv", args)
+    if name == "run_eval_binary":
+        with pytest.raises(ValueError, match="horizons must be >= 48"):
+            module.main()
+    else:
+        with pytest.raises(SystemExit) as exc:
+            module.main()
+        assert exc.value.code == 2
+        assert "horizons must be >= 48" in capsys.readouterr().err
+
+
+def test_binary_example_packaged_and_source_match():
+    from micropolis_world.config import CONFIG_DIR
+    import json5
+    packaged = (CONFIG_DIR / "example-binary.json5").read_text()
+    assert packaged == (ROOT / "configs/example-binary.json5").read_text()
+    cfg = json5.loads(packaged)
+    assert cfg["snapshot_turns"] == [48]
+    assert cfg["horizons"] == [48]
+    assert cfg["turns"] > max(cfg["snapshot_turns"]) + max(cfg["horizons"])
+    assert cfg["branch_nseeds"] == 1

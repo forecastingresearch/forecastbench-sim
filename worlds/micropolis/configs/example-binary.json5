@@ -1,0 +1,26 @@
+// Invented minimal binary/continuation example; not a paper/production configuration.
+{
+  "label": "example-binary",
+  "data_dir": "micropolis-example-binary",
+  "seed": 7,
+  "cities": [
+    "kyoto"
+  ],
+  "disasters": [
+    false
+  ],
+  "turns": 97,
+  "snapshot_turns": [
+    48
+  ],
+  "horizons": [
+    48
+  ],
+  "history_freq": 1,
+  "history_length": 1,
+  "models": [
+    "example/model"
+  ],
+  "branch_nseeds": 1,
+  "concurrency": 1
+}

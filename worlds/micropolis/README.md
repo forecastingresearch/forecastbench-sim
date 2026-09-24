@@ -4,7 +4,7 @@ This world adds simulation, question generation, cached gathering and binary/con
 
 `fbsim-core` owns the shared schema/resolver. `fbsim-benchmark` owns the existing Micropolis parsers, raw replay scoring and cached trajectory converter; this world imports them. The five continuous quantiles are p10/p25/p50/p75/p90. Binary resolution uses half-open windows `(snapshot, resolution]` and engine turns (`tick // 16`). Original question/resolver bodies are retained. Their original specification remains at the pinned source's `binary_forecasts.md`.
 
-Paper normalization, model panels, administered prompt wrappers, knowledge statement sets, historical configurations, frozen data and paper CSV/figure producers are not part of this world. The included prompt wrappers and six-turn config are new illustrative examples; they cannot reproduce historical prompt hashes or results. Existing private paper work remains separate. No simulator, maps or engine binary is vendored.
+Paper normalization, model panels, administered prompt wrappers, knowledge statement sets, historical configurations, frozen data and paper CSV/figure producers are not part of this world. The included prompt wrappers and example configs are new illustrative examples; they cannot reproduce historical prompt hashes or results. Existing private paper work remains separate. No simulator, maps or engine binary is vendored.
 
 ## Python installation and offline checks
 
@@ -46,7 +46,7 @@ Return to forecastbench-sim before the following commands. `MICROPOLIS_CORE_PATH
 
 ## Entrypoints and effects
 
-All script paths are under `worlds/micropolis/scripts/`. Use `uv run --no-project --python .venv-micropolis/bin/python <script> ...` from the repository root. Each configuration-driven command accepts an explicit JSON5 file; the default is the invented `configs/example.json5`. Replace `example/model` with a deliberately selected provider model before any paid evaluation.
+All script paths are under `worlds/micropolis/scripts/`. Use `uv run --no-project --python .venv-micropolis/bin/python <script> ...` from the repository root. Each configuration-driven command accepts an explicit JSON5 file; continuous commands default to the invented `configs/example.json5` (six turns, horizon four). Binary evaluation and continuation extraction default to `configs/example-binary.json5` (97 logged turns, snapshot 48, horizon 48, one continuation seed), also shipped inside the installed package. Binary resolution requires a snapshot and horizon of at least 48 turns to include a yearly baseline and resolution checkpoint; the short continuous example is intentionally invalid for those two commands. These defaults are illustrative, not historical configurations. Replace `example/model` with a deliberately selected provider model before any paid evaluation.
 
 | Script | What it does |
 |---|---|

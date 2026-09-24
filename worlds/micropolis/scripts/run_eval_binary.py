@@ -18,7 +18,7 @@ third eval variant should extract the shared machinery rather than copy it
 again.
 
 Usage:
-    scripts/run_eval_binary.py                      # configs/binary.json5
+    scripts/run_eval_binary.py                      # packaged example-binary.json5
     scripts/run_eval_binary.py my_config.json5 --seed 7
     scripts/run_eval_binary.py --dry-run            # corpus + Yes counts only
     scripts/run_eval_binary.py --cache-only         # no prompts; cached only
@@ -52,7 +52,7 @@ from micropolis_world.scenarios import (
     parse_batch_probabilities_with_lines,
 )
 
-DEFAULT_BINARY_CONFIG_PATH = CONFIG_DIR / "example.json5"
+DEFAULT_BINARY_CONFIG_PATH = CONFIG_DIR / "example-binary.json5"
 
 
 def gather_responses_binary(
