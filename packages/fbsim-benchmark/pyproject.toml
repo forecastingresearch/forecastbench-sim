@@ -21,3 +21,6 @@ include = ["fbsim_benchmark*"]
 
 [tool.pytest.ini_options]
 addopts = "--import-mode=importlib"
+
+[tool.setuptools.package-data]
+fbsim_benchmark = ["docs/*.md", "docs/*.json"]

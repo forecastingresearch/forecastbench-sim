@@ -8,10 +8,11 @@ Use Python 3.11 or newer and uv. This installs the two local packages, not every
 
 ```sh
 uv venv .venv-offline
-uv pip install --python .venv-offline/bin/python ./packages/fbsim-core './packages/fbsim-benchmark[test]'
+uv run --no-project --python .venv-offline/bin/python packages/fbsim-benchmark/tools/build_wheels.py --output dist/offline-wheels
+uv pip install --python .venv-offline/bin/python --find-links dist/offline-wheels 'fbsim-core==0.1.0' 'fbsim-benchmark[test]==0.3.0'
 ```
 
-For an already populated uv cache, add `--offline` to both commands. For a local wheelhouse, add `--find-links /path/to/wheelhouse` to the install command. Without cached dependencies the offline command fails; it never silently downloads. World simulators and API keys are not required. The root uv workspace remains intact; its all-world installation is a separate workflow.
+For already populated caches, add `--offline` to venv, run, build_wheels.py and pip install. A dependency wheelhouse can be supplied with an additional `--find-links /path/to/wheelhouse`. Without cached dependencies offline installation fails instead of downloading. The build helper copies both packages to temporary directories before invoking the standard build backend. This avoids editing the core's historically tracked egg-info metadata and installs non-editable wheels. Direct workspace source installs may still be editable and dirty that metadata; they are not this quickstart. World engines and API keys are not required. The root workspace remains intact; its all-world installation is separate.
 
 ## Run the synthetic fixtures, offline
 
@@ -27,3 +28,11 @@ uv run --offline --no-project --python .venv-offline/bin/python -m pytest -q --i
 ```
 
 The three validation examples return excess Brier scores approximately 0.04, 0.09 and 0.01 respectively. Floating-point display may include trailing digits. The parser example returns 0.75. Tests also exercise all three worlds' native parsers, cached converters and quantile scoring, without live simulation or model calls. See [semantics](docs/SEMANTICS.md), [native interfaces](docs/NATIVE_INTERFACES.md), [workflow map](docs/WORKFLOWS.md) and [provenance](docs/PROVENANCE.json). Exact paper reproduction requires the separate private paper package and versioned data; none is implied to be publicly available here.
+
+Installed contract/provenance documentation is available without the checkout:
+
+```sh
+uv run --offline --no-project --python .venv-offline/bin/python -m fbsim_benchmark docs --name NATIVE_INTERFACES.md
+```
+
+The command returns a JSON object containing the document text. Successful CLI output is standard JSON; nonfinite native parser values and score overflows cause an error exit with no JSON on stdout. Starsim `binary` is strict; `binary-historical` explicitly preserves the administered parser, including its numeric-prefix bug. Never use that compatibility mode to validate new probabilities.

@@ -188,8 +188,8 @@ _QUESTION_NUMBER_RE = re.compile(
 def _normalize_tag(tag: str) -> str:
     """A semantic tag reduced to what it must match on.
 
-    Case and internal spacing are the model's to vary — "Average Crime @ 288"
-    names the same question as "average crime@288" — so both sides of the
+    Case and internal spacing are the model's to vary — "Example Metric @ 2"
+    names the same question as "example metric@2" — so both sides of the
     comparison are folded before matching. Nothing else is stripped: a tag that
     names a different metric or turn must not collide with this one.
     """

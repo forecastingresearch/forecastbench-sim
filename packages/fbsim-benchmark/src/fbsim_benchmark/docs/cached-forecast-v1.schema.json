@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Cached forecast v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "world",
+    "metric",
+    "forecast",
+    "truth"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1"
+    },
+    "world": {
+      "enum": [
+        "freeciv",
+        "micropolis",
+        "starsim"
+      ]
+    },
+    "metric": {
+      "enum": [
+        "excess_brier",
+        "excess_bits",
+        "quantile_crps"
+      ]
+    },
+    "forecast": {},
+    "truth": {}
+  },
+  "description": "Metric-specific scalar/array shapes are enforced here. Standard JSON excludes nonfinite numbers; runtime also rejects them and enforces nondecreasing forecast quantiles (not expressible in this schema).",
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "metric": {
+            "const": "quantile_crps"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "forecast": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 5,
+            "maxItems": 5
+          },
+          "truth": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 1
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "forecast": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "truth": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        }
+      }
+    }
+  ]
+}
