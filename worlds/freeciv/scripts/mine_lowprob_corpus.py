@@ -13,7 +13,7 @@ class base rate -> real ground-truth calibration data in the tail.
 Usage:
     uv run python worlds/freeciv/scripts/mine_lowprob_corpus.py \
         --data-dir data/games --snapshot-turn 40 \
-        --rate-lo 0.01 --rate-hi 0.09 --min-n 30 --workers 8 \
+        --rate-lo 0.01 --rate-hi 0.09 --min-n 40 --workers 8 \
         --out-dir data/lowprob
 """
 
@@ -93,7 +93,9 @@ def main():
     ap.add_argument("--snapshot-turn", type=int, default=40)
     ap.add_argument("--rate-lo", type=float, default=0.01)
     ap.add_argument("--rate-hi", type=float, default=0.09)
-    ap.add_argument("--min-n", type=int, default=30, help="min games supporting a class")
+    ap.add_argument("--min-n", type=int, default=40,
+                    help="min games supporting a class (40 = the reference run; "
+                         "recorded in lowprob_classes.json meta.min_n)")
     ap.add_argument("--workers", type=int, default=8)
     ap.add_argument("--out-dir", default="data/lowprob")
     ap.add_argument("--limit", type=int, default=None, help="cap #games (debug)")
