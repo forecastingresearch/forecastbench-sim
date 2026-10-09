@@ -25,6 +25,15 @@ It's a [uv workspace](https://docs.astral.sh/uv/concepts/workspaces/). Install w
 uv sync --all-packages
 ```
 
+## Paper material
+
+This repository holds reusable world code. Material specific to the ForecastBench-Sim
+paper lives in [forecastbench-sim-paper](https://github.com/forecastingresearch/forecastbench-sim-paper):
+its analysis in `src/`, and the production configs, seeds, prompts, model panels and
+producer scripts in `production/`. Raw provider responses, simulator outputs, datasets,
+human-subject records and credentials stay in the private data archive, out of Git.
+Split contributor branches the same way when merging them.
+
 ## Adding a world
 
 A world provides these to `fbsim-core` (see `worlds/pandemic/` for a compact example):
