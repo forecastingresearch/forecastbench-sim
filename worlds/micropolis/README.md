@@ -4,7 +4,7 @@ This world adds simulation, question generation, cached gathering and binary/con
 
 `fbsim-core` owns the shared schema/resolver. `fbsim-benchmark` owns the existing Micropolis parsers, raw replay scoring and cached trajectory converter; this world imports them. The five continuous quantiles are p10/p25/p50/p75/p90. Binary resolution uses half-open windows `(snapshot, resolution]` and engine turns (`tick // 16`). Original question/resolver bodies are retained. Their original specification remains at the pinned source's `binary_forecasts.md`.
 
-Paper normalization, model panels, administered prompt wrappers, knowledge statement sets, historical configurations, frozen data and paper CSV/figure producers are not part of this world. The included prompt wrappers and example configs are new illustrative examples; they cannot reproduce historical prompt hashes or results. Existing private paper work remains separate. No simulator, maps or engine binary is vendored.
+Paper normalization, model panels, administered prompt wrappers, knowledge statement sets, historical configurations, frozen data and paper CSV/figure producers are not part of this world. The included prompt wrappers and example configs are new illustrative examples; they cannot reproduce historical prompt hashes or results. The paper's production configs, prompts, model panels and knowledge statements are in [forecastbench-sim-paper/production/micropolis](https://github.com/forecastingresearch/forecastbench-sim-paper/tree/main/production/micropolis). No simulator, maps or engine binary is vendored.
 
 ## Python installation and offline checks
 
