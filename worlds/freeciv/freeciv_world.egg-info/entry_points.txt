@@ -1,7 +1,0 @@
-[console_scripts]
-build_freeciv_web_service = freeciv_world.freeciv.build_server:build_freeciv_web_service
-download_freeciv_web_image = freeciv_world.freeciv.build_server:download_freeciv_web_image
-start_freeciv_web_service = freeciv_world.freeciv.build_server:start_freeciv_web_service
-stop_freeciv_web_service = freeciv_world.freeciv.build_server:stop_freeciv_web_service
-test_freeciv = freeciv_world.random_game:main
-update_javascript_for_clean_screenshot = freeciv_world.freeciv.build_server:update_javascript_for_clean_screenshot

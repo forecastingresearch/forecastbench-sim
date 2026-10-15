@@ -1,7 +1,0 @@
-pyproject.toml
-pandemic_world/__init__.py
-pandemic_world.egg-info/PKG-INFO
-pandemic_world.egg-info/SOURCES.txt
-pandemic_world.egg-info/dependency_links.txt
-pandemic_world.egg-info/requires.txt
-pandemic_world.egg-info/top_level.txt

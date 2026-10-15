@@ -1,7 +1,0 @@
-fbsim-core
-starsim
-numpy
-matplotlib
-
-[dev]
-pytest

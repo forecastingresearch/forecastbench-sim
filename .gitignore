@@ -7,7 +7,7 @@
 # Generated files
 plot_game_scores/
 game_scores/
-civrealm.egg-info/
+*.egg-info/
 tests/logs/
 public/
 dist/

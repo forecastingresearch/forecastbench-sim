@@ -1,7 +1,0 @@
-pyproject.toml
-fbsim_core/__init__.py
-fbsim_core.egg-info/PKG-INFO
-fbsim_core.egg-info/SOURCES.txt
-fbsim_core.egg-info/dependency_links.txt
-fbsim_core.egg-info/requires.txt
-fbsim_core.egg-info/top_level.txt
