@@ -218,7 +218,10 @@ class ConditionalQuestionRunner:
         # Compute conditional effect
         conditional_effect = None
         if answer_control is not None and answer_intervention is not None:
-            conditional_effect = 1.0 if answer_control != answer_intervention else 0.0
+            if isinstance(answer_control, bool) and isinstance(answer_intervention, bool):
+                conditional_effect = 1.0 if answer_control != answer_intervention else 0.0
+            else:
+                conditional_effect = answer_intervention - answer_control
 
         if self.verbose:
             print(f"  Baseline answer: {answer_control}")
@@ -353,7 +356,10 @@ class ConditionalQuestionRunner:
             # Compute conditional effect
             conditional_effect = None
             if answer_control is not None and answer_intervention is not None:
-                conditional_effect = 1.0 if answer_control != answer_intervention else 0.0
+                if isinstance(answer_control, bool) and isinstance(answer_intervention, bool):
+                    conditional_effect = 1.0 if answer_control != answer_intervention else 0.0
+                else:
+                    conditional_effect = answer_intervention - answer_control
 
             # Store result
             bank.results[question.conditional_id] = ConditionalResult(
@@ -522,7 +528,7 @@ print("RESULT_JSON:" + json.dumps(output))
         self,
         question: ConditionalQuestion,
         player_states: dict[int, dict],
-    ) -> bool | None:
+    ) -> bool | int | float | None:
         """
         Resolve target question using player states.
 
@@ -573,6 +579,39 @@ print("RESULT_JSON:" + json.dumps(output))
         elif template_id == "tech_discovered":
             # Tech discovery not in basic player_states
             return None
+
+        elif template_id in [
+            "techs_continuous", "treasury_continuous", "population_continuous",
+            "cities_count_continuous", "territory_continuous", "scores_continuous",
+        ]:
+            # Continuous: return numeric value for the affected civ
+            player_id = params.get("player_id")
+            if player_id is None:
+                return None
+            state = player_states.get(player_id, {})
+
+            # Map template to player_state field
+            field_map = {
+                "treasury_continuous": "gold",
+                "techs_continuous": "techs",
+                "population_continuous": "population",
+                "cities_count_continuous": "cities",
+                "territory_continuous": "landarea",
+                "scores_continuous": "score",
+            }
+            field = field_map.get(template_id)
+            value = state.get(field)
+
+            # Fallback for scores: compute proxy
+            if value is None and template_id == "scores_continuous":
+                value = (
+                    state.get("techs", 0) * 10 +
+                    state.get("cities", 0) * 5 +
+                    state.get("population", 0) // 100 +
+                    state.get("wonders", 0) * 20
+                )
+
+            return value
 
         return None
 

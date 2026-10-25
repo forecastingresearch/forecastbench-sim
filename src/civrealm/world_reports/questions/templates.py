@@ -238,6 +238,71 @@ GOVERNMENT_AT = QuestionTemplate(
 
 
 # =============================================================================
+# Continuous Templates (single-civ absolute value)
+# =============================================================================
+
+TECHS_CONTINUOUS = QuestionTemplate(
+    template_id="techs_continuous",
+    signal_name="techs_known",
+    question_template="How many technologies will {civ} have discovered by turn {resolution_turn}?",
+    resolution_type="continuous",
+    data_path="time_series.techs_known.{resolution_turn}.{player_id}",
+    comparison_op="value",
+    required_params=["civ", "player_id", "resolution_turn"],
+)
+
+TREASURY_CONTINUOUS = QuestionTemplate(
+    template_id="treasury_continuous",
+    signal_name="treasury",
+    question_template="How much gold will {civ} have at turn {resolution_turn}?",
+    resolution_type="continuous",
+    data_path="time_series.treasury.{resolution_turn}.{player_id}",
+    comparison_op="value",
+    required_params=["civ", "player_id", "resolution_turn"],
+)
+
+POPULATION_CONTINUOUS = QuestionTemplate(
+    template_id="population_continuous",
+    signal_name="population",
+    question_template="What will {civ}'s population be at turn {resolution_turn}?",
+    resolution_type="continuous",
+    data_path="time_series.population.{resolution_turn}.{player_id}",
+    comparison_op="value",
+    required_params=["civ", "player_id", "resolution_turn"],
+)
+
+CITIES_COUNT_CONTINUOUS = QuestionTemplate(
+    template_id="cities_count_continuous",
+    signal_name="cities_count",
+    question_template="How many cities will {civ} have at turn {resolution_turn}?",
+    resolution_type="continuous",
+    data_path="time_series.cities_count.{resolution_turn}.{player_id}",
+    comparison_op="value",
+    required_params=["civ", "player_id", "resolution_turn"],
+)
+
+TERRITORY_CONTINUOUS = QuestionTemplate(
+    template_id="territory_continuous",
+    signal_name="territory_size",
+    question_template="How many tiles will {civ} control at turn {resolution_turn}?",
+    resolution_type="continuous",
+    data_path="time_series.territory_size.{resolution_turn}.{player_id}",
+    comparison_op="value",
+    required_params=["civ", "player_id", "resolution_turn"],
+)
+
+SCORES_CONTINUOUS = QuestionTemplate(
+    template_id="scores_continuous",
+    signal_name="scores",
+    question_template="What will {civ}'s score be at turn {resolution_turn}?",
+    resolution_type="continuous",
+    data_path="time_series.scores.{resolution_turn}.{player_id}",
+    comparison_op="value",
+    required_params=["civ", "player_id", "resolution_turn"],
+)
+
+
+# =============================================================================
 # Template Registry
 # =============================================================================
 
@@ -274,7 +339,18 @@ ALL_TEMPLATES = [
     GOVERNMENT_AT,
 ]
 
-TEMPLATES_BY_ID: dict[str, QuestionTemplate] = {t.template_id: t for t in ALL_TEMPLATES}
+CONTINUOUS_TEMPLATES = [
+    TECHS_CONTINUOUS,
+    TREASURY_CONTINUOUS,
+    POPULATION_CONTINUOUS,
+    CITIES_COUNT_CONTINUOUS,
+    TERRITORY_CONTINUOUS,
+    SCORES_CONTINUOUS,
+]
+
+TEMPLATES_BY_ID: dict[str, QuestionTemplate] = {
+    t.template_id: t for t in ALL_TEMPLATES + CONTINUOUS_TEMPLATES
+}
 
 
 def get_template(template_id: str) -> QuestionTemplate:
@@ -282,3 +358,8 @@ def get_template(template_id: str) -> QuestionTemplate:
     if template_id not in TEMPLATES_BY_ID:
         raise ValueError(f"Unknown template_id: {template_id}")
     return TEMPLATES_BY_ID[template_id]
+
+
+def get_continuous_templates() -> list[QuestionTemplate]:
+    """Get all continuous question templates."""
+    return list(CONTINUOUS_TEMPLATES)

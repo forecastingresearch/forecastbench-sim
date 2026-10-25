@@ -26,13 +26,14 @@ class QuestionTemplate:
     question_template: str
     """Question text with placeholders, e.g., 'Will {civ_a} have more technologies than {civ_b} at turn {resolution_turn}?'"""
 
-    resolution_type: Literal["comparative", "milestone", "event", "state_check", "rank"]
+    resolution_type: Literal["comparative", "milestone", "event", "state_check", "rank", "continuous"]
     """How this question type is resolved:
     - comparative: Compare two civs on a metric
     - milestone: Check if specific achievement reached
     - event: Check if event occurred in time window
     - state_check: Check state at resolution turn
     - rank: Check ranking position
+    - continuous: Single numeric value for one civ
     """
 
     data_path: str
@@ -140,6 +141,9 @@ class QuestionInstance:
 
     question_text: str
     """Rendered question text"""
+
+    question_type: Literal["binary", "continuous"] = "binary"
+    """Whether this is a binary (yes/no) or continuous (numeric estimate) question"""
 
     resolution: Resolution | None = None
     """Computed answer (None until resolved)"""

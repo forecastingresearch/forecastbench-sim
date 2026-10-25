@@ -149,7 +149,7 @@ def build_game_data_from_savegames(
         player_states = parse_player_states_for_conditional(content)
 
         # Build time_series entries for this turn
-        for metric in ["treasury", "population", "scores", "territory_size"]:
+        for metric in ["treasury", "population", "scores", "territory_size", "techs_known", "cities_count"]:
             if metric not in game_data["time_series"]:
                 game_data["time_series"][metric] = {}
             game_data["time_series"][metric][str(turn)] = {}
@@ -167,6 +167,8 @@ def build_game_data_from_savegames(
                 state.get("wonders", 0) * 20
             )
             game_data["time_series"]["scores"][str(turn)][pid_str] = score
+            game_data["time_series"]["techs_known"][str(turn)][pid_str] = state.get("techs", 0)
+            game_data["time_series"]["cities_count"][str(turn)][pid_str] = state.get("cities", 0)
 
         # Build snapshots for this turn
         game_data["snapshots"][str(turn)] = {
@@ -318,10 +320,16 @@ def main():
         # Convert to QuestionInstance for resolver
         q_instance = conditional_to_question_instance(question, args.checkpoint_turn)
 
+        # Determine if this is a continuous template
+        is_continuous = question.target_template_id.endswith("_continuous")
+
         # Resolve using baseline game_data
         try:
             baseline_resolution = resolver.resolve(q_instance, game_data, args.checkpoint_turn)
-            answer_control = baseline_resolution.answer
+            if is_continuous:
+                answer_control = baseline_resolution.value_at_resolution
+            else:
+                answer_control = baseline_resolution.answer
         except Exception as e:
             if args.verbose:
                 print(f"  Warning: Could not resolve baseline for {question.conditional_id}: {e}")
@@ -330,7 +338,10 @@ def main():
         # Resolve using fork game_data (built from savegames)
         try:
             fork_resolution = resolver.resolve(q_instance, fork_game_data, args.checkpoint_turn)
-            answer_intervention = fork_resolution.answer
+            if is_continuous:
+                answer_intervention = fork_resolution.value_at_resolution
+            else:
+                answer_intervention = fork_resolution.answer
         except Exception as e:
             if args.verbose:
                 print(f"  Warning: Could not resolve fork for {question.conditional_id}: {e}")
@@ -338,7 +349,10 @@ def main():
 
         conditional_effect = None
         if answer_control is not None and answer_intervention is not None:
-            conditional_effect = 1.0 if answer_control != answer_intervention else 0.0
+            if isinstance(answer_control, bool) and isinstance(answer_intervention, bool):
+                conditional_effect = 1.0 if answer_control != answer_intervention else 0.0
+            else:
+                conditional_effect = answer_intervention - answer_control
             effects.append(conditional_effect)
             resolved_count += 1
         else:

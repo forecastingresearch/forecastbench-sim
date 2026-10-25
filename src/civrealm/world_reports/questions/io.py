@@ -58,8 +58,14 @@ def _question_to_dict(q: QuestionInstance) -> dict[str, Any]:
         "question_text": q.question_text,
     }
 
+    if q.question_type != "binary":
+        result["question_type"] = q.question_type
+
     if q.resolution is not None:
-        result["resolution"] = _resolution_to_dict(q.resolution)
+        if q.question_type == "continuous":
+            result["resolution"] = _continuous_resolution_to_dict(q.resolution)
+        else:
+            result["resolution"] = _resolution_to_dict(q.resolution)
 
     if q.empirical_difficulty is not None:
         result["empirical_difficulty"] = _empirical_difficulty_to_dict(q.empirical_difficulty)
@@ -92,6 +98,11 @@ def _resolution_to_dict(r: Resolution) -> dict[str, Any]:
         result["state_at_resolution"] = r.state_at_resolution
 
     return result
+
+
+def _continuous_resolution_to_dict(r: Resolution) -> dict[str, Any]:
+    """Convert a continuous Resolution to a dictionary with 'value' key."""
+    return {"value": r.value_at_resolution}
 
 
 def _empirical_difficulty_to_dict(d: EmpiricalDifficulty) -> dict[str, Any]:
@@ -211,9 +222,14 @@ def dict_to_question_bank(data: dict[str, Any]) -> QuestionBank:
 
 def _dict_to_question(data: dict[str, Any]) -> QuestionInstance:
     """Convert a dictionary to a QuestionInstance."""
+    question_type = data.get("question_type", "binary")
+
     resolution = None
     if "resolution" in data:
-        resolution = _dict_to_resolution(data["resolution"], data.get("resolution_turn", 0))
+        if question_type == "continuous":
+            resolution = _dict_to_continuous_resolution(data["resolution"], data.get("resolution_turn", 0))
+        else:
+            resolution = _dict_to_resolution(data["resolution"], data.get("resolution_turn", 0))
 
     # Handle both old format (difficulty.horizon) and new format (horizon)
     horizon = data.get("horizon")
@@ -227,6 +243,8 @@ def _dict_to_question(data: dict[str, Any]) -> QuestionInstance:
     if "empirical_difficulty" in data:
         empirical_difficulty = _dict_to_empirical_difficulty(data["empirical_difficulty"])
 
+    question_type = data.get("question_type", "binary")
+
     return QuestionInstance(
         question_id=data.get("question_id", ""),
         template_id=data.get("template_id", ""),
@@ -234,6 +252,7 @@ def _dict_to_question(data: dict[str, Any]) -> QuestionInstance:
         horizon=horizon,
         parameters=data.get("parameters", {}),
         question_text=data.get("question_text", ""),
+        question_type=question_type,
         resolution=resolution,
         empirical_difficulty=empirical_difficulty,
     )
@@ -250,5 +269,15 @@ def _dict_to_resolution(data: dict[str, Any], resolution_turn: int) -> Resolutio
         event_occurred=data.get("event_occurred"),
         event_details=data.get("event_details"),
         state_at_resolution=data.get("state_at_resolution"),
+        computed_at=data.get("computed_at"),
+    )
+
+
+def _dict_to_continuous_resolution(data: dict[str, Any], resolution_turn: int) -> Resolution:
+    """Convert a continuous resolution dictionary (with 'value' key) to a Resolution."""
+    return Resolution(
+        answer=True,
+        resolution_turn=resolution_turn,
+        value_at_resolution=data.get("value"),
         computed_at=data.get("computed_at"),
     )

@@ -52,6 +52,8 @@ class QuestionResolver:
             return self._resolve_event(question, game_data, template, snapshot_turn)
         elif template.resolution_type == "state_check":
             return self._resolve_state_check(question, game_data, template)
+        elif template.resolution_type == "continuous":
+            return self._resolve_continuous(question, game_data, template)
         else:
             raise ValueError(f"Unknown resolution_type: {template.resolution_type}")
 
@@ -150,6 +152,28 @@ class QuestionResolver:
             resolution_turn=resolution_turn,
             value_a=value_a,
             value_b=value_b,
+            computed_at=datetime.utcnow().isoformat() + "Z",
+        )
+
+    def _resolve_continuous(
+        self,
+        question: QuestionInstance,
+        game_data: dict[str, Any],
+        template: Any,
+    ) -> Resolution:
+        """Resolve a continuous question (single numeric value for one civ)."""
+        params = question.parameters
+        resolution_turn = question.resolution_turn
+        player_id = params.get("player_id")
+        signal_name = template.signal_name
+
+        time_series = game_data.get("time_series", {}).get(signal_name, {})
+        value = self._get_signal_value(time_series, player_id, resolution_turn)
+
+        return Resolution(
+            answer=value is not None,
+            resolution_turn=resolution_turn,
+            value_at_resolution=value,
             computed_at=datetime.utcnow().isoformat() + "Z",
         )
 

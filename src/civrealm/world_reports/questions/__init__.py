@@ -62,8 +62,10 @@ from .schema import (
 
 from .templates import (
     ALL_TEMPLATES,
+    CONTINUOUS_TEMPLATES,
     TEMPLATES_BY_ID,
     get_template,
+    get_continuous_templates,
 )
 
 from .generator import QuestionGenerator
@@ -117,8 +119,10 @@ __all__ = [
     "classify_horizon",
     # Templates
     "ALL_TEMPLATES",
+    "CONTINUOUS_TEMPLATES",
     "TEMPLATES_BY_ID",
     "get_template",
+    "get_continuous_templates",
     # Generator & Resolver
     "QuestionGenerator",
     "QuestionResolver",
