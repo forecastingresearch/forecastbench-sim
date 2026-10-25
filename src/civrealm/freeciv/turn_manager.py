@@ -63,8 +63,9 @@ class TurnManager(object):
 
     def log_begin_turn(self):
         fc_logger.info('==============================================')
+        player_id = self._turn_ctrls['player'].my_player_id if self._turn_ctrls and 'player' in self._turn_ctrls else 'Unknown'
         fc_logger.info(
-            f"============== Begin turn: {self._turn:04d}. Port: {self.client_port}. Player: {self._turn_ctrls['player'].my_player_id} ==============")
+            f"============== Begin turn: {self._turn:04d}. Port: {self.client_port}. Player: {player_id} ==============")
         fc_logger.info('==============================================')
         # print(f'\nBegin turn: {self._turn:04d}\n')
 

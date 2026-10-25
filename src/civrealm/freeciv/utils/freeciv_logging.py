@@ -60,6 +60,10 @@ def set_logging_file(log_dir_name, log_file_suffix, remove_old_suffix=True):
 
 
 def ray_logger_setup():
+    # CRITICAL: Enable recording for Ray workers
+    # fc_args is loaded at module import time, so we force it here
+    from civrealm.configs import fc_args
+    fc_args['debug.record_action_and_observation'] = True
     return set_logging_file('parallel', os.getpid(), remove_old_suffix=False)
 
 

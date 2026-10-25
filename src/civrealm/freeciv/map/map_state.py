@@ -118,17 +118,19 @@ class MapState(PlainState):
 
         # Update the state for tiles according to the known state.
         self._state['status'][x, y] = tile_packet['known']
+
+        # ALWAYS record terrain data (omniscient view for world reports)
+        # The server sends terrain for all tiles, not just explored ones
+        self._state['terrain'][x, y] = tile_packet['terrain']
+        self._state['extras'][x, y,
+                              :] = tile_packet['extras'][:self._extra_num]
+
         if self._before_first_update and tile_packet['known'] == 1:
             # At the start of the game, the agent can seen some fogged tiles around the starting position.
-            self._state['terrain'][x, y] = tile_packet['terrain']
-            self._state['extras'][x, y,
-                                  :] = tile_packet['extras'][:self._extra_num]
+            pass  # Terrain already recorded above
 
         if tile_packet['known'] == 2:
             # Tile state should be updated when the tile is seen.
-            self._state['terrain'][x, y] = tile_packet['terrain']
-            self._state['extras'][x, y,
-                                  :] = tile_packet['extras'][:self._extra_num]
             self._state['tile_owner'][x, y] = tile_packet['owner']
 
             # Compute output for the tile without improvements.

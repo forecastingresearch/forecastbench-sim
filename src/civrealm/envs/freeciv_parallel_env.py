@@ -25,6 +25,10 @@ os.environ['RAY_DEDUP_LOGS'] = '0'
 @ray.remote
 class FreecivParallelEnv():
     def __init__(self, env_id, *args, **kwargs):
+        # CRITICAL: Enable recording for Ray workers BEFORE creating environment
+        from civrealm.configs import fc_args
+        fc_args['debug.record_action_and_observation'] = True
+
         # Note that when the env_id is FreecivTensor-v0, it will call its reset() inside the make process. Therefore, the FreecivTensor-v0 has already connected to the server after initializing the environment.
         self.env = gymnasium.make(env_id, *args, **kwargs)
         # print(f'FreecivParallelEnv: {self.env.get_username()}')
@@ -43,6 +47,7 @@ class FreecivParallelEnv():
         except Exception as e:
             # print(repr(e))
             fc_logger.error(f'FreecivParallelEnv: {repr(e)}')
+            raise  # Re-raise the exception so it's not swallowed
 
     def close(self):
         self.env.close()
