@@ -7,7 +7,7 @@ which contain data for ALL players without fog-of-war limitations.
 import re
 import requests
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Tuple
 import subprocess
 
 
@@ -144,6 +144,154 @@ def decompress_savegame_content(savegame_content: bytes, filename: str) -> str:
     else:
         # Uncompressed
         return savegame_content.decode('utf-8')
+
+
+def get_local_savegames_dir(recording_dir: str) -> Path:
+    """Get the local savegames directory path within the recordings directory
+
+    Args:
+        recording_dir: Path to the recordings directory (e.g., logs/recordings/username/)
+
+    Returns:
+        Path to the savegames subdirectory
+    """
+    savegames_dir = Path(recording_dir) / 'savegames'
+    savegames_dir.mkdir(exist_ok=True)
+    return savegames_dir
+
+
+def find_local_savegame_for_turn(username: str, turn: int, recording_dir: str) -> Optional[str]:
+    """Find a locally cached savegame for a specific turn
+
+    Args:
+        username: Player username
+        turn: Turn number
+        recording_dir: Path to the recordings directory
+
+    Returns:
+        Savegame filename if found, None otherwise
+    """
+    savegames_dir = get_local_savegames_dir(recording_dir)
+
+    # Pattern: username_T{turn}_*.sav*
+    # Try both turn and turn+1 (as final save after turn N may be labeled as N+1)
+    for t in [turn, turn + 1]:
+        pattern = f"{username}_T{t}_*"
+        matches = list(savegames_dir.glob(pattern))
+        if matches:
+            # Return the most recent (sort by name, which includes timestamp)
+            return sorted(matches)[-1].name
+
+    return None
+
+
+def load_local_savegame(savegame_name: str, recording_dir: str) -> Optional[Tuple[bytes, str]]:
+    """Load a savegame from the local recordings directory
+
+    Args:
+        savegame_name: Name of the savegame file
+        recording_dir: Path to the recordings directory
+
+    Returns:
+        Tuple of (content_bytes, filename) if found, None otherwise
+    """
+    savegames_dir = get_local_savegames_dir(recording_dir)
+
+    # Try to find matching file (may have different extensions)
+    for ext in ['', '.sav', '.sav.xz', '.sav.zst']:
+        # Try exact match first
+        filepath = savegames_dir / f"{savegame_name}{ext}"
+        if filepath.exists():
+            with open(filepath, 'rb') as f:
+                return (f.read(), filepath.name)
+
+        # Also try without the extension if savegame_name already has one
+        if savegame_name.endswith('.sav'):
+            base_name = savegame_name.rsplit('.sav', 1)[0]
+            filepath = savegames_dir / f"{base_name}{ext}"
+            if filepath.exists():
+                with open(filepath, 'rb') as f:
+                    return (f.read(), filepath.name)
+
+    return None
+
+
+def save_local_savegame(savegame_bytes: bytes, filename: str, recording_dir: str) -> None:
+    """Save a savegame to the local recordings directory
+
+    Args:
+        savegame_bytes: Raw savegame bytes
+        filename: Filename to save as
+        recording_dir: Path to the recordings directory
+    """
+    savegames_dir = get_local_savegames_dir(recording_dir)
+    filepath = savegames_dir / filename
+
+    with open(filepath, 'wb') as f:
+        f.write(savegame_bytes)
+
+    print(f"Saved savegame to {filepath}")
+
+
+def download_all_savegames_from_docker(username: str, recording_dir: str, container_name: str = 'freeciv-web') -> tuple[int, int, int]:
+    """Download all savegames directly from Docker container
+
+    This function lists all savegame files in the Docker container and downloads
+    them to the local recordings directory. It skips files that already exist locally.
+
+    Args:
+        username: Player username
+        recording_dir: Path to recordings directory
+        container_name: Docker container name (default: 'freeciv-web')
+
+    Returns:
+        Tuple of (downloaded_count, skipped_count, failed_count)
+    """
+    # Create savegames directory
+    savegames_dir = get_local_savegames_dir(recording_dir)
+
+    # List files in Docker container
+    docker_path = f"/var/lib/tomcat10/webapps/data/savegames/{username}"
+
+    list_cmd = ['docker', 'exec', container_name, 'ls', docker_path]
+    result = subprocess.run(list_cmd, capture_output=True, text=True)
+
+    if result.returncode != 0:
+        print(f"Error listing Docker savegames: {result.stderr}")
+        return (0, 0, 0)
+
+    files = [f.strip() for f in result.stdout.strip().split('\n') if f.strip()]
+
+    if not files:
+        print(f"No savegames found in Docker container")
+        return (0, 0, 0)
+
+    # Download each file
+    downloaded = 0
+    skipped = 0
+    failed = 0
+
+    for filename in files:
+        # Skip if already downloaded
+        local_file = savegames_dir / filename
+        if local_file.exists():
+            skipped += 1
+            continue
+
+        # Read file from container
+        file_path = f"{docker_path}/{filename}"
+        cat_cmd = ['docker', 'exec', container_name, 'cat', file_path]
+        result = subprocess.run(cat_cmd, capture_output=True)
+
+        if result.returncode == 0:
+            # Save to local directory
+            with open(local_file, 'wb') as f:
+                f.write(result.stdout)
+            downloaded += 1
+        else:
+            failed += 1
+
+    return (downloaded, skipped, failed)
 
 
 def parse_city_production(savegame_content: str) -> Dict[int, Dict[str, float]]:
@@ -446,16 +594,18 @@ def parse_player_technologies(savegame_content: str, ruleset_techs: Optional[Dic
     return player_techs
 
 
-def extract_complete_data_from_savegame(username: str, turn: int, host: str = 'localhost', port: int = 8080) -> Optional[Dict[str, any]]:
-    """Extract complete game data from savegame (production, science, technologies, nations)
+def extract_complete_data_from_savegame(username: str, turn: int, host: str = 'localhost', port: int = 8080, recording_dir: Optional[str] = None) -> Optional[Dict[str, any]]:
+    """Extract complete game data from savegame file
 
-    This is the main entry point for getting fog-of-war-free complete data.
+    Reads savegames from the local recordings directory. Savegames should be
+    downloaded during the game recording phase (see run_world.py).
 
     Args:
         username: Player username
         turn: Turn number (will try turn and turn+1, as final save may be labeled as next turn)
-        host: Server host
-        port: Server port
+        host: Server host (unused, kept for backward compatibility)
+        port: Server port (unused, kept for backward compatibility)
+        recording_dir: Path to recordings directory containing savegames/
 
     Returns:
         Dict with keys 'production', 'science', and 'nations' if successful, None otherwise:
@@ -465,27 +615,22 @@ def extract_complete_data_from_savegame(username: str, turn: int, host: str = 'l
             'nations': {player_id: nation_name_or_id}
         }
     """
-    # Find savegame on server
-    # Try both turn and turn+1, as the final save after turn N may be labeled as N+1
-    savegame_name = find_latest_savegame(username, turn, host, port)
-    if not savegame_name:
-        # Try next turn number
-        savegame_name = find_latest_savegame(username, turn + 1, host, port)
-        if not savegame_name:
-            print(f"Warning: No savegame found for {username} turn {turn} or {turn+1}")
-            return None
+    if not recording_dir:
+        return None
 
-    print(f"Found savegame: {savegame_name}")
+    # Find savegame in local recordings directory
+    savegame_name = find_local_savegame_for_turn(username, turn, recording_dir)
+    if not savegame_name:
+        return None
+
+    # Load from local directory
+    result = load_local_savegame(savegame_name, recording_dir)
+    if not result:
+        return None
+
+    savegame_bytes, actual_filename = result
 
     try:
-        # Download from server
-        result = download_savegame(savegame_name, username, host, port)
-        if not result:
-            print(f"Error: Could not download savegame {savegame_name}")
-            return None
-
-        savegame_bytes, actual_filename = result
-
         # Decompress
         content = decompress_savegame_content(savegame_bytes, actual_filename)
 
@@ -495,7 +640,6 @@ def extract_complete_data_from_savegame(username: str, turn: int, host: str = 'l
         nations = parse_player_nations(content)
         technologies = parse_player_technologies(content)
 
-        print(f"Extracted complete data for {len(production)} players from savegame")
         return {
             'production': production,
             'science': science,
@@ -504,7 +648,7 @@ def extract_complete_data_from_savegame(username: str, turn: int, host: str = 'l
         }
 
     except Exception as e:
-        print(f"Error parsing savegame {savegame_name}: {e}")
+        print(f"Error parsing savegame {actual_filename}: {e}")
         import traceback
         traceback.print_exc()
         return None
@@ -540,7 +684,8 @@ def get_savegame_data_for_report(config, turn: int) -> Optional[Dict[str, any]]:
     """Get complete savegame data for a specific turn in a report
 
     This is a convenience wrapper that extracts the username from config
-    and retrieves savegame data for the specified turn.
+    and retrieves savegame data for the specified turn. Automatically
+    persists savegames to the recordings directory.
 
     Args:
         config: ReportConfig instance with recording_dir attribute
@@ -550,4 +695,5 @@ def get_savegame_data_for_report(config, turn: int) -> Optional[Dict[str, any]]:
         Dict with 'production' and 'science' keys if successful, None otherwise
     """
     username = extract_username_from_config(config)
-    return extract_complete_data_from_savegame(username, turn)
+    recording_dir = getattr(config, 'recording_dir', None)
+    return extract_complete_data_from_savegame(username, turn, recording_dir=recording_dir)

@@ -185,8 +185,13 @@ class ClientState(CivPropController):
 
     def try_create_user_account(self, host, username, password):
         url = f"http://{host}:{fc_web_args['port']}/create_pbem_user?username={username}&email={username}@civrealm.org&password={password}&captcha=null"
-        response = requests.post(url)
-        return response.status_code
+        try:
+            response = requests.post(url, timeout=5)
+            return response.status_code
+        except Exception as e:
+            # PBEM service may not be running, but user accounts might not be required for singleplayer/multiplayer
+            fc_logger.warning(f"Failed to create user account: {e}")
+            return 0
 
     def login(self):
         freeciv_version = "+Freeciv.Web.Devel-3.3"

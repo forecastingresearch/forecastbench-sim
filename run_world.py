@@ -24,108 +24,71 @@ After the game completes, world reports are automatically generated.
 """
 
 import sys
+import argparse
+import subprocess
 from pathlib import Path
 
 # Add src to path for world report imports
 sys.path.insert(0, str(Path(__file__).parent / 'src'))
 
 from civrealm.configs import fc_args
-from civrealm.agents import NoOpAgent, ObserverAgent
+from civrealm.agents import NoOpAgent
 from civrealm.world_reports import ReportGenerator, ReportConfig
+from civrealm.world_reports.utils.savegame_parser import (
+    download_all_savegames_from_docker
+)
 import gymnasium
 import time
-import threading
 
-# Configuration
-# this username is for authenticating to the game server
-# we pull the civilization name for world reports
-fc_args['username'] = 'myagent2'
-fc_args['debug.record_action_and_observation'] = True
-
-# Game Configuration
-MAX_TURNS = 500  # Full game with savegame-based complete data extraction
-fc_args['max_turns'] = MAX_TURNS
-
-# Don't wait for observer - let observer join dynamically
-# Observer will connect after game starts
-fc_args['wait_for_observer'] = False
-
-# AI Configuration
-# NOTE: aifill sets TOTAL number of players in game (not additional AI opponents)
-# So aifill=5 creates 4 AI players + 1 connected player = 5 total
-NUM_AI_PLAYERS = 5  # TOTAL players in game
+# Game Configuration defaults
 AI_DIFFICULTY = 'hard'  # Options: 'handicapped', 'novice', 'easy', 'normal', 'hard', 'cheating', 'experimental'
-fc_args['aifill'] = NUM_AI_PLAYERS
 
 
-def run_observer(client_port):
-    """Run observer client to record complete game state
-
-    Observer sees complete state (no fog of war) for all players,
-    enabling accurate world report generation.
+def cleanup_docker_savegames(username: str, container_name: str = 'freeciv-web'):
+    """Clean up any existing savegames for this username in Docker
 
     Args:
-        client_port: Port to connect to (same game as player)
+        username: Player username
+        container_name: Docker container name
     """
-    print(f"\n[Observer] Starting observer connection...")
+    docker_path = f"/var/lib/tomcat10/webapps/data/savegames/{username}"
 
-    # Temporarily modify fc_args for observer
-    # Save original values
-    original_username = fc_args['username']
-    original_self_play = fc_args['self_play']
+    # Remove existing directory
+    subprocess.run(
+        ['docker', 'exec', container_name, 'rm', '-rf', docker_path],
+        capture_output=True
+    )
 
-    # Set observer-specific values
-    fc_args['username'] = OBSERVER_USERNAME
-    fc_args['self_play'] = True  # Join the same game as player
+    # Recreate empty directory
+    subprocess.run(
+        ['docker', 'exec', container_name, 'mkdir', '-p', docker_path],
+        capture_output=True
+    )
 
-    # Create observer environment
-    observer_env = gymnasium.make('civrealm/FreecivBase-v0')
-    observer_agent = ObserverAgent()
-
-    # Restore original fc_args
-    fc_args['username'] = original_username
-    fc_args['self_play'] = original_self_play
-
-    try:
-        # Connect to the same game server by passing client_port to reset
-        observations, info = observer_env.reset(client_port=client_port)
-        print(f"[Observer] Connected successfully!")
-
-        # Send /observe command to enter observer mode (see complete game state)
-        print(f"[Observer] Entering observer mode with /observe command...")
-        observer_env.unwrapped.civ_controller.ws_client.send_message("/observe")
-        time.sleep(1)
-        print(f"[Observer] Observer mode active! Recording to: logs/recordings/{OBSERVER_USERNAME}/")
-
-        # Observer loop - just observe, don't take actions
-        done = False
-        while not done:
-            action = observer_agent.act(observations, info)
-            observations, reward, terminated, truncated, info = observer_env.step(action)
-
-            turn = info.get('turn', 0)
-            if turn > 0 and turn % 50 == 0:
-                print(f"[Observer] Recording turn {turn}")
-
-            done = terminated or truncated
-
-        observer_env.close()
-        print("[Observer] Recording complete")
-
-    except Exception as e:
-        print(f"[Observer] Error: {e}")
-        import traceback
-        traceback.print_exc()
+    print(f"Cleaned Docker savegames directory for {username}")
 
 
-def main():
+def main(session_id: int = 0, max_turns: int = 50, num_ai_players: int = 5):
+    # Configure username with session ID
+    username = f'myagent{session_id}'
+    fc_args['username'] = username
+    fc_args['debug.record_action_and_observation'] = True
+    fc_args['max_turns'] = max_turns
+    fc_args['aifill'] = num_ai_players
+
     print("Starting all-AI game collection...")
-    print(f"Username: {fc_args['username']} (will be toggled to AI control)")
-    print(f"AI Players: {NUM_AI_PLAYERS} total (all Freeciv AI at {AI_DIFFICULTY} difficulty)")
-    print(f"Setup: {NUM_AI_PLAYERS - 1} via aifill + 1 connected player toggled to AI")
-    print(f"Max turns: {MAX_TURNS}")
-    print(f"Recording to: logs/recordings/{fc_args['username']}/")
+    print(f"Session ID: {session_id}")
+    print(f"Username: {username} (will be toggled to AI control)")
+    print(f"AI Players: {num_ai_players} total (all Freeciv AI at {AI_DIFFICULTY} difficulty)")
+    print(f"Setup: {num_ai_players - 1} via aifill + 1 connected player toggled to AI")
+    print(f"Max turns: {max_turns}")
+    print(f"Recording to: logs/recordings/{username}/")
+    print()
 
+    # Clean up any existing savegames for this username
+    print("Cleaning Docker savegames directory...")
+    cleanup_docker_savegames(username)
+    print()
 
     env = gymnasium.make('civrealm/FreecivBase-v0')
     # NoOpAgent just ends turn - connected player will be toggled to Freeciv AI
@@ -169,17 +132,13 @@ def main():
 
     # Aifill players are already AI-controlled by default (PLRF_AI flag set)
     # DO NOT toggle them - that would turn OFF their AI!
-    print(f"All {NUM_AI_PLAYERS - 1} aifill players are AI-controlled by default")
-
-    # Start observer in separate thread if enabled (AFTER game setup)
-    observer_thread = None
-
+    print(f"All {num_ai_players - 1} aifill players are AI-controlled by default")
 
     done = False
     step = 0
 
-    print(f"Game started - all {NUM_AI_PLAYERS} players controlled by Freeciv AI")
-    print(f"Running for up to {MAX_TURNS} turns (AI vs AI competitive game)")
+    print(f"Game started - all {num_ai_players} players controlled by Freeciv AI")
+    print(f"Running for up to {max_turns} turns (AI vs AI competitive game)")
     print()
 
     while not done:
@@ -190,7 +149,7 @@ def main():
 
             turn = info.get('turn', 0)
             if turn > 0 and turn % 10 == 0:
-                print(f"Turn {turn}/{MAX_TURNS}")
+                print(f"Turn {turn}/{max_turns}")
 
             step += 1
             # Environment will set terminated=True when max_turns is reached
@@ -208,6 +167,12 @@ def main():
 
     env.close()
 
+    # Download and persist all savegames from Docker container
+    print("\nDownloading savegames from Docker container...")
+    recording_dir = f'logs/recordings/{username}'
+    downloaded, skipped, failed = download_all_savegames_from_docker(username, recording_dir)
+    print(f"Downloaded {downloaded} savegames (skipped {skipped} existing, {failed} failed)")
+
     print()
     print("="*60)
     print("DATA COLLECTION COMPLETE!")
@@ -219,19 +184,15 @@ def main():
     print()
 
     # Configuration for world report generation
-    # Use observer recordings if available (complete state without fog of war)
-    # Otherwise fall back to player recordings (limited by fog of war)
-    recording_source = fc_args["username"]
-
     report_config = ReportConfig(
         # Input: where our game recording is stored
-        recording_dir=f'logs/recordings/{recording_source}/',
+        recording_dir=f'logs/recordings/{username}/',
 
         # Output: where to save the report
-        output_dir='reports/latest_game/',
+        output_dir=f'reports/{username}/',
 
         # Generate report at the final turn
-        report_turns=[MAX_TURNS],
+        report_turns=[max_turns],
 
         # Enable all implemented sections
         enabled_sections=['overview', 'historical_events', 'economics', 'demographics', 'technology'],
@@ -268,4 +229,31 @@ def main():
     return 0
 
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser(
+        description='Run an all-AI Civilization game and generate world reports'
+    )
+    parser.add_argument(
+        '--session_id',
+        type=int,
+        default=0,
+        help='Session ID for isolating savegames (default: 0). Username will be myagent{session_id}'
+    )
+    parser.add_argument(
+        '--max_turns',
+        type=int,
+        default=50,
+        help='Maximum number of turns to run (default: 50)'
+    )
+    parser.add_argument(
+        '--num_ai_players',
+        type=int,
+        default=5,
+        help='Total number of AI players in the game (default: 5)'
+    )
+
+    args = parser.parse_args()
+    exit(main(
+        session_id=args.session_id,
+        max_turns=args.max_turns,
+        num_ai_players=args.num_ai_players
+    ))
