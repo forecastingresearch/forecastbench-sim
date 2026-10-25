@@ -94,7 +94,7 @@ def subsample_questions(questions: list[dict], n: int, seed: int) -> list[dict]:
 
 def build_prompt(question_text: str, world_report: str) -> str:
     """Build the prompt for the LLM."""
-    return f"""You are a forecaster analyzing a civilization simulation game. Based on the world report data (JSON) below, provide your probability estimate (a probability between 0.0 and 1.0) that the following question will resolve to YES.
+    return f"""You are a forecaster analyzing a FreeCiv game. Based on the world report data (JSON) below, provide your probability estimate (a probability between 0.0 and 1.0) that the following question will resolve to YES.
 
 The JSON contains time series data for each civilization, keyed by turn number and player ID.
 
