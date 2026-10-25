@@ -96,13 +96,13 @@ debug:
   take_player: 
 
   # whether to use randomly generated seeds for running games. if True, the following random seeds (mapseed, gameseed, agentseed) are ignored
-  randomly_generate_seeds: True
+  randomly_generate_seeds: False
   # The seed for generating a map. The same seed leads to the same map.
   mapseed: 88
   # The seed for fixing the behavior of random outputs.
   gameseed: 1729
   # The seed for fixing the action sequence when game/map are fixed.
-  agentseed: 1729
+  agentseed: 1729 # TODO this is irrelevant for our purpose - we use in-game AI, not civrealm agents
   # Whether to print debug information for tensor env.
   tensor_debug: False
   # The path to the directory that stores the log files.. Use null for the default path `civrealm/logs``. 

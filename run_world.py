@@ -5,27 +5,26 @@ This script runs an all-AI competitive game where ALL players are controlled
 by Freeciv's built-in AI, then automatically generates world reports from the
 recorded gameplay.
 
+Usage:
+    python run_world.py --seed 42 --max_turns 50
+
+The seed uniquely identifies the run and ensures deterministic gameplay.
+Games with the same seed will produce identical results.
+
 Setup:
-- Sets aifill=5 to create 5 total players in the game
-- Connects as player 'myagent2' (1 of the 5)
-- Toggles myagent2 to Freeciv AI control via /aitoggle
-- The other 4 players are AI-controlled by default
-- Result: 5 Freeciv AI players, ALL using the same strategy
+- Creates N AI players (default 5) using aifill
+- Connects as a player and toggles to Freeciv AI control via /aitoggle
+- All players use the same Freeciv AI algorithm
 
-NoOpAgent's role:
-- Simply returns None to end turn immediately
-- Freeciv AI actually plays for this player
-- This allows CivRealm to maintain connection and record observations
-
-Result: A competitive 5-player all-AI game with full recording coverage.
-All players use the same Freeciv AI algorithm, ensuring fair comparison.
-
-After the game completes, world reports are automatically generated.
+Output:
+- Recordings saved to: logs/recordings/s{seed}/
+- Reports saved to: reports/s{seed}/
 """
 
 import sys
 import argparse
 import subprocess
+import random
 from pathlib import Path
 
 # Add src to path for world report imports
@@ -68,26 +67,33 @@ def cleanup_docker_savegames(username: str, container_name: str = 'freeciv-web')
     print(f"Cleaned Docker savegames directory for {username}")
 
 
-def main(session_id: int = 0, max_turns: int = 50, num_ai_players: int = 5):
-    # Configure username with session ID
-    username = f'myagent{session_id}'
-    fc_args['username'] = username
+def main(seed: int, max_turns: int = 50, num_ai_players: int = 5):
+    # Use seed as the unique identifier for this run
+    # Freeciv requires non-numeric usernames, so prefix with 's' for seed
+    run_id = f's{seed}'
+    fc_args['username'] = run_id
     fc_args['debug.record_action_and_observation'] = True
     fc_args['max_turns'] = max_turns
     fc_args['aifill'] = num_ai_players
 
+    # Set seed for deterministic runs
+    fc_args['debug.randomly_generate_seeds'] = False
+    fc_args['debug.mapseed'] = seed
+    fc_args['debug.gameseed'] = seed
+    # Also seed Python's random module for nation selection (used in civ_controller.py)
+    random.seed(seed)
+
     print("Starting all-AI game collection...")
-    print(f"Session ID: {session_id}")
-    print(f"Username: {username} (will be toggled to AI control)")
+    print(f"Seed: {seed}")
     print(f"AI Players: {num_ai_players} total (all Freeciv AI at {AI_DIFFICULTY} difficulty)")
     print(f"Setup: {num_ai_players - 1} via aifill + 1 connected player toggled to AI")
     print(f"Max turns: {max_turns}")
-    print(f"Recording to: logs/recordings/{username}/")
+    print(f"Recording to: logs/recordings/{run_id}/")
     print()
 
-    # Clean up any existing savegames for this username
+    # Clean up any existing savegames for this run
     print("Cleaning Docker savegames directory...")
-    cleanup_docker_savegames(username)
+    cleanup_docker_savegames(run_id)
     print()
 
     env = gymnasium.make('civrealm/FreecivBase-v0')
@@ -169,8 +175,8 @@ def main(session_id: int = 0, max_turns: int = 50, num_ai_players: int = 5):
 
     # Download and persist all savegames from Docker container
     print("\nDownloading savegames from Docker container...")
-    recording_dir = f'logs/recordings/{username}'
-    downloaded, skipped, failed = download_all_savegames_from_docker(username, recording_dir)
+    recording_dir = f'logs/recordings/{run_id}'
+    downloaded, skipped, failed = download_all_savegames_from_docker(run_id, recording_dir)
     print(f"Downloaded {downloaded} savegames (skipped {skipped} existing, {failed} failed)")
 
     print()
@@ -186,10 +192,10 @@ def main(session_id: int = 0, max_turns: int = 50, num_ai_players: int = 5):
     # Configuration for world report generation
     report_config = ReportConfig(
         # Input: where our game recording is stored
-        recording_dir=f'logs/recordings/{username}/',
+        recording_dir=f'logs/recordings/{run_id}/',
 
         # Output: where to save the report
-        output_dir=f'reports/{username}/',
+        output_dir=f'reports/{run_id}/',
 
         # Generate report at the final turn
         report_turns=[max_turns],
@@ -233,10 +239,10 @@ if __name__ == '__main__':
         description='Run an all-AI Civilization game and generate world reports'
     )
     parser.add_argument(
-        '--session_id',
+        '--seed',
         type=int,
-        default=0,
-        help='Session ID for isolating savegames (default: 0). Username will be myagent{session_id}'
+        required=True,
+        help='Random seed for the game (used as unique run identifier and for deterministic gameplay)'
     )
     parser.add_argument(
         '--max_turns',
@@ -253,7 +259,7 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     exit(main(
-        session_id=args.session_id,
+        seed=args.seed,
         max_turns=args.max_turns,
         num_ai_players=args.num_ai_players
     ))
