@@ -1,7 +1,7 @@
 # The user name used to log in the game. Spaces and underscores are not allowed.
 username: myagent
 # The maximum number of turns per game. The game will end after the turn number reaches this limit.
-max_turns: 1000
+max_turns: 250
 # The name of service used. Options: freeciv-web | fciv-net
 service: freeciv-web
 # The URL that hosts the game.
@@ -62,7 +62,7 @@ minitask_username: minitask
 debug:
   # Records the game state and available actions at every step.
   # **Warning**: generates many log files if True. Turned off by default.
-  record_action_and_observation: False
+  record_action_and_observation: True
 
   # Take screenshots during playing.
   # *wait_for_observer* flag should be set to *True* if enable screenshots.

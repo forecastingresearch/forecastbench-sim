@@ -239,6 +239,12 @@ class ClientState(CivPropController):
         # Set AI player to 0. Based on HACKING file
         self.ws_client.send_message(f"/rulesetdir {fc_args['ruleset']}")
         self.ws_client.send_message(f"/set aifill {fc_args['aifill']}")
+        # Try to gain admin access first, then disable fog of war
+        self.ws_client.send_message("/cmdlevel hack")
+        # Disable fog of war to get complete world data for reports
+        self.ws_client.send_message("/set fogofwar 0")
+        # Try alternative: reveal the map
+        self.ws_client.send_message("/revealmap")
         self.ws_client.send_message(f"/set endvictory {fc_args['endvictory']}")
         self.ws_client.send_message(f"/set advisor {fc_args['advisor']}")
         self.ws_client.send_message(f"/set victories {fc_args['victories']}")

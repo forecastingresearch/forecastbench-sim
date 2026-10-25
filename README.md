@@ -1,42 +1,176 @@
-# *CivRealm*: A Learning and Reasoning Odyssey in *Civilization* for Decision-Making Agents
+# CivBench
 
-<div align="center">
+A package to automatically create forecasting questions from AI-vs-AI FreeCiv games.
 
-[[Arxiv]](https://arxiv.org/abs/2401.10568)
-[[PDF]](https://arxiv.org/pdf/2401.10568.pdf)
-[[Docs]](https://bigai-ai.github.io/civrealm/)
-[[LLM Agents]](https://github.com/bigai-ai/civrealm-llm-baseline)
-[[Tensor Agent]](https://github.com/bigai-ai/civrealm-tensor-baseline)
+A fork of [CivRealm](https://github.com/bigai-ai/civrealm).
 
-[![Documentation Status](https://readthedocs.org/projects/openreview-py/badge/?version=latest)](<https://bigai-ai.github.io/civrealm>)
-[![PyPI](https://img.shields.io/pypi/v/civrealm)](https://pypi.org/project/civrealm/)
-[![PyPI - Python Version](https://img.shields.io/python/required-version-toml?tomlFilePath=https://raw.githubusercontent.com/bigai-ai/civrealm/dev/pyproject.toml)](https://pypi.org/project/civrealm/)
-[![PyPI Status](https://pepy.tech/badge/civrealm)](https://pepy.tech/project/civrealm)
-[![GitHub license](https://img.shields.io/github/license/bigai-ai/civrealm)](https://github.com/bigai-ai/civrealm/blob/main/LICENSE)
+## About This Fork
 
-</div>
+This project builds on the excellent [CivRealm](https://github.com/bigai-ai/civrealm) framework developed by BIGAI, which provides a Gymnasium-compatible environment for the open-source strategy game [Freeciv-web](https://github.com/freeciv/freeciv-web).
 
-CivRealm is an interactive environment for the open-source strategy game [Freeciv-web](https://github.com/freeciv/freeciv-web), based on [Freeciv](https://www.freeciv.org/), a Civilization-like game. Within CivRealm, we provide interfaces for two typical types of agents: tensor-based reinforcement learning agents (see [Tensor-agent Repo](https://github.com/bigai-ai/civrealm-tensor-baseline)) based on the [Gymnasium](https://gymnasium.farama.org/) API, and language-based agents (see [LLM-agent Repo](https://github.com/bigai-ai/civrealm-llm-baseline)) driven by language models.
+This package CivRealm with:
+- Configurable AI vs. AI gameplay
+- Specialized logging of world state, including:
+  - Economic metrics and trade analysis
+  - Demographic trends and population statistics
+  - Technology advancement tracking
+  - Historical event timelines
 
-We also provide a set of tools for training and evaluating agents, as well as a set of baselines for both types of agents. We hope that CivRealm can serve as a testbed for the development and evaluation of agents that can learn and reason in complex environments. Detailed usage of the CivRealm API can be found in the [Documentation](https://bigai-ai.github.io/civrealm).
+We use these data to create world reports and forecasting questions.
 
 ![Punic War](docs/assets/punic_war_base.jpg)
 
 # Contents
 
-- [About](#about)
+- [About This Fork](#about-this-fork)
+- [How It Works](#how-it-works)
+  - [Running AI Games with run_world.py](#running-ai-games-with-run_worldpy)
+  - [Data Production Pipeline](#data-production-pipeline)
+  - [World Report Generation](#world-report-generation)
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
 - [Testing the Installation](#testing-the-installation)
   - [Single player mode (against built-in AIs)](#single-player-mode-against-built-in-ais)
   - [Multiplayer mode](#multiplayer-mode)
 - [Trouble Shooting](#trouble-shooting)
-- [Our Paper](#check-out-our-paper)
+- [Original CivRealm Project](#original-civrealm-project)
 
-## About
+## How It Works
 
-CivRealm is developed based on [freeciv-bot](https://github.com/chris1869/freeciv-bot), dependent on [freeciv-web](<https://github.com/freeciv/freeciv-web>) and [FCIV-NET](<https://github.com/fciv-net/fciv-net>).
-In the future, CivRealm will be maintained by BIGAI.
+This fork introduces a complete pipeline for running AI games, generating detailed world reports, and creating forecastingq uestions. Here's how each component works:
+
+### Running AI Games with run_world.py
+
+The [run_world.py](run_world.py) script orchestrates fully-automated AI-vs-AI games and report generation:
+
+**Game Setup:**
+- Creates a competitive game with 5 AI players (all using Freeciv's built-in AI)
+- Configures game settings: max turns (default 500), AI difficulty, random starting positions
+- Connects as a player and toggles to AI control via `/aitoggle`
+- Uses a NoOpAgent that simply returns `None` each turn, letting Freeciv AI play
+
+**Recording During Gameplay:**
+- Enables `debug.record_action_and_observation` to capture game state every turn
+- Preserves all autosave files for complete historical data extraction
+- Records full game state as JSON files in `logs/recordings/username/`
+- Each turn produces: `turn_N_step_0_state.json` containing complete world state
+
+**Automatic Report Generation:**
+- After game completion, automatically generates world reports
+- Analyzes all recorded turns (0 to MAX_TURNS)
+- Produces HTML reports with visualizations
+- Saves to `reports/latest_game/`
+
+**Usage:**
+```bash
+python run_world.py
+```
+
+This single command:
+1. Runs a complete 500-turn AI game (takes ~30-60 minutes)
+2. Records all game state data
+3. Generates comprehensive world reports
+4. Opens HTML report in your browser
+
+### Data Production Pipeline
+
+The data production system captures complete game state at every turn through multiple sources:
+
+**1. JSON State Recordings**
+- **Location:** `logs/recordings/{username}/turn_N_step_M_state.json`
+- **Content:** Full game state including:
+  - All player information (gold, science rate, government, etc.)
+  - Complete unit roster with positions and status
+  - City data (population, production, improvements)
+  - Map tiles and terrain
+  - Technology tree progress
+  - Diplomatic relationships
+- **Collection:** Automatic during gameplay when `debug.record_action_and_observation = True`
+
+**2. Savegame Files**
+- **Location:** Preserved autosave files in savegame directory
+- **Content:** Complete Freeciv game state in binary format
+- **Usage:** Parsed by [savegame_parser.py](src/civrealm/world_reports/utils/savegame_parser.py) to extract:
+  - Production queues and city improvements
+  - Complete civilization names and nation data
+  - Historical data not available in JSON snapshots
+- **Collection:** Automatic autosaves every turn when `delete_save = False`
+
+**3. Ruleset Metadata**
+- **Location:** `logs/recordings/{username}/ruleset.json`
+- **Content:** Game rules and nation definitions
+- **Usage:** Maps nation IDs to civilization names
+
+**Data Loader ([data_loader.py](src/civrealm/world_reports/data_loader.py)):**
+- Indexes all state files by turn number
+- Provides efficient access: `get_state(turn)`, `get_states_range(start, end)`
+- Caches ruleset data for fast lookups
+- Validates data availability before report generation
+
+### World Report Generation
+
+Reports are produced through a two-stage pipeline implemented in [report_generator.py](src/civrealm/world_reports/report_generator.py):
+
+**Stage 1: Data Extraction (Python → JSON)**
+
+The [MetricsCollector](src/civrealm/world_reports/extractors/metrics_collector.py) processes game recordings:
+
+```python
+# Load all states from turn 0 to target turn
+states = data_loader.get_states_range(0, target_turn)
+
+# Extract metrics across all categories
+collector = MetricsCollector()
+data = collector.collect_all(states, config, data_loader)
+
+# Save intermediate JSON for reproducibility
+write_world_data(data, 'turn_500_data.json')
+```
+
+**What gets extracted:**
+- **Overview Metrics:** Player rankings, territory control, victory conditions
+- **Economic Data:** GDP, production, trade routes, treasury
+- **Demographics:** Population, growth rates, city distribution
+- **Technology:** Research progress, tech tree advancement
+- **Historical Events:** Wars, alliances, city founding, tech discoveries
+
+**Stage 2: Rendering (JSON → HTML)**
+
+The [HTMLRenderer](src/civrealm/world_reports/renderers/html.py) transforms extracted data into reports:
+
+**Report Components:**
+- **Charts:** Population trends, economic growth, tech progress
+  - Generated by [graph_generator.py](src/civrealm/world_reports/renderers/graph_generator.py)
+  - Uses matplotlib with seaborn styling
+- **Territory Maps:** Color-coded civilization territories
+  - Created by [visualizations.py](src/civrealm/world_reports/utils/visualizations.py)
+  - Shows borders and city locations
+- **Statistical Tables:** Rankings, comparative metrics, detailed breakdowns
+- **Event Timeline:** Chronological history of significant game events
+  - Detected by [event_detector.py](src/civrealm/world_reports/utils/event_detector.py)
+
+**Configuration ([config.py](src/civrealm/world_reports/config.py)):**
+
+```python
+report_config = ReportConfig(
+    recording_dir='logs/recordings/myagent2/',
+    output_dir='reports/latest_game/',
+    report_turns=[30, 100, 500],  # Generate reports at turn 30, 100, and 500
+    enabled_sections=['overview', 'historical_events', 'economics',
+                     'demographics', 'technology'],
+    formats=['html'],
+    plot_style='seaborn',
+    dpi=150
+)
+
+generator = ReportGenerator(report_config)
+generator.generate_reports()
+```
+
+**Output:**
+- `turn_500_data.json` - Complete extracted metrics (intermediate format)
+- `turn_500_report.html` - HTML report
+- Embedded PNG charts and visualizations
 
 ## Prerequisites
 
@@ -48,43 +182,14 @@ After starting the Freeciv-web service, you can connect to the Freeciv-web serve
 
 ## Installation
 
-You can install the stable version of CivRealm by:
+Clone this repository and install:
 
 ```bash
-pip install civrealm
-```
-
-To install the latest version from the source code or contribute to the project, please follow the instructions below:
-
-```bash
-git clone git@github.com:bigai-ai/civrealm.git && cd civrealm
+git clone <your-fork-url> && cd civrealm
 pip install -e .
 ```
 
-<!-- 
-### Update the freeciv-web image
-
-Start the freeciv-web docker:
-
-```bash
-cd freeciv-web
-docker compose up -d
-```
-
-Activate the civrealm virtual environment, and update the freeciv-web image:
-
-```bash
-update_freeciv_web_docker
-```
-
-Restart the freeciv-web container so that the change takes effect
-
-```bash
-cd freeciv-web
-docker compose down
-docker compose up -d
-```
--->
+This installs CivRealm and all dependencies needed for world report generation.
 
 ## Testing the Installation
 
@@ -134,49 +239,6 @@ test_civrealm --username=myagent1 --client_port=6001
 
 As a standard, the official docker image from the [official repository](https://github.com/freeciv/freeciv-web) will be pulled. If you want to create a custom freeciv server (e.g., different rulesets, customizations, etc.) you can use `build_freeciv_server` to create a custom docker image or run a separate image in parallel. In this case, you might need to adapt src/init_server.py -->
 
-## Trouble Shooting
+## Original CivRealm Project
 
-The following are some common issues that you may encounter when running the code. If you encounter any other issues, please feel free to open an issue.
-
-- If firefox keeps loading the page, please try to add the following line to `/etc/hosts`:
-
-    ```bash
-    127.0.0.1 maxcdn.bootstrapcdn.com
-    127.0.0.1 cdn.webglstats.com
-    ```
-
-- If you see the following error when running `test_civrealm`,  please see [this solution](https://stackoverflow.com/questions/72405117/selenium-geckodriver-profile-missing-your-firefox-profile-cannot-be-loaded). If this does not solve the problem, please check `geckodriver.log` for more information.
-
-    ```bash
-    selenium.common.exceptions.WebDriverException: Message: Process unexpectedly closed with status 1
-    ```
-
-    One potential solution on Ubuntu 22.04 is:
-
-    ```bash
-    sudo apt install firefox-geckodriver
-    ln -s /snap/bin/firefox.geckodriver geckodriver
-    ```
-
-- If you see the following error when setting `take_screenshot: True`, it is caused by snap version of Firefox. Please try [System Firefox installation](https://support.mozilla.org/en-US/kb/install-firefox-linux#w_install-firefox-from-mozilla-builds-for-advanced-users).
-
-  ```bash
-  Your Firefox profile cannot be loaded. 
-  It may be missing or inaccessible.
-  ```
-
-- If the screenshot is not centered on the location of your first unit, it is because you are using multiple displays. Please ensure the Firefox browser for screenshot pops up on your primary display.
-
-## Check out our paper
-
-Our paper is available on [Arxiv](https://arxiv.org/abs/2401.10568). If you find our code or databases useful, please consider citing us:
-
-```bibtex
-@inproceedings{qi2024civrealm,
-  title     = {CivRealm: A Learning and Reasoning Odyssey in Civilization for Decision-Making Agents},
-  author    = {Siyuan Qi and Shuo Chen and Yexin Li and Xiangyu Kong and Junqi Wang and Bangcheng Yang and Pring Wong and Yifan Zhong and Xiaoyuan Zhang and Zhaowei Zhang and Nian Liu and Wei Wang and Yaodong Yang and Song-Chun Zhu},
-  booktitle = {International Conference on Learning Representations},
-  year      = {2024},
-  url       = {https://openreview.net/forum?id=UBVNwD3hPN}
-}
-```
+This fork builds upon [CivRealm](https://github.com/bigai-ai/civrealm), developed by BIGAI. CivRealm is based on [freeciv-bot](https://github.com/chris1869/freeciv-bot) and integrates with [freeciv-web](https://github.com/freeciv/freeciv-web) and [FCIV-NET](https://github.com/fciv-net/fciv-net).
