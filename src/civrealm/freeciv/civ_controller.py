@@ -121,7 +121,8 @@ class CivController(CivPropController):
             self.client_port = port
 
         self.score_log_url = f'http://{self.host}:{fc_web_args["port"]}/data/scorelogs/score-{self.client_port}.log'
-        self.delete_save = True
+        # Note: delete_save is now controlled externally (e.g., in run_world.py)
+        # and should not be reset here
         self.game_saving_time_range = []
         self.game_is_over = False
         self.game_is_end = False
@@ -462,7 +463,9 @@ class CivController(CivPropController):
                   "turn": self.rule_ctrl.game_info['turn']}
         self.ws_client.send_request(packet)
         self.turn_manager.end_turn()
-        assert self.ws_client.begin_turn_timeout_handle == None
+        # In observer mode, timing may differ - cancel existing timeout if present
+        if self.ws_client.begin_turn_timeout_handle is not None:
+            self.ws_client.get_ioloop().remove_timeout(self.ws_client.begin_turn_timeout_handle)
         # Add begin_turn timeout handler
         self.ws_client.begin_turn_timeout_handle = self.ws_client.get_ioloop().call_later(
             fc_args['begin_turn_timeout'], self.begin_turn_timeout_callback)
@@ -978,8 +981,8 @@ class CivController(CivPropController):
         #     self.delete_save = False
         if fc_args['debug.autosave'] and self.delete_save:
             self.delete_save_game()
-        # Set delete_save for the next turn
-        self.delete_save = True
+        # Note: delete_save is controlled externally (e.g., in run_world.py)
+        # and should not be reset here to allow preserving all savegames
 
         self.turn_manager.turn += 1
         # if self.client_port == 6301:

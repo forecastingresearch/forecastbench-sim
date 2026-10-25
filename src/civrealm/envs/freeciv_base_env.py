@@ -107,6 +107,23 @@ class FreecivBaseEnv(gymnasium.Env, utils.EzPickle):
         self._record_to_file('state', observation, lambda x: x.get_bitvector_in_ascii()
                              if isinstance(x, BitVector) else x.tolist())
 
+    def _record_ruleset(self):
+        """Save ruleset data (nations, etc.) to the recording directory"""
+        ruleset_data = {
+            'nations': {}
+        }
+
+        # Get nations from the ruleset controller
+        if hasattr(self.civ_controller, 'rule_ctrl') and hasattr(self.civ_controller.rule_ctrl, 'nations'):
+            # Convert OrderedDict to regular dict with string keys for JSON serialization
+            for nation_id, nation_data in self.civ_controller.rule_ctrl.nations.items():
+                ruleset_data['nations'][str(nation_id)] = nation_data
+
+        # Save to recording directory
+        ruleset_file = os.path.join(self.recording_dir, 'ruleset.json')
+        with open(ruleset_file, 'w') as f:
+            json.dump(ruleset_data, f, indent=2, sort_keys=True)
+
     def _record_action(self, available_actions, action):
         def encode_action(x):
             if hasattr(x, 'encode_to_json'):
@@ -202,6 +219,10 @@ class FreecivBaseEnv(gymnasium.Env, utils.EzPickle):
         # Log in and get the first info and observation
         self.civ_controller.init_network()
         info, observation = self._get_info_and_observation()
+
+        # Save ruleset data (nations, etc.) for world reports
+        self._record_ruleset()
+
         # Log in success, set running as True
         self.running = True
         return observation, info
