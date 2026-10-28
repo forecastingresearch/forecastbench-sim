@@ -10,3 +10,5 @@ __pycache__/
 *.pkl
 *.tar
 *.tar.zst
+# the run folders, a symlink to data/freeciv/fbsim_v3/runs (scripts/setup_worktree.sh)
+/fleet/runs
