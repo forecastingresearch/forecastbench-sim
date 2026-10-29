@@ -58,7 +58,8 @@ if [ "${1:-}" = "__lane" ]; then END_TURN="${3:-${HZ##*,}}"; lane "$2"; exit 0; 
 
 # top up lanes to N_LANES (never kill running ones)
 alive=0; : > $F/lanes.pids.new
-if [ -f $F/lanes.pids ]; then while read -r n p; do kill -0 "$p" 2>/dev/null && { echo "$n $p" >> $F/lanes.pids.new; alive=$((alive+1)); }; done < $F/lanes.pids; fi
+# a lane is alive only if its pid still runs that lane: kill -0 also succeeds on an exited lane left as a zombie
+if [ -f $F/lanes.pids ]; then while read -r n p; do ps -o args= -p "$p" 2>/dev/null | grep -q "worker.sh __lane $n " && { echo "$n $p" >> $F/lanes.pids.new; alive=$((alive+1)); }; done < $F/lanes.pids; fi
 mv $F/lanes.pids.new $F/lanes.pids
 used="$(awk '{print $1}' $F/lanes.pids)"
 i=0; started=0
