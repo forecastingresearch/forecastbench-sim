@@ -75,7 +75,8 @@ try:
 except Exception: pass
 ' 2>/dev/null)"
   if [ -n "$a" ]; then
-    { grep -v "^$id	" "$STATE/addr_cache.tsv" 2>/dev/null; printf '%s\t%s\n' "$id" "$a"; } > "$STATE/.addr_cache.tmp" && mv "$STATE/.addr_cache.tmp" "$STATE/addr_cache.tsv"
+    local tmp; tmp="$(mktemp "$STATE/.addr_cache.XXXXXX")"   # own temp file: parallel callers raced on a shared one
+    { grep -v "^$id	" "$STATE/addr_cache.tsv" 2>/dev/null; printf '%s\t%s\n' "$id" "$a"; } > "$tmp" && mv "$tmp" "$STATE/addr_cache.tsv" || rm -f "$tmp"
     echo "$a"
   else
     grep "^$id	" "$STATE/addr_cache.tsv" 2>/dev/null | cut -f2
