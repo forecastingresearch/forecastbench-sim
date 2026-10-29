@@ -26,7 +26,10 @@ rsync -az -e "$RSH" "$HERE/on_pod/" "root@$IP:/workspace/fleet/" || exit 1
 rsync -az -e "$RSH" "$RUNDIR/run.env" "root@$IP:/workspace/fleet/run.env" || exit 1   # the pod scripts source it
 [ -f "$ARCHKEY" ] && rsync -az -e "$RSH" "$ARCHKEY" "root@$IP:/workspace/fleet/archive_key" && S 'chmod 600 /workspace/fleet/archive_key'
 echo "== pod_setup"
-S 'cd /workspace/civbench && bash pod_setup.sh > /workspace/fleet/logs/pod_setup.log 2>&1; rc=$?; tail -3 /workspace/fleet/logs/pod_setup.log; echo pod_setup_rc=$rc'
+# detached, with its exit code in a file, so a dropped ssh session cannot fail a healthy pod; polled for up to 40 min
+S 'rm -f /workspace/fleet/logs/pod_setup.rc; cd /workspace/civbench && nohup setsid bash -c "bash pod_setup.sh > /workspace/fleet/logs/pod_setup.log 2>&1; echo \$? > /workspace/fleet/logs/pod_setup.rc" < /dev/null > /dev/null 2>&1 &'
+rc=""; for i in $(seq 1 160); do rc="$(S 'cat /workspace/fleet/logs/pod_setup.rc 2>/dev/null' 2>/dev/null)"; [ -n "$rc" ] && break; sleep 15; done
+S 'tail -3 /workspace/fleet/logs/pod_setup.log'; echo "pod_setup_rc=${rc:-timeout}"
 if ls "$STATE/anchors"/seed*/savegames/*_T${FBSIM_FORK_TURN}_* >/dev/null 2>&1; then
   echo "== place anchors"
   for d in "$STATE"/anchors/seed*; do s=$(basename "$d"); S "mkdir -p /workspace/civbench/data/freeciv/logs/recordings/$s/savegames"; rsync -az -e "$RSH" "$d/savegames/" "root@$IP:/workspace/civbench/data/freeciv/logs/recordings/$s/savegames/"; done
