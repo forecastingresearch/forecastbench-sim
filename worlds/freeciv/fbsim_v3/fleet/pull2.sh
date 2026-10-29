@@ -11,10 +11,11 @@ read -r IP PORT <<<"$(bash "$HERE/rp.sh" addr "$ID")"; [ -n "$PORT" ] || { echo 
 RSH="ssh -i '$SSHKEY' -p $PORT -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o BatchMode=yes -o LogLevel=ERROR"
 mkdir -p "$DEST" "$STATE"; L="$STATE/pull_files.txt"
 echo "$(date -u +%FT%TZ) listing on archive"
-podsh "$PORT" "root@$IP" "cd '$VOL' && "'find . \( -path "*/anchors/*" -o -path "*/queue/*" -o -path "*/logs/*" \) -type f -print; find . -maxdepth 5 -type f -not -path "./_excluded/*" \( -name "*_data.json.gz" -o -name "*_sgtables.json.gz" -o -name "TRUNCATED" \) -not -path "*/anchors/*" -print; find . -maxdepth 6 -type f -not -path "./_excluded/*" -path "*/forks/*/savegames/*" \( '"$HS"' \) -print' > "$L"
-n=$(wc -l < "$L"); echo "$(date -u +%FT%TZ) $n files listed"
-rm -f "$STATE/pull_chunk_"*; split -l $(( n / PAR + 1 )) "$L" "$STATE/pull_chunk_"
+podsh "$PORT" "root@$IP" "cd '$VOL' && "'find . \( -path "*/anchors/*" -o -path "*/queue/*" -o -path "*/logs/*" \) -type f -print; find . -maxdepth 5 -type f -not -path "./_excluded/*" \( -name "*_data.json.gz" -o -name "*_sgtables.json.gz" -o -name "TRUNCATED" \) -not -path "*/anchors/*" -print; find . -maxdepth 6 -type f -not -path "./_excluded/*" -path "*/forks/*/savegames/*" \( '"$HS"' \) -print' > "$L" || { echo "listing on the archive failed"; exit 1; }
+n=$(wc -l < "$L"); echo "$(date -u +%FT%TZ) $n files listed"; [ "$n" -gt 0 ] || { echo "nothing to pull"; exit 1; }
+rm -f "$STATE/pull_chunk_"*; pids=(); split -l $(( n / PAR + 1 )) "$L" "$STATE/pull_chunk_"
 for c in "$STATE"/pull_chunk_*; do case "$c" in *.log) continue;; esac
-  rsync -a --partial --timeout=300 --files-from="$c" -e "$RSH" "root@$IP:$VOL/" "$DEST/" > "$c.log" 2>&1 &
-done; wait
+  rsync -a --partial --timeout=300 --files-from="$c" -e "$RSH" "root@$IP:$VOL/" "$DEST/" > "$c.log" 2>&1 & pids+=($!)
+done; fail=0; for p in "${pids[@]}"; do wait "$p" || fail=1; done
 echo "$(date -u +%FT%TZ) pull done -> $DEST"; du -sh "$DEST"; cat "$STATE"/pull_chunk_*.log | grep -v "^$" | head -n 5
+[ "$fail" = 0 ] || { echo "a pull chunk failed (see $STATE/pull_chunk_*.log)"; exit 1; }
