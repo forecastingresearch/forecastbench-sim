@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""consolidate_v4.py <corpus_root> <out_dir> [--workers N] [--anchors 7001 ...]
+"""consolidate_v4.py <corpus_root> <out_dir> [--workers N] [--anchors 7001 ...] [--n-main N] [--run NAME]
+(--run or FBSIM_RUN: folders default to the run's raw/ and consol_v4/, --n-main to its FBSIM_N_PLAYERS)
 
 fbsim v3 corpus (2026-09-02 rerun) -> per-world pickles in the mine_v3.py schema, with every
 channel taken from the server savegames (observer-independent):
@@ -202,9 +203,13 @@ def do_world(args):
     return world, n_r, int(halfA.sum()), int(halfB.sum()), n_t, int(truncated.sum()), dict(checks), bad
 
 if __name__ == '__main__':
-    ap = argparse.ArgumentParser(); ap.add_argument('root'); ap.add_argument('out')
+    sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')); import runcfg
+    RUN = runcfg.pop_run()
+    ap = argparse.ArgumentParser()
+    ap.add_argument('root', nargs='?' if RUN.dir else None, default=str(RUN.dir / 'raw') if RUN.dir else None)
+    ap.add_argument('out', nargs='?' if RUN.dir else None, default=str(RUN.dir / 'consol_v4') if RUN.dir else None)
     ap.add_argument('--workers', type=int, default=4); ap.add_argument('--anchors', nargs='*', type=int)
-    ap.add_argument('--n-main', type=int, default=N_MAIN, help='number of main (non-barbarian) players in every world')
+    ap.add_argument('--n-main', type=int, default=RUN.n_players, help='number of main (non-barbarian) players in every world')
     ap.add_argument('--ruleset', default=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'state', 'ruleset.json'))
     a = ap.parse_args(); os.makedirs(a.out, exist_ok=True)
     wonders = wonder_set(a.ruleset)
