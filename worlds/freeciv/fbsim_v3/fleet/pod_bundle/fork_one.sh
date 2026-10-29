@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# fork_one.sh ANCHOR_SEED FORK_NAME RNG_SEED [END_TURN] — run ONE t60 fork of
+# fork_one.sh ANCHOR_SEED FORK_NAME RNG_SEED [END_TURN] — run ONE fork (at FBSIM_FORK_TURN, default 60) of
 # the anchor world via the FIXED fork path, serialize it with savegame
 # coverage required, and publish data + ALL per-turn saves under
 # ${FBSIM_OUT_DIR}/forks/<FORK_NAME>/.
@@ -22,7 +22,7 @@ ANCHOR="${1:?usage: fork_one.sh ANCHOR_SEED FORK_NAME RNG_SEED [END_TURN]}"
 NAME="${2:?fork name (no underscores)}"
 RSEED="${3:?rng seed}"
 END_TURN="${4:-90}"
-FORK_TURN=60
+FORK_TURN="${FBSIM_FORK_TURN:-60}"
 RUN_TIMEOUT_S="${FBSIM_FORK_TIMEOUT_S:-1800}"
 
 case "${NAME}" in (*_*) echo "fork name must not contain underscores"; exit 2;; esac

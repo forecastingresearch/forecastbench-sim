@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
-# worker.sh N_LANES [END_TURN=210] — start (or top up to) N lanes over the local queue.
+# worker.sh N_LANES [END_TURN] — start (or top up to) N lanes over the local queue. END_TURN defaults to the last
+# horizon in /workspace/fleet/run.env (210 in the paper), whose variables (FBSIM_FORK_TURN, ...) reach fork_one.sh.
 # Queue: /workspace/fleet/queue/{todo,inprog,done,failed}; task file "a<anchor>-rng<rng>" containing "<anchor> <rng>".
 # Claim = atomic mv todo -> inprog. Success -> done/<task> (timestamp host lane secs). Failure -> failed/<task>.<n>
 # with the log tail; the task is re-queued once (second failure stays in failed/).
 set -uo pipefail
-if [ "${1:-}" = "__lane" ]; then N_LANES=0; else N_LANES="${1:?N_LANES}"; fi; END_TURN="${2:-210}"
+set -a; [ -f /workspace/fleet/run.env ] && . /workspace/fleet/run.env; set +a
+HZ="${FBSIM_HORIZONS:-90,120,150,180,210}"
+if [ "${1:-}" = "__lane" ]; then N_LANES=0; else N_LANES="${1:?N_LANES}"; fi; END_TURN="${2:-${HZ##*,}}"
 F=/workspace/fleet; Q=$F/queue; B=/workspace/civbench; OUT=/workspace/out
 mkdir -p $Q/todo $Q/inprog $Q/done $Q/failed $F/logs $OUT/logs
 HOST="$(cat /tmp/f3_podid 2>/dev/null || hostname)"
@@ -51,7 +54,7 @@ lane() {
   done
 }
 
-if [ "${1:-}" = "__lane" ]; then END_TURN="${3:-210}"; lane "$2"; exit 0; fi
+if [ "${1:-}" = "__lane" ]; then END_TURN="${3:-${HZ##*,}}"; lane "$2"; exit 0; fi
 
 # top up lanes to N_LANES (never kill running ones)
 alive=0; : > $F/lanes.pids.new
