@@ -11,7 +11,7 @@ for i in $(seq 1 60); do a="$(bash "$HERE/rp.sh" addr "$ID")"; [ -n "$a" ] && br
 [ -n "${a:-}" ] || { echo "no address after 15 min"; exit 1; }
 read -r IP PORT <<<"$a"; echo "addr $IP:$PORT"
 S() { ssh -i "$SSHKEY" -p "$PORT" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ConnectTimeout=10 -o BatchMode=yes -o LogLevel=ERROR "root@$IP" "$@"; }
-for i in $(seq 1 60); do S true 2>/dev/null && break; sleep 15; done
+for i in $(seq 1 $(( ${FBSIM_SSH_WAIT_S:-900} / 15 ))); do S true 2>/dev/null && break; sleep 15; done   # FBSIM_SSH_WAIT_S: how long to wait for ssh
 S true || { echo "ssh never came up"; exit 1; }
 echo "== deadman + services"
 S 'pgrep -af "fleet/deadman[.]sh" | head -1; test -s /tmp/f3_apikey && echo apikey_staged; nproc; free -g | sed -n 2p; df -h /workspace | tail -1'

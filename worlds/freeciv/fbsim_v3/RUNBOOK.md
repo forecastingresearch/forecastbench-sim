@@ -124,7 +124,8 @@ while that pod is live. Refused once the replay queue exists.
 2. Workers `fbsim3-<run>-w01` … `wNN`. Each deletes itself after `--deadman` hours whatever its state (default 48), so
    choose that above the expected run time.
 3. Deals the queue: kept anchors × `FBSIM_RNG`, in proportion to vCPUs, into `fleet_state/queue/<pod>/todo/`.
-4. Brings the workers up in parallel (logs: `fleet_state/bringup_<pod>.log`).
+4. Brings the workers up in parallel (logs: `fleet_state/bringup_<pod>.log`). A worker whose ssh does not answer within
+   6 minutes (a bad host) is deleted and replaced, up to three pods, and its share of the queue moves to the new pod.
 5. Launches the lanes (3/4 of the vCPUs per worker). Each worker syncs `/workspace/out/` to its archive folder every
    5 minutes. Prints the fleet status at the end. A launch that ends without lanes prints an `ERROR:` line, keeps its
    log as `fleet_state/failed_launch_<pod>_<time>.log` and is retried, up to `--max-retries` times per worker

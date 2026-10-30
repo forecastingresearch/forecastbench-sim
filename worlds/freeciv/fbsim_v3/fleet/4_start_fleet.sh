@@ -53,7 +53,23 @@ fi
 
 # ---- bring up (parallel) and launch
 say "bringing up ${#IDS[@]} workers in parallel (logs: $S/bringup_<id>.log)"
-for id in "${IDS[@]}"; do ( bringup_once "$id" ) & done; wait
+# a worker whose ssh never answers within 6 minutes (a bad host) is deleted and replaced, up to 3 pods; its queue slice,
+# not yet shipped, moves to the new pod
+bring_worker() {   # SHORT ID — writes the ID of the pod that came up (or the last one tried) to $S/.worker_SHORT
+  local short="$1" id="$2" k new
+  for k in 1 2 3; do
+    ( FBSIM_SSH_WAIT_S=360 bringup_once "$id" ) && break
+    grep -q "ssh never came up\|no address" "$S/bringup_$id.log" 2>/dev/null && [ "$k" -lt 3 ] || break
+    say "worker $id never answered on ssh; deleting it and creating a new $POD_PREFIX$short"
+    ./rp.sh delete "$id" > /dev/null
+    new="$(create_pod "$short" "$FBSIM_POD_FLAVOR" "$FBSIM_POD_VCPU" "$FBSIM_POD_CLOUD" --deadman "$DEADMAN")"
+    [ -n "$new" ] || break
+    mv "$S/queue/$id" "$S/queue/$new"; id="$new"
+  done
+  echo "$id" > "$S/.worker_$short"
+}
+for i in "${!IDS[@]}"; do bring_worker "$(printf 'w%02d' $((i + 1)))" "${IDS[$i]}" & done; wait
+for i in "${!IDS[@]}"; do IDS[$i]="$(cat "$S/.worker_$(printf 'w%02d' $((i + 1)))")"; done
 for id in "${IDS[@]}"; do grep -q "pod_setup_rc=0" "$STATE/bringup_$id.log" 2>/dev/null || die "worker $id did not come up; rerun this script after checking its log"; done
 say "launching lanes"
 while :; do
