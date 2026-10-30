@@ -4,7 +4,7 @@ unbatched natural-conditional turn-1 rows, which take precedence as p1 and stand
 
 score_v1.py — scorer for the draw v1 sets (one rule per set, no per-family special cases).
 
-  uv run python score_v1.py RESULTS_DIR [RESULTS_DIR ...] --out DIR [--boot 1000] [--seed 0] [--impute-binary 0.5]
+  uv run python score_v1.py RESULTS_DIR [RESULTS_DIR ...] --out DIR [--boot 1000] [--seed 0] [--impute-binary none|P]
 
 Reads every results.jsonl under the given dirs (rows from elicit_v1.py; the last row per (model, item, arm) wins),
 joins on (world, item id) — never on question text — and writes:
@@ -30,8 +30,9 @@ Rules
                                          excess_t2 = (p2 - p_given)^2 (headline), stay = (p1 - p_given)^2 (no-update baseline),
                                          gain = stay - excess_t2; nonews: excess_nonews = (p_nn - p)^2, drift = p_nn - p1;
                                          single: excess_single = (p_s - p_given)^2.  move = p2 - p1 vs target = p_given - p.
-Missing / unparsed answers: binary p is imputed (default 0.5, `--impute-binary none` to drop instead); continuous and natcond
-rows are dropped and the parse rate is reported alongside every aggregate.
+Missing / unparsed answers: binary answers are left out of the scores with a run (`--impute-binary none`, the default), and
+scored as p = 0.5 without one (the paper's rule; `--impute-binary P` sets it); continuous and natcond rows are always left
+out. Every question asked keeps its row, so the parse rate is reported alongside every aggregate.
 """
 import argparse, csv, glob, json, math, os, sys, collections
 import numpy as np
@@ -82,7 +83,8 @@ def score_items(R, S, C, N, impute):
         for iid, it in S.items():
             r = R.get((m, iid, 't1')) or (R.get((m, iid, 't1nc')) if it['set'] == 'extra' else None); q = it['qAll']; p = r.get('value') if r else None; parsed = p is not None   # v2: the extra questions exist only unbatched (t1nc); a bank item with no batched row stays missing
             if not parsed:
-                if impute is None: continue
+                if impute is None:   # kept unscored, so the parse rate counts it
+                    rows.append(dict(model=m, set=it['set'], item=iid, arm='t1', world=it['world'], family=it['family'], T=it['T'], parsed=0, q=q)); continue
                 p = impute
             ll, kl = bits(p, q)
             rows.append(dict(model=m, set=it['set'], item=iid, arm='t1', world=it['world'], family=it['family'], T=it['T'], parsed=int(parsed), q=q, p=p,
@@ -158,8 +160,8 @@ def summarise(rows, B, seed):
 
 def fmt(x, d=4): return '' if x is None or (isinstance(x, float) and math.isnan(x)) else (f'{x:.{d}f}' if isinstance(x, float) else str(x))
 
-def write_md(summary, path):
-    L = ['# Scores (draw v1, all-1000 truth)', '']
+def write_md(summary, path, impute):
+    L = ['# Scores (draw v1, all-1000 truth)', ''] + (['Unparsed binary answers are left out of the scores; the parse column is the share answered.', ''] if impute is None else [])
     models = sorted({r['model'] for r in summary})
     for s, label in [('bank', 'Binary bank 750 — excess Brier (p−q)²'), ('tails', 'Tails 300 — excess bits KL(q‖p)'), ('mirrors', 'Mirrors 50 — excess Brier'),
                      ('continuous', 'Continuous 300 — nCRPS_global = CRPS / fixed per-family constant (Fabio-style); excess variants alongside'), ('natcond', 'Natural conditionals 400 — turn-2 excess Brier vs p(Y|X)'), ('extra', 'Natcond extra turn-1 questions 124 — excess Brier')]:
@@ -194,7 +196,7 @@ def write_md(summary, path):
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument('results', nargs='+'); ap.add_argument('--out', required=RUN.dir is None)
     ap.add_argument('--boot', type=int, default=1000); ap.add_argument('--seed', type=int, default=0)
-    ap.add_argument('--impute-binary', default='0.5', help='probability substituted for an unparsed binary answer, or "none" to drop')
+    ap.add_argument('--impute-binary', default='none' if RUN.name else '0.5', help='probability substituted for an unparsed binary answer, or "none" to leave it out (default with a run; 0.5 without)')
     ap.add_argument('--sets-dir', default=SETS); a = ap.parse_args()
     a.out = a.out or os.path.join(RUN.dir, 'scores', os.path.basename(os.path.normpath(a.results[0])))
     impute = None if a.impute_binary == 'none' else float(a.impute_binary)
@@ -207,7 +209,7 @@ def main():
     keys = sorted({k for r in summary for k in r}, key=lambda k: (k not in ('model', 'set', 'group', 'value', 'n', 'n_parsed', 'parse_rate'), k))
     with open(f'{a.out}/score_summary.csv', 'w', newline='') as f:
         w = csv.DictWriter(f, fieldnames=keys); w.writeheader(); w.writerows(summary)
-    write_md(summary, f'{a.out}/SCORES.md')
+    write_md(summary, f'{a.out}/SCORES.md', impute)
     for r in summary:
         if r['group'] == 'all': print(f"{r['model']:40s} {r['set']:11s} n={r['n']:4d} parse={r['parse_rate']:.3f} {HEADLINE[r['set']]}={fmt(r.get(HEADLINE[r['set']]))} [{fmt(r.get(HEADLINE[r['set']] + '_lo'))}, {fmt(r.get(HEADLINE[r['set']] + '_hi'))}]")
     print('written', a.out)
