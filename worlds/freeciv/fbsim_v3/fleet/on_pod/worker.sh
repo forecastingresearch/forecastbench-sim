@@ -36,7 +36,7 @@ lane() {
     if [ "${free:-0}" -lt 2500 ]; then echo "$(date -u +%FT%TZ) lane$N DISK LOW ${free}MB; pausing"; mv "$Q/inprog/$t.lane$N" "$Q/todo/$t"; sleep 300; continue; fi
     echo "$(date -u +%FT%TZ) lane$N START $t attempt $attempt"
     t0=$(date +%s)
-    FBSIM_OUT_DIR="$OUT/a$A" FBSIM_FORK_TIMEOUT_S=1800 timeout -k 60 2100 bash "$B/fork_one.sh" "$A" "rng$R" "$R" "$END_TURN" > "$log" 2>&1
+    FBSIM_OUT_DIR="$OUT/a$A" FBSIM_FORK_TIMEOUT_S=3600 timeout -k 60 3900 bash "$B/fork_one.sh" "$A" "rng$R" "$R" "$END_TURN" > "$log" 2>&1
     rc=$?
     t1=$(date +%s)
     if [ "$rc" -eq 0 ] && [ -s "$OUT/a$A/forks/rng$R/seed${A}forkrng${R}_data.json.gz" ]; then
