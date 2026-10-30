@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# switch_anchor.sh OLD NEW — drop OLD's remaining todo tasks on every worker, place NEW's T60 save, deal NEW's forks (FBSIM_RNG, default 5001-6000).
+# switch_anchor.sh OLD NEW — drop OLD's remaining todo tasks on every worker, place NEW's fork-turn save, deal NEW's forks (the run's FBSIM_RNG).
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"; cd "$HERE"; OLD="$1"; NEW="$2"; 
 . "$HERE/paths.sh"
 [ -s "$STATE"/archive_pods.txt ] || { echo "no archive pods in $STATE/archive_pods.txt"; exit 1; }
-mkdir -p "$STATE/anchors/seed$NEW/savegames"; cp "$STATE"/anchors_raw/seed$NEW/savegames/seed${NEW}_T60_*.sav.xz "$STATE/anchors/seed$NEW/savegames/"
+mkdir -p "$STATE/anchors/seed$NEW/savegames"; cp "$STATE"/anchors_raw/seed$NEW/savegames/seed${NEW}_T${FBSIM_FORK_TURN}_*.sav.xz "$STATE/anchors/seed$NEW/savegames/"
 pods=$(awk -F'\t' 'NR==FNR{arch[$1]=1; next} $1!~/^#/ && $9!="deleted" && !($2 in arch){printf "%s:%s ", $2, $5}' "$STATE"/archive_pods.txt "$STATE"/pods.tsv)
-python3 ../draw/make_queue.py --anchors "$NEW" --rng "${FBSIM_RNG:-5001-6000}" --pods $pods --out "$STATE/queue_$NEW" | tail -n 1
+python3 ../draw/make_queue.py --anchors "$NEW" --rng "$FBSIM_RNG" --pods $pods --out "$STATE/queue_$NEW" | tail -n 1
 for spec in $pods; do id="${spec%%:*}"
   ( read -r IP PORT <<<"$(bash rp.sh addr "$id")"
     RSH="ssh -i '$SSHKEY' -p $PORT -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o BatchMode=yes -o LogLevel=ERROR"

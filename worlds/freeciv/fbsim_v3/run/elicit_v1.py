@@ -25,7 +25,10 @@ from concurrent.futures import ThreadPoolExecutor
 HERE = os.path.dirname(os.path.abspath(__file__))
 # Question sets, world reports and model panels: FBSIM_FREECIV_V3_DATA, a folder laid out like this one
 # (sets/draw_v1/, reports/, run/models_v*.csv), e.g. forecastbench-sim-paper/production/freeciv.
-DATA = os.environ.get('FBSIM_FREECIV_V3_DATA', os.path.join(HERE, '..'))
+# --run NAME or FBSIM_RUN: the run's folder, fork turn and civilization count (runcfg.py).
+sys.path.insert(0, os.path.join(HERE, '..')); import runcfg
+RUN = runcfg.pop_run()
+DATA = str(runcfg.eval_data(RUN, os.path.join(HERE, '..')))
 SETS = os.path.join(DATA, 'sets', 'draw_v1'); REPORTS = os.path.join(DATA, 'reports')
 from fbsim_core.local import load_env
 load_env()  # credentials/.env; an exported variable wins
@@ -76,6 +79,7 @@ def make_prompt(kind, world, question, criteria, fact=''):
     """-> (prefix, tail). fact = '' or the single-prompt reveal line."""
     pre, tail = (CONT_PREFIX, CONT_TAIL) if kind == 'cont' else (BASE_PREFIX, BASE_TAIL)
     return pre.format(report=report(world)), tail.format(question=question, fact=fact, criteria=criteria)
+BASE_PREFIX, CONT_PREFIX = runcfg.background(BASE_PREFIX, RUN), runcfg.background(CONT_PREFIX, RUN)   # the run's fork turn and civilizations
 FIRST_PARTY = ('anthropic/', 'openai/', 'google/')
 def user_content(prefix, tail, model=None):
     """Two content parts with a cache breakpoint for first-party hosts (verified to keep both parts and to cache), one plain
@@ -87,13 +91,13 @@ def user_content(prefix, tail, model=None):
 TURN2 = """{preamble}
 
 Given this, please answer the same question again. Reason about what, if anything, this changes, and end your response with your updated probability in <probability> </probability> tags."""
-NO_NEWS = "The game has continued. No new information about turns 61 through 90 is available. If you wish, revise your forecast."
+NO_NEWS = runcfg.no_news("The game has continued. No new information about turns 61 through 90 is available. If you wish, revise your forecast.", RUN)
 TURN2_NONEWS = NO_NEWS + "\n\nPlease answer the same question again and end your response with your probability in <probability> </probability> tags."
 FILES = {'bank': 'bank_750', 'tails': 'tails_300', 'mirrors': 'mirrors_50', 'continuous': 'continuous_300'}
 
 _rep = {}
 def report(world):
-    if world not in _rep: _rep[world] = open(f'{REPORTS}/{world}/turn_060_report.txt').read()
+    if world not in _rep: _rep[world] = open(f'{REPORTS}/{world}/{RUN.report_name}').read()
     return _rep[world]
 def _prob(v):
     v = float(v); v = v / 100 if v > 1 else v
@@ -261,7 +265,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--models', default='', help='comma list of names or OpenRouter ids from the models file; default = every row')
     ap.add_argument('--models-file', default=os.path.join(DATA, 'run', 'models_v1.csv'))
-    ap.add_argument('--sets', default='bank,tails,mirrors,continuous,natcond'); ap.add_argument('--out', required=True)
+    ap.add_argument('--sets', default='bank,tails,mirrors,continuous,natcond'); ap.add_argument('--out', required=RUN.dir is None, default=os.path.join(RUN.dir, 'evals', time.strftime('v1_%Y%m%dT%H%M%SZ', time.gmtime())) if RUN.dir else None)
     ap.add_argument('--reasoning', default='low', choices=['low', 'medium', 'high', 'none'])
     ap.add_argument('--limit', type=int, default=0); ap.add_argument('--workers', type=int, default=0, help='override the models-file workers column (0 = use it, else 16)')
     ap.add_argument('--reask', type=int, default=1, help='re-ask a job whose answer did not parse this many times')

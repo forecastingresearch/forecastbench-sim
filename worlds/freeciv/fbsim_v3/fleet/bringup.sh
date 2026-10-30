@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# bringup.sh POD_ID — wait for ssh, verify deadman + services, ship bundle + on_pod scripts, pod_setup, place anchors.
+# bringup.sh POD_ID — wait for ssh, verify deadman + services, ship bundle + on_pod scripts + the run's run.env, pod_setup,
+# place anchors.
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 . "$HERE/paths.sh"
@@ -22,10 +23,14 @@ echo "== ship bundle + scripts"
 RSH="ssh -i '$SSHKEY' -p $PORT -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o BatchMode=yes -o LogLevel=ERROR"
 rsync -az --delete --exclude .venv --exclude uv.lock --exclude __pycache__ --exclude '*.pyc' -e "$RSH" "$BUNDLE/" "root@$IP:/workspace/civbench/" || exit 1
 rsync -az -e "$RSH" "$HERE/on_pod/" "root@$IP:/workspace/fleet/" || exit 1
+rsync -az -e "$RSH" "$RUNDIR/run.env" "root@$IP:/workspace/fleet/run.env" || exit 1   # the pod scripts source it
 [ -f "$ARCHKEY" ] && rsync -az -e "$RSH" "$ARCHKEY" "root@$IP:/workspace/fleet/archive_key" && S 'chmod 600 /workspace/fleet/archive_key'
 echo "== pod_setup"
-S 'cd /workspace/civbench && bash pod_setup.sh > /workspace/fleet/logs/pod_setup.log 2>&1; rc=$?; tail -3 /workspace/fleet/logs/pod_setup.log; echo pod_setup_rc=$rc'
-if ls "$STATE/anchors"/seed*/savegames/*_T60_* >/dev/null 2>&1; then
+# detached, with its exit code in a file, so a dropped ssh session cannot fail a healthy pod; polled for up to 40 min
+S 'rm -f /workspace/fleet/logs/pod_setup.rc; cd /workspace/civbench && nohup setsid bash -c "bash pod_setup.sh > /workspace/fleet/logs/pod_setup.log 2>&1; echo \$? > /workspace/fleet/logs/pod_setup.rc" < /dev/null > /dev/null 2>&1 &'
+rc=""; for i in $(seq 1 160); do rc="$(S 'cat /workspace/fleet/logs/pod_setup.rc 2>/dev/null' 2>/dev/null)"; [ -n "$rc" ] && break; sleep 15; done
+S 'tail -3 /workspace/fleet/logs/pod_setup.log'; echo "pod_setup_rc=${rc:-timeout}"
+if ls "$STATE/anchors"/seed*/savegames/*_T${FBSIM_FORK_TURN}_* >/dev/null 2>&1; then
   echo "== place anchors"
   for d in "$STATE"/anchors/seed*; do s=$(basename "$d"); S "mkdir -p /workspace/civbench/data/freeciv/logs/recordings/$s/savegames"; rsync -az -e "$RSH" "$d/savegames/" "root@$IP:/workspace/civbench/data/freeciv/logs/recordings/$s/savegames/"; done
   S 'chmod -R a+rX /workspace/civbench/data/freeciv/logs/recordings; ls /workspace/civbench/data/freeciv/logs/recordings/'

@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# sync_loop.sh ARCHIVE_IP ARCHIVE_PORT PODNAME [INTERVAL=600] — push /workspace/out to the archive pod forever.
+# sync_loop.sh ARCHIVE_IP ARCHIVE_PORT DEST [INTERVAL=600] — push /workspace/out to /vol/fbsim_v3/DEST/ on the archive
+# pod forever. DEST is <run>/<pod name>; the run's folder must exist there (archive_setup.sh, launch_workers.sh).
 set -u
 IP="$1"; PORT="$2"; NAME="$3"; IV="${4:-600}"
 F=/workspace/fleet

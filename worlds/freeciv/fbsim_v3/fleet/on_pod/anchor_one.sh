@@ -1,16 +1,19 @@
 #!/usr/bin/env bash
-# anchor_one.sh SEED [MAX_TURNS=61] — play a fresh all-AI world to MAX_TURNS, serialize with savegame
+# anchor_one.sh SEED [MAX_TURNS=fork turn + 1] — play a fresh all-AI world to MAX_TURNS, serialize with savegame
 # coverage, run the observability + old publish gates AS REPORTS (never blocking), publish data + all
 # per-turn saves, ruleset.json, sgtables and the recording's turn states (for regen_reports.py) to
-# /workspace/out/anchors/seed<SEED>/. The recording dir is KEPT (forks read its T60 save).
-# Env: FBSIM_N_PLAYERS (default 5), FBSIM_BARBARIANS (e.g. DISABLED; default: server default).
+# /workspace/out/anchors/seed<SEED>/. The recording dir is KEPT (forks read its fork-turn save).
+# Settings from /workspace/fleet/run.env (bringup.sh ships the run's): FBSIM_N_PLAYERS (default 5), FBSIM_BARBARIANS
+# (e.g. DISABLED; default: server default), FBSIM_FORK_TURN (default 60).
 set -uo pipefail
-SEED="${1:?SEED}"; MAX_TURNS="${2:-61}"; NP="${FBSIM_N_PLAYERS:-5}"; BARB="${FBSIM_BARBARIANS:-}"
+[ -f /workspace/fleet/run.env ] && . /workspace/fleet/run.env
+FORK="${FBSIM_FORK_TURN:-60}"
+SEED="${1:?SEED}"; MAX_TURNS="${2:-$((FORK + 1))}"; NP="${FBSIM_N_PLAYERS:-5}"; BARB="${FBSIM_BARBARIANS:-}"
 B=/workspace/civbench; source $B/pod_env.sh
 export FBSIM_OUT_DIR=/workspace/out/anchors_work
 REC="$FBSIM_LOG_ROOT/recordings/seed$SEED"; OUT="/workspace/out/anchors/seed$SEED"; SER="$FBSIM_OUT_DIR/ser_seed$SEED"
 mkdir -p "$OUT" "$SER"
-printf "players=%s\nbarbarians=%s\n" "$NP" "${BARB:-default}" > "$OUT/settings.txt"
+printf "players=%s\nbarbarians=%s\nfork_turn=%s\nrun=%s\n" "$NP" "${BARB:-default}" "$FORK" "${FBSIM_RUN:-}" > "$OUT/settings.txt"
 echo "== seed$SEED players=$NP barbarians=${BARB:-default} run_world $MAX_TURNS turns $(date -u +%FT%TZ)"
 timeout -k 60 3600 python $B/worlds/freeciv/scripts/run_world.py --seed "$SEED" --max_turns "$MAX_TURNS" \
   --num_ai_players "$NP" ${BARB:+--barbarians "$BARB"} --quiet; rc=$?

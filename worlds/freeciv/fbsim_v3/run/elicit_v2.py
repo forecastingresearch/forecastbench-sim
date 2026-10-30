@@ -49,23 +49,20 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 V3 = HERE.parent
-# Question sets, world reports and model panels: FBSIM_FREECIV_V3_DATA, a folder laid out like this one
-# (sets/draw_v1/, reports/, run/models_v*.csv), e.g. forecastbench-sim-paper/production/freeciv.
-# FBSIM_FREECIV_V3_DRAW names the draw under sets/; FBSIM_FREECIV_N_CIVS sets the civilization count in the prompts.
-DATA = Path(os.environ.get("FBSIM_FREECIV_V3_DATA", V3))
+sys.path.insert(0, str(V3))
+import runcfg  # noqa: E402
+# --run NAME or FBSIM_RUN names a run (data/freeciv/fbsim_v3/runs/<NAME>): its fork turn, civilization count and
+# folder. Question sets, world reports and model panels: FBSIM_FREECIV_V3_DATA, else the run folder, else this one,
+# laid out as sets/draw_v1/, reports/, run/models_v*.csv (e.g. forecastbench-sim-paper/production/freeciv).
+# FBSIM_FREECIV_V3_DRAW names the draw under sets/; FBSIM_FREECIV_N_CIVS overrides the run's civilization count.
+RUN = runcfg.pop_run()
+DATA = runcfg.eval_data(RUN, V3)
 SETS = DATA / "sets" / os.environ.get("FBSIM_FREECIV_V3_DRAW", "draw_v1")
-FIVE_CIVS = "Five AI civilizations are competing."
-CIVS_LINES = {"1": "One AI civilization is playing alone.", "2": "Two AI civilizations are competing.", "3": "Three AI civilizations are competing.",
-              "4": "Four AI civilizations are competing.", "5": FIVE_CIVS}
-N_CIVS = os.environ.get("FBSIM_FREECIV_N_CIVS", "5")
-if N_CIVS not in CIVS_LINES:
-    raise SystemExit(f"FBSIM_FREECIV_N_CIVS={N_CIVS!r}: expected one of 1-5")
-CIVS_LINE = CIVS_LINES[N_CIVS]
 
 
 def with_civs(prefix):
-    assert FIVE_CIVS in prefix, "prompt prefix lacks the civilization sentence"
-    return prefix.replace(FIVE_CIVS, CIVS_LINE)
+    """The paper's background sentence with the run's fork turn and civilization count."""
+    return runcfg.background(prefix, RUN)
 
 
 REPORTS = DATA / "reports"
@@ -123,17 +120,17 @@ Given this, please answer the following question{s} from the list above again: {
 <<<PROBABILITIES>>>
 {example}
 <<<END>>>"""
-NO_NEWS = """The game has continued. No new information about turns 61 through 90 is available. If you wish, revise your forecast{s} for the following question{s} from the list above: {qlist}. Please answer {them} again and end your response with your probabilit{ies} in this exact format:
+NO_NEWS = runcfg.no_news("""The game has continued. No new information about turns 61 through 90 is available. If you wish, revise your forecast{s} for the following question{s} from the list above: {qlist}. Please answer {them} again and end your response with your probabilit{ies} in this exact format:
 <<<PROBABILITIES>>>
 {example}
-<<<END>>>"""
+<<<END>>>""", RUN)
 
 _rep = {}
 
 
 def report(world):
     if world not in _rep:
-        _rep[world] = (REPORTS / world / "turn_060_report.txt").read_text()
+        _rep[world] = (REPORTS / world / RUN.report_name).read_text()
     return _rep[world]
 
 
@@ -440,7 +437,8 @@ def main():
     ap.add_argument("--models", default="", help="comma list of names or OpenRouter ids from the models file; default = every row")
     ap.add_argument("--models-file", default=str(DATA / "run" / "models_v2.csv"))
     ap.add_argument("--sets", default="bank,tails,mirrors,continuous", help="run 2 default: the natural conditionals stay unbatched (elicit_natcond_v1.py); add natcond to batch them")
-    ap.add_argument("--out", required=True)
+    ap.add_argument("--out", required=RUN.dir is None, help="default with a run: <run>/evals/<UTC timestamp>",
+                    default=str(RUN.dir / "evals" / time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())) if RUN.dir else None)
     ap.add_argument("--per-prompt", type=int, default=50)
     ap.add_argument("--per-prompt-cont", type=int, default=20, help="cap for continuous prompts (Micropolis: 20; 0 = same as --per-prompt)")
     ap.add_argument("--order", default="fabio", choices=["fabio", "shuffle"], help="question order inside a prompt: Micropolis corpus order (horizon-major binary, metric-major continuous) or a seeded shuffle")

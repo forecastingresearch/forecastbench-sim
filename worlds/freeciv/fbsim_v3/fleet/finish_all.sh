@@ -18,7 +18,7 @@ while IFS=$'\t' read -r ts id name flavor vcpu cloud dc cost status; do
     echo "$id $name: drained ($done done, $forks forks) -> START finish_pod"
     [ $DRY = 1 ] || bash rp.sh ssh "$id" 'nohup setsid bash /workspace/fleet/finish_pod.sh > /workspace/fleet/logs/finish.log 2>&1 < /dev/null &' </dev/null
   elif [ "$finished" = 1 ]; then
-    a="$(ARSH "echo \$(ls -d /vol/fbsim_v3/$name/a*/forks/rng* 2>/dev/null | wc -l) \$(ls /vol/fbsim_v3/$name/a*/forks/rng*/*_data.json.gz 2>/dev/null | wc -l) \$(ls /vol/fbsim_v3/$name/a*/forks/rng*/*_sgtables.json.gz 2>/dev/null | wc -l)" </dev/null)"
+    a="$(ARSH "echo \$(ls -d $VOL/$name/a*/forks/rng* 2>/dev/null | wc -l) \$(ls $VOL/$name/a*/forks/rng*/*_data.json.gz 2>/dev/null | wc -l) \$(ls $VOL/$name/a*/forks/rng*/*_sgtables.json.gz 2>/dev/null | wc -l)" </dev/null)"
     read -r af ad as <<<"$a"
     if [ "$af" = "$forks" ] && [ "$ad" = "$forks" ] && [ "$as" = "$forks" ] && [ "$forks" -gt 0 ]; then
       echo "$id $name: FINISHED, archive complete ($af forks, $as sgtables) -> DELETE"

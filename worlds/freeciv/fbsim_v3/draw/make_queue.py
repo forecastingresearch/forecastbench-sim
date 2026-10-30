@@ -2,13 +2,17 @@
 """make_queue.py --anchors 7001 7002 ... --rng 5001-6000 --pods ID:VCPU ... [--out DIR]
 Writes one task file per (anchor, rng) as a<anchor>-rng<rng> containing "<anchor> <rng>", dealt to pods
 proportionally to vCPU with anchors interleaved (so every pod carries every anchor). Prints the plan.
-Default --out: <repo>/data/freeciv/fbsim_v3/fleet_state/queue, where launch_workers.sh reads it."""
-import argparse, os, random, shutil
+--run NAME (or FBSIM_RUN): --rng defaults to the run's FBSIM_RNG and --out to the run's fleet_state/queue, where
+launch_workers.sh reads it."""
+import argparse, os, random, shutil, sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[1])); import runcfg
+RUN = runcfg.pop_run()
 p = argparse.ArgumentParser()
 p.add_argument('--anchors', nargs='+', type=int, required=True)
-p.add_argument('--rng', default='5001-6000')
+p.add_argument('--rng', default=RUN.rng)
 p.add_argument('--pods', nargs='+', required=True, help='POD_ID:VCPU')
-p.add_argument('--out', default=os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../../../data/freeciv/fbsim_v3/fleet_state/queue'))
+p.add_argument('--out', default=str(RUN.dir / 'fleet_state' / 'queue') if RUN.dir else None, required=RUN.dir is None)
 p.add_argument('--seed', type=int, default=20260902)
 a = p.parse_args()
 lo, hi = map(int, a.rng.split('-'))

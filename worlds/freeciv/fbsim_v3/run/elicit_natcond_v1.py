@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """elicit_natcond_v1.py — the natural-conditional arm exactly as run 1 asked it, for the re-pinned models.
 
-  uv run python elicit_natcond_v1.py --out DIR --models "DeepSeek: DeepSeek V3,DeepSeek: DeepSeek V4 Flash 0731"
+  uv run python elicit_natcond_v1.py [--run NAME] --out DIR --models "DeepSeek: DeepSeek V3,DeepSeek: DeepSeek V4 Flash 0731"
                                      [--models-file models_v2.csv] [--workers W] [--limit N] [--dry-run]
 
 Run 2 keeps the natural conditionals unbatched: one question per prompt at turn 1, the uniform reveal sentence
@@ -17,7 +17,7 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from elicit_v2 import DATA, REPORTS, SETS, FIRST_PARTY, with_civs, call, load_models, spent  # noqa: E402
+from elicit_v2 import RUN, DATA, REPORTS, SETS, FIRST_PARTY, with_civs, call, load_models, spent, runcfg  # noqa: E402
 
 # ---- run-1 texts, verbatim (elicit_v1.py v1.8) ----
 BASE_PREFIX = """You will be asked a binary forecasting question about a simulation in progress. Your task is to estimate the probability that the event described in the question occurs. Please provide your reasoning before stating your final probability.
@@ -40,7 +40,7 @@ Your final answer should be the probability that the event resolves YES and your
 TURN2 = """{preamble}
 
 Given this, please answer the same question again. Reason about what, if anything, this changes, and end your response with your updated probability in <probability> </probability> tags."""
-NO_NEWS = "The game has continued. No new information about turns 61 through 90 is available. If you wish, revise your forecast."
+NO_NEWS = runcfg.no_news("The game has continued. No new information about turns 61 through 90 is available. If you wish, revise your forecast.", RUN)
 TURN2_NONEWS = NO_NEWS + "\n\nPlease answer the same question again and end your response with your probability in <probability> </probability> tags."
 
 _rep = {}
@@ -48,7 +48,7 @@ _rep = {}
 
 def report(world):
     if world not in _rep:
-        _rep[world] = (REPORTS / world / "turn_060_report.txt").read_text()
+        _rep[world] = (REPORTS / world / RUN.report_name).read_text()
     return _rep[world]
 
 
@@ -113,7 +113,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--models", required=True)
     ap.add_argument("--models-file", default=str(DATA / "run" / "models_v2.csv"))
-    ap.add_argument("--out", required=True)
+    ap.add_argument("--out", required=RUN.dir is None, help="default with a run: <run>/evals/natcond_<UTC timestamp>",
+                    default=str(RUN.dir / "evals" / time.strftime("natcond_%Y%m%dT%H%M%SZ", time.gmtime())) if RUN.dir else None)
     ap.add_argument("--workers", type=int, default=0)
     ap.add_argument("--limit", type=int, default=0, help="only the first N turn-1 questions and their cells")
     ap.add_argument("--reask", type=int, default=1)
