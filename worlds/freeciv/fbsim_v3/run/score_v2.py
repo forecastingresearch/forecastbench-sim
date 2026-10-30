@@ -33,20 +33,23 @@ Rules
 Missing / unparsed answers: binary p is imputed (default 0.5, `--impute-binary none` to drop instead); continuous and natcond
 rows are dropped and the parse rate is reported alongside every aggregate.
 """
-import argparse, csv, glob, json, math, os, collections
+import argparse, csv, glob, json, math, os, sys, collections
 import numpy as np
-SETS = os.path.join(os.environ.get('FBSIM_FREECIV_V3_DATA', os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')), 'sets', os.environ.get('FBSIM_FREECIV_V3_DRAW', 'draw_v1'))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')); import runcfg
+RUN = runcfg.pop_run()   # --run NAME or FBSIM_RUN: sets from the run folder, --out defaults to <run>/scores/<first results folder's name>
+SETS = os.path.join(runcfg.eval_data(RUN, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')), 'sets', os.environ.get('FBSIM_FREECIV_V3_DRAW', 'draw_v1'))
 TAU = np.array([.05, .25, .5, .75, .95]); EPS = 1e-3
 
 def load_sets(sets_dir=SETS):
     S = {}
     for name, f in [('bank', 'bank_750'), ('tails', 'tails_300'), ('mirrors', 'mirrors_50'), ('extra', 'natcond_extra_turn1')]:
+        if name == 'extra' and not os.path.exists(f'{sets_dir}/{f}.json'): continue   # a draw without natural conditionals
         for i in json.load(open(f'{sets_dir}/{f}.json')): S[i['id']] = dict(i, set=name)
     C = {i['id']: i for i in json.load(open(f'{sets_dir}/continuous_300.json'))}
     try: NORM = json.load(open(f'{sets_dir}/continuous_norm_constants.json'))['constants']
     except FileNotFoundError: NORM = {}
     for i in C.values(): i['norm_c'] = (NORM.get(i['family'] + ('/' + i.get('metric', '') if i['family'] == 'NC1_value_at_T' else '')) or {}).get('constant')
-    N = json.load(open(f'{sets_dir}/natcond_600.json'))
+    N = json.load(open(f'{sets_dir}/natcond_600.json')) if os.path.exists(f'{sets_dir}/natcond_600.json') else []
     return S, C, N
 
 def load_results(dirs):
@@ -189,10 +192,11 @@ def write_md(summary, path):
     open(path, 'w').write('\n'.join(L))
 
 def main():
-    ap = argparse.ArgumentParser(); ap.add_argument('results', nargs='+'); ap.add_argument('--out', required=True)
+    ap = argparse.ArgumentParser(); ap.add_argument('results', nargs='+'); ap.add_argument('--out', required=RUN.dir is None)
     ap.add_argument('--boot', type=int, default=1000); ap.add_argument('--seed', type=int, default=0)
     ap.add_argument('--impute-binary', default='0.5', help='probability substituted for an unparsed binary answer, or "none" to drop')
     ap.add_argument('--sets-dir', default=SETS); a = ap.parse_args()
+    a.out = a.out or os.path.join(RUN.dir, 'scores', os.path.basename(os.path.normpath(a.results[0])))
     impute = None if a.impute_binary == 'none' else float(a.impute_binary)
     S, C, N = load_sets(a.sets_dir); R = load_results(a.results)
     rows = score_items(R, S, C, N, impute); summary = summarise(rows, a.boot, a.seed)
