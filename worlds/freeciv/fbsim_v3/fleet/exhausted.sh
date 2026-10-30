@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# exhausted.sh — list tasks with >=2 failure markers (exhausted) across live workers, minus those since done anywhere.
+# exhausted.sh — list tasks with >=3 failure markers (exhausted) across live workers, minus those since done anywhere.
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"; cd "$HERE"
 . "$HERE/paths.sh"
-bash fleet_ssh.sh --workers 'ls /workspace/fleet/queue/failed 2>/dev/null | sed "s/\.[0-9a-z]*$//" | sort | uniq -c | awk "\$1>=2{print \$2}" | tr "\n" " "; echo; echo DONE:; ls /workspace/fleet/queue/done | tr "\n" " "' 2>/dev/null > "$STATE/.exh_raw"
+bash fleet_ssh.sh --workers 'ls /workspace/fleet/queue/failed 2>/dev/null | sed "s/\.[0-9a-z]*$//" | sort | uniq -c | awk "\$1>=3{print \$2}" | tr "\n" " "; echo; echo DONE:; ls /workspace/fleet/queue/done | tr "\n" " "' 2>/dev/null > "$STATE/.exh_raw"
 STATE="$STATE" python3 - <<'PY'
 import os, re
 S = os.environ['STATE']

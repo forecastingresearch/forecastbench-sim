@@ -13,7 +13,7 @@ mkdir -p $Q/todo $Q/inprog $Q/done $Q/failed $F/logs $OUT/logs
 HOST="$(cat /tmp/f3_podid 2>/dev/null || hostname)"
 
 lane() {
-  local N="$1" idle_since=0 t A R rc t0 t1 attempt log
+  local N="$1" idle_since=0 t A R rc t0 t1 attempt log to
   exec >> "$F/logs/lane$N.log" 2>&1
   echo "$(date -u +%FT%TZ) lane$N start"
   sleep $(( (N * 3) % 20 ))
@@ -36,8 +36,10 @@ lane() {
     if [ "${free:-0}" -lt 2500 ]; then echo "$(date -u +%FT%TZ) lane$N DISK LOW ${free}MB; pausing"; mv "$Q/inprog/$t.lane$N" "$Q/todo/$t"; sleep 300; continue; fi
     echo "$(date -u +%FT%TZ) lane$N START $t attempt $attempt"
     t0=$(date +%s)
-    FBSIM_OUT_DIR="$OUT/a$A" FBSIM_FORK_TIMEOUT_S=3600 timeout -k 60 3900 bash "$B/fork_one.sh" "$A" "rng$R" "$R" "$END_TURN" > "$log" 2>&1
-    rc=$?
+    to=3600; [ "$attempt" -ge 3 ] && to=5400   # the third and last attempt gets 90 minutes
+    bash "$F/stall_watch.sh" "$A" "$R" "$log" & local wpid=$!   # stops a game that has stopped saving turns
+    FBSIM_OUT_DIR="$OUT/a$A" FBSIM_FORK_TIMEOUT_S=$to timeout -k 60 $((to + 300)) bash "$B/fork_one.sh" "$A" "rng$R" "$R" "$END_TURN" > "$log" 2>&1
+    rc=$?; kill "$wpid" 2>/dev/null
     t1=$(date +%s)
     if [ "$rc" -eq 0 ] && [ -s "$OUT/a$A/forks/rng$R/seed${A}forkrng${R}_data.json.gz" ]; then
       echo "$(date -u +%FT%TZ) $HOST lane$N $((t1-t0))s attempt$attempt $(ls $OUT/a$A/forks/rng$R/savegames | wc -l)saves" > "$Q/done/$t"
@@ -49,7 +51,7 @@ lane() {
       rm -f "$Q/inprog/$t.lane$N"
       rm -rf "$OUT/a$A/forks/rng$R" "$B/data/freeciv/logs/recordings/seed${A}forkrng$R" 2>/dev/null
       echo "$(date -u +%FT%TZ) lane$N FAILED $t attempt $attempt rc=$rc ($((t1-t0))s)"
-      if [ "$attempt" -lt 2 ]; then printf '%s %s\n' "$A" "$R" > "$Q/todo/$t"; fi
+      if [ "$attempt" -lt 3 ]; then printf '%s %s\n' "$A" "$R" > "$Q/todo/$t"; fi
     fi
   done
 }

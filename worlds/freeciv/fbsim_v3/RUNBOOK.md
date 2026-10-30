@@ -137,12 +137,12 @@ while that pod is live. Refused once the replay queue exists.
 ./5_finish.sh p2_t60 [--interval 300]
 ```
 
-1. Prints the fleet status every interval until every worker's queue is empty.
-2. Lists the tasks that failed twice. If there are any, it asks whether to rerun them on the drained workers first
-   (90-minute timeout each), then waits for the reruns and lists what still failed. A missing task means that anchor
-   ends with fewer replays.
-3. Finishes each worker (exact savegame tables, final sync) and deletes it once the archive holds all its forks and
-   tables.
+Every interval it prints the fleet status and runs `finish_all.sh`, so each worker is finished (exact savegame tables,
+final sync) as soon as its queue is empty and deleted once the archive holds all its forks and tables; the rest keep
+running. Lanes try each task three times, the third with a 90-minute timeout, and stop a replay whose game has gone 10
+minutes without saving a turn (`stall_watch.sh`; the game client hangs when the server rejects one of its commands).
+At the end it lists the tasks that failed every attempt (`fleet_state/failed_tasks.txt`); each leaves its anchor one
+replay short. To keep a worker up (say, to rerun something on it by hand), add its pod ID to `fleet_state/keep.txt`.
 
 ### Step 6: pull the corpus
 

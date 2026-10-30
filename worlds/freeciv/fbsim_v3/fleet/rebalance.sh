@@ -10,7 +10,8 @@ tmp="$(mktemp -d)"
 while IFS=$'\t' read -r ts id name flavor vcpu cloud dc cost status; do
   case "$ts" in \#*) continue;; esac; [ "$status" = deleted ] && continue
   grep -qx "$id" "$STATE"/archive_pods.txt 2>/dev/null && continue
-  ( t="$(bash rp.sh ssh "$id" 'echo $(ls /workspace/fleet/queue/todo | wc -l) $(ls /workspace/fleet/queue/inprog | wc -l)' 2>/dev/null)" && echo "$id $vcpu $t" > "$tmp/$id" ) &
+  # a worker that finish_all.sh has started finishing takes no more tasks
+  ( t="$(bash rp.sh ssh "$id" '[ -f /workspace/fleet/FINISHED ] || pgrep -f "fleet/finish_pod[.]sh" > /dev/null || echo $(ls /workspace/fleet/queue/todo | wc -l) $(ls /workspace/fleet/queue/inprog | wc -l)' 2>/dev/null)" && [ -n "$t" ] && echo "$id $vcpu $t" > "$tmp/$id" ) &
 done < "$STATE"/pods.tsv; wait
 cat "$tmp"/* | sort -k3 -n > "$tmp/all"
 echo "== todo snapshot (id vcpu todo inprog):"; cat "$tmp/all"

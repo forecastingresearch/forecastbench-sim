@@ -42,7 +42,7 @@ The numbered scripts in `fleet/` run a whole run, one step each. Each takes the 
 | 2 | `2_anchors.sh RUN [SEED...]` | play the anchors on one pod, pull them, print anchor QC |
 | 3 | `3_keep_anchors.sh RUN SEED...` | keep the chosen anchors; offers to delete the anchor pod |
 | 4 | `4_start_fleet.sh RUN N_WORKERS [--deadman H]` | archive pod, workers, queue, bringup, lanes |
-| 5 | `5_finish.sh RUN` | wait for the workers to drain, offer reruns of twice-failed tasks, finish and delete workers |
+| 5 | `5_finish.sh RUN` | finish and delete each worker as soon as its queue is empty; list tasks that failed every attempt |
 | 6 | `6_pull_corpus.sh RUN` | pull, QC, consolidate; offers to delete the archive pod |
 | 7 | `7_make_sets.sh RUN --models-csv PATH` | bank, sets, criteria, norm constants, reports, model panel |
 | 8 | `8_elicit.sh RUN LABEL [--models ...]` | dry run, then (after confirmation) elicitation into `evals/LABEL/` |
