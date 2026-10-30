@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """draw_v1.py BANK_DIR OUT_DIR [--seed 2026] [--run NAME]
 Stratified random draws (structural strata only; never on the noisy estimate beyond the band a question sits in):
-  bank      750 = 5 horizons x 5 bands over (.05,.95) x 30; caps: <=6/world and <=6/family per band-cell, NB1_threshold <=150 total
+  bank      750 = 5 horizons x 5 bands over (.05,.95) x 30; caps: <=6/world and <=6/family per band-cell, NB1_threshold <=150 total,
+            one question per subject (per subject and band with one player); with a run the cells take turns
   tails     300 = 60/horizon with qAll <= .05 (0 < q); caps NB1 <=45 total, others <=40 total and <=10/family/horizon, <=12/world/horizon
   mirrors    50 = 10/horizon with qAll >= .95 (q < 1), same families as tails
   continuous 300 = 240 spread (~6/family/horizon over 8 families, T90 4) + 60 timing at T210 (P9 40, P7 15, P8 5); IQR>0
@@ -31,14 +32,15 @@ binpool = []
 for w, D in W.items():
     for i, inst in enumerate(D['bin']): binpool.append(dict(inst, id=f"{w}:b{i}", idx=i))
 def subject_key(i): return (i['world'], tuple(sorted(i['subj'])), i['family'], i['T'])
-def draw_cells(cands, per_cell, cell_key, caps, order=None, balance=None):
+def draw_cells(cands, per_cell, cell_key, caps, order=None, balance=None, interleave=False):
     """random draw per cell with caps; with balance='family' the cell is filled round-robin over families
-    (each family's candidates shuffled), so every family present gets an equal share before any family repeats."""
+    (each family's candidates shuffled), so every family present gets an equal share before any family repeats.
+    interleave=True: the cells take one question each in turn instead of filling one after another, so cells that
+    compete for a cap (one question per subject) share it evenly."""
     chosen = []; counts = collections.Counter(); cells = collections.defaultdict(list)
     for c in cands: cells[cell_key(c)].append(c)
     keys = order or sorted(cells)
-    for key in keys:
-        if not cells[key]: continue   # e.g. a horizon in `order` with no candidates
+    def fill(key):   # yields after each question taken for this cell
         lst = cells[key][:]; rng.shuffle(lst); got = 0
         ok = lambda c: not any(counts[(k.__name__, k(c), scope(key))] >= mx for k, mx, scope in caps)
         def take(c):
@@ -51,11 +53,16 @@ def draw_cells(cands, per_cell, cell_key, caps, order=None, balance=None):
                 f = fams[i % len(fams)]; i += 1; stall += 1
                 while by[f]:
                     c = by[f].pop()
-                    if ok(c): take(c); stall = 0; break
+                    if ok(c): take(c); stall = 0; yield; break
         else:
             for c in lst:
                 if got >= per_cell: break
-                if ok(c): take(c)
+                if ok(c): take(c); yield
+    fills = [fill(key) for key in keys if cells[key]]   # skips e.g. a horizon in `order` with no candidates
+    if interleave:
+        while fills: fills = [f for f in fills if next(f, StopIteration) is not StopIteration]
+    else:
+        for f in fills: collections.deque(f, maxlen=0)
     return chosen
 def need(cands, name, rule):   # an empty set means too few replays per anchor: q moves in steps of 1/replays
     if not cands: sys.exit(f"draw_v1.py: no candidates for the {name} set ({rule}); the run has too few replays per anchor")
@@ -66,8 +73,12 @@ CELL = lambda key: key; HORIZON = lambda key: key[1] if isinstance(key, tuple) e
 # bank
 rng = random.Random(SEED + 1)
 cands = [c for c in binpool if band_of(c['qAll']) is not None]; need(cands, 'bank', '0.05 < q < 0.95')
+# A run draws the cells in turns (the paper filled them in order, so low bands took the shared subjects first). With one
+# player every question has the same subject per world, family and horizon, so a subject may recur once per band.
+BAND = lambda key: key[0]
 bank = draw_cells(cands, 30, lambda c: (band_of(c['qAll']), c['T']),
-                  caps=[(world, 6, CELL), (family, 6, CELL), (subj, 1, GLOBAL), (family, 150, GLOBAL)], balance='family')
+                  caps=[(world, 6, CELL), (family, 6, CELL), (subj, 1, BAND if RUN.n_players == 1 else GLOBAL), (family, 150, GLOBAL)],
+                  balance='family', interleave=bool(RUN.name))
 # NB1 techs filler cap handled by (family,150,GLOBAL) for every family; fine since others never reach 150
 used = {c['id'] for c in bank}
 # tails: long horizons first
