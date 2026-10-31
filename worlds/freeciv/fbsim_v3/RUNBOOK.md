@@ -131,6 +131,12 @@ while that pod is live. Refused once the replay queue exists.
    log as `fleet_state/failed_launch_<pod>_<time>.log` and is retried, up to `--max-retries` times per worker
    (default 5); past that the script stops. Raise `--max-retries` to retry again, since the earlier failures still count.
 
+To replace an anchor after the fleet is gone (`switch_anchor.sh` needs live workers): move its folder from
+`fleet_state/anchors/` to `fleet_state/anchors_dropped/`, copy the spare's fork-turn save from `anchors_raw/` into
+`anchors/seed<NEW>/savegames/`, move `fleet_state/queue/` aside, and start a top-up fleet with
+`./4_start_fleet.sh RUN N --anchors NEW --name wb` (workers `fbsim3-<run>-wb01..`, so their archive folders stay apart
+from the first fleet's). Then steps 5 and 6 as usual; consolidation takes only the kept anchors.
+
 ### Step 5: wait, finish, delete
 
 ```bash

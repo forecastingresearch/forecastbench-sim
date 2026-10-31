@@ -1,17 +1,24 @@
 #!/usr/bin/env bash
-# 4_start_fleet.sh RUN N_WORKERS [--deadman HOURS=48] [--max-retries N=5] — step 4: start the replay fleet. Creates the
-# archive pod on the run's network volume (fbsim3-<run>-arch, /vol/fbsim_v3/<run>/) and copies the anchors to it, creates
+# 4_start_fleet.sh RUN N_WORKERS [--deadman HOURS=48] [--max-retries N=5] [--anchors "SEEDS"] [--name wX] — step 4:
+# start the replay fleet. Creates the archive pod on the run's network volume (fbsim3-<run>-arch, /vol/fbsim_v3/<run>/)
+# and copies the anchors to it, creates
 # N worker pods (fbsim3-<run>-w01..), deals the queue (kept anchors x FBSIM_RNG), brings the workers up in parallel and
 # launches their lanes. Workers delete themselves after HOURS whatever their state, so choose it above the expected run
-# time. A failed lane launch is retried up to N times per worker.
+# time. A failed lane launch is retried up to N times per worker. For a top-up fleet after the first (a replaced anchor),
+# --anchors deals only those kept anchors and --name wX names the workers fbsim3-<run>-wX01.. so their archive folders
+# stay apart from the first fleet's; move the first fleet's fleet_state/queue/ aside first.
 # Safe to stop and rerun: existing pods, bringups and the queue are reused. Next: 5_finish.sh RUN
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"; . "$HERE/steps_lib.sh"
 step_init "${1:-}"; shift
-N="${1:?usage: 4_start_fleet.sh RUN N_WORKERS [--deadman HOURS] [--max-retries N]}"; shift; DEADMAN=48; MAX_RETRIES=5
-while [ $# -gt 0 ]; do case "$1" in --deadman) DEADMAN="$2"; shift 2;; --max-retries) MAX_RETRIES="$2"; shift 2;; *) die "bad option $1";; esac; done
+N="${1:?usage: 4_start_fleet.sh RUN N_WORKERS [--deadman HOURS] [--max-retries N] [--anchors SEEDS] [--name wX]}"; shift
+DEADMAN=48; MAX_RETRIES=5; ONLY=""; W=w
+while [ $# -gt 0 ]; do case "$1" in --deadman) DEADMAN="$2"; shift 2;; --max-retries) MAX_RETRIES="$2"; shift 2;;
+  --anchors) ONLY="$2"; shift 2;; --name) W="$2"; shift 2; [ "${W#w}" != "$W" ] || die "--name must start with w";; *) die "bad option $1";; esac; done
 [ -z "$(live_pod anchors)" ] || die "the anchor pod $(live_pod anchors) is still live; delete it first (3_keep_anchors.sh asks)"
 SEEDS="$(kept_seeds)"; [ -n "$SEEDS" ] || die "no kept anchors in $S/anchors (run 3_keep_anchors.sh)"
+for a in $ONLY; do [ -d "$S/anchors/seed$a" ] || die "--anchors: $a is not a kept anchor ($SEEDS)"; done
+SEEDS="${ONLY:-$SEEDS}"
 lo="${FBSIM_RNG%-*}"; hi="${FBSIM_RNG#*-}"
 say "kept anchors: $SEEDS; replays per anchor: $((hi - lo + 1)) (rng $FBSIM_RNG); workers: $N x $FBSIM_POD_VCPU vCPU, deadman ${DEADMAN} h"
 
@@ -35,7 +42,7 @@ fi
 # ---- workers
 IDS=()
 for i in $(seq 1 "$N"); do
-  id="$(create_pod "$(printf 'w%02d' "$i")" "$FBSIM_POD_FLAVOR" "$FBSIM_POD_VCPU" "$FBSIM_POD_CLOUD" --deadman "$DEADMAN")"
+  id="$(create_pod "$(printf "$W%02d" "$i")" "$FBSIM_POD_FLAVOR" "$FBSIM_POD_VCPU" "$FBSIM_POD_CLOUD" --deadman "$DEADMAN")"
   [ -n "$id" ] || die "worker $i was not created"; IDS+=("$id")
 done
 extra="$(live_workers | grep -vxF -f <(printf '%s\n' "${IDS[@]}"))"
@@ -68,8 +75,8 @@ bring_worker() {   # SHORT ID — writes the ID of the pod that came up (or the 
   done
   echo "$id" > "$S/.worker_$short"
 }
-for i in "${!IDS[@]}"; do bring_worker "$(printf 'w%02d' $((i + 1)))" "${IDS[$i]}" & done; wait
-for i in "${!IDS[@]}"; do IDS[$i]="$(cat "$S/.worker_$(printf 'w%02d' $((i + 1)))")"; done
+for i in "${!IDS[@]}"; do bring_worker "$(printf "$W%02d" $((i + 1)))" "${IDS[$i]}" & done; wait
+for i in "${!IDS[@]}"; do IDS[$i]="$(cat "$S/.worker_$(printf "$W%02d" $((i + 1)))")"; done
 for id in "${IDS[@]}"; do grep -q "pod_setup_rc=0" "$STATE/bringup_$id.log" 2>/dev/null || die "worker $id did not come up; rerun this script after checking its log"; done
 say "launching lanes"
 while :; do
