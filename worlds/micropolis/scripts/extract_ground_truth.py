@@ -17,7 +17,8 @@ Horizon 0 is a read-off, not a forecast, and is dropped.
 --intervene ACTION (repeatable) applies the intervention once at the snapshot
 turn, before branching, so all continuations share its outcome, and writes
 <scenario>_T<S>_do-<ACTION>.jsonl instead. A scenario where it has no effect
-(e.g. makeFlood without river edges) fails.
+(e.g. makeFlood without river edges) fails, or with --skip-infeasible is
+recorded in <output>.infeasible.json and skipped.
 
 Usage:
     scripts/extract_ground_truth.py                    # packaged example-binary.json5
@@ -27,6 +28,7 @@ Usage:
 """
 
 import argparse
+import json
 import os
 import time
 from concurrent.futures import ProcessPoolExecutor
@@ -41,9 +43,11 @@ from micropolis_world.config import (
 )
 from micropolis_world.continuous_eval import engine_commit_note, git_commit_note
 from micropolis_world.ground_truth import (
+    InfeasibleIntervention,
     covers,
     cross_check_trunk,
     ground_truth_lines,
+    infeasible_marker,
     load_lines,
     merge_shards,
     output_path,
@@ -87,8 +91,17 @@ def main() -> None:
         help="Intervention applied once at the snapshot turn, before branching "
         f"(repeatable): {', '.join(INTERVENTION_ACTIONS)}",
     )
+    ap.add_argument(
+        "--skip-infeasible",
+        action="store_true",
+        help="With --intervene: record a scenario where the intervention has no "
+        "effect in <output>.infeasible.json and go on, instead of failing; "
+        "recorded ones are skipped on later runs unless --force-regen",
+    )
     args = ap.parse_args()
     interventions = args.intervene
+    if args.skip_infeasible and not interventions:
+        ap.error("--skip-infeasible needs --intervene")
 
     cfg = load_config(args)
     seed = cfg.get_seed(args.seed)
@@ -138,6 +151,10 @@ def main() -> None:
             ):
                 print(f"{tag}: already covered by {path}, skipping")
                 continue
+            marker = infeasible_marker(path)
+            if args.skip_infeasible and not args.force_regen and marker.exists():
+                print(f"{tag}: recorded as infeasible in {marker}, skipping")
+                continue
             print(f"{tag}: running {nseeds} continuations to T{S + max(horizons)}...")
             start = time.perf_counter()
             futures = [
@@ -156,6 +173,22 @@ def main() -> None:
             ]
             try:
                 merged = merge_shards([f.result() for f in futures])
+            except InfeasibleIntervention as e:
+                for f in futures:
+                    f.cancel()
+                if not args.skip_infeasible:
+                    raise
+                record = {
+                    "scenario_id": sim.get_id_str(),
+                    "snapshot_turn": S,
+                    "interventions": interventions,
+                    "error": str(e),
+                    "engine_commit": engine_commit,
+                }
+                marker.parent.mkdir(parents=True, exist_ok=True)
+                marker.write_text(json.dumps(record) + "\n")
+                print(f"  infeasible ({e}); recorded in {marker}")
+                continue
             except BaseException:
                 for f in futures:
                     f.cancel()

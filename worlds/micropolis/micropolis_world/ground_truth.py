@@ -10,6 +10,7 @@ horizon.
 """
 
 import json
+import re
 import subprocess
 import tempfile
 from collections import Counter
@@ -46,6 +47,19 @@ STREAM_FIELDS = ("kind", "seed")
 
 class StreamError(ValueError):
     """The producer's stream is not what the reader was told to expect."""
+
+
+class InfeasibleIntervention(RuntimeError):
+    """An intervention had no effect on the trunk (e.g. a flood without river edges)."""
+
+
+# The engine's InterventionError messages (cli/lib/interventions.js).
+_INFEASIBLE = re.compile(r"^Error: .*(had no effect|found nothing to demolish)", re.M)
+
+
+def infeasible_marker(path: Path) -> Path:
+    """Where a skipped (scenario, snapshot, interventions) is recorded, next to its output."""
+    return path.with_suffix(".infeasible.json")
 
 
 def output_path(
@@ -301,6 +315,8 @@ def run_shard(
         if returncode != 0:
             err.seek(0)
             tail = err.read().decode(errors="replace")[-2000:]
+            if interventions and (m := _INFEASIBLE.search(tail)):
+                raise InfeasibleIntervention(m.group(0)) from stream_error
             raise RuntimeError(
                 f"{' '.join(cmd)} exited with code {returncode}:\n{tail}"
             ) from stream_error

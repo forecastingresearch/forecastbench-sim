@@ -340,6 +340,17 @@ def test_interventions_in_command_header_paths_and_lines(tmp_path, monkeypatch):
     assert all(line["interventions"] == ["makeFire"] for line in lines)
 
 
+def test_infeasible_intervention_message():
+    import micropolis_world.ground_truth as gt
+
+    tail = "progress...\nError: turn 960: makeFlood had no effect (engine sent no message 42)\n"
+    assert gt._INFEASIBLE.search(tail)
+    assert gt._INFEASIBLE.search("Error: turn 960: demolishAirport found nothing to demolish")
+    assert not gt._INFEASIBLE.search("Error: WASM heap size changed")
+    p = gt.out_dir() / "kobe_disasters_seed42_T960_do-makeFlood.jsonl"
+    assert gt.infeasible_marker(p).name == "kobe_disasters_seed42_T960_do-makeFlood.infeasible.json"
+
+
 def test_intervention_events_fall_outside_the_window():
     # The intervention's own message is a trunk event tagged tick 16S+15 (turn S),
     # emitted after the trunk's last row: not in (S, S+h].
