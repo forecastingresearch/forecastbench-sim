@@ -53,6 +53,7 @@ All script paths are under `worlds/micropolis/scripts/`. Use `uv run --no-projec
 | Same eval scripts with `--cache-only` | No provider calls; reads existing raw-response cache, but corpus construction can still simulate |
 | Same eval scripts with `--dry-run` | Builds corpus without gathering; **can still simulate** |
 | `extract_ground_truth.py CONFIG --jobs 1` | Runs reseeded continuations through external `run_continuations.js`; not an offline smoke command. Writes `ground_truth/<scenario>_T<snapshot>.jsonl`, one line per horizon: Yes `counts` and `yes_idx` (the 0-based continuations resolving Yes) per question, and per-continuation `values` per metric |
+| `draw_natcond.py [--n 400] [--seed 42]` | Draws natural-conditional cells (question A at S+horizon_A, revealed fact B at the horizon just before it; `--max-gap` widens this) from the ground-truth `yes_idx`, after FreeCiv's draw: 0.05 < P(A) ≤ 0.95, B Yes in ≥ 100 of 1,000 replays, 0.02 < P(A\|B) < 0.98; irrelevant / mechanical / inferential blocks, template-balanced, ≤ 2 reveals per A and ≤ 8 cells per revealed event. Writes `natcond/natcond_<n>_seed<seed>.jsonl`; no engine or provider |
 | `check_determinism.py CONFIG` | Repeats live engine runs; opt-in only |
 | `score_cached.py --input DATASET --kind binary\|continuous` | Reads gathered JSON and prints per-forecast realized Brier or raw quantile CRPS; no engine/provider/normalization |
 
