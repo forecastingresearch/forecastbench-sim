@@ -310,3 +310,78 @@ def test_load_truths(tmp_path, monkeypatch):
         load_truths([dict(corpus[0], horizon=7)])
     with pytest.raises(FileNotFoundError, match="extract_ground_truth"):
         load_truths([dict(corpus[0], snapshot_turn=S + 1)])
+
+
+def test_interventions_in_command_header_paths_and_lines(tmp_path, monkeypatch):
+    import micropolis_world.ground_truth as gt
+
+    cmd = producer_command("kyoto", 42, True, 960, 480, 1, 100, ["makeFlood"])
+    assert cmd[-2:] == ["--intervene", "makeFlood"]
+    with pytest.raises(ValueError, match="unknown intervention"):
+        producer_command("kyoto", 42, True, 960, 480, 1, 100, ["makeRain"])
+
+    iv = [{"turn": S, "action": "makeEarthquake"}]
+    stream = [header(interventions=iv)] + trunk() + continuation(1, []) + continuation(2, [])
+    consume_stream(encode(stream), CITY, True, S, HORIZONS, ["makeEarthquake"])
+    with pytest.raises(StreamError, match="interventions"):
+        consume_stream(encode(stream), CITY, True, S, HORIZONS)
+    with pytest.raises(StreamError, match="interventions"):
+        consume_stream(encode([header()]), CITY, True, S, HORIZONS, ["makeEarthquake"])
+
+    monkeypatch.setattr(gt, "out_dir", lambda: tmp_path)
+    sim = CitySimulation(CITY, 42, disasters=True)
+    assert gt.output_path(sim, S).name == f"{sim.get_id_str()}_T{S}.jsonl"
+    assert gt.output_path(sim, S, ["makeFire", "makeFlood"]).name == (
+        f"{sim.get_id_str()}_T{S}_do-makeFire+makeFlood.jsonl"
+    )
+    merged = consume_stream(make_stream(), CITY, True, S, HORIZONS)
+    assert "interventions" not in ground_truth_lines(sim, S, HORIZONS, merged, "x", "y")[0]
+    lines = ground_truth_lines(sim, S, HORIZONS, merged, "x", "y", ["makeFire"])
+    assert all(line["interventions"] == ["makeFire"] for line in lines)
+
+
+def test_intervention_events_fall_outside_the_window():
+    # The intervention's own message is a trunk event tagged tick 16S+15 (turn S),
+    # emitted after the trunk's last row: not in (S, S+h].
+    forced = dict(message(S, None, MSG_EARTHQUAKE), tick=S * g.TICKS_PER_TURN + 15)
+    iv = [{"turn": S, "action": "makeEarthquake"}]
+    records = [header(interventions=iv)] + trunk()
+    records.insert(-1, forced)
+    records += continuation(1, []) + continuation(2, [])
+    result = consume_stream(encode(records), CITY, True, S, HORIZONS, ["makeEarthquake"])
+    assert result.yes[LONG]["A1"] == 0
+
+
+def test_city_sim_interventions(monkeypatch, tmp_path):
+    import importlib.util
+    from pathlib import Path
+
+    # The autouse guard blocks CitySimulation.run; exercise a fresh copy of the
+    # module with a fake subprocess instead, as test_integration does.
+    src = Path(__file__).parents[1] / "micropolis_world/city_sim.py"
+    spec = importlib.util.spec_from_file_location("micropolis_world._iv_test", src)
+    cs = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(cs)
+
+    monkeypatch.setattr(g, "RUNS_DIR", tmp_path)
+    base = CitySimulation(CITY, 42, disasters=True)
+    sim = CitySimulation(CITY, 42, disasters=True, interventions=[(96, "demolishAirport")])
+    assert sim.get_id_str() == base.get_id_str() + "_at96-demolishAirport"
+    assert sim.get_data_file_path("log").name == "log-seed42-disasters-at96_demolishAirport.jsonl"
+    assert base.get_data_file_path("log").name == "log-seed42-disasters.jsonl"
+    assert "interventions" not in base.describe()
+    assert sim.describe()["interventions"] == [[96, "demolishAirport"]]
+    with pytest.raises(ValueError, match="unknown intervention"):
+        CitySimulation(CITY, 42, interventions=[(96, "makeRain")])
+
+    calls = []
+    monkeypatch.setattr(g, "engine_app_path", lambda **_: tmp_path)
+
+    def fake_run(args, **kwargs):
+        calls.append(args)
+        return cs.subprocess.CompletedProcess(args, 1, stderr="Error: turn 96: nothing\n")
+
+    monkeypatch.setattr(cs.subprocess, "run", fake_run)
+    with pytest.raises(RuntimeError, match="turn 96: nothing"):
+        cs.CitySimulation(CITY, 42, True, [(96, "demolishAirport")]).run(nturns=200)
+    assert calls[0][-2:] == ["--at", "96:demolishAirport"]

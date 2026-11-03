@@ -13,7 +13,7 @@ import json
 import subprocess
 import tempfile
 from collections import Counter
-from collections.abc import Iterable
+from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
 from pathlib import Path
 from typing import NamedTuple
@@ -26,7 +26,7 @@ from .binary_questions import (
     messages_from_events,
     resolve_all,
 )
-from .city_sim import CitySimulation, _load_jsonl, turn_of
+from .city_sim import CitySimulation, _load_jsonl, check_action, turn_of
 
 SUBDIR = "ground_truth"
 
@@ -48,12 +48,18 @@ class StreamError(ValueError):
     """The producer's stream is not what the reader was told to expect."""
 
 
-def output_path(sim: CitySimulation, snapshot_turn: int) -> Path:
-    return output_path_for(sim.get_id_str(), snapshot_turn)
+def output_path(
+    sim: CitySimulation, snapshot_turn: int, interventions: Sequence[str] = ()
+) -> Path:
+    return output_path_for(sim.get_id_str(), snapshot_turn, interventions)
 
 
-def output_path_for(scenario_id: str, snapshot_turn: int) -> Path:
-    return out_dir() / f"{scenario_id}_T{snapshot_turn}.jsonl"
+def output_path_for(
+    scenario_id: str, snapshot_turn: int, interventions: Sequence[str] = ()
+) -> Path:
+    """`<scenario>_T<S>.jsonl`, or `<scenario>_T<S>_do-<a>[+<b>...].jsonl` with interventions at S."""
+    do = f"_do-{'+'.join(interventions)}" if interventions else ""
+    return out_dir() / f"{scenario_id}_T{snapshot_turn}{do}.jsonl"
 
 
 def seed_shards(nseeds: int, jobs: int) -> list[tuple[int, int]]:
@@ -78,6 +84,7 @@ def producer_command(
     horizon: int,
     seed_lo: int,
     seed_hi: int,
+    interventions: Sequence[str] = (),
 ) -> list[str]:
     """The engine invocation for one shard of continuations.
 
@@ -85,7 +92,9 @@ def producer_command(
     the models forecast from shows row S. Branching at S+1 puts the branch at
     tick 16(S+1), so every continuation starts from exactly that reported state
     and its rows are turns S+1..S+H, the window (S, S+H] the questions resolve
-    over.
+    over. Interventions run once on the trunk at the branch, before the
+    snapshot, reaching run_sim.js --at S:ACTION's state; their events are trunk
+    events in turn S, outside the window.
     """
     return [
         *PRODUCER,
@@ -100,6 +109,7 @@ def producer_command(
         "--branch-seeds",
         f"{seed_lo}-{seed_hi}",
         "--disasters" if disasters else "--no-disasters",
+        *(arg for a in interventions for arg in ("--intervene", check_action(a))),
     ]
 
 
@@ -123,17 +133,25 @@ def _strip(row: dict) -> dict:
 
 
 def _check_header(
-    rec: dict, city: str, disasters: bool, snapshot_turn: int, hmax: int
+    rec: dict,
+    city: str,
+    disasters: bool,
+    snapshot_turn: int,
+    hmax: int,
+    interventions: Sequence[str] = (),
 ) -> None:
     expected = {
         "city": city,
         "disasters": disasters,
         "branchAt": snapshot_turn + 1,
         "trunkOutput": True,
+        "interventions": [{"turn": snapshot_turn, "action": a} for a in interventions],
     }
     for key, value in expected.items():
-        if rec.get(key) != value:
-            raise StreamError(f"header {key}={rec.get(key)!r}, expected {value!r}")
+        # Producers that predate interventions omit the key.
+        got = rec.get(key, []) if key == "interventions" else rec.get(key)
+        if got != value:
+            raise StreamError(f"header {key}={got!r}, expected {value!r}")
     if rec["horizon"] < hmax:
         raise StreamError(
             f"producer horizon {rec['horizon']} is shorter than the longest "
@@ -155,6 +173,7 @@ def consume_stream(
     disasters: bool,
     snapshot_turn: int,
     horizons: list[int],
+    interventions: Sequence[str] = (),
 ) -> ShardResult:
     """Tally one producer's stream (header, trunk, continuations).
 
@@ -186,7 +205,7 @@ def consume_stream(
         elif kind == "event":
             (trunk_events if rec["seed"] is None else events).append(_strip(rec))
         elif kind == "header":
-            _check_header(rec, city, disasters, S, max(horizons))
+            _check_header(rec, city, disasters, S, max(horizons), interventions)
             header = rec
         elif kind == "begin":
             if header is None:
@@ -247,6 +266,7 @@ def run_shard(
     horizons: list[int],
     seed_lo: int,
     seed_hi: int,
+    interventions: Sequence[str] = (),
 ) -> ShardResult:
     """Run one producer and tally its stream as it arrives.
 
@@ -254,17 +274,27 @@ def run_shard(
     progress and timing there, and a full pipe would stall it.
     """
     cmd = producer_command(
-        city, seed, disasters, snapshot_turn, max(horizons), seed_lo, seed_hi
+        city,
+        seed,
+        disasters,
+        snapshot_turn,
+        max(horizons),
+        seed_lo,
+        seed_hi,
+        interventions,
     )
     with tempfile.TemporaryFile() as err:
         proc = subprocess.Popen(
             cmd, cwd=g.engine_app_path(continuations=True), stdout=subprocess.PIPE, stderr=err
         )
         assert proc.stdout is not None
+        stream_error: StreamError | None = None
         try:
             result = consume_stream(
-                proc.stdout, city, disasters, snapshot_turn, horizons
+                proc.stdout, city, disasters, snapshot_turn, horizons, interventions
             )
+        except StreamError as e:
+            stream_error = e  # a failed producer truncates the stream; report its stderr
         finally:
             proc.stdout.close()
             returncode = proc.wait()
@@ -273,7 +303,9 @@ def run_shard(
             tail = err.read().decode(errors="replace")[-2000:]
             raise RuntimeError(
                 f"{' '.join(cmd)} exited with code {returncode}:\n{tail}"
-            )
+            ) from stream_error
+        if stream_error is not None:
+            raise stream_error
     return result
 
 
@@ -348,15 +380,19 @@ def ground_truth_lines(
     merged: ShardResult,
     fbsim_commit: str,
     engine_commit: str,
+    interventions: Sequence[str] = (),
 ) -> list[dict]:
     """One output record per horizon.
 
     yes_idx lists, per question, the continuations resolving Yes as 0-based
-    positions in the values lists (seed branch_seeds[0] + i).
+    positions in the values lists (seed branch_seeds[0] + i). With
+    interventions, every record names them (applied at the snapshot turn).
     """
     pos = {seed: i for i, seed in enumerate(merged.seeds)}
+    extra = {"interventions": list(interventions)} if interventions else {}
     return [
         {
+            **extra,
             "scenario_id": sim.get_id_str(),
             "city": sim.city_name,
             "seed": sim.seed,

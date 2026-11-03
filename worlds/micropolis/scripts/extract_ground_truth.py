@@ -14,10 +14,16 @@ ranges. A (scenario, snapshot) whose file already covers every horizon with at
 least branch_nseeds continuations is skipped unless --force-regen is given.
 Horizon 0 is a read-off, not a forecast, and is dropped.
 
+--intervene ACTION (repeatable) applies the intervention once at the snapshot
+turn, before branching, so all continuations share its outcome, and writes
+<scenario>_T<S>_do-<ACTION>.jsonl instead. A scenario where it has no effect
+(e.g. makeFlood without river edges) fails.
+
 Usage:
     scripts/extract_ground_truth.py                    # packaged example-binary.json5
     scripts/extract_ground_truth.py configs/example-binary.json5 --branch-nseeds 1
     scripts/extract_ground_truth.py --cities kyoto --jobs 4 --force-regen
+    scripts/extract_ground_truth.py --cities kobe --intervene demolishPowerPlants
 """
 
 import argparse
@@ -26,6 +32,7 @@ import time
 from concurrent.futures import ProcessPoolExecutor
 
 from micropolis_world.binary_questions import check_horizons
+from micropolis_world.city_sim import INTERVENTION_ACTIONS
 from micropolis_world.config import (
     CONFIG_DIR,
     add_config_args,
@@ -71,7 +78,17 @@ def main() -> None:
         action="store_true",
         help="Re-run scenarios whose output file already covers every horizon",
     )
+    ap.add_argument(
+        "--intervene",
+        action="append",
+        default=[],
+        choices=INTERVENTION_ACTIONS,
+        metavar="ACTION",
+        help="Intervention applied once at the snapshot turn, before branching "
+        f"(repeatable): {', '.join(INTERVENTION_ACTIONS)}",
+    )
     args = ap.parse_args()
+    interventions = args.intervene
 
     cfg = load_config(args)
     seed = cfg.get_seed(args.seed)
@@ -106,11 +123,13 @@ def main() -> None:
         f"{len(scenarios)} scenario(s) x {len(snapshot_turns)} snapshot(s), "
         f"{nseeds} continuations each over {args.jobs} job(s); horizons {horizons}"
     )
+    if interventions:
+        print(f"interventions at the snapshot turn: {', '.join(interventions)}")
 
     jobs = [(sim, S) for sim in scenarios for S in snapshot_turns]
     with ProcessPoolExecutor(max_workers=args.jobs) as pool:
         for i, (sim, S) in enumerate(jobs, start=1):
-            path = output_path(sim, S)
+            path = output_path(sim, S, interventions)
             tag = f"[{i}/{len(jobs)}] {sim.get_id_str()} T{S}"
             if (
                 not args.force_regen
@@ -123,7 +142,15 @@ def main() -> None:
             start = time.perf_counter()
             futures = [
                 pool.submit(
-                    run_shard, sim.city_name, seed, sim.disasters, S, horizons, lo, hi
+                    run_shard,
+                    sim.city_name,
+                    seed,
+                    sim.disasters,
+                    S,
+                    horizons,
+                    lo,
+                    hi,
+                    interventions,
                 )
                 for lo, hi in seed_shards(nseeds, args.jobs)
             ]
@@ -137,7 +164,7 @@ def main() -> None:
             write_lines(
                 path,
                 ground_truth_lines(
-                    sim, S, horizons, merged, fbsim_commit, engine_commit
+                    sim, S, horizons, merged, fbsim_commit, engine_commit, interventions
                 ),
             )
             print(
