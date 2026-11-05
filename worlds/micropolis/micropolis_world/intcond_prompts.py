@@ -28,7 +28,10 @@ Given this, what is the probability that this question resolves YES: {question}{
 
 Reason about what, if anything, this changes, and end your response with your updated probability in <probability> </probability> tags."""
 # The disaster's own report is logged at turn S, outside A's window.
-LOGGED = " The disaster's own report is logged at turn {S}, so that report does not count toward the question below; anything it leads to from turn {S1} on does."
+LOGGED = (
+    " The disaster is reported once, when it starts, at turn {S}; that report does not count toward the question"
+    " below, and the disaster is not reported again while it lasts. Anything it leads to from turn {S1} on does count."
+)
 WINDOW = " Only turns {S1} through {T} count."
 
 

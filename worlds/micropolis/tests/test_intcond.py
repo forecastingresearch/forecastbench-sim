@@ -88,9 +88,9 @@ def test_intcond_prompts():
             "action": "makeEarthquake", "block": "null", "question_id": "kobe_disasters_seed42_T960_H144_A2",
             "text": "Will at least one tornado be sighted between the current turn and turn 1104?"}
     t = turn2_text(cell)
-    assert "an earthquake is set off" in t and "logged at turn 960" in t
+    assert "an earthquake is set off" in t and "reported once, when it starts, at turn 960" in t
     assert "between turn 960 and turn 1104? Only turns 961 through 1104 count." in t
-    assert "logged" not in turn2_text(dict(cell, action="demolishAirport"))
+    assert "reported once" not in turn2_text(dict(cell, action="demolishAirport"))
     jobs = build_jobs([cell, dict(cell, cell_id=4, action="makeFire")], {("kobe_disasters_seed42", 960): "R"}, "P")
     assert len(jobs["t1"]) == 1 and [j["item"] for j in jobs["t2"]] == [
         "kobe_disasters_seed42_T960_H144_A2|do-makeEarthquake", "kobe_disasters_seed42_T960_H144_A2|do-makeFire"]
