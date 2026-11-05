@@ -90,10 +90,10 @@ def trunk(pop: int = 1000) -> list[dict]:
 
 
 def continuation(
-    seed: int, events: list[dict], pops: dict[int, int] | None = None
+    seed: int, events: list[dict], pops: dict[int, int] | None = None, begin: dict | None = None
 ) -> list[dict]:
     pops = pops or {}
-    lines = [{"kind": "begin", "seed": seed, "run": "continuation"}]
+    lines = [{"kind": "begin", "seed": seed, "run": "continuation", **(begin or {})}]
     for t in range(S + 1, S + H + 1):
         lines.append(row(t, seed, pops.get(t, 1000)))
         lines.extend(e for e in events if e["tick"] // g.TICKS_PER_TURN == t)
@@ -321,12 +321,21 @@ def test_interventions_in_command_header_paths_and_lines(tmp_path, monkeypatch):
         producer_command("kyoto", 42, True, 960, 480, 1, 100, ["makeRain"])
 
     iv = [{"turn": S, "action": "makeEarthquake"}]
-    stream = [header(interventions=iv)] + trunk() + continuation(1, []) + continuation(2, [])
-    consume_stream(encode(stream), CITY, True, S, HORIZONS, ["makeEarthquake"])
+    hdr = header(interventions=iv, interventionMode="per-continuation")
+    conts = (continuation(1, [], begin={"interventionSeed": 1000001, "missedSeeds": [1]})
+             + continuation(2, [], begin={"interventionSeed": 2, "missedSeeds": []}))
+    stream = [hdr] + trunk() + conts
+    result = consume_stream(encode(stream), CITY, True, S, HORIZONS, ["makeEarthquake"])
+    assert result.missed == {1: [1]}
     with pytest.raises(StreamError, match="interventions"):
         consume_stream(encode(stream), CITY, True, S, HORIZONS)
     with pytest.raises(StreamError, match="interventions"):
         consume_stream(encode([header()]), CITY, True, S, HORIZONS, ["makeEarthquake"])
+    with pytest.raises(StreamError, match="interventionMode"):  # a trunk-mode engine
+        consume_stream(encode([header(interventions=iv)]), CITY, True, S, HORIZONS, ["makeEarthquake"])
+    with pytest.raises(StreamError, match="interventionSeed"):
+        no_seed = [hdr] + trunk() + continuation(1, []) + continuation(2, [])
+        consume_stream(encode(no_seed), CITY, True, S, HORIZONS, ["makeEarthquake"])
 
     monkeypatch.setattr(gt, "out_dir", lambda: tmp_path)
     sim = CitySimulation(CITY, 42, disasters=True)
@@ -336,8 +345,10 @@ def test_interventions_in_command_header_paths_and_lines(tmp_path, monkeypatch):
     )
     merged = consume_stream(make_stream(), CITY, True, S, HORIZONS)
     assert "interventions" not in ground_truth_lines(sim, S, HORIZONS, merged, "x", "y")[0]
+    merged = merge_shards([result])
     lines = ground_truth_lines(sim, S, HORIZONS, merged, "x", "y", ["makeFire"])
     assert all(line["interventions"] == ["makeFire"] for line in lines)
+    assert lines[0]["n_missed"] == 1 and lines[0]["missed_seeds"] == {"1": [1]}
 
 
 def test_infeasible_intervention_message():
@@ -352,13 +363,14 @@ def test_infeasible_intervention_message():
 
 
 def test_intervention_events_fall_outside_the_window():
-    # The intervention's own message is a trunk event tagged tick 16S+15 (turn S),
-    # emitted after the trunk's last row: not in (S, S+h].
-    forced = dict(message(S, None, MSG_EARTHQUAKE), tick=S * g.TICKS_PER_TURN + 15)
+    # The intervention's own message is a continuation event tagged tick 16S+15
+    # (turn S), emitted right after its begin line: not in (S, S+h].
     iv = [{"turn": S, "action": "makeEarthquake"}]
-    records = [header(interventions=iv)] + trunk()
-    records.insert(-1, forced)
-    records += continuation(1, []) + continuation(2, [])
+    records = [header(interventions=iv, interventionMode="per-continuation")] + trunk()
+    for seed in (1, 2):
+        forced = dict(message(S, seed, MSG_EARTHQUAKE), tick=S * g.TICKS_PER_TURN + 15)
+        lines = continuation(seed, [], begin={"interventionSeed": seed, "missedSeeds": []})
+        records += lines[:1] + [forced] + lines[1:]
     result = consume_stream(encode(records), CITY, True, S, HORIZONS, ["makeEarthquake"])
     assert result.yes[LONG]["A1"] == 0
 

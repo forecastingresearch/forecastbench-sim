@@ -14,11 +14,12 @@ ranges. A (scenario, snapshot) whose file already covers every horizon with at
 least branch_nseeds continuations is skipped unless --force-regen is given.
 Horizon 0 is a read-off, not a forecast, and is dropped.
 
---intervene ACTION (repeatable) applies the intervention once at the snapshot
-turn, before branching, so all continuations share its outcome, and writes
-<scenario>_T<S>_do-<ACTION>.jsonl instead. A scenario where it has no effect
-(e.g. makeFlood without river edges) fails, or with --skip-infeasible is
-recorded in <output>.infeasible.json and skipped.
+--intervene ACTION (repeatable) applies the intervention at the snapshot turn in
+every continuation, after its reseed, so each draws its own realisation, and
+writes <scenario>_T<S>_do-<ACTION>.jsonl instead. A continuation whose
+intervention misses is retried with another seed (recorded in missed_seeds). A
+scenario where it never takes effect (e.g. makeFlood without river edges) fails,
+or with --skip-infeasible is recorded in <output>.infeasible.json and skipped.
 
 Usage:
     scripts/extract_ground_truth.py                    # packaged example-binary.json5
@@ -88,7 +89,7 @@ def main() -> None:
         default=[],
         choices=INTERVENTION_ACTIONS,
         metavar="ACTION",
-        help="Intervention applied once at the snapshot turn, before branching "
+        help="Intervention applied at the snapshot turn in every continuation, after its reseed "
         f"(repeatable): {', '.join(INTERVENTION_ACTIONS)}",
     )
     ap.add_argument(

@@ -1,10 +1,11 @@
 """Interventional-conditional draw: P(A | do X) against P(A), after natcond.py.
 
-A cell pairs question A (resolving over (S, S+h]) with intervention X applied
-once at snapshot S, before branching (extract_ground_truth.py --intervene). P(A)
-comes from the base ground truth and P(A|do X) from the do-file over the same
-branch seeds, so delta is a paired difference. The draw is structural: blocks,
-template balance and caps, never a cell's own effect size.
+A cell pairs question A (resolving over (S, S+h]) with intervention X applied at
+snapshot S in every continuation, each with its own realisation
+(extract_ground_truth.py --intervene). P(A) comes from the base ground truth and
+P(A|do X) from the do-file; the two are effectively independent samples. Cells
+are picked by blocks, template balance and caps, never by their own effect size,
+but weak_pairs drops (block, X, A family) pairs by their median realised |delta|.
 """
 
 import random
@@ -30,6 +31,9 @@ RANDOM_DISASTERS = {"earthquake", "tornado", "flood", "monster", "meltdown"}
 # Crashes need a powered airport, seaport or rail line, so damage reaches them.
 CRASHES = {"air_crash", "shipwreck", "train_crash"}
 OUTCOMES = CONSEQUENCES | {"pollution"} | CRASHES
+# Same family as X but a state the disaster leaves behind, not a count of it:
+# a tile still burning at the horizon after a forced fire is damage.
+DAMAGE_NOT_SAME = {"A14"}
 
 BLOCKS = ("null", "same-family", "damage", "infrastructure")
 DEFAULT_QUOTA = {"null": 50, "same-family": 50, "damage": 200, "infrastructure": 100}
@@ -49,7 +53,7 @@ def block_of(action: str, qid: str) -> str | None:
         if af in OUTCOMES or (xf == "power" and af in {"meltdown", "monster"}):
             return "infrastructure"
         return "null" if af in RANDOM_DISASTERS else None
-    if af == xf:
+    if af == xf and qid not in DAMAGE_NOT_SAME:
         return "same-family"
     if af in RANDOM_DISASTERS:
         return "null"

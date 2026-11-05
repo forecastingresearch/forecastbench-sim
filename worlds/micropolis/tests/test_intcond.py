@@ -33,6 +33,7 @@ def test_blocks():
     assert block_of("makeEarthquake", "A13") == "damage"  # rubble
     assert block_of("makeEarthquake", "A5") == "damage"  # plane crash: airport damage
     assert block_of("makeFire", "B4") == "same-family"
+    assert block_of("makeFire", "A14") == "damage"  # burning tile at the horizon
     assert block_of("demolishAirport", "A5") == "infrastructure"
     assert block_of("demolishPowerPlants", "A6") == "infrastructure"  # unpowered seaport
     assert block_of("demolishPowerPlants", "A4") == "infrastructure"  # pollution -> monster
@@ -78,3 +79,18 @@ def test_draw_respects_caps_and_quota():
     assert len({(c["scenario_id"], c["horizon"], c["qid"], c["action"]) for c in chosen}) == 46
     with pytest.raises(ValueError, match="sum"):
         draw(cells, 40, quota, seed=1)
+
+
+def test_intcond_prompts():
+    from micropolis_world.intcond_prompts import build_jobs, turn2_text
+
+    cell = {"cell_id": 3, "scenario_id": "kobe_disasters_seed42", "snapshot_turn": 960, "horizon": 144, "qid": "A2",
+            "action": "makeEarthquake", "block": "null", "question_id": "kobe_disasters_seed42_T960_H144_A2",
+            "text": "Will at least one tornado be sighted between the current turn and turn 1104?"}
+    t = turn2_text(cell)
+    assert "an earthquake is set off" in t and "logged at turn 960" in t
+    assert "between turn 960 and turn 1104? Only turns 961 through 1104 count." in t
+    assert "logged" not in turn2_text(dict(cell, action="demolishAirport"))
+    jobs = build_jobs([cell, dict(cell, cell_id=4, action="makeFire")], {("kobe_disasters_seed42", 960): "R"}, "P")
+    assert len(jobs["t1"]) == 1 and [j["item"] for j in jobs["t2"]] == [
+        "kobe_disasters_seed42_T960_H144_A2|do-makeEarthquake", "kobe_disasters_seed42_T960_H144_A2|do-makeFire"]

@@ -75,6 +75,21 @@ class Results:
             return False
         return sum(r["error"] is None for r in rows) <= reask
 
+    def copy_t1(self, other: "Results", t1_jobs: list[dict], models: list[str], dry_run: bool = False) -> int:
+        """Copy another study's turn-1 rows asked with the same messages, for keys
+        with none here yet; returns the rows copied (or that would be)."""
+        n = 0
+        for m in models:
+            for j in t1_jobs:
+                key, sha = (m, "t1", j["item"]), messages_sha(conversation(j))
+                if self.rows.get(key):
+                    continue
+                for r in other._rows(key, sha):
+                    if not dry_run:
+                        self.add({**r, "copied_from": str(other.path)})
+                    n += 1
+        return n
+
     def add(self, row: dict) -> None:
         self.rows[row["model"], row["arm"], row["item"]].append(row)
         with open(self.path, "a") as f:

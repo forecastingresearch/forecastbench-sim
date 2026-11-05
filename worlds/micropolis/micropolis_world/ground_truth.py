@@ -15,7 +15,7 @@ import subprocess
 import tempfile
 from collections import Counter
 from collections.abc import Iterable, Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import NamedTuple
 
@@ -50,7 +50,7 @@ class StreamError(ValueError):
 
 
 class InfeasibleIntervention(RuntimeError):
-    """An intervention had no effect on the trunk (e.g. a flood without river edges)."""
+    """An intervention missed with every seed tried (e.g. a flood without river edges)."""
 
 
 # The engine's InterventionError messages (cli/lib/interventions.js).
@@ -106,9 +106,9 @@ def producer_command(
     the models forecast from shows row S. Branching at S+1 puts the branch at
     tick 16(S+1), so every continuation starts from exactly that reported state
     and its rows are turns S+1..S+H, the window (S, S+H] the questions resolve
-    over. Interventions run once on the trunk at the branch, before the
-    snapshot, reaching run_sim.js --at S:ACTION's state; their events are trunk
-    events in turn S, outside the window.
+    over. Interventions run in every continuation right after the reseed, so
+    each draws its own realisation (a miss is retried with another seed); their
+    events are tagged turn S, outside the window.
     """
     return [
         *PRODUCER,
@@ -136,6 +136,7 @@ class ShardResult:
     yes: dict[int, Counter]  # horizon -> qid -> continuations resolving Yes
     values: dict[int, dict[str, list]]  # horizon -> metric -> value per continuation
     yes_seeds: dict[int, dict[str, list[int]]]  # horizon -> qid -> seeds resolving Yes
+    missed: dict[int, list[int]] = field(default_factory=dict)  # seed -> intervention seeds that missed
 
     @property
     def n(self) -> int:
@@ -166,6 +167,11 @@ def _check_header(
         got = rec.get(key, []) if key == "interventions" else rec.get(key)
         if got != value:
             raise StreamError(f"header {key}={got!r}, expected {value!r}")
+    if interventions and rec.get("interventionMode") != "per-continuation":
+        raise StreamError(
+            f"header interventionMode={rec.get('interventionMode')!r}: the engine applies "
+            "interventions on the trunk, not per continuation; update MicropolisCore"
+        )
     if rec["horizon"] < hmax:
         raise StreamError(
             f"producer horizon {rec['horizon']} is shorter than the longest "
@@ -230,6 +236,10 @@ def consume_stream(
                 if trunk is None:
                     raise StreamError("continuation before the trunk finished")
                 rows, events = [], []
+                if interventions and "interventionSeed" not in rec:
+                    raise StreamError(f"seed {rec['seed']}: begin line has no interventionSeed")
+                if rec.get("missedSeeds"):
+                    result.missed[rec["seed"]] = rec["missedSeeds"]
         elif kind == "end":
             if rec["seed"] is None:
                 _check_turns(trunk_rows, 0, S, f"{city} trunk")
@@ -344,6 +354,7 @@ def merge_shards(shards: list[ShardResult]) -> ShardResult:
     )
     for shard in shards:
         merged.seeds.extend(shard.seeds)
+        merged.missed.update(shard.missed)
         for h in merged.yes:
             merged.yes[h].update(shard.yes[h])
             for metric, values in shard.values[h].items():
@@ -402,10 +413,19 @@ def ground_truth_lines(
 
     yes_idx lists, per question, the continuations resolving Yes as 0-based
     positions in the values lists (seed branch_seeds[0] + i). With
-    interventions, every record names them (applied at the snapshot turn).
+    interventions, every record names them (applied at the snapshot turn, per
+    continuation) and lists the branch seeds whose intervention missed, with
+    the seeds tried (missed_seeds).
     """
     pos = {seed: i for i, seed in enumerate(merged.seeds)}
-    extra = {"interventions": list(interventions)} if interventions else {}
+    extra = {}
+    if interventions:
+        extra = {
+            "interventions": list(interventions),
+            "intervention_mode": "per-continuation",
+            "n_missed": sum(len(v) for v in merged.missed.values()),
+            "missed_seeds": {str(s): merged.missed[s] for s in sorted(merged.missed)},
+        }
     return [
         {
             **extra,
@@ -567,11 +587,13 @@ def covers(lines: list[dict], horizons: list[int], nseeds: int) -> bool:
     The question set is part of coverage: a file tallied before a question was
     added, removed or relabelled holds counts under the wrong ids, and skipping
     it would silently resolve against stale labels. A file without yes_idx is
-    not covered either.
+    not covered either, nor an intervention file from a trunk-mode engine (one
+    realisation shared by every continuation).
     """
     by_horizon = {line["horizon"]: line for line in lines}
     return all(
         h in by_horizon
+        and (not by_horizon[h].get("interventions") or by_horizon[h].get("intervention_mode") == "per-continuation")
         and by_horizon[h]["n_continuations"] >= nseeds
         and set(by_horizon[h]["counts"]) == set(QUESTION_IDS)
         and set(by_horizon[h].get("yes_idx", ())) == set(QUESTION_IDS)
