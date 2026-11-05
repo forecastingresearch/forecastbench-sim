@@ -54,7 +54,7 @@ class InfeasibleIntervention(RuntimeError):
 
 
 # The engine's InterventionError messages (cli/lib/interventions.js).
-_INFEASIBLE = re.compile(r"^Error: .*(had no effect|found nothing to demolish)", re.M)
+_INFEASIBLE = re.compile(r"^Error: .*(had no effect|found nothing to demolish)", re.MULTILINE)
 
 
 def infeasible_marker(path: Path) -> Path:

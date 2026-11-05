@@ -16,7 +16,12 @@ from pathlib import Path
 
 from micropolis_world import module_globals as g
 from micropolis_world.intcond_prompts import build_jobs
-from micropolis_world.natcond_prompts import PREAMBLE_PATH, binary_prompt_path, conversation, report_from_prompt
+from micropolis_world.natcond_prompts import (
+    PREAMBLE_PATH,
+    binary_prompt_path,
+    conversation,
+    report_from_prompt,
+)
 
 
 def main() -> None:
