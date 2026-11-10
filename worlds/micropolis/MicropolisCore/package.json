@@ -1,0 +1,18 @@
+{
+	"name": "micropoliscore",
+	"version": "0.1.0",
+	"private": true,
+	"description": "MicropolisCore monorepo — WASM engine, packages/, apps (Micropolis, VitaMooSpace), VitaMoo libraries",
+	"type": "module",
+	"scripts": {
+		"build": "pnpm -r --stream --if-present run build",
+		"build:engine": "pnpm --filter @micropolis/engine-wasm run build",
+		"check": "pnpm --filter micropolis run check",
+		"test": "pnpm --filter vitamoo run build && pnpm --filter mooshow run build && pnpm --filter mooshow run test && pnpm --filter @micropolis/sims-io run build && pnpm --filter @micropolis/sims-io run test && pnpm --filter micropolis run test",
+		"verify:structure": "node scripts/verify-monorepo-structure.mjs"
+	},
+	"engines": {
+		"node": ">=20"
+	},
+	"packageManager": "pnpm@10.28.0+sha512.05df71d1421f21399e053fde567cea34d446fa02c76571441bfc1c7956e98e363088982d940465fd34480d4d90a0668bc12362f8aa88000a64e83d0b0e47be48"
+}

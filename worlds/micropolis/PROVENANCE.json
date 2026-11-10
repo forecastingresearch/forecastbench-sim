@@ -199,5 +199,13 @@
     "branch": "exploration",
     "commit": "4fe3a7238b735f9cdd3ec13c957ccc8a3a3b0481",
     "validation": "source interface inspected only; no historical producer pin or live run established"
+  },
+  "vendored_engine": {
+    "path": "MicropolisCore",
+    "repository": "https://github.com/fdrocha/MicropolisCore",
+    "branch": "fbs",
+    "commit": "4ba571dd9a571e674c919b17a5577ff61fbffe2c",
+    "details": "MicropolisCore/VENDORED.md",
+    "validation": "reproduces byte-for-byte all cached trunk logs/events in data/micropolis/runs and sampled natural and interventional continuations (November 10, 2026)"
   }
 }

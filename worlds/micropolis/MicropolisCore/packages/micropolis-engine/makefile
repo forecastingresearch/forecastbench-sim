@@ -1,0 +1,311 @@
+# Makefile for MicropolisCore
+#
+# Micropolis, Unix Version.  This game was released for the Unix platform
+# in or about 1990 and has been modified for inclusion in the One Laptop
+# Per Child program.  Copyright (C) 1989 - 2007 Electronic Arts Inc.  If
+# you need assistance with this program, you may contact:
+#   http://wiki.laptop.org/go/Micropolis  or email  micropolis@laptop.org.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or (at
+# your option) any later version.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.  You should have received a
+# copy of the GNU General Public License along with this program.  If
+# not, see <http://www.gnu.org/licenses/>.
+#
+#             ADDITIONAL TERMS per GNU GPL Section 7
+#
+# No trademark or publicity rights are granted.  This license does NOT
+# give you any right, title or interest in the trademark SimCity or any
+# other Electronic Arts trademark.  You may not distribute any
+# modification of this program using the trademark SimCity or claim any
+# affliation or association with Electronic Arts Inc. or its employees.
+#
+# Any propagation or conveyance of this program must include this
+# copyright notice and these terms.
+#
+# If you convey this program (or any modifications of it) and assume
+# contractual liability for the program to recipients of it, you agree
+# to indemnify Electronic Arts for any liability that those contractual
+# assumptions impose on Electronic Arts.
+#
+# You may not misrepresent the origins of this program; modified
+# versions of the program must be marked as such and not identified as
+# the original program.
+#
+# This disclaimer supplements the one included in the General Public
+# License.  TO THE FULLEST EXTENT PERMISSIBLE UNDER APPLICABLE LAW, THIS
+# PROGRAM IS PROVIDED TO YOU "AS IS," WITH ALL FAULTS, WITHOUT WARRANTY
+# OF ANY KIND, AND YOUR USE IS AT YOUR SOLE RISK.  THE ENTIRE RISK OF
+# SATISFACTORY QUALITY AND PERFORMANCE RESIDES WITH YOU.  ELECTRONIC ARTS
+# DISCLAIMS ANY AND ALL EXPRESS, IMPLIED OR STATUTORY WARRANTIES,
+# INCLUDING IMPLIED WARRANTIES OF MERCHANTABILITY, SATISFACTORY QUALITY,
+# FITNESS FOR A PARTICULAR PURPOSE, NONINFRINGEMENT OF THIRD PARTY
+# RIGHTS, AND WARRANTIES (IF ANY) ARISING FROM A COURSE OF DEALING,
+# USAGE, OR TRADE PRACTICE.  ELECTRONIC ARTS DOES NOT WARRANT AGAINST
+# INTERFERENCE WITH YOUR ENJOYMENT OF THE PROGRAM; THAT THE PROGRAM WILL
+# MEET YOUR REQUIREMENTS; THAT OPERATION OF THE PROGRAM WILL BE
+# UNINTERRUPTED OR ERROR-FREE, OR THAT THE PROGRAM WILL BE COMPATIBLE
+# WITH THIRD PARTY SOFTWARE OR THAT ANY ERRORS IN THE PROGRAM WILL BE
+# CORRECTED.  NO ORAL OR WRITTEN ADVICE PROVIDED BY ELECTRONIC ARTS OR
+# ANY AUTHORIZED REPRESENTATIVE SHALL CREATE A WARRANTY.  SOME
+# JURISDICTIONS DO NOT ALLOW THE EXCLUSION OF OR LIMITATIONS ON IMPLIED
+# WARRANTIES OR THE LIMITATIONS ON THE APPLICABLE STATUTORY RIGHTS OF A
+# CONSUMER, SO SOME OR ALL OF THE ABOVE EXCLUSIONS AND LIMITATIONS MAY
+# NOT APPLY TO YOU.
+#
+########################################################################
+
+
+########################################################################
+# Emscripten settings
+#
+# INCOMING_MODULE_JS_API: Emscripten only honours Module.* properties named in
+# this list, and since 4.x it hard-aborts on any it does not know
+# ("Aborted(`Module.wasmBinary` was supplied but `wasmBinary` not included in
+# INCOMING_MODULE_JS_API)"). The default list omits `wasmBinary` and
+# `getPreloadedPackage`, both of which apps/micropolis/src/lib/wasm/node.ts
+# passes to load the engine from a Buffer in Node instead of over HTTP. So the
+# list below is the upstream default plus those two. If a loader starts passing
+# another Module property, add it here too.
+
+
+EMCC = em++
+
+EMCXXFLAGS = \
+    -std=c++17 \
+	-fPIC
+
+EMLDFLAGS = \
+    -s WASM=1 \
+    -s MODULARIZE=1 \
+    -s EXPORT_ES6=1 \
+    -s 'ENVIRONMENT=web,worker,node' \
+    -s ALLOW_MEMORY_GROWTH=1 \
+    -s 'EXPORTED_RUNTIME_METHODS=["HEAPU16","wasmMemory"]' \
+    -s 'INCOMING_MODULE_JS_API=["ENVIRONMENT","arguments","canvas","dynamicLibraries","elementPointerLock","getPreloadedPackage","instantiateWasm","locateFile","monitorRunDependencies","noExitRuntime","noInitialRun","onAbort","onExit","onRuntimeInitialized","postRun","preInit","preRun","print","printErr","setStatus","statusMessage","stderr","stdin","stdout","thisProgram","wasm","wasmBinary","websocket"]' \
+	-lembind \
+	--emit-tsd=micropolisengine.d.ts \
+	--shell-file src/micropolisengine_template.html \
+	--js-library src/micropolisengine_lib.js \
+	--preload-file ../../content/micropolis/cities@cities/
+
+
+########################################################################
+# Debug build settings
+#
+# `make debug` builds a separate, instrumented engine for hunting memory bugs
+# (e.g. the out-of-bounds trap in simTick() that apps/micropolis/cli/
+# simCrash.test.ts reproduces). Release and debug never share object files —
+# they compile to build/obj/release and build/obj/debug — so switching targets
+# cannot silently link a mix of differently-instrumented objects.
+#
+# Flags, and why each one:
+#   -g                  full DWARF; turns wasm-function[2874] into file:line
+#   -O0                 no inlining, so frames map to real C++ functions
+#   -s ASSERTIONS=2     enables the runtime's own sanity checks, verbosely
+#   -s SAFE_HEAP=1      traps on the *first* misaligned/out-of-bounds access
+#                       rather than wherever the corruption later surfaces —
+#                       this is the flag that localizes the bug
+#   -s STACK_OVERFLOW_CHECK=2  catches stack smashes with a real trace
+#   -s DISABLE_EXCEPTION_CATCHING=0  let asserts/throws surface as exceptions
+#
+# Deliberately absent: DEMANGLE_SUPPORT. It was removed from Emscripten (see
+# tools/settings.py's removed-settings table) and now hard-errors the link.
+# Demangled C++ names come from -g instead.
+#
+# SAFE_HEAP makes the engine roughly an order of magnitude slower. That is the
+# point of keeping it out of the default target.
+
+EMDEBUG_CXXFLAGS = \
+	-g \
+	-O0 \
+	-fno-omit-frame-pointer
+
+EMDEBUG_LDFLAGS = \
+	-g \
+	-O0 \
+	-s ASSERTIONS=2 \
+	-s SAFE_HEAP=1 \
+	-s STACK_OVERFLOW_CHECK=2 \
+	-s DISABLE_EXCEPTION_CATCHING=0
+
+
+########################################################################
+# Sources and headers
+
+
+SOURCES = \
+	src/allocate.cpp \
+	src/animate.cpp \
+	src/budget.cpp \
+	src/callback.cpp \
+	src/connect.cpp \
+	src/disasters.cpp \
+	src/emscripten.cpp \
+	src/evaluate.cpp \
+	src/fileio.cpp \
+	src/generate.cpp \
+	src/graph.cpp \
+	src/initialize.cpp \
+	src/map.cpp \
+	src/frontendmessage.cpp \
+	src/message.cpp \
+	src/micropolis.cpp \
+	src/position.cpp \
+	src/power.cpp \
+	src/random.cpp \
+	src/scan.cpp \
+	src/simulate.cpp \
+	src/sprite.cpp \
+	src/tool.cpp \
+	src/traffic.cpp \
+	src/update.cpp \
+	src/utilities.cpp \
+	src/zone.cpp
+
+SUBHEADERS = \
+	src/callback.h \
+	src/data_types.h \
+	src/frontendmessage.h \
+	src/map_type.h \
+	src/position.h \
+	src/text.h \
+	src/tool.h
+
+HEADERS = \
+	$(SUBHEADERS) \
+	src/micropolis.h
+
+
+########################################################################
+
+
+# BUILD selects the variant: "release" (default) or "debug". `make debug` just
+# re-invokes make with BUILD=debug, so both variants share one set of rules.
+BUILD ?= release
+
+OBJDIR = build/obj/$(BUILD)
+OBJECTS = $(patsubst src/%.cpp,$(OBJDIR)/%.o,$(SOURCES))
+
+# Release keeps writing to build/ so `make install` and every existing
+# reference to build/micropolisengine.* behave exactly as before. Debug lands
+# in build/debug/ so an instrumented engine can never be mistaken for, or
+# installed over, the shipping artifacts.
+ifeq ($(BUILD),debug)
+OUTDIR = build/debug
+VARIANT_CXXFLAGS = $(EMDEBUG_CXXFLAGS)
+VARIANT_LDFLAGS = $(EMDEBUG_LDFLAGS)
+else
+OUTDIR = build
+# Without an explicit -O level em++ defaults to -O0 (and turns ASSERTIONS on),
+# which ran simTick() ~4x slower than -O3 in the headless runners (28k vs
+# 120k ticks/s on haight) and produced a 2.5x larger .wasm. Output is
+# bit-identical between the two: run_sim.js / run_continuations.js logs were
+# diffed across builds when this was added.
+VARIANT_CXXFLAGS = -O3
+VARIANT_LDFLAGS = -O3
+endif
+
+LIBRARY = $(OUTDIR)/micropolisengine
+OUTPUTFILES = \
+    $(LIBRARY).wasm \
+	$(LIBRARY).js \
+	$(LIBRARY).d.ts \
+	$(LIBRARY).data \
+	$(LIBRARY).html
+
+.PHONY: all debug install clean
+
+all: $(LIBRARY)
+
+# Build the instrumented engine into build/debug/. Never installed by
+# `make install` — see the debug settings section above for the flag rationale.
+debug:
+	$(MAKE) BUILD=debug all
+
+# Compilation rule for wasm
+$(LIBRARY): $(OBJECTS)
+	mkdir -p $(OUTDIR)
+	$(EMCC) \
+		$(EMLDFLAGS) \
+		$(VARIANT_LDFLAGS) \
+		-o $(LIBRARY).html \
+		$^
+
+$(OBJDIR)/%.o: src/%.cpp $(HEADERS)
+	mkdir -p $(OBJDIR)
+	$(EMCC) \
+	    $(EMCXXFLAGS) \
+		$(VARIANT_CXXFLAGS) \
+		-c $< \
+		-o $@
+
+# Installs the release artifacts only; refuses to run under BUILD=debug so an
+# instrumented engine never overwrites what the app ships. The guard is at
+# parse time (not a recipe line) so it fires before `all` does any linking.
+ifeq ($(BUILD),debug)
+install:
+	$(error refusing to install a debug build over the release artifacts; run `make install` without BUILD=debug)
+else
+install: all
+	echo "MicropolisEngine: makefile: make install"
+	pwd
+	ls -la .
+	ls -la build
+	cp build/micropolisengine.wasm ../../apps/micropolis/src/lib
+	cp build/micropolisengine.data ../../apps/micropolis/src/lib
+	{ printf '%s\n' '// @ts-nocheck'; cat build/micropolisengine.js; } > ../../apps/micropolis/src/lib/micropolisengine.js
+	if [ -f build/micropolisengine.d.ts ]; then cp build/micropolisengine.d.ts ../../apps/micropolis/src/types; else echo "micropolisengine.d.ts was not generated; keeping existing TypeScript bindings"; fi
+endif
+
+# Removes both variants' objects and outputs. Also sweeps any src/*.o left by
+# an older revision of this makefile, which compiled objects next to sources.
+clean:
+	rm -rf \
+		build \
+		src/*.o
+
+
+########################################################################
+# Dependencies
+
+
+src/micropolis.h: $(SUBHEADERS)
+
+allocate.cpp: micropolis.h
+animate.cpp: micropolis.h
+budget.cpp: micropolis.h
+connect.cpp: micropolis.h
+disasters.cpp: micropolis.h
+emscripten.cpp: micropolis.h
+evaluate.cpp: micropolis.h
+frontendmessage.cpp: micropolis.h
+fileio.cpp: micropolis.h
+generate.cpp: micropolis.h
+graph.cpp: micropolis.h
+initialize.cpp: micropolis.h
+map.cpp: micropolis.h
+message.cpp: micropolis.h
+micropolis.cpp: micropolis.h
+position.cpp: micropolis.h
+power.cpp: micropolis.h
+random.cpp: micropolis.h
+resource.cpp: micropolis.h
+scan.cpp: micropolis.h
+simulate.cpp: micropolis.h
+sprite.cpp: micropolis.h
+stubs.cpp: micropolis.h
+tool.cpp: micropolis.h
+traffic.cpp: micropolis.h
+update.cpp: micropolis.h
+utilities.cpp: micropolis.h
+zone.cpp: micropolis.h
+
+
+########################################################################

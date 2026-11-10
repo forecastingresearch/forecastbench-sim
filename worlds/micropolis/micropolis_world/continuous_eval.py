@@ -277,14 +277,29 @@ def git_commit_note(repo: Path | None = None, count_untracked: bool = True) -> s
 
 
 def engine_commit_note() -> str:
-    """git_commit_note for the MicropolisCore checkout the sims are run with.
+    """Upstream MicropolisCore commit of the vendored engine, plus its local state.
 
-    The engine decides the trajectories every question resolves against, so it
-    is as much a part of a result's provenance as this repo is. Untracked files
-    are ignored: the checkout carries build output and sim-runs directories that
-    are not part of the engine's source.
+    E.g. "4ba571d (vendored, last changed in a1b2c3d)", with " (dirty)" when the
+    vendored tree has uncommitted changes to tracked files.
     """
-    return git_commit_note(g.engine_app_path(), count_untracked=False)
+    g.engine_app_path()
+    root = g.ENGINE_ROOT
+    vendored = root / "VENDORED.md"
+    text = vendored.read_text() if vendored.is_file() else ""
+    m = re.search(r"^- Commit: `([0-9a-f]{7})[0-9a-f]*`", text, re.M)
+    upstream = m.group(1) if m else "unknown"
+    try:
+        last = subprocess.run(
+            ["git", "log", "-1", "--format=%h", "--", "."],
+            capture_output=True, text=True, check=True, cwd=root,
+        ).stdout.strip() or "uncommitted"
+        dirty = subprocess.run(
+            ["git", "status", "--porcelain", "--untracked-files=no", "--", "."],
+            capture_output=True, text=True, check=False, cwd=root,
+        ).stdout.strip()
+    except (subprocess.CalledProcessError, FileNotFoundError, NotADirectoryError):
+        return f"{upstream} (vendored)"
+    return f"{upstream} (vendored, last changed in {last})" + (" (dirty)" if dirty else "")
 
 
 class MdReport:

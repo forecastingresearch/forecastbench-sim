@@ -1,0 +1,4 @@
+# MicropolisCore monorepo — apps/, shared packages, VitaMoo.
+packages:
+  - 'apps/*'
+  - 'packages/*'

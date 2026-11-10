@@ -26,23 +26,18 @@ uv run --offline --no-project --python .venv-micropolis/bin/python -m pytest -q 
 uv run --offline --no-project --python .venv-micropolis/bin/python worlds/micropolis/scripts/run_sim.py --help
 ```
 
-Tests block engine launches and provider transports. Corpus tests use invented trajectory rows; the process-contract test mocks pnpm. Neither is a live-engine validation. CLI `--help`, cached parsing/scoring and imports need no engine path or credentials. A missing engine is reported when a runner is invoked, rather than during import. `credentials/.env` (repo root) is read only when a runner needs the engine or provider keys; variables exported in the shell take precedence, and no cloud secret store is used.
+Tests block engine launches and provider transports. Corpus tests use invented trajectory rows; the process-contract test mocks pnpm. Neither is a live-engine validation. CLI `--help`, cached parsing/scoring and imports need no engine or credentials. A missing engine is reported when a runner is invoked, rather than during import. `credentials/.env` (repo root) is read only when a runner needs provider keys; variables exported in the shell take precedence, and no cloud secret store is used.
 
-## External engine setup
+## Engine
 
-Use [fdrocha/MicropolisCore, exploration](https://github.com/fdrocha/MicropolisCore/tree/4fe3a7238b735f9cdd3ec13c957ccc8a3a3b0481), pinned for this integration's **source-interface inspection** to `4fe3a7238b735f9cdd3ec13c957ccc8a3a3b0481`. It contains both `apps/micropolis/cli/run_sim.js` and `run_continuations.js`. The `fbs` branch at `d50b799d5915944263c0385fc43a8990e5d4e32e` has run_sim but lacks run_continuations; it is not a substitute for ground-truth extraction.
-
-Prerequisites in that engine revision: Node >=20, pnpm 10.28.0 (declared packageManager), make, and an activated Emscripten toolchain providing `em++`. The engine makefile uses Emscripten APIs including `--emit-tsd`; no exact tested Emscripten version or historical producer-engine pin was established in this port. Its source specifies `pnpm run build:engine` → `make install`. Setup below is for a separately provisioned engine checkout and may download/build substantial dependencies; it was **not executed by the offline integration tests**:
+The engine is vendored in `MicropolisCore/`: a trimmed copy of [fdrocha/MicropolisCore](https://github.com/fdrocha/MicropolisCore) (branch `fbs`) whose upstream commit, omissions and re-vendoring steps are in `MicropolisCore/VENDORED.md`. It includes the prebuilt engine, so running the sims needs only Node >=20 and pnpm 10.28.0 (the declared packageManager), installed once:
 
 ```sh
-# In a separately obtained fdrocha/MicropolisCore checkout:
-git checkout 4fe3a7238b735f9cdd3ec13c957ccc8a3a3b0481
+cd worlds/micropolis/MicropolisCore
 pnpm install --frozen-lockfile
-pnpm run build:engine
-export MICROPOLIS_CORE_PATH="$PWD"
 ```
 
-Return to forecastbench-sim before the following commands. `MICROPOLIS_CORE_PATH` names the engine root, not apps/micropolis. Engine assets and their licenses/additional terms remain in that external repository; this package grants no new rights to them. Live engine/toolchain compatibility remains a runtime gate, not a claim about historical reproducibility.
+Rebuilding the engine (`pnpm run build:engine`) also needs make and an activated Emscripten toolchain providing `em++`. The engine is found next to the package source, so runners need the workspace (editable) install; the non-editable wheels above do not ship it. Engine assets keep their own licenses and additional terms (`MicropolisCore/LICENSE`, `MicropolisCore/MicropolisPublicNameLicense.md`); this package grants no new rights to them.
 
 ## Entrypoints and effects
 
@@ -50,7 +45,7 @@ All script paths are under `worlds/micropolis/scripts/`. Use `uv run --no-projec
 
 | Script | What it does |
 |---|---|
-| `run_sim.py CONFIG --no-plot` | Runs the external engine and writes log/event files; optional plot |
+| `run_sim.py CONFIG --no-plot` | Runs the engine and writes log/event files; optional plot |
 | `gen_corpus.py CONFIG` | Runs/reuses city trajectories, generates and resolves continuous questions |
 | `gen_report.py CONFIG` | Produces a situation report; reads cached trajectory files |
 | `generate_prompt.py CONFIG` | Builds an example continuous prompt; may run simulations on cache misses |

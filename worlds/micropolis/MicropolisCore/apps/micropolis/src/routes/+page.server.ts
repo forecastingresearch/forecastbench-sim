@@ -1,0 +1,30 @@
+import { error } from '@sveltejs/kit';
+import { findNodeByUrl, siteStructure } from '$lib/navigationTree';
+import type { PageServerLoad } from './$types';
+
+// Static hub: site structure is fixed at build time
+export const prerender = true;
+
+export const load: PageServerLoad = async ({ params }) => {
+    const requestedUrl = '/'; // Explicitly loading the root page
+
+    // Find the node and path for the root URL in our site structure
+    const foundData = findNodeByUrl(requestedUrl);
+
+    if (!foundData) {
+        console.error(`[load /] Root node ('/') not found in siteStructure! Check navigationTree.js`);
+        error(500, 'Site configuration error: Root node not found');
+    }
+
+    // Destructure the result
+    const { node, fullPath } = foundData;
+
+
+    return {
+        node,       // Pass the specific node data for the root page itself
+        fullPath,   // Pass the path (just the root node)
+        siteStructure // Pass the entire structure for index generation
+    };
+};
+
+// No entries function needed here. 

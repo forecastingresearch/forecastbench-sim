@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def test_all_entrypoints_help_without_engine_or_keys(tmp_path):
-    env = {k: v for k, v in os.environ.items() if not k.endswith("API_KEY") and k not in {"MICROPOLIS_CORE_PATH", "PYTHONPATH"}}
+    env = {k: v for k, v in os.environ.items() if not k.endswith("API_KEY") and k != "PYTHONPATH"}
     env.update(FBSIM_TEST_DATA_ROOT=str(tmp_path), LITELLM_LOCAL_MODEL_COST_MAP="True")
     for script in sorted((ROOT / "scripts").glob("*.py")):
         result = subprocess.run([sys.executable, str(script), "--help"], env=env, capture_output=True, text=True, timeout=30)
@@ -21,17 +21,24 @@ def test_all_entrypoints_help_without_engine_or_keys(tmp_path):
     assert list(tmp_path.iterdir()) == []
 
 
-def test_missing_engine_fails_at_invocation(monkeypatch):
-    monkeypatch.delenv("MICROPOLIS_CORE_PATH", raising=False)
-    with pytest.raises(RuntimeError, match="MICROPOLIS_CORE_PATH"):
+def test_missing_engine_fails_at_invocation(monkeypatch, tmp_path):
+    monkeypatch.setattr(g, "ENGINE_ROOT", tmp_path)
+    with pytest.raises(RuntimeError, match="engine not found"):
         g.engine_app_path()
+
+
+@pytest.mark.skipif(g.PKG_DIR != ROOT, reason="non-editable install; the engine is not shipped")
+def test_vendored_engine_is_default():
+    assert g.ENGINE_ROOT == ROOT / "MicropolisCore"
+    assert (g.ENGINE_ROOT / "apps/micropolis/cli/run_continuations.js").is_file()
 
 
 def test_incompatible_engine_explains_missing_producer(monkeypatch, tmp_path):
     cli = tmp_path / "apps/micropolis/cli"
     cli.mkdir(parents=True)
     (cli / "run_sim.js").write_text("// synthetic interface fixture")
-    monkeypatch.setenv("MICROPOLIS_CORE_PATH", str(tmp_path))
+    (cli.parent / "node_modules").mkdir()
+    monkeypatch.setattr(g, "ENGINE_ROOT", tmp_path)
     assert g.engine_app_path() == cli.parent
     with pytest.raises(RuntimeError, match="continuation producer"):
         g.engine_app_path(continuations=True)
@@ -48,7 +55,8 @@ def test_live_runner_command_contract(monkeypatch, tmp_path):
     cli = tmp_path / "apps/micropolis/cli"
     cli.mkdir(parents=True)
     (cli / "run_sim.js").write_text("// synthetic interface fixture")
-    monkeypatch.setenv("MICROPOLIS_CORE_PATH", str(tmp_path))
+    (cli.parent / "node_modules").mkdir()
+    monkeypatch.setattr(g, "ENGINE_ROOT", tmp_path)
     monkeypatch.setattr(g, "RUNS_DIR", tmp_path / "out")
     # Autouse guard blocks CitySimulation.run. Test the original implementation
     # through its source module with a fake subprocess, never executing pnpm.
@@ -97,11 +105,11 @@ def test_cached_pipeline(tmp_path, synthetic_corpus):
 
 
 def test_installed_default_reaches_engine_diagnostic(tmp_path):
-    env = {k: v for k, v in os.environ.items() if k not in {"MICROPOLIS_CORE_PATH", "PYTHONPATH"}}
-    env.update(FBSIM_TEST_DATA_ROOT=str(tmp_path), LITELLM_LOCAL_MODEL_COST_MAP="True")
+    env = {k: v for k, v in os.environ.items() if k != "PYTHONPATH"}
+    env.update(FBSIM_TEST_DATA_ROOT=str(tmp_path), FBSIM_TEST_MICROPOLIS_ENGINE_ROOT=str(tmp_path / "no-engine"), LITELLM_LOCAL_MODEL_COST_MAP="True")
     result = subprocess.run([sys.executable, str(ROOT / "scripts/run_sim.py"), "--no-plot"], env=env, capture_output=True, text=True, timeout=30)
     assert result.returncode != 0
-    assert "Set MICROPOLIS_CORE_PATH" in result.stderr
+    assert "engine not found" in result.stderr
     assert "config file not found" not in result.stderr
     assert list(tmp_path.iterdir()) == []
 
