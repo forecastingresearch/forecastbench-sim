@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# setup_worktree.sh [--quiet] — give this checkout its data/ and credentials/ links; idempotent.
+# setup_worktree.sh [--quiet] — give this checkout its data/ and credentials/ links; idempotent. Reminds about the Micropolis engine's pnpm install.
 # A linked worktree points both at what the main checkout has (a symlink's target or a real directory).
 # The main checkout points them at $FBSIM_LOCAL/{data,credentials} (default: fbsim-local next to the main checkout).
 # Run by .githooks/post-checkout once `git config core.hooksPath .githooks` is set.
@@ -22,3 +22,7 @@ for name in data credentials; do
   fi
   ln -s "$target" "$link"; echo "setup_worktree: $name -> $target"
 done
+engine="$ROOT/worlds/micropolis/MicropolisCore"
+if [ -d "$engine" ] && [ ! -d "$engine/node_modules" ]; then
+  echo "setup_worktree: Micropolis engine dependencies missing; run: (cd $engine && pnpm install --frozen-lockfile)"
+fi

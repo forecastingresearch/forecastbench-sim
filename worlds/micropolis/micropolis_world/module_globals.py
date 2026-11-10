@@ -65,18 +65,19 @@ def set_data_dir(subdir: str, source: Path) -> None:
     _data_dir_source = source
 
 
-# credentials/.env is read only when a runner needs the engine or keys, never during
-# imports/help/cached work. Variables exported in the shell take precedence.
+# The engine is vendored (MicropolisCore/VENDORED.md); the override is for tests only.
+ENGINE_ROOT = Path(os.environ.get("FBSIM_TEST_MICROPOLIS_ENGINE_ROOT", str(PKG_DIR / "MicropolisCore"))).resolve()
+
+
 def engine_app_path(*, continuations: bool = False) -> Path:
-    local.load_env()
-    raw = os.environ.get("MICROPOLIS_CORE_PATH")
-    if not raw:
-        raise RuntimeError("Set MICROPOLIS_CORE_PATH to a compatible MicropolisCore checkout; see worlds/micropolis/README.md")
-    app = Path(raw).expanduser().resolve() / "apps" / "micropolis"
+    """apps/micropolis of the vendored engine, checked when a runner needs it."""
+    app = ENGINE_ROOT / "apps" / "micropolis"
     if not (app / "cli" / "run_sim.js").is_file():
-        raise RuntimeError(f"Incompatible MicropolisCore checkout: missing {app / 'cli/run_sim.js'}")
+        raise RuntimeError(f"Micropolis engine not found: missing {app / 'cli/run_sim.js'}")
     if continuations and not (app / "cli" / "run_continuations.js").is_file():
-        raise RuntimeError(f"Missing continuation producer: {app / 'cli/run_continuations.js'}; use the documented exploration revision")
+        raise RuntimeError(f"Missing continuation producer: {app / 'cli/run_continuations.js'}")
+    if not (app / "node_modules").is_dir():
+        raise RuntimeError(f"Engine dependencies not installed: run `pnpm install --frozen-lockfile` in {ENGINE_ROOT}")
     return app
 
 
