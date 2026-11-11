@@ -37,7 +37,7 @@ cd worlds/micropolis/MicropolisCore
 pnpm install --frozen-lockfile
 ```
 
-Rebuilding the engine (`pnpm run build:engine`) also needs make and an activated Emscripten toolchain providing `em++`. The engine is found next to the package source, so runners need the workspace (editable) install; the non-editable wheels above do not ship it. Engine assets keep their own licenses and additional terms (`MicropolisCore/LICENSE`, `MicropolisCore/MicropolisPublicNameLicense.md`); this package grants no new rights to them.
+Rebuilding the engine (`pnpm run build:engine`) also needs make and an activated Emscripten toolchain providing `em++`. The wheels above do not ship the engine; runners use the one in the checkout (found from the working directory for a wheel install, as for `data/`). Engine assets keep their own licenses and additional terms (`MicropolisCore/LICENSE`, `MicropolisCore/MicropolisPublicNameLicense.md`); this package grants no new rights to them.
 
 ## Entrypoints and effects
 

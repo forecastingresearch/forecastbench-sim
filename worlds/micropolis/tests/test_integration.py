@@ -27,7 +27,6 @@ def test_missing_engine_fails_at_invocation(monkeypatch, tmp_path):
         g.engine_app_path()
 
 
-@pytest.mark.skipif(g.PKG_DIR != ROOT, reason="non-editable install; the engine is not shipped")
 def test_vendored_engine_is_default():
     assert g.ENGINE_ROOT == ROOT / "MicropolisCore"
     assert (g.ENGINE_ROOT / "apps/micropolis/cli/run_continuations.js").is_file()
