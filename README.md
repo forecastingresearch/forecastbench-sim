@@ -95,4 +95,4 @@ The additive [fbsim-benchmark package](packages/fbsim-benchmark/README.md) provi
 
 ### Micropolis world
 
-[Micropolis setup and workflows](worlds/micropolis/README.md) cover the external engine, question generation, cached/model gathering and raw scoring. Synthetic offline tests do not validate a live engine or reproduce paper results.
+[Micropolis setup and workflows](worlds/micropolis/README.md) cover the vendored engine, question generation, cached/model gathering and raw scoring. Synthetic offline tests do not validate a live engine or reproduce paper results.

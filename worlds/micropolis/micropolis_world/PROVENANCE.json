@@ -182,7 +182,7 @@
     "administered prompt files and knowledge statements",
     "model panel and routing specs",
     "paper reporting/gathering scripts and fitted normalization constants",
-    "engine binaries/maps and raw datasets"
+    "engine binaries/maps (vendored in the repository, not the package) and raw datasets"
   ],
   "adaptations": [
     "Lazy engine configuration and explicit credential validation; no cloud lookup",

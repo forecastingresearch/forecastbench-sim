@@ -4,7 +4,7 @@ This world adds simulation, question generation, cached gathering and binary/con
 
 `fbsim-core` owns the shared schema/resolver. `fbsim-benchmark` owns the existing Micropolis parsers, raw replay scoring and cached trajectory converter; this world imports them. The five continuous quantiles are p10/p25/p50/p75/p90. Binary resolution uses half-open windows `(snapshot, resolution]` and engine turns (`tick // 16`). Original question/resolver bodies are retained. Their original specification remains at the pinned source's `binary_forecasts.md`.
 
-Paper normalization, model panels, administered prompt wrappers, knowledge statement sets, historical configurations, frozen data and paper CSV/figure producers are not part of this world. The included prompt wrappers and example configs are new illustrative examples; they cannot reproduce historical prompt hashes or results. The paper's production configs, prompts, model panels and knowledge statements are in [forecastbench-sim-paper/production/micropolis](https://github.com/forecastingresearch/forecastbench-sim-paper/tree/main/production/micropolis). No simulator, maps or engine binary is vendored.
+Paper normalization, model panels, administered prompt wrappers, knowledge statement sets, historical configurations, frozen data and paper CSV/figure producers are not part of this world. The included prompt wrappers and example configs are new illustrative examples; they cannot reproduce historical prompt hashes or results. The paper's production configs, prompts, model panels and knowledge statements are in [forecastbench-sim-paper/production/micropolis](https://github.com/forecastingresearch/forecastbench-sim-paper/tree/main/production/micropolis). The engine, with its city maps and prebuilt binary, is vendored in `MicropolisCore/` (see [Engine](#engine)); the Python package does not ship it.
 
 ## Python installation and offline checks
 
@@ -52,7 +52,7 @@ All script paths are under `worlds/micropolis/scripts/`. Use `uv run --no-projec
 | `run_eval_binary.py CONFIG`, `run_eval_continuous.py CONFIG` | Builds corpus and gathers model responses, then writes the respective dataset |
 | Same eval scripts with `--cache-only` | No provider calls; reads existing raw-response cache, but corpus construction can still simulate |
 | Same eval scripts with `--dry-run` | Builds corpus without gathering; **can still simulate** |
-| `extract_ground_truth.py CONFIG --jobs 1` | Runs reseeded continuations through external `run_continuations.js`; not an offline smoke command |
+| `extract_ground_truth.py CONFIG --jobs 1` | Runs reseeded continuations through the engine's `run_continuations.js`; not an offline smoke command |
 | `check_determinism.py CONFIG` | Repeats live engine runs; opt-in only |
 | `score_cached.py --input DATASET --kind binary\|continuous` | Reads gathered JSON and prints per-forecast realized Brier or raw quantile CRPS; no engine/provider/normalization |
 
