@@ -4,11 +4,11 @@ This world adds simulation, question generation, cached gathering and binary/con
 
 `fbsim-core` owns the shared schema/resolver. `fbsim-benchmark` owns the existing Micropolis parsers, raw replay scoring and cached trajectory converter; this world imports them. The five continuous quantiles are p10/p25/p50/p75/p90. Binary resolution uses half-open windows `(snapshot, resolution]` and engine turns (`tick // 16`). Original question/resolver bodies are retained. Their original specification remains at the pinned source's `binary_forecasts.md`.
 
-Paper normalization, model panels, administered prompt wrappers, knowledge statement sets, historical configurations, frozen data and paper CSV/figure producers are not part of this world. The included prompt wrappers and example configs are new illustrative examples; they cannot reproduce historical prompt hashes or results. The paper's production configs, prompts, model panels and knowledge statements are in [forecastbench-sim-paper/production/micropolis](https://github.com/forecastingresearch/forecastbench-sim-paper/tree/main/production/micropolis). No simulator, maps or engine binary is vendored.
+Paper normalization, model panels, administered prompt wrappers, knowledge statement sets, historical configurations, frozen data and paper CSV/figure producers are not part of this world. The included prompt wrappers and example configs are new illustrative examples; they cannot reproduce historical prompt hashes or results. The paper's production configs, prompts, model panels and knowledge statements are in [forecastbench-sim-paper/production/micropolis](https://github.com/forecastingresearch/forecastbench-sim-paper/tree/main/production/micropolis). The engine, with its city maps and prebuilt binary, is vendored in `MicropolisCore/` (see [Engine](#engine)); the Python package does not ship it.
 
 ## Python installation and offline checks
 
-From the repository root, Python 3.11+ and uv are required. The workspace already discovers `worlds/*`. To install just core, benchmark and this world as non-editable wheels:
+From the repository root, Python 3.11+ and uv are required. The workspace already discovers `worlds/*`, so `uv run` needs no further install. For a minimal, offline-capable install, and to check what the packages ship, install just core, benchmark and this world as non-editable wheels:
 
 ```sh
 uv venv --python 3.13 .venv-micropolis
@@ -37,11 +37,11 @@ cd worlds/micropolis/MicropolisCore
 pnpm install --frozen-lockfile
 ```
 
-Rebuilding the engine (`pnpm run build:engine`) also needs make and an activated Emscripten toolchain providing `em++`. The engine is found next to the package source, so runners need the workspace (editable) install; the non-editable wheels above do not ship it. Engine assets keep their own licenses and additional terms (`MicropolisCore/LICENSE`, `MicropolisCore/MicropolisPublicNameLicense.md`); this package grants no new rights to them.
+Rebuilding the engine (`pnpm run build:engine`) also needs make and an activated Emscripten toolchain providing `em++`. The wheels above do not ship the engine; runners use the one in the checkout (found from the working directory for a wheel install, as for `data/`). Engine assets keep their own licenses and additional terms (`MicropolisCore/LICENSE`, `MicropolisCore/MicropolisPublicNameLicense.md`); this package grants no new rights to them.
 
 ## Entrypoints and effects
 
-All script paths are under `worlds/micropolis/scripts/`. Use `uv run --no-project --python .venv-micropolis/bin/python <script> ...` from the repository root. Each configuration-driven command accepts an explicit JSON5 file; continuous commands default to the invented `configs/example.json5` (six turns, horizon four). Binary evaluation and continuation extraction default to `configs/example-binary.json5` (97 logged turns, snapshot 48, horizon 48, one continuation seed), also shipped inside the installed package. Binary resolution requires a snapshot and horizon of at least 48 turns to include a yearly baseline and resolution checkpoint; the short continuous example is intentionally invalid for those two commands. These defaults are illustrative, not historical configurations. Replace `example/model` with a deliberately selected provider model before any paid evaluation.
+All script paths are under `worlds/micropolis/scripts/`. Run them from the repository root with `uv run <script> ...`, which uses the workspace (editable) install and the vendored engine. The `.venv-micropolis` wheel environment above also works when run from inside the checkout: `uv run --no-project --python .venv-micropolis/bin/python <script> ...`. Each configuration-driven command accepts an explicit JSON5 file; continuous commands default to the invented `configs/example.json5` (six turns, horizon four). Binary evaluation and continuation extraction default to `configs/example-binary.json5` (97 logged turns, snapshot 48, horizon 48, one continuation seed), also shipped inside the installed package. Binary resolution requires a snapshot and horizon of at least 48 turns to include a yearly baseline and resolution checkpoint; the short continuous example is intentionally invalid for those two commands. These defaults are illustrative, not historical configurations. Replace `example/model` with a deliberately selected provider model before any paid evaluation.
 
 | Script | What it does |
 |---|---|
@@ -52,15 +52,15 @@ All script paths are under `worlds/micropolis/scripts/`. Use `uv run --no-projec
 | `run_eval_binary.py CONFIG`, `run_eval_continuous.py CONFIG` | Builds corpus and gathers model responses, then writes the respective dataset |
 | Same eval scripts with `--cache-only` | No provider calls; reads existing raw-response cache, but corpus construction can still simulate |
 | Same eval scripts with `--dry-run` | Builds corpus without gathering; **can still simulate** |
-| `extract_ground_truth.py CONFIG --jobs 1` | Runs reseeded continuations through external `run_continuations.js`; not an offline smoke command |
+| `extract_ground_truth.py CONFIG --jobs 1` | Runs reseeded continuations through the engine's `run_continuations.js`; not an offline smoke command |
 | `check_determinism.py CONFIG` | Repeats live engine runs; opt-in only |
 | `score_cached.py --input DATASET --kind binary\|continuous` | Reads gathered JSON and prints per-forecast realized Brier or raw quantile CRPS; no engine/provider/normalization |
 
 The example configs write to their own `data/micropolis-example*` folders (their `data_dir`), apart from `data/micropolis`:
 
 ```sh
-uv run --no-project --python .venv-micropolis/bin/python worlds/micropolis/scripts/run_sim.py worlds/micropolis/configs/example.json5 --no-plot
-uv run --no-project --python .venv-micropolis/bin/python worlds/micropolis/scripts/gen_corpus.py worlds/micropolis/configs/example.json5
+uv run worlds/micropolis/scripts/run_sim.py worlds/micropolis/configs/example.json5 --no-plot
+uv run worlds/micropolis/scripts/gen_corpus.py worlds/micropolis/configs/example.json5
 ```
 
 The config's `data_dir` selects one child of the repository's `data/` (a symlink set up by `scripts/setup_worktree.sh`). Cached gathering preserves the native content-addressed prompt/response scheme. Missing cached forecasts remain absent, unparsed forecasts remain null: the raw scorer does not apply paper eligibility or imputation rules.

@@ -65,8 +65,10 @@ def set_data_dir(subdir: str, source: Path) -> None:
     _data_dir_source = source
 
 
-# The engine is vendored (MicropolisCore/VENDORED.md); the override is for tests only.
-ENGINE_ROOT = Path(os.environ.get("FBSIM_TEST_MICROPOLIS_ENGINE_ROOT", str(PKG_DIR / "MicropolisCore"))).resolve()
+# The engine is vendored (MicropolisCore/VENDORED.md) in the checkout, which a wheel install
+# finds from the cwd as for data/; the override is for tests only.
+ENGINE_ROOT = Path(os.environ.get(
+    "FBSIM_TEST_MICROPOLIS_ENGINE_ROOT", str(local.REPO_ROOT / "worlds" / "micropolis" / "MicropolisCore"))).resolve()
 
 
 def engine_app_path(*, continuations: bool = False) -> Path:
