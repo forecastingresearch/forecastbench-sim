@@ -3,9 +3,9 @@
 
 For every (city, disasters, snapshot turn) in the config, runs the engine's
 run_continuations.js — the trunk to the snapshot, then `branch_nseeds`
-continuations from that exact state, each with its own RNG seed — and tallies
-how many continuations resolve each binary question Yes at every horizon,
-along with each continuous metric's value at the resolution turn. Writes one
+continuations from that exact state, each with its own RNG seed — and records
+which continuations resolve each binary question Yes at every horizon (counts
+and yes_idx), along with each continuous metric's value at the resolution turn. Writes one
 JSONL file per (scenario, snapshot) to data/micropolis/ground_truth/, one line
 per horizon.
 
@@ -14,18 +14,28 @@ ranges. A (scenario, snapshot) whose file already covers every horizon with at
 least branch_nseeds continuations is skipped unless --force-regen is given.
 Horizon 0 is a read-off, not a forecast, and is dropped.
 
+--intervene ACTION (repeatable) applies the intervention at the snapshot turn in
+every continuation, after its reseed, so each draws its own realisation, and
+writes <scenario>_T<S>_do-<ACTION>.jsonl instead. A continuation whose
+intervention misses is retried with another seed (recorded in missed_seeds). A
+scenario where it never takes effect (e.g. makeFlood without river edges) fails,
+or with --skip-infeasible is recorded in <output>.infeasible.json and skipped.
+
 Usage:
     scripts/extract_ground_truth.py                    # packaged example-binary.json5
     scripts/extract_ground_truth.py configs/example-binary.json5 --branch-nseeds 1
     scripts/extract_ground_truth.py --cities kyoto --jobs 4 --force-regen
+    scripts/extract_ground_truth.py --cities kobe --intervene demolishPowerPlants
 """
 
 import argparse
+import json
 import os
 import time
 from concurrent.futures import ProcessPoolExecutor
 
 from micropolis_world.binary_questions import check_horizons
+from micropolis_world.city_sim import INTERVENTION_ACTIONS
 from micropolis_world.config import (
     CONFIG_DIR,
     add_config_args,
@@ -34,9 +44,11 @@ from micropolis_world.config import (
 )
 from micropolis_world.continuous_eval import engine_commit_note, git_commit_note
 from micropolis_world.ground_truth import (
+    InfeasibleIntervention,
     covers,
     cross_check_trunk,
     ground_truth_lines,
+    infeasible_marker,
     load_lines,
     merge_shards,
     output_path,
@@ -71,7 +83,26 @@ def main() -> None:
         action="store_true",
         help="Re-run scenarios whose output file already covers every horizon",
     )
+    ap.add_argument(
+        "--intervene",
+        action="append",
+        default=[],
+        choices=INTERVENTION_ACTIONS,
+        metavar="ACTION",
+        help="Intervention applied at the snapshot turn in every continuation, after its reseed "
+        f"(repeatable): {', '.join(INTERVENTION_ACTIONS)}",
+    )
+    ap.add_argument(
+        "--skip-infeasible",
+        action="store_true",
+        help="With --intervene: record a scenario where the intervention has no "
+        "effect in <output>.infeasible.json and go on, instead of failing; "
+        "recorded ones are skipped on later runs unless --force-regen",
+    )
     args = ap.parse_args()
+    interventions = args.intervene
+    if args.skip_infeasible and not interventions:
+        ap.error("--skip-infeasible needs --intervene")
 
     cfg = load_config(args)
     seed = cfg.get_seed(args.seed)
@@ -106,11 +137,13 @@ def main() -> None:
         f"{len(scenarios)} scenario(s) x {len(snapshot_turns)} snapshot(s), "
         f"{nseeds} continuations each over {args.jobs} job(s); horizons {horizons}"
     )
+    if interventions:
+        print(f"interventions at the snapshot turn: {', '.join(interventions)}")
 
     jobs = [(sim, S) for sim in scenarios for S in snapshot_turns]
     with ProcessPoolExecutor(max_workers=args.jobs) as pool:
         for i, (sim, S) in enumerate(jobs, start=1):
-            path = output_path(sim, S)
+            path = output_path(sim, S, interventions)
             tag = f"[{i}/{len(jobs)}] {sim.get_id_str()} T{S}"
             if (
                 not args.force_regen
@@ -119,16 +152,44 @@ def main() -> None:
             ):
                 print(f"{tag}: already covered by {path}, skipping")
                 continue
+            marker = infeasible_marker(path)
+            if args.skip_infeasible and not args.force_regen and marker.exists():
+                print(f"{tag}: recorded as infeasible in {marker}, skipping")
+                continue
             print(f"{tag}: running {nseeds} continuations to T{S + max(horizons)}...")
             start = time.perf_counter()
             futures = [
                 pool.submit(
-                    run_shard, sim.city_name, seed, sim.disasters, S, horizons, lo, hi
+                    run_shard,
+                    sim.city_name,
+                    seed,
+                    sim.disasters,
+                    S,
+                    horizons,
+                    lo,
+                    hi,
+                    interventions,
                 )
                 for lo, hi in seed_shards(nseeds, args.jobs)
             ]
             try:
                 merged = merge_shards([f.result() for f in futures])
+            except InfeasibleIntervention as e:
+                for f in futures:
+                    f.cancel()
+                if not args.skip_infeasible:
+                    raise
+                record = {
+                    "scenario_id": sim.get_id_str(),
+                    "snapshot_turn": S,
+                    "interventions": interventions,
+                    "error": str(e),
+                    "engine_commit": engine_commit,
+                }
+                marker.parent.mkdir(parents=True, exist_ok=True)
+                marker.write_text(json.dumps(record) + "\n")
+                print(f"  infeasible ({e}); recorded in {marker}")
+                continue
             except BaseException:
                 for f in futures:
                     f.cancel()
@@ -137,7 +198,7 @@ def main() -> None:
             write_lines(
                 path,
                 ground_truth_lines(
-                    sim, S, horizons, merged, fbsim_commit, engine_commit
+                    sim, S, horizons, merged, fbsim_commit, engine_commit, interventions
                 ),
             )
             print(

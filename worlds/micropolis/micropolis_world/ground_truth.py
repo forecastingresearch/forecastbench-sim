@@ -2,7 +2,7 @@
 
 Drives the engine's run_continuations.js — one trunk run to the snapshot, then
 many continuations from a byte copy of the engine state, each with its own RNG
-seed — and reads its JSONL stream to tally, per horizon, how many
+seed — and reads its JSONL stream to record, per horizon, which
 continuations resolve each binary question Yes and what value each continuous
 metric takes at the resolution turn. Output is one JSONL file per
 (scenario, snapshot turn) under data/micropolis/ground_truth/, one line per
@@ -10,11 +10,12 @@ horizon.
 """
 
 import json
+import re
 import subprocess
 import tempfile
 from collections import Counter
-from collections.abc import Iterable
-from dataclasses import dataclass
+from collections.abc import Iterable, Sequence
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import NamedTuple
 
@@ -26,7 +27,7 @@ from .binary_questions import (
     messages_from_events,
     resolve_all,
 )
-from .city_sim import CitySimulation, _load_jsonl, turn_of
+from .city_sim import CitySimulation, _load_jsonl, check_action, turn_of
 
 SUBDIR = "ground_truth"
 
@@ -48,12 +49,31 @@ class StreamError(ValueError):
     """The producer's stream is not what the reader was told to expect."""
 
 
-def output_path(sim: CitySimulation, snapshot_turn: int) -> Path:
-    return output_path_for(sim.get_id_str(), snapshot_turn)
+class InfeasibleIntervention(RuntimeError):
+    """An intervention missed with every seed tried (e.g. a flood without river edges)."""
 
 
-def output_path_for(scenario_id: str, snapshot_turn: int) -> Path:
-    return out_dir() / f"{scenario_id}_T{snapshot_turn}.jsonl"
+# The engine's InterventionError messages (cli/lib/interventions.js).
+_INFEASIBLE = re.compile(r"^Error: .*(had no effect|found nothing to demolish)", re.MULTILINE)
+
+
+def infeasible_marker(path: Path) -> Path:
+    """Where a skipped (scenario, snapshot, interventions) is recorded, next to its output."""
+    return path.with_suffix(".infeasible.json")
+
+
+def output_path(
+    sim: CitySimulation, snapshot_turn: int, interventions: Sequence[str] = ()
+) -> Path:
+    return output_path_for(sim.get_id_str(), snapshot_turn, interventions)
+
+
+def output_path_for(
+    scenario_id: str, snapshot_turn: int, interventions: Sequence[str] = ()
+) -> Path:
+    """`<scenario>_T<S>.jsonl`, or `<scenario>_T<S>_do-<a>[+<b>...].jsonl` with interventions at S."""
+    do = f"_do-{'+'.join(interventions)}" if interventions else ""
+    return out_dir() / f"{scenario_id}_T{snapshot_turn}{do}.jsonl"
 
 
 def seed_shards(nseeds: int, jobs: int) -> list[tuple[int, int]]:
@@ -78,6 +98,7 @@ def producer_command(
     horizon: int,
     seed_lo: int,
     seed_hi: int,
+    interventions: Sequence[str] = (),
 ) -> list[str]:
     """The engine invocation for one shard of continuations.
 
@@ -85,7 +106,9 @@ def producer_command(
     the models forecast from shows row S. Branching at S+1 puts the branch at
     tick 16(S+1), so every continuation starts from exactly that reported state
     and its rows are turns S+1..S+H, the window (S, S+H] the questions resolve
-    over.
+    over. Interventions run in every continuation right after the reseed, so
+    each draws its own realisation (a miss is retried with another seed); their
+    events are tagged turn S, outside the window.
     """
     return [
         *PRODUCER,
@@ -100,6 +123,7 @@ def producer_command(
         "--branch-seeds",
         f"{seed_lo}-{seed_hi}",
         "--disasters" if disasters else "--no-disasters",
+        *(arg for a in interventions for arg in ("--intervene", check_action(a))),
     ]
 
 
@@ -111,6 +135,8 @@ class ShardResult:
     seeds: list[int]
     yes: dict[int, Counter]  # horizon -> qid -> continuations resolving Yes
     values: dict[int, dict[str, list]]  # horizon -> metric -> value per continuation
+    yes_seeds: dict[int, dict[str, list[int]]]  # horizon -> qid -> seeds resolving Yes
+    missed: dict[int, list[int]] = field(default_factory=dict)  # seed -> intervention seeds that missed
 
     @property
     def n(self) -> int:
@@ -122,17 +148,30 @@ def _strip(row: dict) -> dict:
 
 
 def _check_header(
-    rec: dict, city: str, disasters: bool, snapshot_turn: int, hmax: int
+    rec: dict,
+    city: str,
+    disasters: bool,
+    snapshot_turn: int,
+    hmax: int,
+    interventions: Sequence[str] = (),
 ) -> None:
     expected = {
         "city": city,
         "disasters": disasters,
         "branchAt": snapshot_turn + 1,
         "trunkOutput": True,
+        "interventions": [{"turn": snapshot_turn, "action": a} for a in interventions],
     }
     for key, value in expected.items():
-        if rec.get(key) != value:
-            raise StreamError(f"header {key}={rec.get(key)!r}, expected {value!r}")
+        # Producers that predate interventions omit the key.
+        got = rec.get(key, []) if key == "interventions" else rec.get(key)
+        if got != value:
+            raise StreamError(f"header {key}={got!r}, expected {value!r}")
+    if interventions and rec.get("interventionMode") != "per-continuation":
+        raise StreamError(
+            f"header interventionMode={rec.get('interventionMode')!r}: the engine applies "
+            "interventions on the trunk, not per continuation; update MicropolisCore"
+        )
     if rec["horizon"] < hmax:
         raise StreamError(
             f"producer horizon {rec['horizon']} is shorter than the longest "
@@ -154,6 +193,7 @@ def consume_stream(
     disasters: bool,
     snapshot_turn: int,
     horizons: list[int],
+    interventions: Sequence[str] = (),
 ) -> ShardResult:
     """Tally one producer's stream (header, trunk, continuations).
 
@@ -174,6 +214,7 @@ def consume_stream(
         seeds=[],
         yes={h: Counter() for h in horizons},
         values={h: {m: [] for m in g.METRICS} for h in horizons},
+        yes_seeds={h: {qid: [] for qid in QUESTION_IDS} for h in horizons},
     )
 
     for raw in lines:
@@ -184,7 +225,7 @@ def consume_stream(
         elif kind == "event":
             (trunk_events if rec["seed"] is None else events).append(_strip(rec))
         elif kind == "header":
-            _check_header(rec, city, disasters, S, max(horizons))
+            _check_header(rec, city, disasters, S, max(horizons), interventions)
             header = rec
         elif kind == "begin":
             if header is None:
@@ -195,6 +236,10 @@ def consume_stream(
                 if trunk is None:
                     raise StreamError("continuation before the trunk finished")
                 rows, events = [], []
+                if interventions and "interventionSeed" not in rec:
+                    raise StreamError(f"seed {rec['seed']}: begin line has no interventionSeed")
+                if rec.get("missedSeeds"):
+                    result.missed[rec["seed"]] = rec["missedSeeds"]
         elif kind == "end":
             if rec["seed"] is None:
                 _check_turns(trunk_rows, 0, S, f"{city} trunk")
@@ -215,6 +260,9 @@ def consume_stream(
                 answers = resolve_all(run, S, S + h)
                 check_structural_constraints(city, answers)
                 result.yes[h].update(qid for qid, yes in answers.items() if yes)
+                for qid, yes in answers.items():
+                    if yes:
+                        result.yes_seeds[h].setdefault(qid, []).append(seed)
                 state = run.state_at(S + h)
                 for metric in g.METRICS:
                     result.values[h][metric].append(state[metric])
@@ -242,6 +290,7 @@ def run_shard(
     horizons: list[int],
     seed_lo: int,
     seed_hi: int,
+    interventions: Sequence[str] = (),
 ) -> ShardResult:
     """Run one producer and tally its stream as it arrives.
 
@@ -249,26 +298,40 @@ def run_shard(
     progress and timing there, and a full pipe would stall it.
     """
     cmd = producer_command(
-        city, seed, disasters, snapshot_turn, max(horizons), seed_lo, seed_hi
+        city,
+        seed,
+        disasters,
+        snapshot_turn,
+        max(horizons),
+        seed_lo,
+        seed_hi,
+        interventions,
     )
     with tempfile.TemporaryFile() as err:
         proc = subprocess.Popen(
             cmd, cwd=g.engine_app_path(continuations=True), stdout=subprocess.PIPE, stderr=err
         )
         assert proc.stdout is not None
+        stream_error: StreamError | None = None
         try:
             result = consume_stream(
-                proc.stdout, city, disasters, snapshot_turn, horizons
+                proc.stdout, city, disasters, snapshot_turn, horizons, interventions
             )
+        except StreamError as e:
+            stream_error = e  # a failed producer truncates the stream; report its stderr
         finally:
             proc.stdout.close()
             returncode = proc.wait()
         if returncode != 0:
             err.seek(0)
             tail = err.read().decode(errors="replace")[-2000:]
+            if interventions and (m := _INFEASIBLE.search(tail)):
+                raise InfeasibleIntervention(m.group(0)) from stream_error
             raise RuntimeError(
                 f"{' '.join(cmd)} exited with code {returncode}:\n{tail}"
-            )
+            ) from stream_error
+        if stream_error is not None:
+            raise stream_error
     return result
 
 
@@ -287,13 +350,17 @@ def merge_shards(shards: list[ShardResult]) -> ShardResult:
         seeds=[],
         yes={h: Counter() for h in first.yes},
         values={h: {m: [] for m in vs} for h, vs in first.values.items()},
+        yes_seeds={h: {qid: [] for qid in qs} for h, qs in first.yes_seeds.items()},
     )
     for shard in shards:
         merged.seeds.extend(shard.seeds)
+        merged.missed.update(shard.missed)
         for h in merged.yes:
             merged.yes[h].update(shard.yes[h])
             for metric, values in shard.values[h].items():
                 merged.values[h][metric].extend(values)
+            for qid, seeds in shard.yes_seeds[h].items():
+                merged.yes_seeds[h].setdefault(qid, []).extend(seeds)
     return merged
 
 
@@ -340,10 +407,28 @@ def ground_truth_lines(
     merged: ShardResult,
     fbsim_commit: str,
     engine_commit: str,
+    interventions: Sequence[str] = (),
 ) -> list[dict]:
-    """One output record per horizon."""
+    """One output record per horizon.
+
+    yes_idx lists, per question, the continuations resolving Yes as 0-based
+    positions in the values lists (seed branch_seeds[0] + i). With
+    interventions, every record names them (applied at the snapshot turn, per
+    continuation) and lists the branch seeds whose intervention missed, with
+    the seeds tried (missed_seeds).
+    """
+    pos = {seed: i for i, seed in enumerate(merged.seeds)}
+    extra = {}
+    if interventions:
+        extra = {
+            "interventions": list(interventions),
+            "intervention_mode": "per-continuation",
+            "n_missed": sum(len(v) for v in merged.missed.values()),
+            "missed_seeds": {str(s): merged.missed[s] for s in sorted(merged.missed)},
+        }
     return [
         {
+            **extra,
             "scenario_id": sim.get_id_str(),
             "city": sim.city_name,
             "seed": sim.seed,
@@ -358,6 +443,10 @@ def ground_truth_lines(
             "averages": _averages(merged.values[h]),
             "fbsim_commit": fbsim_commit,
             "engine_commit": engine_commit,
+            "yes_idx": {
+                qid: sorted(pos[s] for s in merged.yes_seeds[h].get(qid, []))
+                for qid in QUESTION_IDS
+            },
         }
         for h in horizons
     ]
@@ -497,12 +586,16 @@ def covers(lines: list[dict], horizons: list[int], nseeds: int) -> bool:
 
     The question set is part of coverage: a file tallied before a question was
     added, removed or relabelled holds counts under the wrong ids, and skipping
-    it would silently resolve against stale labels.
+    it would silently resolve against stale labels. A file without yes_idx is
+    not covered either, nor an intervention file from a trunk-mode engine (one
+    realisation shared by every continuation).
     """
     by_horizon = {line["horizon"]: line for line in lines}
     return all(
         h in by_horizon
+        and (not by_horizon[h].get("interventions") or by_horizon[h].get("intervention_mode") == "per-continuation")
         and by_horizon[h]["n_continuations"] >= nseeds
         and set(by_horizon[h]["counts"]) == set(QUESTION_IDS)
+        and set(by_horizon[h].get("yes_idx", ())) == set(QUESTION_IDS)
         for h in horizons
     )

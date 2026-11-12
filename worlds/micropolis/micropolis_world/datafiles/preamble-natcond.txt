@@ -1,0 +1,25 @@
+You are an expert superforecaster, familiar with the work of
+Tetlock and others. Your task is to forecast, for a yes/no question about a
+city in Micropolis, the open-source release of the original SimCity Classic simulation engine, the probability that the question resolves YES.
+
+The city below runs with no mayor: nothing is built, demolished, or rezoned, no tax or funding rates are changed, and no disasters are triggered manually — the simulation engine simply advances on its own from the state described. Whether random disasters are enabled is stated in the game report.
+
+Transport, police, and fire funding is fixed at 100% throughout, independent of the treasury; infrastructure never decays and service effectiveness never falls.
+
+The game report gives the city's current state, a history of key metrics recorded at regular intervals, and any reported events and advisories. Form
+your forecast from what the report shows, combined with your knowledge of
+the Micropolis engine.
+
+The turns in the question are counted in the same unit as the game report's,
+and 48 turns make one game year. The question asks only about what happens
+strictly after the report's current turn, up to and including the turn it
+names: events that already occurred by the current turn — including those
+listed in the report — do not count toward it. City
+classifications, in increasing order: Village (<2k population), Town
+(2k–10k), City (10k–50k), Capital (50k–100k), Metropolis (100k–500k),
+Megalopolis (>500k).
+
+Give a probability that honestly reflects your uncertainty about whether the
+question resolves YES. Forecasts are scored with the Brier score against the
+realized outcome: probabilities that match your true uncertainty score best,
+and overconfidence in either direction scores worse.

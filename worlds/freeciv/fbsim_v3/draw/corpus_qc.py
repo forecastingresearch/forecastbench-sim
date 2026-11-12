@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
-"""corpus_qc.py <raw_root> — per-anchor inventory and integrity checks on the pulled corpus (data files only)."""
+"""corpus_qc.py <raw_root> [--run NAME] — per-anchor inventory and integrity checks on the pulled corpus (data files only)."""
 import collections, glob, gzip, json, os, re, sys
-root = sys.argv[1]
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[1])); import runcfg
+RUN = runcfg.pop_run()
+root, = runcfg.positional(RUN, ['raw'], usage='corpus_qc.py RAW_ROOT')
+HSAVES = (RUN.fork_turn, RUN.start, *RUN.horizons, RUN.end_turn + 1)   # the saves pull2.sh fetches
 by = collections.defaultdict(dict); dups = collections.Counter(); trunc = collections.Counter(); sgt = collections.Counter()
 bad = []; stamps = collections.Counter(); neg = collections.Counter(); turns = collections.Counter(); hz = collections.Counter()
 for fp in sorted(glob.glob(f'{root}/**/*_data.json.gz', recursive=True)):
@@ -24,10 +28,10 @@ for fp in sorted(glob.glob(f'{root}/**/*_data.json.gz', recursive=True)):
     tt = sorted(int(t) for t in ts.get('scores', {})); turns[(a, tt[0], tt[-1])] += 1
     saves = glob.glob(os.path.join(d, 'savegames', '*'))
     have = {int(mm.group(1)) for s in saves for mm in [re.search(r'_T(\d+)_', s)] if mm}
-    hz[(a, tuple(sorted(t for t in (60, 61, 90, 120, 150, 180, 210, 211) if t in have)))] += 1
+    hz[(a, tuple(sorted(t for t in HSAVES if t in have)))] += 1
 print(f"{'anchor':>6} {'forks':>5} {'dups':>4} {'trunc':>5} {'sgtables':>8} {'stamp_ok':>8} {'neg_scores':>10}  turn ranges")
 for a in sorted(by):
     rng = {k[1:]: v for k, v in turns.items() if k[0] == a}
     print(f"{a:>6} {len(by[a]):>5} {dups[a]:>4} {trunc[a]:>5} {sgt[a]:>8} {stamps[(a, True)]:>8} {neg[a]:>10}  {rng}")
-print('horizon-save sets:', {k: v for k, v in hz.items() if k[1] != (60, 61, 90, 120, 150, 180, 210, 211)} or 'all forks have T60/61/90/120/150/180/210/211 saves')
+print('horizon-save sets:', {k: v for k, v in hz.items() if k[1] != HSAVES} or f"all forks have T{'/'.join(map(str, HSAVES))} saves")
 print('unreadable:', bad[:5], len(bad))

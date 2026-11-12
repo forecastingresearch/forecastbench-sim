@@ -1,16 +1,22 @@
 #!/usr/bin/env python3
-"""draw_v1.py BANK_DIR OUT_DIR [--seed 2026]
+"""draw_v1.py BANK_DIR OUT_DIR [--seed 2026] [--run NAME]
 Stratified random draws (structural strata only; never on the noisy estimate beyond the band a question sits in):
-  bank      750 = 5 horizons x 5 bands over (.05,.95) x 30; caps: <=6/world and <=6/family per band-cell, NB1_threshold <=150 total
+  bank      750 = 5 horizons x 5 bands over (.05,.95) x 30; caps: <=6/world and <=6/family per band-cell, NB1_threshold <=150 total,
+            one question per subject (per subject and band with one player); with a run the cells take turns
   tails     300 = 60/horizon with qAll <= .05 (0 < q); caps NB1 <=45 total, others <=40 total and <=10/family/horizon, <=12/world/horizon
   mirrors    50 = 10/horizon with qAll >= .95 (q < 1), same families as tails
   continuous 300 = 240 spread (~6/family/horizon over 8 families, T90 4) + 60 timing at T210 (P9 40, P7 15, P8 5); IQR>0
   natcond   600 = 4 horizons (120..210) x 150 from BANK questions x reveals, blocks A30 B20 C1 20 C2 50 D30,
-            template-balanced inside blocks, n_x>=100, <=2 reveals (distinct kinds) per question, <=8 cells per revealed event
+            template-balanced inside blocks, n_x >= replays/10 (100), <=2 reveals (distinct kinds) per question, <=8 cells per revealed event
+Horizons are the run's (the paper's 90..210 above). --run NAME or FBSIM_RUN: folders default to the run's bank_v1/ and
+sets/draw_v1/, and FBSIM_NATCOND=0 in its run.env implies --no-natcond.
 --binary-only writes bank, tails and mirrors only; --no-natcond adds continuous but skips natcond.
 Truth for everything = all replays. Effect sizes for natcond are reported after the draw, never used for it."""
 import os, sys, json, pickle, random, collections, numpy as np
-BANK, OUT = sys.argv[1], sys.argv[2]; SEED = int(sys.argv[sys.argv.index('--seed') + 1]) if '--seed' in sys.argv else 2026
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[1])); import runcfg
+RUN = runcfg.pop_run()
+BANK, OUT = runcfg.positional(RUN, ['bank_v1', 'sets/draw_v1'], usage='draw_v1.py BANK_DIR OUT_DIR'); SEED = int(sys.argv[sys.argv.index('--seed') + 1]) if '--seed' in sys.argv else 2026
 os.makedirs(OUT, exist_ok=True); rng = random.Random(SEED)
 def opt(name, default):
     return sys.argv[sys.argv.index(name) + 1] if name in sys.argv else default
@@ -19,20 +25,22 @@ STRONG_ONLY = '--strong-only' in sys.argv       # C2/D restricted to magnitude r
 STRONG_FIRST = '--strong-first' in sys.argv     # C2/D: strong reveals drawn first, weaker ones only fill what remains
 STRONG = ('civ_lost3', 'civ_cities_fell2', 'pair_war_began')
 W = {fn[:-4]: pickle.load(open(os.path.join(BANK, fn), 'rb')) for fn in sorted(os.listdir(BANK)) if fn.endswith('.pkl')}
-HZ = (90, 120, 150, 180, 210); BANDS = [(0.05, 0.23), (0.23, 0.41), (0.41, 0.59), (0.59, 0.77), (0.77, 0.95)]
+HZ = RUN.horizons; BANDS = [(0.05, 0.23), (0.23, 0.41), (0.41, 0.59), (0.59, 0.77), (0.77, 0.95)]
 def band_of(q): return next((i for i, (lo, hi) in enumerate(BANDS) if lo < q <= hi), None)
 # ---------------- pools ----------------
 binpool = []
 for w, D in W.items():
     for i, inst in enumerate(D['bin']): binpool.append(dict(inst, id=f"{w}:b{i}", idx=i))
 def subject_key(i): return (i['world'], tuple(sorted(i['subj'])), i['family'], i['T'])
-def draw_cells(cands, per_cell, cell_key, caps, order=None, balance=None):
+def draw_cells(cands, per_cell, cell_key, caps, order=None, balance=None, interleave=False):
     """random draw per cell with caps; with balance='family' the cell is filled round-robin over families
-    (each family's candidates shuffled), so every family present gets an equal share before any family repeats."""
+    (each family's candidates shuffled), so every family present gets an equal share before any family repeats.
+    interleave=True: the cells take one question each in turn instead of filling one after another, so cells that
+    compete for a cap (one question per subject) share it evenly."""
     chosen = []; counts = collections.Counter(); cells = collections.defaultdict(list)
     for c in cands: cells[cell_key(c)].append(c)
     keys = order or sorted(cells)
-    for key in keys:
+    def fill(key):   # yields after each question taken for this cell
         lst = cells[key][:]; rng.shuffle(lst); got = 0
         ok = lambda c: not any(counts[(k.__name__, k(c), scope(key))] >= mx for k, mx, scope in caps)
         def take(c):
@@ -45,28 +53,39 @@ def draw_cells(cands, per_cell, cell_key, caps, order=None, balance=None):
                 f = fams[i % len(fams)]; i += 1; stall += 1
                 while by[f]:
                     c = by[f].pop()
-                    if ok(c): take(c); stall = 0; break
+                    if ok(c): take(c); stall = 0; yield; break
         else:
             for c in lst:
                 if got >= per_cell: break
-                if ok(c): take(c)
+                if ok(c): take(c); yield
+    fills = [fill(key) for key in keys if cells[key]]   # skips e.g. a horizon in `order` with no candidates
+    if interleave:
+        while fills: fills = [f for f in fills if next(f, StopIteration) is not StopIteration]
+    else:
+        for f in fills: collections.deque(f, maxlen=0)
     return chosen
+def need(cands, name, rule):   # an empty set means too few replays per anchor: q moves in steps of 1/replays
+    if not cands: sys.exit(f"draw_v1.py: no candidates for the {name} set ({rule}); the run has too few replays per anchor")
 def world(c): return c['world']
 def family(c): return c['family']
 def subj(c): return subject_key(c)
 CELL = lambda key: key; HORIZON = lambda key: key[1] if isinstance(key, tuple) else key; GLOBAL = lambda key: 'g'
 # bank
 rng = random.Random(SEED + 1)
-cands = [c for c in binpool if band_of(c['qAll']) is not None]
+cands = [c for c in binpool if band_of(c['qAll']) is not None]; need(cands, 'bank', '0.05 < q < 0.95')
+# A run draws the cells in turns (the paper filled them in order, so low bands took the shared subjects first). With one
+# player every question has the same subject per world, family and horizon, so a subject may recur once per band.
+BAND = lambda key: key[0]
 bank = draw_cells(cands, 30, lambda c: (band_of(c['qAll']), c['T']),
-                  caps=[(world, 6, CELL), (family, 6, CELL), (subj, 1, GLOBAL), (family, 150, GLOBAL)], balance='family')
+                  caps=[(world, 6, CELL), (family, 6, CELL), (subj, 1, BAND if RUN.n_players == 1 else GLOBAL), (family, 150, GLOBAL)],
+                  balance='family', interleave=bool(RUN.name))
 # NB1 techs filler cap handled by (family,150,GLOBAL) for every family; fine since others never reach 150
 used = {c['id'] for c in bank}
 # tails: long horizons first
-tcands = [c for c in binpool if 0 < c['qAll'] <= 0.05 and c['id'] not in used]
-tails = draw_cells(tcands, 60, lambda c: c['T'], caps=[(family, 10, CELL), (world, 12, CELL), (subj, 1, GLOBAL), (family, 45, GLOBAL)], order=[210, 180, 150, 120, 90], balance='family')
+tcands = [c for c in binpool if 0 < c['qAll'] <= 0.05 and c['id'] not in used]; need(tcands, 'tails', '0 < q <= 0.05')
+tails = draw_cells(tcands, 60, lambda c: c['T'], caps=[(family, 10, CELL), (world, 12, CELL), (subj, 1, GLOBAL), (family, 45, GLOBAL)], order=sorted(HZ, reverse=True), balance='family')
 used |= {c['id'] for c in tails}
-mcands = [c for c in binpool if 0.95 <= c['qAll'] < 1 and c['id'] not in used]
+mcands = [c for c in binpool if 0.95 <= c['qAll'] < 1 and c['id'] not in used]; need(mcands, 'mirrors', '0.95 <= q < 1')
 mirrors = draw_cells(mcands, 10, lambda c: c['T'], caps=[(family, 3, CELL), (world, 3, CELL), (subj, 1, GLOBAL)], balance='family')
 strip = lambda c: {k: v for k, v in c.items() if k != 'idx'}
 def write_and_exit(sets, note):   # a partial draw: write these sets and stop
@@ -90,7 +109,7 @@ for T in HZ:
         used = {c['id'] for c in got}; pool = [c for c in spread if c['T'] == T and c['id'] not in used]
         got += draw_cells(pool, 60 - len(got), lambda c: c['T'], caps=[(world, 3, CELL), (subj, 1, GLOBAL), (family, 9, CELL)], balance='family')
     cont += got
-if '--no-natcond' in sys.argv:   # no reveals needed
+if '--no-natcond' in sys.argv or (RUN.name and not RUN.natcond):   # no reveals needed
     write_and_exit((('bank_750', bank), ('tails_300', tails), ('mirrors_50', mirrors), ('continuous_300', cont)), 'no natcond')
 # ---------------- natcond from bank questions ----------------
 value_fams = {'NB1_value_threshold', 'EX_comparative', 'NB4_drawdown'}
@@ -110,19 +129,19 @@ def block(rev, q):
 QUOTA = NC_QUOTA; rng = random.Random(SEED + 3)
 bank_by_world = collections.defaultdict(list)
 for q in bank:
-    if q['T'] >= 120: bank_by_world[q['world']].append(dict(q, from_bank=True))
+    if q['T'] >= HZ[1]: bank_by_world[q['world']].append(dict(q, from_bank=True))
 # top-up pool for blocks C1/C2: value-series questions NOT in the bank (same bands, same subject rule); they get
 # their own turn-1 elicitation (natcond_extra_turn1.json) so cells still condition on a turn-1 answer.
 bank_ids = {q['id'] for q in bank}; extra_by_world = collections.defaultdict(list)
 for c in binpool:
-    if c['T'] >= 120 and c['family'] in value_fams and c['id'] not in bank_ids and band_of(c['qAll']) is not None:
+    if c['T'] >= HZ[1] and c['family'] in value_fams and c['id'] not in bank_ids and band_of(c['qAll']) is not None:
         extra_by_world[c['world']].append(dict(c, from_bank=False))
 cells = []
 for w, D in W.items():
     X, Y = D['X'], D['Y']
     for ri, rev in enumerate(D['reveals']):
         x = X[ri]; nx = int(x.sum())
-        if nx < 100: continue
+        if nx < D['n'] / 10: continue   # 100 of the paper's 1,000 replays, as bank_v1's reveals
         for q in bank_by_world[w] + extra_by_world[w]:
             b = block(rev, q)
             if b is None: continue
@@ -147,7 +166,7 @@ def fill_block(T, b, qn):
             if q_used[c['qid']] >= 2 or c['rev_kind'] in q_kinds[c['qid']] or ev_count[c['rev_id']] >= 8: continue
             natcond.append(c); q_used[c['qid']] += 1; q_kinds[c['qid']].add(c['rev_kind']); ev_count[c['rev_id']] += 1; got += 1; stall = 0; break
     return got
-for T in (120, 150, 180, 210):
+for T in HZ[1:]:
     got_T = 0
     for b, qn in QUOTA.items():
         got = fill_block(T, b, qn); got_T += got

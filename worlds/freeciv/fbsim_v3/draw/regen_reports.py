@@ -1,19 +1,28 @@
 #!/usr/bin/env python3
-"""regen_reports.py STATE_DIR OUT_DIR SEED [SEED ...] — regenerate turn-60 world reports from the v3 anchors (savegame truth).
-Reads STATE_DIR/anchors_raw/seed<N>/seed<N>_data.json.gz, stamps metadata.map_size from the T60 savegame settings,
-renders with the patched freeciv_world renderer (no territory maps), writes
-OUT_DIR/seed<N>/turn_060_report.txt (+ the data json used)."""
+"""regen_reports.py STATE_DIR OUT_DIR SEED [SEED ...] — regenerate the fork-turn (F) world reports from the v3 anchors
+(savegame truth). Reads STATE_DIR/anchors_raw/seed<N>/seed<N>_data.json.gz, stamps metadata.map_size from the T<F>
+savegame settings, renders with the patched freeciv_world renderer (no territory maps), writes
+OUT_DIR/seed<N>/turn_<FFF>_report.txt (+ the data json used). F is the run's fork turn (60 in the paper).
+regen_reports.py --run NAME (or FBSIM_RUN, no positional arguments): the run's fleet_state/, reports/ and the seeds
+in fleet_state/anchors/."""
 import gzip, json, lzma, re, shutil, sys, glob
 from pathlib import Path
 from freeciv_world.world_reports.txt_report import generate_txt_report
-BASE = Path(sys.argv[1])
-OUT = Path(sys.argv[2])
-for seed in sys.argv[3:]:
+sys.path.insert(0, str(Path(__file__).resolve().parents[1])); import runcfg
+RUN = runcfg.pop_run(); FORK = RUN.fork_turn
+if len(sys.argv) > 1:
+    BASE, OUT, SEEDS = Path(sys.argv[1]), Path(sys.argv[2]), sys.argv[3:]
+elif RUN.dir:
+    BASE, OUT = RUN.dir / 'fleet_state', RUN.dir / 'reports'
+    SEEDS = sorted(p.name[4:] for p in (BASE / 'anchors').glob('seed*'))
+else:
+    sys.exit('usage: regen_reports.py STATE_DIR OUT_DIR SEED [SEED ...] (or --run NAME)')
+for seed in SEEDS:
     src = BASE / f'anchors_raw/seed{seed}'
     d = json.load(gzip.open(src / f'seed{seed}_data.json.gz', 'rt'))
     st = src / 'settings.txt'   # written by anchor_one.sh; the paper's anchors have none (5 players)
     NP = int(re.search(r'^players=(\d+)', st.read_text(), re.M).group(1)) if st.exists() else 5
-    sav = sorted(glob.glob(str(src / f'savegames/seed{seed}_T60_*.sav.xz')))[0]
+    sav = sorted(glob.glob(str(src / f'savegames/seed{seed}_T{FORK}_*.sav.xz')))[0]
     txt = lzma.open(sav, 'rt', errors='replace').read()
     xs = re.search(r'^"xsize",(\d+)', txt, re.M); ys = re.search(r'^"ysize",(\d+)', txt, re.M)
     if xs and ys: d.setdefault('metadata', {})['map_size'] = [int(xs.group(1)), int(ys.group(1))]
@@ -43,10 +52,10 @@ for seed in sys.argv[3:]:
             if g is None: continue
             border_rows.append(f"{nm_(a):<14}| {nm_(b):<14}| {'yes' if g <= 1 else 'no':<4}| {('0' if g <= 1 else str(g - 1)):>3}")
     barb = re.search(r'^"barbarians","([^"]*)"', txt, re.M)
-    d.setdefault('metadata', {})['borders_section'] = ("BORDERS (TURN 60)\nWhether each pair's territories are adjacent (share a border) at turn 60, and otherwise the gap in tiles between their nearest owned tiles.\n"
+    d.setdefault('metadata', {})['borders_section'] = (f"BORDERS (TURN {FORK})\nWhether each pair's territories are adjacent (share a border) at turn {FORK}, and otherwise the gap in tiles between their nearest owned tiles.\n"
         + f"{'Civ A':<14}| {'Civ B':<14}| {'Touch':<4}| Gap\n" + "-" * 14 + "+" + "-" * 15 + "+" + "-" * 5 + "+----\n" + "\n".join(border_rows))
     d['metadata']['barbarians_setting'] = barb.group(1) if barb else None
-    # exact events for turns <= 60 from the savegame tables (the serializer ledger is the observer's view)
+    # exact events for turns <= FORK from the savegame tables (the serializer ledger is the observer's view)
     sgp = src / f'seed{seed}_sgtables.json.gz'
     if sgp.exists():
         sg = json.load(gzip.open(sgp, 'rt')); tv = (sg.get('static') or {}).get('technology_vector') or []
@@ -60,7 +69,7 @@ for seed in sys.argv[3:]:
         ex = []
         for e in sg['events']:
             t, ty, pl = e.get('turn'), e.get('type'), e.get('player_id')
-            if t is None or t > 60: continue
+            if t is None or t > FORK: continue
             if ty == 'tech_discovered':
                 tn = tv[int(e['tech_id'])] if str(e['tech_id']).isdigit() and int(e['tech_id']) < len(tv) else str(e['tech_id'])
                 ex.append(dict(turn=t, type=ty, player_id=int(pl), description=f'{nm(pl)} discovered {tn}', metadata={'tech_name': tn}))
@@ -83,7 +92,7 @@ for seed in sys.argv[3:]:
         # diplomacy changes (exact, one per unordered pair per turn) so the EVENT TYPES list is true
         seen = set()
         for e in sg['events']:
-            if e.get('type') != 'diplomacy_change' or e.get('turn', 99) > 60: continue
+            if e.get('type') != 'diplomacy_change' or e.get('turn', 10**9) > FORK: continue
             a, b = int(e['player_id']), int(e['other'])
             if a >= NP or b >= NP: continue
             key = (e['turn'], min(a, b), max(a, b))
@@ -94,7 +103,7 @@ for seed in sys.argv[3:]:
         for t, row in d['time_series'].get('techs_known', {}).items():
             for pl, v in row.items():
                 if v is not None: row[pl] = max(0, int(v) - 1)
-        led = [e for e in d.get('events', []) if e.get('turn', 0) <= 60]
+        led = [e for e in d.get('events', []) if e.get('turn', 0) <= FORK]
         print(f"seed{seed}: events ledger={len(led)} exact={len(ex)}  (tech {sum(1 for e in led if e['type']=='tech_discovered')}->{sum(1 for e in ex if e['type']=='tech_discovered')}, founded {sum(1 for e in led if e['type']=='city_founded')}->{sum(1 for e in ex if e['type']=='city_founded')}, gov {sum(1 for e in led if e['type']=='government_change')}->{sum(1 for e in ex if e['type']=='government_change')}, wonders {sum(1 for e in led if e['type']=='wonder_completed')}->{sum(1 for e in ex if e['type']=='wonder_completed')})")
         d['events'] = sorted(ex, key=lambda e: (e['turn'], e['type']))
         d.setdefault('metadata', {})['events_source'] = 'savegame_tables_v4'
@@ -104,17 +113,19 @@ for seed in sys.argv[3:]:
     if rs.exists() and not (src / 'ruleset.json').exists(): shutil.copy(rs, src / 'ruleset.json')
     if not glob.glob(str(src / 'turn_*_state.json')) and (src / 'recording_states.tar.gz').exists():   # as anchor_one.sh publishes them
         import tarfile; tarfile.open(src / 'recording_states.tar.gz').extractall(src, filter='data')
-    p, _ = generate_txt_report(js, src, out, 60, 5, 0)
+    p, _ = generate_txt_report(js, src, out, FORK, 5, 0)
     body = open(p).read()
     # cuts: RANKINGS section; Adjective + Nation ID columns; the Metadata column of EVENTS
     body = re.sub(r'\nRANKINGS \(derived from scores\)\n(?:.*\n)*?\n', '\n', body)
     # insert BORDERS after the DIPLOMACY table; add the barbarian setting to the header
     bs = d['metadata'].get('borders_section')
-    if bs: body = re.sub(r'(\nDIPLOMACY \(TURN 60\)\n(?:.*\n)*?)\n', lambda m: m.group(1) + '\n' + bs + '\n\n', body, count=1)
+    if bs: body = re.sub(rf'(\nDIPLOMACY \(TURN {FORK}\)\n(?:.*\n)*?)\n', lambda m: m.group(1) + '\n' + bs + '\n\n', body, count=1)
     # the savegame lists only changed settings: no 'barbarians' entry (the paper's anchors) means FreeCiv's default,
-    # with raids by barbarians and pirates beginning around turn 60; none exist at the snapshot.
+    # with raids by barbarians and pirates beginning around turn 60; none exist at a turn-60 snapshot, and a later
+    # snapshot's report shows any that do.
     barb_line = ("Barbarians: disabled (no barbarian or pirate players for the whole game)" if (d['metadata'].get('barbarians_setting') or '').upper() == 'DISABLED'
-                 else "Barbarians: default settings (barbarian and pirate raids begin around turn 60; none exist at turn 60)")
+                 else "Barbarians: default settings (barbarian and pirate raids begin around turn 60; none exist at turn 60)" if FORK <= 60
+                 else "Barbarians: default settings (barbarian and pirate raids begin around turn 60)")
     body = body.replace('\nMap size:', f"\n{barb_line}\nMap size:", 1)
     lines = body.split('\n'); out_lines = []; mode = None
     for ln in lines:

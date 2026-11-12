@@ -90,10 +90,10 @@ def trunk(pop: int = 1000) -> list[dict]:
 
 
 def continuation(
-    seed: int, events: list[dict], pops: dict[int, int] | None = None
+    seed: int, events: list[dict], pops: dict[int, int] | None = None, begin: dict | None = None
 ) -> list[dict]:
     pops = pops or {}
-    lines = [{"kind": "begin", "seed": seed, "run": "continuation"}]
+    lines = [{"kind": "begin", "seed": seed, "run": "continuation", **(begin or {})}]
     for t in range(S + 1, S + H + 1):
         lines.append(row(t, seed, pops.get(t, 1000)))
         lines.extend(e for e in events if e["tick"] // g.TICKS_PER_TURN == t)
@@ -207,6 +207,19 @@ def test_merge_shards_adds_counts_and_concatenates_values():
     merged = merge_shards([a, b])
     assert merged.seeds == [1, 2, 3]
     assert merged.yes[LONG]["A1"] == 1
+    assert merged.yes_seeds[LONG]["A7"] == [2]
+    assert merged.yes_seeds[SHORT]["A1"] == [1]
+    c = consume_stream(
+        encode([header(seedLo=3, seedHi=3)] + trunk() + continuation(3, [], pops={S + H: 400})),
+        CITY,
+        True,
+        S,
+        HORIZONS,
+    )
+    sim = CitySimulation(CITY, 42, disasters=True)
+    line = ground_truth_lines(sim, S, HORIZONS, merge_shards([a, c]), "x", "y")[1]
+    assert line["yes_idx"]["A7"] == [1, 2]
+    assert line["counts"]["A7"] == 2
     assert merged.values[LONG]["cityPop"] == [1000, 400, 1000]
     other_trunk = consume_stream(
         encode([header(seedLo=3, seedHi=3)] + trunk(pop=5) + continuation(3, [])),
@@ -230,7 +243,16 @@ def test_ground_truth_lines_and_covers():
     assert list(lines[1]["counts"]) == QUESTION_IDS
     assert lines[1]["counts"]["A2"] == 1
     assert lines[1]["values"]["cityPop"] == [1000, 400]
+    # Seed 1 (index 0) has the tornado, seed 2 (index 1) the population halving.
+    assert lines[1]["yes_idx"]["A2"] == [0]
+    assert lines[1]["yes_idx"]["A7"] == [1]
+    assert lines[0]["yes_idx"]["A1"] == [0]
+    for line in lines:
+        assert list(line["yes_idx"]) == QUESTION_IDS
+        assert {q: len(v) for q, v in line["yes_idx"].items()} == line["counts"]
     assert covers(lines, HORIZONS, 2)
+    stripped = [{k: v for k, v in line.items() if k != "yes_idx"} for line in lines]
+    assert not covers(stripped, HORIZONS, 2)
     assert not covers(lines, HORIZONS, 3)
     assert not covers(lines, HORIZONS + [144], 2)
     assert covers(lines[1:], [LONG], 1)
@@ -288,3 +310,101 @@ def test_load_truths(tmp_path, monkeypatch):
         load_truths([dict(corpus[0], horizon=7)])
     with pytest.raises(FileNotFoundError, match="extract_ground_truth"):
         load_truths([dict(corpus[0], snapshot_turn=S + 1)])
+
+
+def test_interventions_in_command_header_paths_and_lines(tmp_path, monkeypatch):
+    import micropolis_world.ground_truth as gt
+
+    cmd = producer_command("kyoto", 42, True, 960, 480, 1, 100, ["makeFlood"])
+    assert cmd[-2:] == ["--intervene", "makeFlood"]
+    with pytest.raises(ValueError, match="unknown intervention"):
+        producer_command("kyoto", 42, True, 960, 480, 1, 100, ["makeRain"])
+
+    iv = [{"turn": S, "action": "makeEarthquake"}]
+    hdr = header(interventions=iv, interventionMode="per-continuation")
+    conts = (continuation(1, [], begin={"interventionSeed": 1000001, "missedSeeds": [1]})
+             + continuation(2, [], begin={"interventionSeed": 2, "missedSeeds": []}))
+    stream = [hdr] + trunk() + conts
+    result = consume_stream(encode(stream), CITY, True, S, HORIZONS, ["makeEarthquake"])
+    assert result.missed == {1: [1]}
+    with pytest.raises(StreamError, match="interventions"):
+        consume_stream(encode(stream), CITY, True, S, HORIZONS)
+    with pytest.raises(StreamError, match="interventions"):
+        consume_stream(encode([header()]), CITY, True, S, HORIZONS, ["makeEarthquake"])
+    with pytest.raises(StreamError, match="interventionMode"):  # a trunk-mode engine
+        consume_stream(encode([header(interventions=iv)]), CITY, True, S, HORIZONS, ["makeEarthquake"])
+    with pytest.raises(StreamError, match="interventionSeed"):
+        no_seed = [hdr] + trunk() + continuation(1, []) + continuation(2, [])
+        consume_stream(encode(no_seed), CITY, True, S, HORIZONS, ["makeEarthquake"])
+
+    monkeypatch.setattr(gt, "out_dir", lambda: tmp_path)
+    sim = CitySimulation(CITY, 42, disasters=True)
+    assert gt.output_path(sim, S).name == f"{sim.get_id_str()}_T{S}.jsonl"
+    assert gt.output_path(sim, S, ["makeFire", "makeFlood"]).name == (
+        f"{sim.get_id_str()}_T{S}_do-makeFire+makeFlood.jsonl"
+    )
+    merged = consume_stream(make_stream(), CITY, True, S, HORIZONS)
+    assert "interventions" not in ground_truth_lines(sim, S, HORIZONS, merged, "x", "y")[0]
+    merged = merge_shards([result])
+    lines = ground_truth_lines(sim, S, HORIZONS, merged, "x", "y", ["makeFire"])
+    assert all(line["interventions"] == ["makeFire"] for line in lines)
+    assert lines[0]["n_missed"] == 1 and lines[0]["missed_seeds"] == {"1": [1]}
+
+
+def test_infeasible_intervention_message():
+    import micropolis_world.ground_truth as gt
+
+    tail = "progress...\nError: turn 960: makeFlood had no effect (engine sent no message 42)\n"
+    assert gt._INFEASIBLE.search(tail)
+    assert gt._INFEASIBLE.search("Error: turn 960: demolishAirport found nothing to demolish")
+    assert not gt._INFEASIBLE.search("Error: WASM heap size changed")
+    p = gt.out_dir() / "kobe_disasters_seed42_T960_do-makeFlood.jsonl"
+    assert gt.infeasible_marker(p).name == "kobe_disasters_seed42_T960_do-makeFlood.infeasible.json"
+
+
+def test_intervention_events_fall_outside_the_window():
+    # The intervention's own message is a continuation event tagged tick 16S+15
+    # (turn S), emitted right after its begin line: not in (S, S+h].
+    iv = [{"turn": S, "action": "makeEarthquake"}]
+    records = [header(interventions=iv, interventionMode="per-continuation")] + trunk()
+    for seed in (1, 2):
+        forced = dict(message(S, seed, MSG_EARTHQUAKE), tick=S * g.TICKS_PER_TURN + 15)
+        lines = continuation(seed, [], begin={"interventionSeed": seed, "missedSeeds": []})
+        records += lines[:1] + [forced] + lines[1:]
+    result = consume_stream(encode(records), CITY, True, S, HORIZONS, ["makeEarthquake"])
+    assert result.yes[LONG]["A1"] == 0
+
+
+def test_city_sim_interventions(monkeypatch, tmp_path):
+    import importlib.util
+    from pathlib import Path
+
+    # The autouse guard blocks CitySimulation.run; exercise a fresh copy of the
+    # module with a fake subprocess instead, as test_integration does.
+    src = Path(__file__).parents[1] / "micropolis_world/city_sim.py"
+    spec = importlib.util.spec_from_file_location("micropolis_world._iv_test", src)
+    cs = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(cs)
+
+    monkeypatch.setattr(g, "RUNS_DIR", tmp_path)
+    base = CitySimulation(CITY, 42, disasters=True)
+    sim = CitySimulation(CITY, 42, disasters=True, interventions=[(96, "demolishAirport")])
+    assert sim.get_id_str() == base.get_id_str() + "_at96-demolishAirport"
+    assert sim.get_data_file_path("log").name == "log-seed42-disasters-at96_demolishAirport.jsonl"
+    assert base.get_data_file_path("log").name == "log-seed42-disasters.jsonl"
+    assert "interventions" not in base.describe()
+    assert sim.describe()["interventions"] == [[96, "demolishAirport"]]
+    with pytest.raises(ValueError, match="unknown intervention"):
+        CitySimulation(CITY, 42, interventions=[(96, "makeRain")])
+
+    calls = []
+    monkeypatch.setattr(g, "engine_app_path", lambda **_: tmp_path)
+
+    def fake_run(args, **kwargs):
+        calls.append(args)
+        return cs.subprocess.CompletedProcess(args, 1, stderr="Error: turn 96: nothing\n")
+
+    monkeypatch.setattr(cs.subprocess, "run", fake_run)
+    with pytest.raises(RuntimeError, match="turn 96: nothing"):
+        cs.CitySimulation(CITY, 42, True, [(96, "demolishAirport")]).run(nturns=200)
+    assert calls[0][-2:] == ["--at", "96:demolishAirport"]

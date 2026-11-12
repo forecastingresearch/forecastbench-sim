@@ -3,10 +3,35 @@
 import json
 import subprocess
 from collections import defaultdict
+from collections.abc import Sequence
 from pathlib import Path
 from typing import Any
 
 from . import module_globals as g
+
+# The engine's intervention actions (cli/lib/interventions.js).
+INTERVENTION_ACTIONS = (
+    "makeFire",
+    "makeFlood",
+    "makeTornado",
+    "makeEarthquake",
+    "makeMonster",
+    "makeMeltdown",
+    "makeFireBombs",
+    "demolishCoalPower",
+    "demolishNuclearPower",
+    "demolishPowerPlants",
+    "demolishAirport",
+)
+
+
+def check_action(action: str) -> str:
+    """`action` if the engine knows it, else ValueError."""
+    if action not in INTERVENTION_ACTIONS:
+        raise ValueError(
+            f"unknown intervention {action!r}; known: {', '.join(INTERVENTION_ACTIONS)}"
+        )
+    return action
 
 
 def _load_jsonl(file_path: Path) -> list[dict]:
@@ -18,20 +43,36 @@ def _load_jsonl(file_path: Path) -> list[dict]:
 class CitySimulation:
     """Class to run a Micropolis city simulation and collect metrics."""
 
-    def __init__(self, city_name: str, seed: int, disasters: bool = False):
+    def __init__(
+        self,
+        city_name: str,
+        seed: int,
+        disasters: bool = False,
+        interventions: Sequence[tuple[int, str]] = (),
+    ):
+        """`interventions`: (turn, action) pairs for run_sim.js --at TURN:ACTION."""
         self.city_name = city_name
         self.seed = seed
         self.disasters = disasters
+        self.interventions = sorted((int(t), check_action(a)) for t, a in interventions)
         self.log_data: list[dict] | None = None
         self.events_data: list[dict] | None = None
         self.nturns: int | None = None
 
     def get_id_str(self) -> str:
         """Get a unique string identifier for this simulation."""
-        return f"{self.city_name}_{'disasters' if self.disasters else 'nodisasters'}_seed{self.seed}"
+        base = f"{self.city_name}_{'disasters' if self.disasters else 'nodisasters'}_seed{self.seed}"
+        return base + "".join(f"_at{t}-{a}" for t, a in self.interventions)
 
     def describe(self) -> dict[str, Any]:
-        return {"name": self.city_name, "seed": self.seed, "disasters": self.disasters}
+        out: dict[str, Any] = {
+            "name": self.city_name,
+            "seed": self.seed,
+            "disasters": self.disasters,
+        }
+        if self.interventions:  # omitted otherwise: baseline cache keys stay as they were
+            out["interventions"] = [list(iv) for iv in self.interventions]
+        return out
 
     def run(self, nturns: int, quiet: bool = True) -> None:
         """Run the simulation for a given number of turns."""
@@ -49,17 +90,23 @@ class CitySimulation:
             args.append("--disasters")
         else:
             args.append("--no-disasters")
+        for t, a in self.interventions:
+            args += ["--at", f"{t}:{a}"]
 
         result = subprocess.run(
             ["pnpm", "run", "run-sim", *args],
             cwd=g.engine_app_path(),
             check=False,
             stdout=subprocess.DEVNULL if quiet else None,
-            stderr=subprocess.DEVNULL if quiet else None,
+            stderr=subprocess.PIPE if quiet else None,
+            text=True,
         )
         if result.returncode != 0:
+            # e.g. "Error: turn 96: makeFlood had no effect ..."
+            tail = (result.stderr or "")[-2000:]
             raise RuntimeError(
                 f"micropolis run-sim failed with exit code {result.returncode}"
+                + (f":\n{tail}" if tail else "")
             )
 
     def get_data_file_path(self, prefix: str, ext="jsonl") -> Path:
@@ -67,7 +114,8 @@ class CitySimulation:
         Common prefixes are "log", "events", and
         "worldreport-{LABEL}-T{TURN}"."""
         disasters_str = "disasters" if self.disasters else "nodisasters"
-        filename = f"{prefix}-seed{self.seed}-{disasters_str}.{ext}"
+        tag = "".join(f"-at{t}_{a}" for t, a in self.interventions)  # run_sim.js's
+        filename = f"{prefix}-seed{self.seed}-{disasters_str}{tag}.{ext}"
         return g.RUNS_DIR / self.city_name / filename
 
     def get_plot_path(self, prefix: str = "plot") -> Path:
