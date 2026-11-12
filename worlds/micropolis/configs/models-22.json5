@@ -1,0 +1,29 @@
+// The 22-model panel: the paper's 24 (models-loeff.json5 in forecastbench-sim-paper/
+// production/micropolis/configs/) without qwen/qwen3-235b-a22b and openai/o4-mini,
+// which are no longer on OpenRouter. The same 22 models answered FreeCiv run
+// p5_t120 (elicitation "main", October 31, 2026). Slugs need the paper's model
+// registry (production/micropolis/micropolis_world/model_specs.json5).
+[
+  "meta-llama/llama-4-scout",
+  "deepseek/deepseek-chat",
+  "openai/gpt-4.1",
+  "google/gemini-2.5-flash:loeff",
+  "moonshotai/kimi-k2",
+  "openai/gpt-5-nano:loeff",
+  "anthropic/claude-haiku-4.5:loeff",
+  "qwen/qwen3.5-flash-02-23:loeff",
+  "google/gemini-3.1-flash-lite-preview:loeff",
+  "openai/gpt-5-mini:loeff",
+  "openai/gpt-5.4-nano:loeff",
+  "openai/o3:loeff",
+  "openai/gpt-5:loeff",
+  "google/gemini-3-flash-preview:loeff",
+  "deepseek/deepseek-v4-flash-0731:loeff",
+  "anthropic/claude-sonnet-5:loeff",
+  "openai/gpt-5.5:loeff",
+  "openai/gpt-5.6-luna:loeff",
+  "google/gemini-3.7-flash:loeff",
+  "openai/gpt-5.6-sol:loeff",
+  "anthropic/claude-opus-5:loeff",
+  "anthropic/claude-fable-5:loeff",
+]

@@ -2,7 +2,7 @@
 
 Drives the engine's run_continuations.js — one trunk run to the snapshot, then
 many continuations from a byte copy of the engine state, each with its own RNG
-seed — and reads its JSONL stream to tally, per horizon, how many
+seed — and reads its JSONL stream to record, per horizon, which
 continuations resolve each binary question Yes and what value each continuous
 metric takes at the resolution turn. Output is one JSONL file per
 (scenario, snapshot turn) under data/micropolis/ground_truth/, one line per
@@ -111,6 +111,7 @@ class ShardResult:
     seeds: list[int]
     yes: dict[int, Counter]  # horizon -> qid -> continuations resolving Yes
     values: dict[int, dict[str, list]]  # horizon -> metric -> value per continuation
+    yes_seeds: dict[int, dict[str, list[int]]]  # horizon -> qid -> seeds resolving Yes
 
     @property
     def n(self) -> int:
@@ -174,6 +175,7 @@ def consume_stream(
         seeds=[],
         yes={h: Counter() for h in horizons},
         values={h: {m: [] for m in g.METRICS} for h in horizons},
+        yes_seeds={h: {qid: [] for qid in QUESTION_IDS} for h in horizons},
     )
 
     for raw in lines:
@@ -215,6 +217,9 @@ def consume_stream(
                 answers = resolve_all(run, S, S + h)
                 check_structural_constraints(city, answers)
                 result.yes[h].update(qid for qid, yes in answers.items() if yes)
+                for qid, yes in answers.items():
+                    if yes:
+                        result.yes_seeds[h].setdefault(qid, []).append(seed)
                 state = run.state_at(S + h)
                 for metric in g.METRICS:
                     result.values[h][metric].append(state[metric])
@@ -287,6 +292,7 @@ def merge_shards(shards: list[ShardResult]) -> ShardResult:
         seeds=[],
         yes={h: Counter() for h in first.yes},
         values={h: {m: [] for m in vs} for h, vs in first.values.items()},
+        yes_seeds={h: {qid: [] for qid in qs} for h, qs in first.yes_seeds.items()},
     )
     for shard in shards:
         merged.seeds.extend(shard.seeds)
@@ -294,6 +300,8 @@ def merge_shards(shards: list[ShardResult]) -> ShardResult:
             merged.yes[h].update(shard.yes[h])
             for metric, values in shard.values[h].items():
                 merged.values[h][metric].extend(values)
+            for qid, seeds in shard.yes_seeds[h].items():
+                merged.yes_seeds[h].setdefault(qid, []).extend(seeds)
     return merged
 
 
@@ -341,7 +349,12 @@ def ground_truth_lines(
     fbsim_commit: str,
     engine_commit: str,
 ) -> list[dict]:
-    """One output record per horizon."""
+    """One output record per horizon.
+
+    yes_idx lists, per question, the continuations resolving Yes as 0-based
+    positions in the values lists (seed branch_seeds[0] + i).
+    """
+    pos = {seed: i for i, seed in enumerate(merged.seeds)}
     return [
         {
             "scenario_id": sim.get_id_str(),
@@ -358,6 +371,10 @@ def ground_truth_lines(
             "averages": _averages(merged.values[h]),
             "fbsim_commit": fbsim_commit,
             "engine_commit": engine_commit,
+            "yes_idx": {
+                qid: sorted(pos[s] for s in merged.yes_seeds[h].get(qid, []))
+                for qid in QUESTION_IDS
+            },
         }
         for h in horizons
     ]
@@ -497,12 +514,14 @@ def covers(lines: list[dict], horizons: list[int], nseeds: int) -> bool:
 
     The question set is part of coverage: a file tallied before a question was
     added, removed or relabelled holds counts under the wrong ids, and skipping
-    it would silently resolve against stale labels.
+    it would silently resolve against stale labels. A file without yes_idx is
+    not covered either.
     """
     by_horizon = {line["horizon"]: line for line in lines}
     return all(
         h in by_horizon
         and by_horizon[h]["n_continuations"] >= nseeds
         and set(by_horizon[h]["counts"]) == set(QUESTION_IDS)
+        and set(by_horizon[h].get("yes_idx", ())) == set(QUESTION_IDS)
         for h in horizons
     )

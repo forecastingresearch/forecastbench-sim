@@ -3,9 +3,9 @@
 
 For every (city, disasters, snapshot turn) in the config, runs the engine's
 run_continuations.js — the trunk to the snapshot, then `branch_nseeds`
-continuations from that exact state, each with its own RNG seed — and tallies
-how many continuations resolve each binary question Yes at every horizon,
-along with each continuous metric's value at the resolution turn. Writes one
+continuations from that exact state, each with its own RNG seed — and records
+which continuations resolve each binary question Yes at every horizon (counts
+and yes_idx), along with each continuous metric's value at the resolution turn. Writes one
 JSONL file per (scenario, snapshot) to data/micropolis/ground_truth/, one line
 per horizon.
 

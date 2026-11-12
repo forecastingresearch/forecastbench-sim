@@ -207,6 +207,19 @@ def test_merge_shards_adds_counts_and_concatenates_values():
     merged = merge_shards([a, b])
     assert merged.seeds == [1, 2, 3]
     assert merged.yes[LONG]["A1"] == 1
+    assert merged.yes_seeds[LONG]["A7"] == [2]
+    assert merged.yes_seeds[SHORT]["A1"] == [1]
+    c = consume_stream(
+        encode([header(seedLo=3, seedHi=3)] + trunk() + continuation(3, [], pops={S + H: 400})),
+        CITY,
+        True,
+        S,
+        HORIZONS,
+    )
+    sim = CitySimulation(CITY, 42, disasters=True)
+    line = ground_truth_lines(sim, S, HORIZONS, merge_shards([a, c]), "x", "y")[1]
+    assert line["yes_idx"]["A7"] == [1, 2]
+    assert line["counts"]["A7"] == 2
     assert merged.values[LONG]["cityPop"] == [1000, 400, 1000]
     other_trunk = consume_stream(
         encode([header(seedLo=3, seedHi=3)] + trunk(pop=5) + continuation(3, [])),
@@ -230,7 +243,16 @@ def test_ground_truth_lines_and_covers():
     assert list(lines[1]["counts"]) == QUESTION_IDS
     assert lines[1]["counts"]["A2"] == 1
     assert lines[1]["values"]["cityPop"] == [1000, 400]
+    # Seed 1 (index 0) has the tornado, seed 2 (index 1) the population halving.
+    assert lines[1]["yes_idx"]["A2"] == [0]
+    assert lines[1]["yes_idx"]["A7"] == [1]
+    assert lines[0]["yes_idx"]["A1"] == [0]
+    for line in lines:
+        assert list(line["yes_idx"]) == QUESTION_IDS
+        assert {q: len(v) for q, v in line["yes_idx"].items()} == line["counts"]
     assert covers(lines, HORIZONS, 2)
+    stripped = [{k: v for k, v in line.items() if k != "yes_idx"} for line in lines]
+    assert not covers(stripped, HORIZONS, 2)
     assert not covers(lines, HORIZONS, 3)
     assert not covers(lines, HORIZONS + [144], 2)
     assert covers(lines[1:], [LONG], 1)
