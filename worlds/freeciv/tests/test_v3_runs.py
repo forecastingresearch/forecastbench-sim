@@ -73,3 +73,20 @@ def test_bringup_propagates_setup_failure(tmp_path, setup_rc, expected):
     result = subprocess.run(["bash", str(fleet / "bringup.sh"), "invented-pod"], env=env, capture_output=True, text=True, timeout=10)
     assert result.returncode == expected, result.stdout + result.stderr
     assert ("bringup done" in result.stdout) == (expected == 0)
+
+
+def test_make_sets_resolves_model_file_before_changing_directory(tmp_path):
+    fleet, draw, caller, run, fakebin = [tmp_path / n for n in ("fleet", "draw", "caller", "run", "bin")]
+    for path in (fleet, draw, caller, run / "consol_v4", fakebin):
+        path.mkdir(parents=True)
+    shutil.copyfile(V3 / "fleet/7_make_sets.sh", fleet / "7_make_sets.sh")
+    (fleet / "steps_lib.sh").write_text('step_init() { R="$TEST_RUN_ROOT"; FBSIM_FORK_TURN=60; FBSIM_RUN=invented; cd "$HERE"; }\nsay() { :; }\ndie() { echo "$*" >&2; exit 1; }\n')
+    uv = fakebin / "uv"
+    uv.write_text("#!/bin/bash\nexit 0\n")
+    uv.chmod(0o755)
+    contents = "name,model\ninvented,invented/model\n"
+    (caller / "models.csv").write_text(contents)
+    env = dict(os.environ, PATH=f"{fakebin}:{os.environ['PATH']}", TEST_RUN_ROOT=str(run))
+    result = subprocess.run(["bash", str(fleet / "7_make_sets.sh"), "invented", "--models-csv", "models.csv"], cwd=caller, env=env, capture_output=True, text=True, timeout=10)
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert (run / "run/models_v2.csv").read_text() == contents

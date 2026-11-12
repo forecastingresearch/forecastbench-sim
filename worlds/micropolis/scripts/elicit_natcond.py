@@ -1,8 +1,11 @@
 #!/usr/bin/env -S uv run python3
-"""Ask models the natural-conditional prompts (build_natcond_prompts.py output).
+"""Ask models the natural- or interventional-conditional prompts
+(build_natcond_prompts.py / build_intcond_prompts.py output).
 
 Turn 1 for every question, then turn 2 for every cell on top of the model's own
-turn-1 reply. Rows go to <out>/results.jsonl; rerunning resumes. Every model
+turn-1 reply. With --study intcond, turn-1 rows already in the natural-conditional
+results with the same messages are copied rather than asked again (--reuse-t1).
+Rows go to <out>/results.jsonl; rerunning resumes. Every model
 must have an entry in the model registry (provider pin, reasoning effort): the
 paper's is forecastbench-sim-paper/production/micropolis/micropolis_world/
 model_specs.json5. Needs OPENROUTER_API_KEY (credentials/.env).
@@ -10,6 +13,7 @@ model_specs.json5. Needs OPENROUTER_API_KEY (credentials/.env).
 Usage:
     scripts/elicit_natcond.py --model-specs SPECS --models deepseek/deepseek-chat --limit 2
     scripts/elicit_natcond.py --model-specs SPECS          # the 22-model panel, configs/models-22.json5
+    scripts/elicit_natcond.py --model-specs SPECS --study intcond --dry-run
 """
 
 import argparse
@@ -34,7 +38,13 @@ def main() -> None:
                     help="comma-separated slugs, or a JSON5 list file (default: configs/models-22.json5, the 22-model panel)")
     ap.add_argument("--model-specs", type=Path, default=None,
                     help="model registry (default: $MICROPOLIS_MODEL_SPECS, else the package's)")
-    ap.add_argument("--prompts", type=Path, default=None, help="default: data/micropolis/natcond/natcond_400_seed42_prompts.jsonl")
+    ap.add_argument("--study", choices=["natcond", "intcond"], default="natcond",
+                    help="sets the default --prompts and --reuse-t1 (default natcond)")
+    ap.add_argument("--prompts", type=Path, default=None,
+                    help="default: data/micropolis/<study>/<study>_400_seed42_prompts.jsonl")
+    ap.add_argument("--reuse-t1", type=Path, nargs="+", default=None,
+                    help="results.jsonl files whose matching turn-1 rows are copied, first file first "
+                    "(intcond default: the natcond results, and its separate Llama run)")
     ap.add_argument("--out", type=Path, default=None, help="default: <prompts stem>_elicit/ beside the prompts")
     ap.add_argument("--limit", type=int, default=0, help="only the first N turn-1 questions and their cells")
     ap.add_argument("--reask", type=int, default=1, help="re-ask an unparsed reply this many times (default 1)")
@@ -56,7 +66,7 @@ def main() -> None:
     if missing:
         raise SystemExit(f"no entry in {MODEL_SPECS_PATH} for: {', '.join(missing)}")
 
-    prompts = args.prompts or g.DATA_DIR / "natcond" / "natcond_400_seed42_prompts.jsonl"
+    prompts = args.prompts or g.DATA_DIR / args.study / f"{args.study}_400_seed42_prompts.jsonl"
     with open(prompts) as f:
         rows = [json.loads(line) for line in f]
     jobs = {"t1": [r for r in rows if r["arm"] == "t1"], "t2": [r for r in rows if r["arm"] == "t2"]}
@@ -66,6 +76,12 @@ def main() -> None:
     out = args.out or prompts.with_name(prompts.stem.removesuffix("_prompts") + "_elicit")
     out.mkdir(parents=True, exist_ok=True)
     results = Results(out / "results.jsonl")
+    reuse = args.reuse_t1 or ([g.DATA_DIR / "natcond" / f"natcond_400_seed42_elicit{s}" / "results.jsonl"
+                               for s in ("", "_llama")] if args.study == "intcond" else [])
+    for path in reuse:
+        if path.exists():
+            print(f"turn-1 rows to copy from {path}: "
+                  + str(results.copy_t1(Results(path), jobs["t1"], models, dry_run=args.dry_run)))
 
     print(f"{len(models)} model(s), {len(jobs['t1'])} turn-1 and {len(jobs['t2'])} turn-2 prompts each -> {out}")
     if args.dry_run:
