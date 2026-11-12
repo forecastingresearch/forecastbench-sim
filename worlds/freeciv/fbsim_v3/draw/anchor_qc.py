@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
-"""anchor_qc.py seedN_data.json.gz [...] — per-civ turn-60 table + health flags for candidate anchors."""
+"""anchor_qc.py seedN_data.json.gz [...] [--run NAME] — per-civ table at the run's fork turn (60 in the paper) + health
+flags for candidate anchors."""
 import gzip, json, sys, os, collections
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[1])); import runcfg
+FORK = runcfg.pop_run().fork_turn
 def row(ts, m, t, pid, d=None):
     return (ts.get(m) or {}).get(str(t), {}).get(pid, d)
 for path in sys.argv[1:]:
     d = json.load(gzip.open(path, 'rt')); ts = d['time_series']; md = d.get('metadata', {})
-    turns = sorted(int(t) for t in ts['scores']); T = 60 if 60 in turns else max(turns)
+    turns = sorted(int(t) for t in ts['scores']); T = FORK if FORK in turns else max(turns)
     civs = sorted((d.get('civilizations') or {}).items(), key=lambda kv: int(kv[0]))
     ev = d.get('events') or []
     techs_by = collections.Counter(str(e['player_id']) for e in ev if e.get('type') == 'tech_discovered')

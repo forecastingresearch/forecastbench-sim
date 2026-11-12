@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-# rp.sh — minimal RunPod REST helper for the hand-driven fbsim v3 rerun (2026-09-02).
+# rp.sh — minimal RunPod REST helper for the fleet scripts, acting on the run in FBSIM_RUN.
 #   rp.sh create NAME FLAVOR VCPU CLOUD [--dc DC] [--volume ID] [--deadman H] [--disk GB] [--start FILE]
+#     (the pod is named fbsim3-<run>-NAME unless NAME already carries that prefix)
 #   rp.sh list | get ID | addr ID | ssh ID [CMD...] | delete ID | ledger
 # Ledger: $STATE/pods.tsv (created_at, id, name, flavor, vcpu, cloud, dc, cost, status)
 set -euo pipefail
@@ -29,6 +30,7 @@ http() { cat "$STATE/.http" 2>/dev/null; }
 
 cmd_create() {
   local NAME="$1" FLAVOR="$2" VCPU="$3" CLOUD="$4"; shift 4
+  case "$NAME" in "$POD_PREFIX"*) ;; *) NAME="$POD_PREFIX$NAME";; esac
   local DC="" VOL="" DEADMAN=18 DISK=40 STARTF="$HERE/start_cmd.sh"
   while [ $# -gt 0 ]; do case "$1" in
     --dc) DC="$2"; shift 2;; --volume) VOL="$2"; shift 2;; --deadman) DEADMAN="$2"; shift 2;;
@@ -73,7 +75,8 @@ try:
 except Exception: pass
 ' 2>/dev/null)"
   if [ -n "$a" ]; then
-    { grep -v "^$id	" "$STATE/addr_cache.tsv" 2>/dev/null; printf '%s\t%s\n' "$id" "$a"; } > "$STATE/.addr_cache.tmp" && mv "$STATE/.addr_cache.tmp" "$STATE/addr_cache.tsv"
+    local tmp; tmp="$(mktemp "$STATE/.addr_cache.XXXXXX")"   # own temp file: parallel callers raced on a shared one
+    { grep -v "^$id	" "$STATE/addr_cache.tsv" 2>/dev/null; printf '%s\t%s\n' "$id" "$a"; } > "$tmp" && mv "$tmp" "$STATE/addr_cache.tsv" || rm -f "$tmp"
     echo "$a"
   else
     grep "^$id	" "$STATE/addr_cache.tsv" 2>/dev/null | cut -f2
@@ -113,8 +116,8 @@ case "${1:-}" in
 import json,sys
 d=json.load(sys.stdin); d=d if isinstance(d,list) else d.get("pods",d.get("data",[]))
 for p in sorted(d,key=lambda p:p.get("createdAt","")):
-    if p.get("desiredStatus")!="RUNNING" or not str(p.get("name","")).startswith("fbsim3-"): continue
+    if p.get("desiredStatus")!="RUNNING" or not str(p.get("name","")).startswith(sys.argv[1]): continue
     m=p.get("machine") or {}; dc=m.get("dataCenterId","") if isinstance(m,dict) else ""
-    print("\t".join([p.get("createdAt","")[:19].replace(" ","T")+"Z",p["id"],p.get("name",""),p.get("cpuFlavorId",""),str(p.get("vcpuCount","")),"?",dc,str(p.get("costPerHr","")),"created"]))' >> "$LEDGER"; cat "$LEDGER";;
+    print("\t".join([p.get("createdAt","")[:19].replace(" ","T")+"Z",p["id"],p.get("name",""),p.get("cpuFlavorId",""),str(p.get("vcpuCount","")),"?",dc,str(p.get("costPerHr","")),"created"]))' "$POD_PREFIX" >> "$LEDGER"; cat "$LEDGER";;
   *) sed -n 2,5p "$0"; exit 2;;
 esac

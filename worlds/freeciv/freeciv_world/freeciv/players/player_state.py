@@ -105,7 +105,7 @@ class PlayerState(DictState):
             player_state['gold'] = opponent['gold']
 
         if 'researching' in opponent and opponent['researching'] > 0 and opponent['researching'] in self.rule_ctrl.techs:
-            player_state['research'] = opponent['researching']
+            player_state['researching'] = opponent['researching']
             player_state['research_name'] = self.rule_ctrl.techs[opponent['researching']]['name']
         return player_state
 

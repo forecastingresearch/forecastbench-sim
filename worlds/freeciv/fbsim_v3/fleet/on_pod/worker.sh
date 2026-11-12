@@ -1,16 +1,19 @@
 #!/usr/bin/env bash
-# worker.sh N_LANES [END_TURN=210] — start (or top up to) N lanes over the local queue.
+# worker.sh N_LANES [END_TURN] — start (or top up to) N lanes over the local queue. END_TURN defaults to the last
+# horizon in /workspace/fleet/run.env (210 in the paper), whose variables (FBSIM_FORK_TURN, ...) reach fork_one.sh.
 # Queue: /workspace/fleet/queue/{todo,inprog,done,failed}; task file "a<anchor>-rng<rng>" containing "<anchor> <rng>".
 # Claim = atomic mv todo -> inprog. Success -> done/<task> (timestamp host lane secs). Failure -> failed/<task>.<n>
 # with the log tail; the task is re-queued once (second failure stays in failed/).
 set -uo pipefail
-if [ "${1:-}" = "__lane" ]; then N_LANES=0; else N_LANES="${1:?N_LANES}"; fi; END_TURN="${2:-210}"
+set -a; [ -f /workspace/fleet/run.env ] && . /workspace/fleet/run.env; set +a
+HZ="${FBSIM_HORIZONS:-90,120,150,180,210}"
+if [ "${1:-}" = "__lane" ]; then N_LANES=0; else N_LANES="${1:?N_LANES}"; fi; END_TURN="${2:-${HZ##*,}}"
 F=/workspace/fleet; Q=$F/queue; B=/workspace/civbench; OUT=/workspace/out
 mkdir -p $Q/todo $Q/inprog $Q/done $Q/failed $F/logs $OUT/logs
 HOST="$(cat /tmp/f3_podid 2>/dev/null || hostname)"
 
 lane() {
-  local N="$1" idle_since=0 t A R rc t0 t1 attempt log
+  local N="$1" idle_since=0 t A R rc t0 t1 attempt log to
   exec >> "$F/logs/lane$N.log" 2>&1
   echo "$(date -u +%FT%TZ) lane$N start"
   sleep $(( (N * 3) % 20 ))
@@ -33,8 +36,10 @@ lane() {
     if [ "${free:-0}" -lt 2500 ]; then echo "$(date -u +%FT%TZ) lane$N DISK LOW ${free}MB; pausing"; mv "$Q/inprog/$t.lane$N" "$Q/todo/$t"; sleep 300; continue; fi
     echo "$(date -u +%FT%TZ) lane$N START $t attempt $attempt"
     t0=$(date +%s)
-    FBSIM_OUT_DIR="$OUT/a$A" FBSIM_FORK_TIMEOUT_S=1800 timeout -k 60 2100 bash "$B/fork_one.sh" "$A" "rng$R" "$R" "$END_TURN" > "$log" 2>&1
-    rc=$?
+    to=3600; [ "$attempt" -ge 3 ] && to=5400   # the third and last attempt gets 90 minutes
+    bash "$F/stall_watch.sh" "$A" "$R" "$log" & local wpid=$!   # stops a game that has stopped saving turns
+    FBSIM_OUT_DIR="$OUT/a$A" FBSIM_FORK_TIMEOUT_S=$to timeout -k 60 $((to + 300)) bash "$B/fork_one.sh" "$A" "rng$R" "$R" "$END_TURN" > "$log" 2>&1
+    rc=$?; kill "$wpid" 2>/dev/null
     t1=$(date +%s)
     if [ "$rc" -eq 0 ] && [ -s "$OUT/a$A/forks/rng$R/seed${A}forkrng${R}_data.json.gz" ]; then
       echo "$(date -u +%FT%TZ) $HOST lane$N $((t1-t0))s attempt$attempt $(ls $OUT/a$A/forks/rng$R/savegames | wc -l)saves" > "$Q/done/$t"
@@ -46,16 +51,17 @@ lane() {
       rm -f "$Q/inprog/$t.lane$N"
       rm -rf "$OUT/a$A/forks/rng$R" "$B/data/freeciv/logs/recordings/seed${A}forkrng$R" 2>/dev/null
       echo "$(date -u +%FT%TZ) lane$N FAILED $t attempt $attempt rc=$rc ($((t1-t0))s)"
-      if [ "$attempt" -lt 2 ]; then printf '%s %s\n' "$A" "$R" > "$Q/todo/$t"; fi
+      if [ "$attempt" -lt 3 ]; then printf '%s %s\n' "$A" "$R" > "$Q/todo/$t"; fi
     fi
   done
 }
 
-if [ "${1:-}" = "__lane" ]; then END_TURN="${3:-210}"; lane "$2"; exit 0; fi
+if [ "${1:-}" = "__lane" ]; then END_TURN="${3:-${HZ##*,}}"; lane "$2"; exit 0; fi
 
 # top up lanes to N_LANES (never kill running ones)
 alive=0; : > $F/lanes.pids.new
-if [ -f $F/lanes.pids ]; then while read -r n p; do kill -0 "$p" 2>/dev/null && { echo "$n $p" >> $F/lanes.pids.new; alive=$((alive+1)); }; done < $F/lanes.pids; fi
+# a lane is alive only if its pid still runs that lane: kill -0 also succeeds on an exited lane left as a zombie
+if [ -f $F/lanes.pids ]; then while read -r n p; do ps -o args= -p "$p" 2>/dev/null | grep -q "worker.sh __lane $n " && { echo "$n $p" >> $F/lanes.pids.new; alive=$((alive+1)); }; done < $F/lanes.pids; fi
 mv $F/lanes.pids.new $F/lanes.pids
 used="$(awk '{print $1}' $F/lanes.pids)"
 i=0; started=0
